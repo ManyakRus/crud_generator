@@ -24,10 +24,8 @@ func StartApp() {
 
 	graphml.StartReadFile()
 
-	FileName := config.Settings.FILENAME_GRAPHML
-	log.Info("file graphml: ", FileName)
 	log.Info("postgres host: ", postgres_gorm.Settings.DB_HOST)
-	ok := logic.StartFillAll(FileName)
+	ok := logic.StartFillAll()
 	if ok == false {
 		println(constants.TEXT_HELP)
 	}

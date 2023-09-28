@@ -4,28 +4,28 @@ import (
 	"os"
 )
 
-const FILENAME_GRAPHML = "connections.graphml"
-
 // Settings хранит все нужные переменные окружения
 var Settings SettingsINI
 
 // SettingsINI - структура для хранения всех нужных переменных окружения
 type SettingsINI struct {
-	FILENAME_GRAPHML string
-	INCLUDE_TABLES   string
-	EXCLUDE_TABLES   string
+	INCLUDE_TABLES          string
+	EXCLUDE_TABLES          string
+	TEMPLATE_FILENAME_MODEL string
+	TEMPLATE_FILENAME_DB    string
+	TEMPLATE_FILENAME_GRPC  string
+	TEMPLATE_FILENAME_NRPC  string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
 func FillSettings() {
 	Settings = SettingsINI{}
-	Settings.FILENAME_GRAPHML = os.Getenv("FILENAME_GRAPHML")
 	Settings.INCLUDE_TABLES = os.Getenv("INCLUDE_TABLES")
 	Settings.EXCLUDE_TABLES = os.Getenv("EXCLUDE_TABLES")
-
-	if Settings.FILENAME_GRAPHML == "" {
-		Settings.FILENAME_GRAPHML = FILENAME_GRAPHML
-	}
+	Settings.TEMPLATE_FILENAME_MODEL = os.Getenv("TEMPLATE_FILENAME_MODEL")
+	Settings.TEMPLATE_FILENAME_DB = os.Getenv("TEMPLATE_FILENAME_DB")
+	Settings.TEMPLATE_FILENAME_GRPC = os.Getenv("TEMPLATE_FILENAME_GRPC")
+	Settings.TEMPLATE_FILENAME_NRPC = os.Getenv("TEMPLATE_FILENAME_NRPC")
 
 	//
 }
@@ -47,7 +47,4 @@ func FillFlags() {
 		return
 	}
 
-	if len(Args) > 0 {
-		Settings.FILENAME_GRAPHML = Args[0]
-	}
 }
