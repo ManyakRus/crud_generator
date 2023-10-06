@@ -4,7 +4,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/logic"
-	"github.com/ManyakRus/crud_generator/pkg/graphml"
 	ConfigMain "github.com/ManyakRus/starter/config"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/postgres_gorm"
@@ -21,8 +20,6 @@ func StartApp() {
 
 	postgres_gorm.StartDB()
 	postgres_gorm.GetConnection().Logger.LogMode(1)
-
-	graphml.StartReadFile()
 
 	log.Info("postgres host: ", postgres_gorm.Settings.DB_HOST)
 	ok := logic.StartFillAll()
