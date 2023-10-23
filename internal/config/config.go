@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 	"strings"
 )
@@ -10,16 +11,17 @@ var Settings SettingsINI
 
 // SettingsINI - структура для хранения всех нужных переменных окружения
 type SettingsINI struct {
-	INCLUDE_TABLES          string
-	EXCLUDE_TABLES          string
-	TEMPLATE_FILENAME_MODEL string
-	TEMPLATE_FILENAME_DB    string
-	TEMPLATE_FILENAME_GRPC  string
-	TEMPLATE_FILENAME_NRPC  string
-	NEED_CRUD               bool
-	NEED_GRPC               bool
-	NEED_NRPC               bool
-	SERVICE_NAME            string
+	INCLUDE_TABLES            string
+	EXCLUDE_TABLES            string
+	TEMPLATE_FOLDERNAME       string
+	TEMPLATE_FOLDERNAME_MODEL string
+	TEMPLATE_FOLDERNAME_DB    string
+	TEMPLATE_FOLDERNAME_GRPC  string
+	TEMPLATE_FOLDERNAME_NRPC  string
+	NEED_CRUD                 bool
+	NEED_GRPC                 bool
+	NEED_NRPC                 bool
+	SERVICE_NAME              string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -27,10 +29,11 @@ func FillSettings() {
 	Settings = SettingsINI{}
 	Settings.INCLUDE_TABLES = os.Getenv("INCLUDE_TABLES")
 	Settings.EXCLUDE_TABLES = os.Getenv("EXCLUDE_TABLES")
-	Settings.TEMPLATE_FILENAME_MODEL = os.Getenv("TEMPLATE_FILENAME_MODEL")
-	Settings.TEMPLATE_FILENAME_DB = os.Getenv("TEMPLATE_FILENAME_DB")
-	Settings.TEMPLATE_FILENAME_GRPC = os.Getenv("TEMPLATE_FILENAME_GRPC")
-	Settings.TEMPLATE_FILENAME_NRPC = os.Getenv("TEMPLATE_FILENAME_NRPC")
+	Settings.TEMPLATE_FOLDERNAME = os.Getenv("TEMPLATE_FOLDERNAME")
+	Settings.TEMPLATE_FOLDERNAME_MODEL = os.Getenv("TEMPLATE_FOLDERNAME_MODEL")
+	Settings.TEMPLATE_FOLDERNAME_DB = os.Getenv("TEMPLATE_FOLDERNAME_DB")
+	Settings.TEMPLATE_FOLDERNAME_GRPC = os.Getenv("TEMPLATE_FOLDERNAME_GRPC")
+	Settings.TEMPLATE_FOLDERNAME_NRPC = os.Getenv("TEMPLATE_FOLDERNAME_NRPC")
 
 	sNEED_CRUD := os.Getenv("NEED_CRUD")
 	Settings.NEED_CRUD = BoolFromString(sNEED_CRUD)
@@ -43,6 +46,9 @@ func FillSettings() {
 
 	Settings.SERVICE_NAME = os.Getenv("SERVICE_NAME")
 
+	if Settings.TEMPLATE_FOLDERNAME == "" {
+		log.Panic("Need fill TEMPLATE_FOLDERNAME")
+	}
 	//
 }
 
