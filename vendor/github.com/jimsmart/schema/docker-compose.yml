@@ -1,0 +1,60 @@
+version: "3.7"
+services:
+
+  # Port numbers (normal port number + 40000):
+  # - mssql    41433
+  # - mysql    43306
+  # - postgres 45432
+  # - oracle   41521
+
+  mssql:
+    # See https://hub.docker.com/_/microsoft-mssql-server
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    container_name: schema-test-mssql
+    ports:
+      - 127.0.0.1:41433:1433
+    volumes:
+      # Override the normal entry point, to call our own db-init.sh
+      - ./docker-entrypoint-mssql.sh:/entrypoint.sh:ro
+      # Script to do init after startup is complete.
+      - ./docker-db-init-mssql.sh:/db-init.sh:ro
+      # SQL script executed at startup.
+      - ./docker-db-init-mssql.sql:/init.sql:ro
+    command: /bin/bash /entrypoint.sh
+    environment:
+      ACCEPT_EULA: Y 
+      MSSQL_PID: Developer
+      SA_PASSWORD: 7kRZ4mUsSD4XedMq
+
+  mysql:
+    # See https://hub.docker.com/_/mysql
+    image: mysql:latest
+    container_name: schema-test-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 127.0.0.1:43306:3306
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: password-123
+
+  oracle:
+    # See https://www.petefreitag.com/item/886.cfm
+    image: oracle/database:18.4.0-xe
+    container_name: schema-test-oracle
+    ports:
+      - 127.0.0.1:41521:1521
+    volumes:
+      # SQL script executed after initial setup (not on every startup).
+      - ./docker-db-init-oracle.sql:/opt/oracle/scripts/setup/init.sql:ro
+      # - ./docker-db-init-oracle.sql:/opt/oracle/scripts/startup/init.sql:ro
+
+  postgres:
+    # See https://hub.docker.com/_/postgres
+    image: postgres:latest
+    container_name: schema-test-postgres
+    ports:
+      - 127.0.0.1:45432:5432
+    environment:
+        POSTGRES_HOST_AUTH_METHOD: trust

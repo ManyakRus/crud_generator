@@ -1,0 +1,35 @@
+language: go
+go:
+  - "1.16.x"
+
+sudo: required
+
+services:
+  - docker
+
+env:
+  DOCKER_COMPOSE_VERSION=1.29.0 GO111MODULE=on
+  # See https://arslan.io/2018/08/26/using-go-modules-with-vendor-support-on-travis-ci/
+
+before_install:
+  # Update docker-compose.
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  # Go get our deps.
+  - go get -v ./...
+
+before_script:
+  # Start everything except oracle servvice.
+  - docker-compose up -d mssql mysql postgres
+
+script:
+  - go test -race -coverprofile=coverage.txt -covermode=atomic -tags=travis
+
+after_script:
+  - docker-compose down -v
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+

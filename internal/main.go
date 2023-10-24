@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
+	"github.com/ManyakRus/crud_generator/internal/load_configs"
 	"github.com/ManyakRus/crud_generator/internal/logic"
 	ConfigMain "github.com/ManyakRus/starter/config"
 	"github.com/ManyakRus/starter/log"
@@ -17,6 +18,8 @@ func StartApp() {
 	ConfigMain.LoadEnv()
 	config.FillSettings()
 	config.FillFlags()
+
+	load_configs.LoadMappingsAll()
 
 	postgres_gorm.StartDB()
 	postgres_gorm.GetConnection().Logger.LogMode(1)

@@ -22,6 +22,8 @@ type SettingsINI struct {
 	NEED_GRPC                 bool
 	NEED_NRPC                 bool
 	SERVICE_NAME              string
+	TEXT_TEMPLATE_MODEL       string
+	TEXT_TEMPLATE_TABLENAME   string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -34,6 +36,8 @@ func FillSettings() {
 	Settings.TEMPLATE_FOLDERNAME_DB = os.Getenv("TEMPLATE_FOLDERNAME_DB")
 	Settings.TEMPLATE_FOLDERNAME_GRPC = os.Getenv("TEMPLATE_FOLDERNAME_GRPC")
 	Settings.TEMPLATE_FOLDERNAME_NRPC = os.Getenv("TEMPLATE_FOLDERNAME_NRPC")
+	Settings.TEXT_TEMPLATE_MODEL = os.Getenv("TEXT_TEMPLATE_MODEL")
+	Settings.TEXT_TEMPLATE_TABLENAME = os.Getenv("TEXT_TEMPLATE_TABLENAME")
 
 	sNEED_CRUD := os.Getenv("NEED_CRUD")
 	Settings.NEED_CRUD = BoolFromString(sNEED_CRUD)
@@ -49,7 +53,14 @@ func FillSettings() {
 	if Settings.TEMPLATE_FOLDERNAME == "" {
 		log.Panic("Need fill TEMPLATE_FOLDERNAME")
 	}
-	//
+
+	if Settings.TEXT_TEMPLATE_MODEL == "" {
+		Settings.TEXT_TEMPLATE_MODEL = "LawsuitStatusType"
+	}
+
+	if Settings.TEXT_TEMPLATE_TABLENAME == "" {
+		Settings.TEXT_TEMPLATE_TABLENAME = "lawsuit_status_types"
+	}
 }
 
 // CurrentDirectory - возвращает текущую директорию ОС
