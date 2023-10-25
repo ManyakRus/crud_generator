@@ -8,7 +8,7 @@ const FolderTemplates string = "templates"
 
 const FolderReady string = "ready"
 
-const FILE_PERMISSIONS = 0600
+const FILE_PERMISSIONS = 0666
 
 const TEXT_GENERATED = `//File generated automatic with crud_generator app
 //Do not change anything here.

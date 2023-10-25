@@ -8,6 +8,7 @@ type Column struct {
 	OrderNumber int
 	TableKey    string `json:"table_key"   gorm:"column:table_key;default:''"`
 	ColumnKey   string `json:"column_key"   gorm:"column:column_key;default:''"`
+	NameGo      string `gorm:-`
 }
 
 type Table struct {
@@ -16,4 +17,5 @@ type Table struct {
 	MapColumns map[string]Column
 	//Columns []Column
 	OrderNumber int
+	NameGo      string
 }

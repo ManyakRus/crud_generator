@@ -9,6 +9,7 @@ import (
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -69,6 +70,7 @@ func CreateModelFiles1(Table1 *types.Table) error {
 		TextModel = DeleteFuncDelete(TextModel, ModelName, Table1)
 		TextModel = DeleteFuncRestore(TextModel, ModelName, Table1)
 	}
+	TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
 
 	TextModel = AddImportTime(TextModel, Table1)
 
@@ -86,12 +88,23 @@ func FindTextModelStruct(Table1 *types.Table) (string, string, error) {
 	TableName := Table1.Name
 	ModelName = create_files.FindSingularName(TableName)
 	ModelName = create_files.FormatName(ModelName)
+	Table1.NameGo = ModelName
 
 	Otvet = `// ` + ModelName + ` - model from table ` + TableName + `
 type ` + ModelName + ` struct {
 `
-	for _, Column1 := range Table1.MapColumns {
-		TextColumn := FindTextColumn(Column1)
+
+	//сортировка
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	//цикл по всем колонкам
+	for _, key1 := range keys {
+		Column1, _ := Table1.MapColumns[key1]
+		TextColumn := FindTextColumn(&Column1)
 		Otvet = Otvet + TextColumn + "\n"
 	}
 
@@ -99,12 +112,13 @@ type ` + ModelName + ` struct {
 	return Otvet, ModelName, err
 }
 
-func FindTextColumn(Column1 types.Column) string {
+func FindTextColumn(Column1 *types.Column) string {
 	Otvet := ""
 	//	Code string `json:"code" gorm:"column:code;default:0"`
 
 	ColumnName := Column1.Name
 	ColumnModelName := create_files.FormatName(Column1.Name)
+	Column1.NameGo = ColumnModelName
 	SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
 	if ok == false {
 		log.Panic("GetMappings() ", Column1.Type, " error: not found")
@@ -284,6 +298,43 @@ func FindHasTimeColumn(Table1 *types.Table) bool {
 			break
 		}
 	}
+
+	return Otvet
+}
+
+// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
+func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//
+	_, ok := Table1.MapColumns["ext_id"]
+	if ok == true {
+		return Otvet
+	}
+
+	//
+	_, ok = Table1.MapColumns["connection_id"]
+	if ok == true {
+		return Otvet
+	}
+
+	//FirstSymbol := strings.ToLower(Modelname)[:1]
+	TextFind := "Find_ByExtID(*" + Modelname + ") error"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
+
+	TextFind = "\n// Find_ByExtID "
+	pos1 := strings.Index(Otvet, TextFind)
+	if pos1 < 0 {
+		return Otvet
+	}
+	s2 := Otvet[pos1+1:]
+
+	posEnd := strings.Index(s2, "\n}")
+	if posEnd < 0 {
+		return Otvet
+	}
+
+	Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+3:]
 
 	return Otvet
 }

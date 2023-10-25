@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"github.com/ManyakRus/crud_generator/internal/create_files/db"
 	"github.com/ManyakRus/crud_generator/internal/create_files/model"
 	"github.com/ManyakRus/crud_generator/internal/postgres"
 	"github.com/ManyakRus/starter/log"
@@ -22,7 +23,17 @@ func StartFillAll() error {
 		return err
 	}
 
+	//модель
 	err = model.CreateModelFiles(MapAll)
+	if err != nil {
+		return err
+	}
+
+	//db crud
+	err = db.CreateDBFiles(MapAll)
+	if err != nil {
+		return err
+	}
 
 	return err
 }
