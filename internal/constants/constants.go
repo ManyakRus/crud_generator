@@ -7,3 +7,10 @@ Need create .env file with settings
 const FolderTemplates string = "templates"
 
 const FolderReady string = "ready"
+
+const FILE_PERMISSIONS = 0600
+
+const TEXT_GENERATED = `//File generated automatic with crud_generator app
+//Do not change anything here.
+
+`

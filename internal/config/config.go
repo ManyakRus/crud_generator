@@ -24,6 +24,7 @@ type SettingsINI struct {
 	SERVICE_NAME              string
 	TEXT_TEMPLATE_MODEL       string
 	TEXT_TEMPLATE_TABLENAME   string
+	HAS_IS_DELETED            bool
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -38,6 +39,7 @@ func FillSettings() {
 	Settings.TEMPLATE_FOLDERNAME_NRPC = os.Getenv("TEMPLATE_FOLDERNAME_NRPC")
 	Settings.TEXT_TEMPLATE_MODEL = os.Getenv("TEXT_TEMPLATE_MODEL")
 	Settings.TEXT_TEMPLATE_TABLENAME = os.Getenv("TEXT_TEMPLATE_TABLENAME")
+	sHAS_IS_DELETED := os.Getenv("HAS_IS_DELETED")
 
 	sNEED_CRUD := os.Getenv("NEED_CRUD")
 	Settings.NEED_CRUD = BoolFromString(sNEED_CRUD)
@@ -61,6 +63,9 @@ func FillSettings() {
 	if Settings.TEXT_TEMPLATE_TABLENAME == "" {
 		Settings.TEXT_TEMPLATE_TABLENAME = "lawsuit_status_types"
 	}
+
+	HAS_IS_DELETED := BoolFromString(sHAS_IS_DELETED)
+	Settings.HAS_IS_DELETED = HAS_IS_DELETED
 }
 
 // CurrentDirectory - возвращает текущую директорию ОС

@@ -20,12 +20,12 @@ type LawsuitStatusType struct {
 }
 
 type ICrud_LawsuitStatusType interface {
-	Read(l *LawsuitStatusType) error
-	Save(l *LawsuitStatusType) error
-	Update(l *LawsuitStatusType) error
-	Create(l *LawsuitStatusType) error
-	Delete(l *LawsuitStatusType) error
-	Restore(l *LawsuitStatusType) error
+	Read(*LawsuitStatusType) error
+	Save(*LawsuitStatusType) error
+	Update(*LawsuitStatusType) error
+	Create(*LawsuitStatusType) error
+	Delete(*LawsuitStatusType) error
+	Restore(*LawsuitStatusType) error
 }
 
 // TableName - возвращает имя таблицы в БД, нужен для gorm
@@ -136,7 +136,7 @@ func (l *LawsuitStatusType) Restore() error {
 }
 
 // SetCrudInterface - заполняет интерфейс crud: DB, GRPC, NRPC
-func (c LawsuitStatusType) SetCrudInterface(crud ICrud_LawsuitStatusType) {
+func (l LawsuitStatusType) SetCrudInterface(crud ICrud_LawsuitStatusType) {
 	crud_LawsuitStatusType = crud
 
 	return

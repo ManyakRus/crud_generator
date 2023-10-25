@@ -25,8 +25,8 @@ func StartApp() {
 	postgres_gorm.GetConnection().Logger.LogMode(1)
 
 	log.Info("postgres host: ", postgres_gorm.Settings.DB_HOST)
-	ok := logic.StartFillAll()
-	if ok == false {
+	err := logic.StartFillAll()
+	if err != nil {
 		println(constants.TEXT_HELP)
 	}
 
