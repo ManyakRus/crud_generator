@@ -47,10 +47,10 @@ func CreateDBFiles1(Table1 *types.Table) error {
 
 	FilenameTemplateDB := DirTemplatesDB + "db.go_"
 	TableName := strings.ToLower(Table1.Name)
-	FilenameReadyDB := DirReadyDB + TableName + micro.SeparatorFile() + TableName + ".go"
+	DirTable := DirReadyDB + "db_" + TableName
+	FilenameReadyDB := DirTable + micro.SeparatorFile() + "db_" + TableName + ".go"
 
 	//создадим каталог
-	DirTable := DirReadyDB + TableName
 	ok, err := micro.FileExists(DirTable)
 	if ok == false {
 		err = os.Mkdir(DirTable, 0777)
@@ -98,10 +98,10 @@ func CreateDBTestFiles1(Table1 *types.Table) error {
 
 	FilenameTemplateDB := DirTemplatesDB + "db_test.go_"
 	TableName := strings.ToLower(Table1.Name)
-	FilenameReadyDB := DirReadyDB + TableName + micro.SeparatorFile() + TableName + "_test.go"
+	DirTable := DirReadyDB + "db_" + TableName
+	FilenameReadyDB := DirTable + micro.SeparatorFile() + "db_" + TableName + "_test.go"
 
 	//создадим каталог
-	DirTable := DirReadyDB + TableName
 	ok, err := micro.FileExists(DirTable)
 	if ok == false {
 		err = os.Mkdir(DirTable, 0777)

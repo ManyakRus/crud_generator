@@ -3,6 +3,7 @@ package create_files
 import (
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/inflection"
+	"strings"
 )
 
 // FindSingularName - возвращает наименование в единственном числе
@@ -22,7 +23,12 @@ func FindSingularName(s string) string {
 func FormatName(Name string) string {
 	Otvet := Name
 
-	Otvet = strcase.ToCamel(Otvet)
+	switch strings.ToLower(Name) {
+	case "id":
+		Otvet = "ID"
+	default:
+		Otvet = strcase.ToCamel(Otvet)
+	}
 
 	return Otvet
 }
