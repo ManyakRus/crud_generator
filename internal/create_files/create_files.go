@@ -1,6 +1,7 @@
 package create_files
 
 import (
+	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/inflection"
 )
 
@@ -13,6 +14,15 @@ func FindSingularName(s string) string {
 	}
 
 	Otvet = inflection.Singular(s)
+
+	return Otvet
+}
+
+// FormatName - возвращает наименование в формате CamelCase
+func FormatName(Name string) string {
+	Otvet := Name
+
+	Otvet = strcase.ToCamel(Otvet)
 
 	return Otvet
 }
