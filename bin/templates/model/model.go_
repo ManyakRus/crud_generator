@@ -29,7 +29,7 @@ type ICrud_LawsuitStatusType interface {
 }
 
 // TableName - возвращает имя таблицы в БД, нужен для gorm
-func (l LawsuitStatusType) TableNameDB() string {
+func (m LawsuitStatusType) TableNameDB() string {
 	return "lawsuit_status_types"
 }
 
@@ -49,8 +49,8 @@ func AsLawsuitStatusType(b []byte) (LawsuitStatusType, error) {
 }
 
 // LawsuitStatusTypeAsBytes - упаковывает объект в массив байтов
-func LawsuitStatusTypeAsBytes(l *LawsuitStatusType) ([]byte, error) {
-	b, err := msgpack.Marshal(l)
+func LawsuitStatusTypeAsBytes(m *LawsuitStatusType) ([]byte, error) {
+	b, err := msgpack.Marshal(m)
 	if err != nil {
 		return nil, err
 	}
@@ -58,32 +58,32 @@ func LawsuitStatusTypeAsBytes(l *LawsuitStatusType) ([]byte, error) {
 }
 
 // GetStructVersion - возвращает версию модели
-func (l LawsuitStatusType) GetStructVersion() uint32 {
+func (m LawsuitStatusType) GetStructVersion() uint32 {
 	if versionLawsuitStatusType == 0 {
-		versionLawsuitStatusType = CalcStructVersion(reflect.TypeOf(l))
+		versionLawsuitStatusType = CalcStructVersion(reflect.TypeOf(m))
 	}
 
 	return versionLawsuitStatusType
 }
 
 // GetModelFromJSON - создаёт модель из строки json
-func (l *LawsuitStatusType) GetModelFromJSON(sModel string) error {
+func (m *LawsuitStatusType) GetModelFromJSON(sModel string) error {
 	var err error
 
 	var bytes []byte
 	bytes = []byte(sModel)
 
-	err = json.Unmarshal(bytes, l)
+	err = json.Unmarshal(bytes, m)
 
 	return err
 }
 
 // GetJSON - возвращает строку json из модели
-func (l LawsuitStatusType) GetJSON() (string, error) {
+func (m LawsuitStatusType) GetJSON() (string, error) {
 	var ReturnVar string
 	var err error
 
-	bytes, err := json.Marshal(l)
+	bytes, err := json.Marshal(m)
 	if err != nil {
 		return ReturnVar, err
 	}
@@ -94,49 +94,49 @@ func (l LawsuitStatusType) GetJSON() (string, error) {
 //---------------------------- CRUD операции ------------------------------------------------------------
 
 // Read - находит запись в БД по ID, и заполняет в объект
-func (l *LawsuitStatusType) Read() error {
-	err := crud_LawsuitStatusType.Read(l)
+func (m *LawsuitStatusType) Read() error {
+	err := crud_LawsuitStatusType.Read(m)
 
 	return err
 }
 
 // Save - записывает объект в БД по ID
-func (l *LawsuitStatusType) Save() error {
-	err := crud_LawsuitStatusType.Save(l)
+func (m *LawsuitStatusType) Save() error {
+	err := crud_LawsuitStatusType.Save(m)
 
 	return err
 }
 
 // Update - обновляет объект в БД по ID
-func (l *LawsuitStatusType) Update() error {
-	err := crud_LawsuitStatusType.Update(l)
+func (m *LawsuitStatusType) Update() error {
+	err := crud_LawsuitStatusType.Update(m)
 
 	return err
 }
 
 // Create - создаёт объект в БД с новым ID
-func (l *LawsuitStatusType) Create() error {
-	err := crud_LawsuitStatusType.Create(l)
+func (m *LawsuitStatusType) Create() error {
+	err := crud_LawsuitStatusType.Create(m)
 
 	return err
 }
 
 // Delete - устанавливает признак пометки удаления в БД
-func (l *LawsuitStatusType) Delete() error {
-	err := crud_LawsuitStatusType.Delete(l)
+func (m *LawsuitStatusType) Delete() error {
+	err := crud_LawsuitStatusType.Delete(m)
 
 	return err
 }
 
 // Restore - снимает признак пометки удаления в БД
-func (l *LawsuitStatusType) Restore() error {
-	err := crud_LawsuitStatusType.Restore(l)
+func (m *LawsuitStatusType) Restore() error {
+	err := crud_LawsuitStatusType.Restore(m)
 
 	return err
 }
 
 // SetCrudInterface - заполняет интерфейс crud: DB, GRPC, NRPC
-func (l LawsuitStatusType) SetCrudInterface(crud ICrud_LawsuitStatusType) {
+func (m LawsuitStatusType) SetCrudInterface(crud ICrud_LawsuitStatusType) {
 	crud_LawsuitStatusType = crud
 
 	return

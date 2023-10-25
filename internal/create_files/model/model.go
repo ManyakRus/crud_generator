@@ -254,6 +254,11 @@ func AddImportTime(TextModel string, Table1 *types.Table) string {
 		return Otvet
 	}
 
+	HasTimeColumn := FindHasTimeColumn(Table1)
+	if HasTimeColumn == false {
+		return Otvet
+	}
+
 	//
 	pos1 = strings.Index(Otvet, "import (")
 	if pos1 < 0 {
@@ -262,6 +267,23 @@ func AddImportTime(TextModel string, Table1 *types.Table) string {
 	}
 
 	Otvet = Otvet[:pos1+8] + "\n\t" + `"time"` + Otvet[pos1+8:]
+
+	return Otvet
+}
+
+func FindHasTimeColumn(Table1 *types.Table) bool {
+	Otvet := false
+
+	for _, Column1 := range Table1.MapColumns {
+		SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
+		if ok == false {
+			log.Panic("GetMappings() ", Column1.Type, " error: not found")
+		}
+		if SQLMapping1.GoType == "time.Time" {
+			Otvet = true
+			break
+		}
+	}
 
 	return Otvet
 }
