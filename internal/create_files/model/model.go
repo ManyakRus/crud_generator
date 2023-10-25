@@ -106,6 +106,7 @@ type ` + ModelName + ` struct {
 		Column1, _ := Table1.MapColumns[key1]
 		TextColumn := FindTextColumn(&Column1)
 		Otvet = Otvet + TextColumn + "\n"
+		Table1.MapColumns[key1] = Column1
 	}
 
 	Otvet = Otvet + "\n}"
@@ -124,6 +125,7 @@ func FindTextColumn(Column1 *types.Column) string {
 		log.Panic("GetMappings() ", Column1.Type, " error: not found")
 	}
 	Type_go := SQLMapping1.GoType
+	Column1.TypeGo = Type_go
 	TextDefaultValue := FindTextDefaultValue(Type_go)
 	TextPrimaryKey := FindTextPrimaryKey(Column1.Is_identity)
 	Description := Column1.Description

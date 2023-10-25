@@ -20,7 +20,7 @@ type Crud_DB struct {
 }
 
 // Read - находит запись в БД по ID
-func (crud Crud_DB) Read(l *model.LawsuitStatusType) error {
+func (crud Crud_DB) Read(m *model.LawsuitStatusType) error {
 	//var Otvet model.LawsuitStatusType
 	var err error
 
@@ -29,77 +29,77 @@ func (crud Crud_DB) Read(l *model.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = crud.Read_ctx(ctx, l)
+	err = crud.Read_ctx(ctx, m)
 	return err
 }
 
 // Read_ctx - находит запись в БД по ID
-func (crud Crud_DB) Read_ctx(ctx context.Context, l *model.LawsuitStatusType) error {
+func (crud Crud_DB) Read_ctx(ctx context.Context, m *model.LawsuitStatusType) error {
 	//var Otvet model.LawsuitStatusType
 	var err error
 
-	id := l.ID
+	id := m.ID
 
 	db := postgres_gorm.GetConnection()
 	db.WithContext(ctx)
 
-	tx := db.First(l, id)
+	tx := db.First(m, id)
 	err = tx.Error
 
 	return err
 }
 
 // Save - записывает новый или существующий объект в базу данных
-func (crud Crud_DB) Save(l *model.LawsuitStatusType) error {
+func (crud Crud_DB) Save(m *model.LawsuitStatusType) error {
 	ctxMain := context.Background()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err := crud.Save_ctx(ctx, l)
+	err := crud.Save_ctx(ctx, m)
 	return err
 }
 
 // Save_ctx - записывает новый или существующий объект в базу данных
-func (crud Crud_DB) Save_ctx(ctx context.Context, l *model.LawsuitStatusType) error {
-	is_create := !micro.BoolFromInt64(l.ID)
-	err := crud.create_update_ctx(ctx, l, is_create)
+func (crud Crud_DB) Save_ctx(ctx context.Context, m *model.LawsuitStatusType) error {
+	is_create := !micro.BoolFromInt64(m.ID)
+	err := crud.create_update_ctx(ctx, m, is_create)
 	return err
 }
 
 // Update - записывает существующий объект в базу данных
-func (crud Crud_DB) Update(l *model.LawsuitStatusType) error {
+func (crud Crud_DB) Update(m *model.LawsuitStatusType) error {
 	ctxMain := context.Background()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err := crud.Update_ctx(ctx, l)
+	err := crud.Update_ctx(ctx, m)
 	return err
 }
 
 // Update_ctx - записывает существующий объект в базу данных
-func (crud Crud_DB) Update_ctx(ctx context.Context, l *model.LawsuitStatusType) error {
-	err := crud.create_update_ctx(ctx, l, false)
+func (crud Crud_DB) Update_ctx(ctx context.Context, m *model.LawsuitStatusType) error {
+	err := crud.create_update_ctx(ctx, m, false)
 	return err
 }
 
 // Create - записывает новый объект в базу данных
-func (crud Crud_DB) Create(l *model.LawsuitStatusType) error {
+func (crud Crud_DB) Create(m *model.LawsuitStatusType) error {
 	ctxMain := context.Background()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err := crud.Create_ctx(ctx, l)
+	err := crud.Create_ctx(ctx, m)
 	return err
 }
 
 // Create_ctx - записывает новый объект в базу данных
-func (crud Crud_DB) Create_ctx(ctx context.Context, l *model.LawsuitStatusType) error {
-	err := crud.create_update_ctx(ctx, l, true)
+func (crud Crud_DB) Create_ctx(ctx context.Context, m *model.LawsuitStatusType) error {
+	err := crud.create_update_ctx(ctx, m, true)
 	return err
 }
 
 // create_update - записывает объект в базу данных
-func (crud Crud_DB) create_update(l *model.LawsuitStatusType, is_create bool) error {
+func (crud Crud_DB) create_update(m *model.LawsuitStatusType, is_create bool) error {
 	var err error
 
 	//log.Trace("start Save() ", TableName, " id: ", m.ID)
@@ -108,25 +108,25 @@ func (crud Crud_DB) create_update(l *model.LawsuitStatusType, is_create bool) er
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = crud.create_update_ctx(ctx, l, is_create)
+	err = crud.create_update_ctx(ctx, m, is_create)
 	return err
 }
 
 // create_update_ctx - записывает объект в базу данных
-func (crud Crud_DB) create_update_ctx(ctx context.Context, l *model.LawsuitStatusType, is_create bool) error {
+func (crud Crud_DB) create_update_ctx(ctx context.Context, m *model.LawsuitStatusType, is_create bool) error {
 	var err error
 
 	//log.Trace("start Save() ", TableName, " id: ", m.ID)
 
 	// проверка ID
 	if is_create == true {
-		if l.ID != 0 {
+		if m.ID != 0 {
 			TextError := fmt.Sprint("db.Save() ", TableName, " error: id !=0")
 			//log.Panic(sError)
 			err = errors.New(TextError)
 			return err
 		}
-	} else if l.ID == 0 {
+	} else if m.ID == 0 {
 		TextError := fmt.Sprint("db.Save() ", TableName, " error: id =0")
 		err = errors.New(TextError)
 		//log.Panic(sError)
@@ -139,11 +139,11 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, l *model.LawsuitStatu
 
 	//заполним даты
 	Now := time.Now()
-	l.ModifiedAt = Now
-	if l.IsDeleted == true && l.DeletedAt.IsZero() == true {
-		l.DeletedAt = Now
-	} else if l.IsDeleted == false && l.DeletedAt.IsZero() == false {
-		l.DeletedAt = time.Time{}
+	m.ModifiedAt = Now
+	if m.IsDeleted == true && m.DeletedAt.IsZero() == true {
+		m.DeletedAt = Now
+	} else if m.IsDeleted == false && m.DeletedAt.IsZero() == false {
+		m.DeletedAt = time.Time{}
 	}
 
 	//колонки с null
@@ -152,12 +152,12 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, l *model.LawsuitStatu
 	var ColumnName string
 
 	ColumnName = "DeletedAt"
-	if l.DeletedAt.IsZero() == true {
+	if m.DeletedAt.IsZero() == true {
 		MassOmit = append(MassOmit, ColumnName)
 	}
 
 	ColumnName = "ExtID"
-	if l.ExtID == 0 {
+	if m.ExtID == 0 {
 		MassOmit = append(MassOmit, ColumnName)
 	}
 
@@ -166,9 +166,9 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, l *model.LawsuitStatu
 
 	//запись
 	if is_create == true {
-		tx = tx.Create(&l)
+		tx = tx.Create(&m)
 	} else {
-		tx = tx.Save(&l)
+		tx = tx.Save(&m)
 	}
 	err = tx.Error
 	if err != nil {
@@ -178,11 +178,11 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, l *model.LawsuitStatu
 	//запишем NULL в пустые колонки
 	for f := 0; f < len(MassOmit); f++ {
 		ColumnName := MassOmit[f]
-		tx = db.Model(&l).Update(ColumnName, gorm.Expr("NULL"))
+		tx = db.Model(&m).Update(ColumnName, gorm.Expr("NULL"))
 
 		err = tx.Error
 		if err != nil {
-			TextError := fmt.Sprint("db.Update() ", TableName, " id: ", l.ID, " error: ", err)
+			TextError := fmt.Sprint("db.Update() ", TableName, " id: ", m.ID, " error: ", err)
 			err = errors.New(TextError)
 			return err
 			//log.Panic(sError)
@@ -193,7 +193,7 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, l *model.LawsuitStatu
 }
 
 // Delete - записывает is_deleted = true
-func (crud Crud_DB) Delete(l *model.LawsuitStatusType) error {
+func (crud Crud_DB) Delete(m *model.LawsuitStatusType) error {
 	//var Otvet model.LawsuitStatusType
 	var err error
 
@@ -201,32 +201,32 @@ func (crud Crud_DB) Delete(l *model.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = crud.Delete_ctx(ctx, l)
+	err = crud.Delete_ctx(ctx, m)
 	return err
 }
 
 // Delete_ctx - записывает is_deleted = true
-func (crud Crud_DB) Delete_ctx(ctx context.Context, l *model.LawsuitStatusType) error {
+func (crud Crud_DB) Delete_ctx(ctx context.Context, m *model.LawsuitStatusType) error {
 	//var Otvet model.LawsuitStatusType
 	var err error
 
-	l2 := model.LawsuitStatusType{}
-	l2.ID = l.ID
-	err = crud.Read_ctx(ctx, &l2)
+	m2 := model.LawsuitStatusType{}
+	m2.ID = m.ID
+	err = crud.Read_ctx(ctx, &m2)
 	if err != nil {
 		return err
 	}
 
-	l2.IsDeleted = true
-	l.IsDeleted = true
+	m2.IsDeleted = true
+	m.IsDeleted = true
 
-	err = crud.Save_ctx(ctx, &l2)
+	err = crud.Save_ctx(ctx, &m2)
 
 	return err
 }
 
 // Restore - записывает is_deleted = true
-func (crud Crud_DB) Restore(l *model.LawsuitStatusType) error {
+func (crud Crud_DB) Restore(m *model.LawsuitStatusType) error {
 	//var Otvet model.LawsuitStatusType
 	var err error
 
@@ -234,26 +234,26 @@ func (crud Crud_DB) Restore(l *model.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = crud.Restore_ctx(ctx, l)
+	err = crud.Restore_ctx(ctx, m)
 	return err
 }
 
 // Restore_ctx - записывает is_deleted = true
-func (crud Crud_DB) Restore_ctx(ctx context.Context, l *model.LawsuitStatusType) error {
+func (crud Crud_DB) Restore_ctx(ctx context.Context, m *model.LawsuitStatusType) error {
 	//var Otvet model.LawsuitStatusType
 	var err error
 
-	l2 := model.LawsuitStatusType{}
-	l2.ID = l.ID
-	err = crud.Read_ctx(ctx, &l2)
+	m2 := model.LawsuitStatusType{}
+	m2.ID = m.ID
+	err = crud.Read_ctx(ctx, &m2)
 	if err != nil {
 		return err
 	}
 
-	l2.IsDeleted = false
-	l.IsDeleted = false
+	m2.IsDeleted = false
+	m.IsDeleted = false
 
-	err = crud.Save_ctx(ctx, &l2)
+	err = crud.Save_ctx(ctx, &m2)
 
 	return err
 }

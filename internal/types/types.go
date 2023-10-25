@@ -9,6 +9,7 @@ type Column struct {
 	TableKey    string `json:"table_key"   gorm:"column:table_key;default:''"`
 	ColumnKey   string `json:"column_key"   gorm:"column:column_key;default:''"`
 	NameGo      string `gorm:-`
+	TypeGo      string `gorm:-`
 }
 
 type Table struct {

@@ -3,7 +3,6 @@ package db
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
-	"github.com/ManyakRus/crud_generator/internal/create_files/model"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
@@ -72,12 +71,13 @@ func CreateDBFiles1(Table1 *types.Table) error {
 	TextDB = constants.TEXT_GENERATED + TextDB
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncDeleteCtx(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncRestore(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncRestoreCtx(TextDB, ModelName, Table1)
+		TextDB = DeleteFuncDelete(TextDB, Table1)
+		TextDB = DeleteFuncDeleteCtx(TextDB, Table1)
+		TextDB = DeleteFuncRestore(TextDB, Table1)
+		TextDB = DeleteFuncRestoreCtx(TextDB, Table1)
 	}
-	TextDB = model.DeleteFuncFind_byExtID(TextDB, ModelName, Table1)
+	TextDB = DeleteFuncFind_byExtID(TextDB, Table1)
+	TextDB = AddTextOmit(TextDB, Table1)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -123,12 +123,12 @@ func CreateDBTestFiles1(Table1 *types.Table) error {
 	TextDB = constants.TEXT_GENERATED + TextDB
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncDeleteCtx(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncRestore(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncRestoreCtx(TextDB, ModelName, Table1)
+		TextDB = DeleteFuncDelete(TextDB, Table1)
+		TextDB = DeleteFuncDeleteCtx(TextDB, Table1)
+		TextDB = DeleteFuncRestore(TextDB, Table1)
+		TextDB = DeleteFuncRestoreCtx(TextDB, Table1)
 	}
-	TextDB = model.DeleteFuncFind_byExtID(TextDB, ModelName, Table1)
+	TextDB = DeleteFuncFind_byExtID(TextDB, Table1)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -137,8 +137,8 @@ func CreateDBTestFiles1(Table1 *types.Table) error {
 }
 
 // DeleteFuncDelete - удаляет функцию Delete()
-func DeleteFuncDelete(TextModel, ModelName string, Table1 *types.Table) string {
-	Otvet := TextModel
+func DeleteFuncDelete(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
 
 	_, ok := Table1.MapColumns["is_deleted"]
 	if ok == true {
@@ -163,8 +163,8 @@ func DeleteFuncDelete(TextModel, ModelName string, Table1 *types.Table) string {
 }
 
 // DeleteFuncRestore - удаляет функцию Restore()
-func DeleteFuncRestore(TextModel, Modelname string, Table1 *types.Table) string {
-	Otvet := TextModel
+func DeleteFuncRestore(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
 
 	_, ok := Table1.MapColumns["is_deleted"]
 	if ok == true {
@@ -189,8 +189,8 @@ func DeleteFuncRestore(TextModel, Modelname string, Table1 *types.Table) string 
 }
 
 // DeleteFuncDeleteCtx - удаляет функцию Delete_ctx()
-func DeleteFuncDeleteCtx(TextModel, ModelName string, Table1 *types.Table) string {
-	Otvet := TextModel
+func DeleteFuncDeleteCtx(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
 
 	_, ok := Table1.MapColumns["is_deleted"]
 	if ok == true {
@@ -215,8 +215,8 @@ func DeleteFuncDeleteCtx(TextModel, ModelName string, Table1 *types.Table) strin
 }
 
 // DeleteFuncRestoreCtx - удаляет функцию Restore_ctx()
-func DeleteFuncRestoreCtx(TextModel, Modelname string, Table1 *types.Table) string {
-	Otvet := TextModel
+func DeleteFuncRestoreCtx(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
 
 	_, ok := Table1.MapColumns["is_deleted"]
 	if ok == true {
@@ -241,8 +241,8 @@ func DeleteFuncRestoreCtx(TextModel, Modelname string, Table1 *types.Table) stri
 }
 
 // DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) string {
-	Otvet := TextModel
+func DeleteFuncFind_byExtID(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
 
 	//
 	_, ok := Table1.MapColumns["ext_id"]
@@ -274,8 +274,8 @@ func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) st
 }
 
 // DeleteFuncTestDelete - удаляет функцию Delete()
-func DeleteFuncTestDelete(TextModel, ModelName string, Table1 *types.Table) string {
-	Otvet := TextModel
+func DeleteFuncTestDelete(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
 
 	_, ok := Table1.MapColumns["is_deleted"]
 	if ok == true {
@@ -300,8 +300,8 @@ func DeleteFuncTestDelete(TextModel, ModelName string, Table1 *types.Table) stri
 }
 
 // DeleteFuncTestRestore - удаляет функцию Restore()
-func DeleteFuncTestRestore(TextModel, Modelname string, Table1 *types.Table) string {
-	Otvet := TextModel
+func DeleteFuncTestRestore(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
 
 	_, ok := Table1.MapColumns["is_deleted"]
 	if ok == true {
@@ -326,8 +326,8 @@ func DeleteFuncTestRestore(TextModel, Modelname string, Table1 *types.Table) str
 }
 
 // DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncTestFind_byExtID(TextModel, Modelname string, Table1 *types.Table) string {
-	Otvet := TextModel
+func DeleteFuncTestFind_byExtID(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
 
 	//
 	_, ok := Table1.MapColumns["ext_id"]
@@ -354,6 +354,42 @@ func DeleteFuncTestFind_byExtID(TextModel, Modelname string, Table1 *types.Table
 	}
 
 	Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+3:]
+
+	return Otvet
+}
+
+func AddTextOmit(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
+
+	TextFind := "\t//игнор пустых колонок"
+	pos1 := strings.Index(Otvet, TextFind)
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	TextOmit := ""
+	for _, Column1 := range Table1.MapColumns {
+		TypeGo := Column1.TypeGo
+		if TypeGo != "time.Time" {
+			continue
+		}
+
+		ColumnNameGo := Column1.NameGo
+		TextFind := `if m.` + ColumnNameGo + `.IsZero() == true {`
+		pos1 := strings.Index(TextDB, TextFind)
+		if pos1 >= 0 {
+			continue
+		}
+
+		TextOmit = TextOmit + "\t" + `ColumnName = "` + ColumnNameGo + `"
+	if m.` + ColumnNameGo + `.IsZero() == true {
+		MassOmit = append(MassOmit, ColumnName)
+	}
+
+`
+	}
+
+	Otvet = Otvet[:pos1] + TextOmit + Otvet[pos1:]
 
 	return Otvet
 }
