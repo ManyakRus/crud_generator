@@ -309,14 +309,14 @@ func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) st
 	Otvet := TextModel
 
 	//
-	_, ok := Table1.MapColumns["ext_id"]
-	if ok == true {
-		return Otvet
-	}
+	_, ok1 := Table1.MapColumns["ext_id"]
+	//if ok == false {
+	//	return Otvet
+	//}
 
 	//
-	_, ok = Table1.MapColumns["connection_id"]
-	if ok == true {
+	_, ok2 := Table1.MapColumns["connection_id"]
+	if ok1 == true && ok2 == true {
 		return Otvet
 	}
 

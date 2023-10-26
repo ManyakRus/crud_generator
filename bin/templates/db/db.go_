@@ -258,42 +258,42 @@ func (crud Crud_DB) Restore_ctx(ctx context.Context, m *model.LawsuitStatusType)
 	return err
 }
 
-//// Find_ByExtID - находит запись в БД по ext_id и connection_id
-//func Find_ByExtID(ext_id int64, connection_id int64) (model.LawsuitStatusType, error) {
-//	var Otvet model.LawsuitStatusType
-//	var err error
-//
-//	if ext_id <= 0 {
-//		err = errors.New("Error: ext_id <=0")
-//		return Otvet, err
-//	}
-//
-//	//
-//	ctxMain := context.Background()
-//	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
-//	defer ctxCancelFunc()
-//
-//	Otvet, err = Find_ByExtID_ctx(ctx, ext_id, connection_id)
-//
-//	return Otvet, err
-//}
-//
-//// Find_ByExtID_ctx - находит запись в БД по ext_id и connection_id
-//func Find_ByExtID_ctx(ctx context.Context, ext_id int64, connection_id int64) (model.LawsuitStatusType, error) {
-//	var Otvet model.LawsuitStatusType
-//	var err error
-//	//log.Trace("start Find_ByExtID() ", TableName, " ext_id: ", ext_id)
-//
-//	if ext_id <= 0 {
-//		err = errors.New("Error: ext_id <=0")
-//		return Otvet, err
-//	}
-//
-//	db := postgres_gorm.GetConnection()
-//	db.WithContext(ctx)
-//
-//	tx := db.Where("ext_id = ?", ext_id).Where("connection_id = ?", connection_id).First(&Otvet)
-//	err = tx.Error
-//
-//	return Otvet, err
-//}
+// Find_ByExtID - находит запись в БД по ext_id и connection_id
+func Find_ByExtID(ext_id int64, connection_id int64) (model.LawsuitStatusType, error) {
+	var Otvet model.LawsuitStatusType
+	var err error
+
+	if ext_id <= 0 {
+		err = errors.New("Error: ext_id <=0")
+		return Otvet, err
+	}
+
+	//
+	ctxMain := context.Background()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	Otvet, err = Find_ByExtID_ctx(ctx, ext_id, connection_id)
+
+	return Otvet, err
+}
+
+// Find_ByExtID_ctx - находит запись в БД по ext_id и connection_id
+func Find_ByExtID_ctx(ctx context.Context, ext_id int64, connection_id int64) (model.LawsuitStatusType, error) {
+	var Otvet model.LawsuitStatusType
+	var err error
+	//log.Trace("start Find_ByExtID() ", TableName, " ext_id: ", ext_id)
+
+	if ext_id <= 0 {
+		err = errors.New("Error: ext_id <=0")
+		return Otvet, err
+	}
+
+	db := postgres_gorm.GetConnection()
+	db.WithContext(ctx)
+
+	tx := db.Where("ext_id = ?", ext_id).Where("connection_id = ?", connection_id).First(&Otvet)
+	err = tx.Error
+
+	return Otvet, err
+}

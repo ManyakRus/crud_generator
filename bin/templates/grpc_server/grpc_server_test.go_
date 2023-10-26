@@ -12,7 +12,7 @@ import (
 // LawsuitStatusType_ID_Test - ID таблицы для тестирования
 const LawsuitStatusType_ID_Test = 1
 
-func Test_server_LawsuitStatusTypes_Read(t *testing.T) {
+func Test_server_LawsuitStatusType_Read(t *testing.T) {
 	//t.SkipNow()
 	config.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
@@ -23,7 +23,7 @@ func Test_server_LawsuitStatusTypes_Read(t *testing.T) {
 	Request.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
-	Otvet, err := server1.LawsuitStatusTypes_Read(ctx, &Request)
+	Otvet, err := server1.LawsuitStatusType_Read(ctx, &Request)
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Read() error: ", err)
 	}
@@ -32,7 +32,7 @@ func Test_server_LawsuitStatusTypes_Read(t *testing.T) {
 	}
 }
 
-func Test_server_LawsuitStatusTypes_Delete(t *testing.T) {
+func Test_server_LawsuitStatusType_Delete(t *testing.T) {
 	config.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
@@ -42,17 +42,17 @@ func Test_server_LawsuitStatusTypes_Delete(t *testing.T) {
 	Request.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
-	Otvet, err := server1.LawsuitStatusTypes_Delete(ctx, &Request)
+	Otvet, err := server1.LawsuitStatusType_Delete(ctx, &Request)
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Delete() error: ", err)
 	}
 	if Otvet.ModelString == "" {
 		t.Error("Test_server_LawsuitStatusType_Delete() error: ModelString=''")
 	}
-	Otvet, err = server1.LawsuitStatusTypes_Restore(ctx, &Request)
+	Otvet, err = server1.LawsuitStatusType_Restore(ctx, &Request)
 }
 
-func Test_server_LawsuitStatusTypes_Create(t *testing.T) {
+func Test_server_LawsuitStatusType_Create(t *testing.T) {
 	config.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
@@ -71,7 +71,7 @@ func Test_server_LawsuitStatusTypes_Create(t *testing.T) {
 
 	ctx := context.Background()
 	server1 := &ServerGRPC{}
-	Otvet, err := server1.LawsuitStatusTypes_Create(ctx, &RequestModel)
+	Otvet, err := server1.LawsuitStatusType_Create(ctx, &RequestModel)
 	if err == nil {
 		t.Error("Test_server_LawsuitStatusType_Create() error: ", err)
 	}
@@ -80,7 +80,7 @@ func Test_server_LawsuitStatusTypes_Create(t *testing.T) {
 	}
 }
 
-func Test_server_LawsuitStatusTypes_Update(t *testing.T) {
+func Test_server_LawsuitStatusType_Update(t *testing.T) {
 	config.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
@@ -90,7 +90,7 @@ func Test_server_LawsuitStatusTypes_Update(t *testing.T) {
 	Request.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
-	Response1, err := server1.LawsuitStatusTypes_Read(ctx, &Request)
+	Response1, err := server1.LawsuitStatusType_Read(ctx, &Request)
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Update() error: ", err)
 		return
@@ -106,7 +106,7 @@ func Test_server_LawsuitStatusTypes_Update(t *testing.T) {
 	RequestModel.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
 	RequestModel.ModelString = ModelString
 
-	Otvet, err := server1.LawsuitStatusTypes_Update(ctx, &RequestModel)
+	Otvet, err := server1.LawsuitStatusType_Update(ctx, &RequestModel)
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Update() error: ", err)
 	}
@@ -116,7 +116,7 @@ func Test_server_LawsuitStatusTypes_Update(t *testing.T) {
 
 }
 
-func Test_server_LawsuitStatusTypes_Save(t *testing.T) {
+func Test_server_LawsuitStatusType_Save(t *testing.T) {
 	config.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
@@ -128,7 +128,7 @@ func Test_server_LawsuitStatusTypes_Save(t *testing.T) {
 	Request.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
-	Response1, err := server1.LawsuitStatusTypes_Read(ctx, &Request)
+	Response1, err := server1.LawsuitStatusType_Read(ctx, &Request)
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Save() error: ", err)
 		return
@@ -142,7 +142,7 @@ func Test_server_LawsuitStatusTypes_Save(t *testing.T) {
 	RequestModel.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
 	RequestModel.ModelString = ModelString
 
-	Otvet, err := server1.LawsuitStatusTypes_Save(ctx, &RequestModel)
+	Otvet, err := server1.LawsuitStatusType_Save(ctx, &RequestModel)
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Save() error: ", err)
 	}
@@ -151,3 +151,24 @@ func Test_server_LawsuitStatusTypes_Save(t *testing.T) {
 	}
 
 }
+
+func Test_server_LawsuitStatusType_FindByExtID(t *testing.T) {
+	config.LoadEnv()
+	crud_starter.InitCrudTransport_DB()
+
+	ctx := context.Background()
+	Request := grpc_proto.RequestExtId{}
+	Request.ExtId = 1
+	Request.ConnectionId = 3
+	Request.VersionModel = model.Employee{}.GetStructVersion()
+
+	server1 := &ServerGRPC{}
+	Otvet, err := server1.LawsuitStatusType_FindByExtId(ctx, &Request)
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_FindByExtId() error: ", err)
+	}
+	if Otvet.ModelString == "" {
+		t.Error("Test_server_LawsuitStatusType_FindByExtId() error: ModelString=''")
+	}
+}
+

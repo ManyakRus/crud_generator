@@ -105,12 +105,10 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextDB = constants.TEXT_GENERATED + TextDB
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncDeleteCtx(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncRestore(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncRestoreCtx(TextDB, ModelName, Table1)
+		TextDB = DeleteFuncTestDelete(TextDB, ModelName, Table1)
+		TextDB = DeleteFuncTestRestore(TextDB, ModelName, Table1)
 	}
-	TextDB = DeleteFuncFind_byExtID(TextDB, ModelName, Table1)
+	TextDB = DeleteFuncTestFind_byExtID(TextDB, ModelName, Table1)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -178,19 +176,14 @@ func DeleteFuncRestoreCtx(Text, ModelName string, Table1 *types.Table) string {
 func DeleteFuncFind_byExtID(Text, ModelName string, Table1 *types.Table) string {
 	Otvet := Text
 
-	//
-	_, ok := Table1.MapColumns["ext_id"]
+	//если есть обе колонки - ничего не делаем
+	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
 	if ok == true {
 		return Otvet
 	}
 
 	//
-	_, ok = Table1.MapColumns["connection_id"]
-	if ok == true {
-		return Otvet
-	}
-
-	Otvet = create_files.DeleteFuncFromComment(Text, "\n// "+ModelName+"_Find_ByExtID ")
+	Otvet = create_files.DeleteFuncFromComment(Text, "\n// "+ModelName+"_FindByExtID ")
 
 	return Otvet
 }
@@ -227,19 +220,14 @@ func DeleteFuncTestRestore(Text, ModelName string, Table1 *types.Table) string {
 func DeleteFuncTestFind_byExtID(Text, ModelName string, Table1 *types.Table) string {
 	Otvet := Text
 
-	//
-	_, ok := Table1.MapColumns["ext_id"]
+	//если есть обе колонки - ничего не делаем
+	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
 	if ok == true {
 		return Otvet
 	}
 
 	//
-	_, ok = Table1.MapColumns["connection_id"]
-	if ok == true {
-		return Otvet
-	}
-
-	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "Test_server_"+ModelName+"Find_ByExtID")
+	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "Test_server_"+ModelName+"_FindByExtID")
 
 	return Otvet
 }

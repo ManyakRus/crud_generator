@@ -254,3 +254,39 @@ func (crud Crud_NRPC) Restore(l *model.LawsuitStatusType) error {
 
 	return err
 }
+
+// Find_ByExtID - находит модель в БД по ext_id и connection_id
+func (crud Crud_NRPC) Find_ByExtID(e *model.LawsuitStatusType) error {
+	//подключение
+	if nrpc_client.Client == nil {
+		nrpc_client.Connect()
+	}
+
+	//подготовка запроса
+	var VersionModel = crud.GetVersionModel()
+
+	Request := &grpc_proto.RequestExtId{}
+	Request.ExtId = e.ExtID
+	Request.ConnectionId = e.ConnectionID
+	Request.VersionModel = VersionModel
+
+	//запрос
+	Response, err := nrpc_client.Client.LawsuitStatusType_FindByExtId(Request)
+	if err != nil {
+		sError := err.Error()
+		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+			log.Panic("table: ", TableName, " error: ", err)
+		}
+		return err
+	}
+
+	//ответ
+	sModel := Response.ModelString
+	err = json.Unmarshal([]byte(sModel), e)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+

@@ -26,6 +26,7 @@ type ICrud_LawsuitStatusType interface {
 	Create(*LawsuitStatusType) error
 	Delete(*LawsuitStatusType) error
 	Restore(*LawsuitStatusType) error
+	Find_ByExtID(*LawsuitStatusType) error
 }
 
 // TableName - возвращает имя таблицы в БД, нужен для gorm
@@ -131,6 +132,13 @@ func (m *LawsuitStatusType) Delete() error {
 // Restore - снимает признак пометки удаления в БД
 func (m *LawsuitStatusType) Restore() error {
 	err := crud_LawsuitStatusType.Restore(m)
+
+	return err
+}
+
+// Find_ByExtID - находит объект по ExtID
+func (m *LawsuitStatusType) Find_ByExtID() error {
+	err := crud_LawsuitStatusType.Find_ByExtID(m)
 
 	return err
 }

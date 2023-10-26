@@ -78,6 +78,7 @@ func CreateFiles(Table1 *types.Table) error {
 		TextDB = DeleteFuncRestoreCtx(TextDB, Table1)
 	}
 	TextDB = DeleteFuncFind_byExtID(TextDB, Table1)
+	TextDB = DeleteFuncFind_byExtIDCtx(TextDB, Table1)
 	TextDB = AddTextOmit(TextDB, Table1)
 
 	//запись файла
@@ -124,12 +125,10 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextDB = constants.TEXT_GENERATED + TextDB
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncDelete(TextDB, Table1)
-		TextDB = DeleteFuncDeleteCtx(TextDB, Table1)
-		TextDB = DeleteFuncRestore(TextDB, Table1)
-		TextDB = DeleteFuncRestoreCtx(TextDB, Table1)
+		TextDB = DeleteFuncTestDelete(TextDB, Table1)
+		TextDB = DeleteFuncTestRestore(TextDB, Table1)
 	}
-	TextDB = DeleteFuncFind_byExtID(TextDB, Table1)
+	TextDB = DeleteFuncTestFind_byExtID(TextDB, Table1)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -197,19 +196,30 @@ func DeleteFuncRestoreCtx(Text string, Table1 *types.Table) string {
 func DeleteFuncFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	//
-	_, ok := Table1.MapColumns["ext_id"]
+	//если есть обе колонки - ничего не делаем
+	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
 	if ok == true {
 		return Otvet
 	}
 
 	//
-	_, ok = Table1.MapColumns["connection_id"]
-	if ok == true {
-		return Otvet
-	}
-
 	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Find_ByExtID ")
+
+	return Otvet
+}
+
+// DeleteFuncFind_byExtIDCtx - удаляет функцию Find_ByExtID_ctx()
+func DeleteFuncFind_byExtIDCtx(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	//если есть обе колонки - ничего не делаем
+	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
+	if ok == true {
+		return Otvet
+	}
+
+	//
+	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Find_ByExtID_ctx ")
 
 	return Otvet
 }
@@ -246,18 +256,13 @@ func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
 func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	//
-	_, ok := Table1.MapColumns["ext_id"]
+	//если есть обе колонки - ничего не делаем
+	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
 	if ok == true {
 		return Otvet
 	}
 
 	//
-	_, ok = Table1.MapColumns["connection_id"]
-	if ok == true {
-		return Otvet
-	}
-
 	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "TestFind_ByExtID")
 
 	return Otvet

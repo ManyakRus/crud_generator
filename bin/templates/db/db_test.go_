@@ -95,17 +95,17 @@ func TestDelete(t *testing.T) {
 
 }
 
-//func TestFind_ByExtID(t *testing.T) {
-//	config.LoadEnv()
-//	postgres_gorm.Connect()
-//	defer postgres_gorm.CloseConnection()
-//
-//	Otvet, err := Find_ByExtID(1, constants.CONNECTION_ID_TEST)
-//	if err != nil {
-//		t.Error("TestFind_ByExtID() error: ", err)
-//	}
-//
-//	if Otvet.ID == 0 {
-//		t.Error("TestFind_ByExtID() error: ID =0")
-//	}
-//}
+func TestFind_ByExtID(t *testing.T) {
+	config.LoadEnv()
+	postgres_gorm.Connect()
+	defer postgres_gorm.CloseConnection()
+
+	Otvet, err := Find_ByExtID(1, constants.CONNECTION_ID_TEST)
+	if err != nil {
+		t.Error("TestFind_ByExtID() error: ", err)
+	}
+
+	if Otvet.ID == 0 {
+		t.Error("TestFind_ByExtID() error: ID =0")
+	}
+}

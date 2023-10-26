@@ -150,3 +150,24 @@ func TestDelete(t *testing.T) {
 		}
 	}
 }
+
+func TestFindByExtID(t *testing.T) {
+	config.LoadEnv()
+	nrpc_client.Connect()
+	defer nrpc_client.CloseConnection()
+
+	crud := Crud_NRPC{}
+	Otvet := model.LawsuitStatusType{}
+	Otvet.ExtID = 1
+	Otvet.ConnectionID = constants.CONNECTION_ID_TEST
+	err := crud.Find_ByExtID(&Otvet)
+
+	if err != nil {
+		t.Error("TestFindByExtId() error: ", err)
+	}
+
+	if Otvet.ID == 0 {
+		t.Error("TestFindByExtId() error: ID =0")
+	}
+}
+
