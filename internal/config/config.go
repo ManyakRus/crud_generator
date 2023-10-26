@@ -11,20 +11,24 @@ var Settings SettingsINI
 
 // SettingsINI - структура для хранения всех нужных переменных окружения
 type SettingsINI struct {
-	INCLUDE_TABLES            string
-	EXCLUDE_TABLES            string
-	TEMPLATE_FOLDERNAME       string
-	TEMPLATE_FOLDERNAME_MODEL string
-	TEMPLATE_FOLDERNAME_DB    string
-	TEMPLATE_FOLDERNAME_GRPC  string
-	TEMPLATE_FOLDERNAME_NRPC  string
-	NEED_CRUD                 bool
-	NEED_GRPC                 bool
-	NEED_NRPC                 bool
-	SERVICE_NAME              string
-	TEXT_TEMPLATE_MODEL       string
-	TEXT_TEMPLATE_TABLENAME   string
-	HAS_IS_DELETED            bool
+	INCLUDE_TABLES                  string
+	EXCLUDE_TABLES                  string
+	TEMPLATE_FOLDERNAME             string
+	TEMPLATE_FOLDERNAME_MODEL       string
+	TEMPLATE_FOLDERNAME_DB          string
+	TEMPLATE_FOLDERNAME_GRPC        string
+	TEMPLATE_FOLDERNAME_GRPC_SERVER string
+	TEMPLATE_FOLDERNAME_GRPC_CLIENT string
+	TEMPLATE_FOLDERNAME_NRPC        string
+	TEMPLATE_FOLDERNAME_NRPC_SERVER string
+	TEMPLATE_FOLDERNAME_NRPC_CLIENT string
+	NEED_CRUD                       bool
+	NEED_GRPC                       bool
+	NEED_NRPC                       bool
+	SERVICE_NAME                    string
+	TEXT_TEMPLATE_MODEL             string
+	TEXT_TEMPLATE_TABLENAME         string
+	HAS_IS_DELETED                  bool
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -36,7 +40,11 @@ func FillSettings() {
 	Settings.TEMPLATE_FOLDERNAME_MODEL = os.Getenv("TEMPLATE_FOLDERNAME_MODEL")
 	Settings.TEMPLATE_FOLDERNAME_DB = os.Getenv("TEMPLATE_FOLDERNAME_DB")
 	Settings.TEMPLATE_FOLDERNAME_GRPC = os.Getenv("TEMPLATE_FOLDERNAME_GRPC")
+	Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_SERVER")
+	Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_CLIENT")
 	Settings.TEMPLATE_FOLDERNAME_NRPC = os.Getenv("TEMPLATE_FOLDERNAME_NRPC")
+	Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER = os.Getenv("TEMPLATE_FOLDERNAME_NRPC_SERVER")
+	Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT = os.Getenv("TEMPLATE_FOLDERNAME_NRPC_CLIENT")
 	Settings.TEXT_TEMPLATE_MODEL = os.Getenv("TEXT_TEMPLATE_MODEL")
 	Settings.TEXT_TEMPLATE_TABLENAME = os.Getenv("TEXT_TEMPLATE_TABLENAME")
 	sHAS_IS_DELETED := os.Getenv("HAS_IS_DELETED")

@@ -1,0 +1,153 @@
+package server_grpc
+
+import (
+	"context"
+	model "gitlab.aescorp.ru/dsp_dev/claim/common/object_model"
+	"gitlab.aescorp.ru/dsp_dev/claim/common/object_model/pkg/crud_starter"
+	"gitlab.aescorp.ru/dsp_dev/claim/common/object_model/pkg/grpc/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/config"
+	"testing"
+)
+
+// LawsuitStatusType_ID_Test - ID таблицы для тестирования
+const LawsuitStatusType_ID_Test = 1
+
+func Test_server_LawsuitStatusTypes_Read(t *testing.T) {
+	//t.SkipNow()
+	config.LoadEnv()
+	crud_starter.InitCrudTransport_DB()
+
+	ctx := context.Background()
+	Request := grpc_proto.RequestId{}
+	Request.Id = LawsuitStatusType_ID_Test
+	Request.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
+
+	server1 := &ServerGRPC{}
+	Otvet, err := server1.LawsuitStatusTypes_Read(ctx, &Request)
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_Read() error: ", err)
+	}
+	if Otvet.ModelString == "" {
+		t.Error("Test_server_LawsuitStatusType_Read() error: ModelString=''")
+	}
+}
+
+func Test_server_LawsuitStatusTypes_Delete(t *testing.T) {
+	config.LoadEnv()
+	crud_starter.InitCrudTransport_DB()
+
+	ctx := context.Background()
+	Request := grpc_proto.RequestId{}
+	Request.Id = LawsuitStatusType_ID_Test
+	Request.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
+
+	server1 := &ServerGRPC{}
+	Otvet, err := server1.LawsuitStatusTypes_Delete(ctx, &Request)
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_Delete() error: ", err)
+	}
+	if Otvet.ModelString == "" {
+		t.Error("Test_server_LawsuitStatusType_Delete() error: ModelString=''")
+	}
+	Otvet, err = server1.LawsuitStatusTypes_Restore(ctx, &Request)
+}
+
+func Test_server_LawsuitStatusTypes_Create(t *testing.T) {
+	config.LoadEnv()
+	crud_starter.InitCrudTransport_DB()
+
+	var ModelString string
+	Model := model.LawsuitStatusType{}
+	Model.ID = 1
+	ModelString, err := Model.GetJSON()
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_Create() error: ", err)
+		return
+	}
+
+	RequestModel := grpc_proto.RequestModel{}
+	RequestModel.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
+	RequestModel.ModelString = ModelString
+
+	ctx := context.Background()
+	server1 := &ServerGRPC{}
+	Otvet, err := server1.LawsuitStatusTypes_Create(ctx, &RequestModel)
+	if err == nil {
+		t.Error("Test_server_LawsuitStatusType_Create() error: ", err)
+	}
+	if Otvet.ModelString != "" {
+		t.Error("Test_server_LawsuitStatusType_Create() error: ModelString !=''")
+	}
+}
+
+func Test_server_LawsuitStatusTypes_Update(t *testing.T) {
+	config.LoadEnv()
+	crud_starter.InitCrudTransport_DB()
+
+	ctx := context.Background()
+	Request := grpc_proto.RequestId{}
+	Request.Id = LawsuitStatusType_ID_Test
+	Request.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
+
+	server1 := &ServerGRPC{}
+	Response1, err := server1.LawsuitStatusTypes_Read(ctx, &Request)
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_Update() error: ", err)
+		return
+	}
+	if Response1.ModelString == "" {
+		t.Error("Test_server_LawsuitStatusType_Update() error: ModelString=''")
+	}
+
+	var ModelString string
+	ModelString = Response1.ModelString
+
+	RequestModel := grpc_proto.RequestModel{}
+	RequestModel.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
+	RequestModel.ModelString = ModelString
+
+	Otvet, err := server1.LawsuitStatusTypes_Update(ctx, &RequestModel)
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_Update() error: ", err)
+	}
+	if Otvet.ModelString == "" {
+		t.Error("Test_server_LawsuitStatusType_Update() error: ModelString=''")
+	}
+
+}
+
+func Test_server_LawsuitStatusTypes_Save(t *testing.T) {
+	config.LoadEnv()
+	crud_starter.InitCrudTransport_DB()
+
+	//Model := model.LawsuitStatusType{}
+
+	ctx := context.Background()
+	Request := grpc_proto.RequestId{}
+	Request.Id = LawsuitStatusType_ID_Test
+	Request.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
+
+	server1 := &ServerGRPC{}
+	Response1, err := server1.LawsuitStatusTypes_Read(ctx, &Request)
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_Save() error: ", err)
+		return
+	}
+
+	var ModelString string
+	ModelString = Response1.ModelString
+
+	//sModel, _ := GetJSON(Otvet)
+	RequestModel := grpc_proto.RequestModel{}
+	RequestModel.VersionModel = model.LawsuitStatusType{}.GetStructVersion()
+	RequestModel.ModelString = ModelString
+
+	Otvet, err := server1.LawsuitStatusTypes_Save(ctx, &RequestModel)
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_Save() error: ", err)
+	}
+	if Otvet.ModelString == "" {
+		t.Error("Test_server_LawsuitStatusType_Save() error: ModelString=''")
+	}
+
+}

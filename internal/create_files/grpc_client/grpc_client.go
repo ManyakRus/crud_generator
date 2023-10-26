@@ -1,4 +1,4 @@
-package db
+package grpc_client
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
@@ -11,19 +11,19 @@ import (
 	"strings"
 )
 
-// CreateAllFiles - создаёт все файлы в папке db
+// CreateAllFiles - создаёт все файлы в папке grpc_client
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
 	for _, table1 := range MapAll {
-		//файлы db
+		//файлы grpc_client
 		err = CreateFiles(table1)
 		if err != nil {
 			log.Error("CreateFiles() table: ", table1.Name, " error: ", err)
 			return err
 		}
 
-		//тестовые файлы db
+		//тестовые файлы grpc_client
 		err = CreateTestFiles(table1)
 		if err != nil {
 			log.Error("CreateTestFiles() table: ", table1.Name, " error: ", err)
@@ -34,7 +34,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 	return err
 }
 
-// CreateFiles - создаёт 1 файл в папке db
+// CreateFiles - создаёт 1 файл в папке grpc_client
 func CreateFiles(Table1 *types.Table) error {
 	var err error
 
@@ -42,13 +42,13 @@ func CreateFiles(Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
 	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
-	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
-	DirReadyDB := DirReady + "pkg" + micro.SeparatorFile() + "db" + micro.SeparatorFile()
+	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
+	DirReadyGRPCClient := DirReady + "pkg" + micro.SeparatorFile() + "grpc" + micro.SeparatorFile() + "grpc_client" + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + "db.go_"
+	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirTable := DirReadyDB + "db_" + TableName
-	FilenameReadyDB := DirTable + micro.SeparatorFile() + "db_" + TableName + ".go"
+	DirTable := DirReadyGRPCClient + TableName + micro.SeparatorFile()
+	FilenameReadyGRPCClient := DirTable + TableName + ".go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirTable)
@@ -59,9 +59,9 @@ func CreateFiles(Table1 *types.Table) error {
 		}
 	}
 
-	bytes, err := os.ReadFile(FilenameTemplateDB)
+	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
 	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
+		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
 	TextDB := string(bytes)
 
@@ -72,21 +72,20 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = constants.TEXT_GENERATED + TextDB
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncDelete(TextDB, Table1)
-		TextDB = DeleteFuncDeleteCtx(TextDB, Table1)
-		TextDB = DeleteFuncRestore(TextDB, Table1)
-		TextDB = DeleteFuncRestoreCtx(TextDB, Table1)
+		TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
+		//TextDB = DeleteFuncDeleteCtx(TextDB, ModelName, Table1)
+		TextDB = DeleteFuncRestore(TextDB, ModelName, Table1)
+		//TextDB = DeleteFuncRestoreCtx(TextDB, ModelName, Table1)
 	}
-	TextDB = DeleteFuncFind_byExtID(TextDB, Table1)
-	TextDB = AddTextOmit(TextDB, Table1)
+	TextDB = DeleteFuncFind_byExtID(TextDB, ModelName, Table1)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextDB), constants.FILE_PERMISSIONS)
 
 	return err
 }
 
-// CreateTestFiles - создаёт 1 файл в папке db
+// CreateTestFiles - создаёт 1 файл в папке grpc_client
 func CreateTestFiles(Table1 *types.Table) error {
 	var err error
 
@@ -94,13 +93,13 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
 	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
-	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
-	DirReadyDB := DirReady + "pkg" + micro.SeparatorFile() + "db" + micro.SeparatorFile()
+	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
+	DirReadyGRPCClient := DirReady + "pkg" + micro.SeparatorFile() + "grpc" + micro.SeparatorFile() + "grpc_client" + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + "db_test.go_"
+	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client_test.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirTable := DirReadyDB + "db_" + TableName
-	FilenameReadyDB := DirTable + micro.SeparatorFile() + "db_" + TableName + "_test.go"
+	DirTable := DirReadyGRPCClient + TableName + micro.SeparatorFile()
+	FilenameReadyGRPCClient := DirTable + TableName + "_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirTable)
@@ -111,9 +110,9 @@ func CreateTestFiles(Table1 *types.Table) error {
 		}
 	}
 
-	bytes, err := os.ReadFile(FilenameTemplateDB)
+	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
 	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
+		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
 	TextDB := string(bytes)
 
@@ -124,21 +123,21 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextDB = constants.TEXT_GENERATED + TextDB
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncDelete(TextDB, Table1)
-		TextDB = DeleteFuncDeleteCtx(TextDB, Table1)
-		TextDB = DeleteFuncRestore(TextDB, Table1)
-		TextDB = DeleteFuncRestoreCtx(TextDB, Table1)
+		TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
+		//TextDB = DeleteFuncDeleteCtx(TextDB, ModelName, Table1)
+		TextDB = DeleteFuncRestore(TextDB, ModelName, Table1)
+		//TextDB = DeleteFuncRestoreCtx(TextDB, ModelName, Table1)
 	}
-	TextDB = DeleteFuncFind_byExtID(TextDB, Table1)
+	TextDB = DeleteFuncFind_byExtID(TextDB, ModelName, Table1)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextDB), constants.FILE_PERMISSIONS)
 
 	return err
 }
 
 // DeleteFuncDelete - удаляет функцию Delete()
-func DeleteFuncDelete(Text string, Table1 *types.Table) string {
+func DeleteFuncDelete(Text, ModelName string, Table1 *types.Table) string {
 	Otvet := Text
 
 	_, ok := Table1.MapColumns["is_deleted"]
@@ -152,7 +151,7 @@ func DeleteFuncDelete(Text string, Table1 *types.Table) string {
 }
 
 // DeleteFuncRestore - удаляет функцию Restore()
-func DeleteFuncRestore(Text string, Table1 *types.Table) string {
+func DeleteFuncRestore(Text, ModelName string, Table1 *types.Table) string {
 	Otvet := Text
 
 	_, ok := Table1.MapColumns["is_deleted"]
@@ -166,7 +165,7 @@ func DeleteFuncRestore(Text string, Table1 *types.Table) string {
 }
 
 // DeleteFuncDeleteCtx - удаляет функцию Delete_ctx()
-func DeleteFuncDeleteCtx(Text string, Table1 *types.Table) string {
+func DeleteFuncDeleteCtx(Text, ModelName string, Table1 *types.Table) string {
 	Otvet := Text
 
 	_, ok := Table1.MapColumns["is_deleted"]
@@ -180,7 +179,7 @@ func DeleteFuncDeleteCtx(Text string, Table1 *types.Table) string {
 }
 
 // DeleteFuncRestoreCtx - удаляет функцию Restore_ctx()
-func DeleteFuncRestoreCtx(Text string, Table1 *types.Table) string {
+func DeleteFuncRestoreCtx(Text, ModelName string, Table1 *types.Table) string {
 	Otvet := Text
 
 	_, ok := Table1.MapColumns["is_deleted"]
@@ -194,7 +193,7 @@ func DeleteFuncRestoreCtx(Text string, Table1 *types.Table) string {
 }
 
 // DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncFind_byExtID(Text string, Table1 *types.Table) string {
+func DeleteFuncFind_byExtID(Text, ModelName string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//
@@ -215,7 +214,7 @@ func DeleteFuncFind_byExtID(Text string, Table1 *types.Table) string {
 }
 
 // DeleteFuncTestDelete - удаляет функцию Delete()
-func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
+func DeleteFuncTestDelete(Text, ModelName string, Table1 *types.Table) string {
 	Otvet := Text
 
 	_, ok := Table1.MapColumns["is_deleted"]
@@ -229,7 +228,7 @@ func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
 }
 
 // DeleteFuncTestRestore - удаляет функцию Restore()
-func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
+func DeleteFuncTestRestore(Text, ModelName string, Table1 *types.Table) string {
 	Otvet := Text
 
 	_, ok := Table1.MapColumns["is_deleted"]
@@ -243,7 +242,7 @@ func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
 }
 
 // DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
+func DeleteFuncTestFind_byExtID(Text, ModelName string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//
@@ -259,60 +258,6 @@ func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
 	}
 
 	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "TestFind_ByExtID")
-
-	return Otvet
-}
-
-// AddTextOmit - добавляет код для записи null в колонки Nullable
-func AddTextOmit(TextDB string, Table1 *types.Table) string {
-	Otvet := TextDB
-
-	TextFind := "\t//игнор пустых колонок"
-	pos1 := strings.Index(Otvet, TextFind)
-	if pos1 < 0 {
-		return Otvet
-	}
-
-	TextOmit := ""
-	for _, Column1 := range Table1.MapColumns {
-		TypeGo := Column1.TypeGo
-		if Column1.IsNullable == false {
-			continue
-		}
-
-		ColumnNameGo := Column1.NameGo
-
-		if TypeGo == "time.Time" {
-			TextFind := `if m.` + ColumnNameGo + `.IsZero() == true {`
-			pos1 := strings.Index(TextDB, TextFind)
-			if pos1 >= 0 {
-				continue
-			}
-
-			TextOmit = TextOmit + "\t" + `ColumnName = "` + ColumnNameGo + `"
-	if m.` + ColumnNameGo + `.IsZero() == true {
-		MassOmit = append(MassOmit, ColumnName)
-	}
-
-`
-		} else if create_files.IsNumberType(TypeGo) == true && Column1.TableKey != "" {
-			TextFind := `if m.` + ColumnNameGo + ` == 0 {`
-			pos1 := strings.Index(TextDB, TextFind)
-			if pos1 >= 0 {
-				continue
-			}
-
-			TextOmit = TextOmit + "\t" + `ColumnName = "` + ColumnNameGo + `"
-	if m.` + ColumnNameGo + ` == 0 {
-		MassOmit = append(MassOmit, ColumnName)
-	}
-
-`
-		}
-
-	}
-
-	Otvet = Otvet[:pos1] + TextOmit + Otvet[pos1:]
 
 	return Otvet
 }

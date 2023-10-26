@@ -14,13 +14,13 @@ import (
 	"strings"
 )
 
-func CreateModelFiles(MapAll map[string]*types.Table) error {
+func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
 	for _, table1 := range MapAll {
-		err = CreateModelFiles1(table1)
+		err = CreateFiles(table1)
 		if err != nil {
-			log.Error("CreateModelFiles1() table: ", table1.Name, " error: ", err)
+			log.Error("CreateFiles() table: ", table1.Name, " error: ", err)
 			return err
 		}
 	}
@@ -28,7 +28,7 @@ func CreateModelFiles(MapAll map[string]*types.Table) error {
 	return err
 }
 
-func CreateModelFiles1(Table1 *types.Table) error {
+func CreateFiles(Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов

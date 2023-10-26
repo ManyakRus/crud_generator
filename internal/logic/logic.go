@@ -2,6 +2,8 @@ package logic
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/db"
+	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client"
+	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_server"
 	"github.com/ManyakRus/crud_generator/internal/create_files/model"
 	"github.com/ManyakRus/crud_generator/internal/postgres"
 	"github.com/ManyakRus/starter/log"
@@ -24,13 +26,25 @@ func StartFillAll() error {
 	}
 
 	//модель
-	err = model.CreateModelFiles(MapAll)
+	err = model.CreateAllFiles(MapAll)
 	if err != nil {
 		return err
 	}
 
 	//db crud
-	err = db.CreateDBFiles(MapAll)
+	err = db.CreateAllFiles(MapAll)
+	if err != nil {
+		return err
+	}
+
+	//grpc_server
+	err = grpc_server.CreateAllFiles(MapAll)
+	if err != nil {
+		return err
+	}
+
+	//grpc_client
+	err = grpc_client.CreateAllFiles(MapAll)
 	if err != nil {
 		return err
 	}

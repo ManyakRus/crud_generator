@@ -116,7 +116,7 @@ func CreateAllFolders() {
 		}
 
 		//
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "pkg" + micro.SeparatorFile() + "grpc" + micro.SeparatorFile() + "grpc_server"
+		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "internal" + micro.SeparatorFile() + "grpc_server"
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
 			err = CreateFolder(Filename, 0777)
@@ -162,7 +162,7 @@ func CreateAllFolders() {
 		}
 
 		//
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "pkg" + micro.SeparatorFile() + "grpc" + micro.SeparatorFile() + "nrpc_server"
+		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "internal" + micro.SeparatorFile() + "nrpc_server"
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
 			err = CreateFolder(Filename, 0777)
@@ -173,7 +173,7 @@ func CreateAllFolders() {
 		}
 
 		//
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "pkg" + micro.SeparatorFile() + "grpc" + micro.SeparatorFile() + "nrpc_client"
+		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "pkg" + micro.SeparatorFile() + "nrpc" + micro.SeparatorFile() + "nrpc_client"
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
 			err = CreateFolder(Filename, 0777)
