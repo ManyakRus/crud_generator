@@ -127,7 +127,7 @@ func FindTextColumn(Column1 *types.Column) string {
 	Type_go := SQLMapping1.GoType
 	Column1.TypeGo = Type_go
 	TextDefaultValue := FindTextDefaultValue(Type_go)
-	TextPrimaryKey := FindTextPrimaryKey(Column1.Is_identity)
+	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)
 	Description := Column1.Description
 	Description = strconv.Quote(Description) //экранирование символов
 

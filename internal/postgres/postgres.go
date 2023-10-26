@@ -19,6 +19,7 @@ type TableColumn struct {
 	ColumnName        string `json:"column_name"   gorm:"column:column_name;default:''"`
 	ColumnType        string `json:"type_name"   gorm:"column:type_name;default:''"`
 	ColumnIsIdentity  string `json:"is_identity"   gorm:"column:is_identity;default:''"`
+	ColumnIsNullable  string `json:"is_nullable"   gorm:"column:is_nullable;default:''"`
 	ColumnDescription string `json:"description"   gorm:"column:description;default:''"`
 	ColumnTableKey    string `json:"table_key"   gorm:"column:table_key;default:''"`
 	ColumnColumnKey   string `json:"column_key"   gorm:"column:column_key;default:''"`
@@ -62,6 +63,7 @@ SELECT
 	c.column_name,
 	c.udt_name as type_name,
 	c.is_identity as is_identity,
+	c.is_nullable as is_nullable, 
 	COALESCE(pgd.description, '') as description,
 	COALESCE(keys.table_to, '') as table_key,
 	COALESCE(keys.column_to, '') as column_key 
@@ -200,7 +202,10 @@ order by
 		Column1.Name = v.ColumnName
 		Column1.Type = v.ColumnType
 		if v.ColumnIsIdentity == "YES" {
-			Column1.Is_identity = true
+			Column1.IsIdentity = true
+		}
+		if v.ColumnIsNullable == "YES" {
+			Column1.IsNullable = true
 		}
 		Column1.Description = v.ColumnDescription
 		Column1.OrderNumber = OrderNumberColumn

@@ -358,6 +358,7 @@ func DeleteFuncTestFind_byExtID(TextDB string, Table1 *types.Table) string {
 	return Otvet
 }
 
+// AddTextOmit - добавляет код для записи null в колонки Nullable
 func AddTextOmit(TextDB string, Table1 *types.Table) string {
 	Otvet := TextDB
 
@@ -370,26 +371,56 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 	TextOmit := ""
 	for _, Column1 := range Table1.MapColumns {
 		TypeGo := Column1.TypeGo
-		if TypeGo != "time.Time" {
+		if Column1.IsNullable == false {
 			continue
 		}
 
 		ColumnNameGo := Column1.NameGo
-		TextFind := `if m.` + ColumnNameGo + `.IsZero() == true {`
-		pos1 := strings.Index(TextDB, TextFind)
-		if pos1 >= 0 {
-			continue
-		}
 
-		TextOmit = TextOmit + "\t" + `ColumnName = "` + ColumnNameGo + `"
+		if TypeGo == "time.Time" {
+			TextFind := `if m.` + ColumnNameGo + `.IsZero() == true {`
+			pos1 := strings.Index(TextDB, TextFind)
+			if pos1 >= 0 {
+				continue
+			}
+
+			TextOmit = TextOmit + "\t" + `ColumnName = "` + ColumnNameGo + `"
 	if m.` + ColumnNameGo + `.IsZero() == true {
 		MassOmit = append(MassOmit, ColumnName)
 	}
 
 `
+		} else if IsNumberType(TypeGo) == true && Column1.TableKey != "" {
+			TextFind := `if m.` + ColumnNameGo + ` == 0 {`
+			pos1 := strings.Index(TextDB, TextFind)
+			if pos1 >= 0 {
+				continue
+			}
+
+			TextOmit = TextOmit + "\t" + `ColumnName = "` + ColumnNameGo + `"
+	if m.` + ColumnNameGo + ` == 0 {
+		MassOmit = append(MassOmit, ColumnName)
+	}
+
+`
+		}
+
 	}
 
 	Otvet = Otvet[:pos1] + TextOmit + Otvet[pos1:]
+
+	return Otvet
+}
+
+func IsNumberType(TypeGo string) bool {
+	Otvet := false
+
+	switch TypeGo {
+	case "int", "int8", "int16", "int32", "int64", "float32", "float64", "uint", "uint8", "uint16", "uint32", "uint64", "byte":
+		{
+			Otvet = true
+		}
+	}
 
 	return Otvet
 }
