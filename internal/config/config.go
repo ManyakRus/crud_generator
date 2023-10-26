@@ -22,6 +22,7 @@ type SettingsINI struct {
 	TEMPLATE_FOLDERNAME_NRPC        string
 	TEMPLATE_FOLDERNAME_NRPC_SERVER string
 	TEMPLATE_FOLDERNAME_NRPC_CLIENT string
+	TEMPLATE_SERVICE_NAME           string
 	NEED_CRUD                       bool
 	NEED_GRPC                       bool
 	NEED_NRPC                       bool
@@ -47,6 +48,7 @@ func FillSettings() {
 	Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT = os.Getenv("TEMPLATE_FOLDERNAME_NRPC_CLIENT")
 	Settings.TEXT_TEMPLATE_MODEL = os.Getenv("TEXT_TEMPLATE_MODEL")
 	Settings.TEXT_TEMPLATE_TABLENAME = os.Getenv("TEXT_TEMPLATE_TABLENAME")
+	Settings.TEMPLATE_SERVICE_NAME = os.Getenv("TEMPLATE_SERVICE_NAME")
 	sHAS_IS_DELETED := os.Getenv("HAS_IS_DELETED")
 
 	sNEED_CRUD := os.Getenv("NEED_CRUD")

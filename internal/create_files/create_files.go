@@ -1,6 +1,7 @@
 package create_files
 
 import (
+	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/inflection"
 	"strings"
@@ -87,4 +88,38 @@ func DeleteFuncFromComment(Text, Comment string) string {
 
 	return Otvet
 
+}
+
+// Has_Column_ExtID_ConnectionID - возвращает true если есть поля ExtId и ConnectionID
+func Has_Column_ExtID_ConnectionID(Table1 *types.Table) bool {
+	Otvet := false
+
+	//
+	_, ok := Table1.MapColumns["ext_id"]
+	if ok == false {
+		return Otvet
+	}
+
+	//
+	_, ok = Table1.MapColumns["connection_id"]
+	if ok == false {
+		return Otvet
+	}
+
+	Otvet = true
+	return Otvet
+}
+
+// Has_Column_IsDeleted - возвращает true если есть поле is_deleted
+func Has_Column_IsDeleted(Table1 *types.Table) bool {
+	Otvet := false
+
+	//
+	_, ok := Table1.MapColumns["is_deleted"]
+	if ok == false {
+		return Otvet
+	}
+
+	Otvet = true
+	return Otvet
 }

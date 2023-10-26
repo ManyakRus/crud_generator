@@ -1,0 +1,186 @@
+syntax = "proto3";
+
+/*
+    Файл содержит описание сервиса Sync_service
+*/
+
+
+package grpc;
+
+option go_package = "./grpc_proto";
+
+// sync_service - сервис обмена с Базой данных
+service Sync_service {
+    // 
+    rpc Organizations_Read(RequestId) returns (Response) {}
+    rpc Organizations_Create(RequestModel) returns (Response) {}
+    rpc Organizations_Update(RequestModel) returns (Response) {}
+    rpc Organizations_Save(RequestModel) returns (Response) {}
+    rpc Organizations_Delete(RequestId) returns (Response) {}
+    rpc Organizations_Restore(RequestId) returns (Response) {}
+    rpc Organizations_FindByInnKpp(RequestInnKpp) returns (Response) {}
+    rpc Organizations_FindByExtId(RequestExtId) returns (Response) {}
+
+    //
+    rpc Files_Read(RequestId) returns (Response) {}
+    rpc Files_Create(RequestModel) returns (Response) {}
+    rpc Files_Update(RequestModel) returns (Response) {}
+    rpc Files_Save(RequestModel) returns (Response) {}
+    rpc Files_Delete(RequestId) returns (Response) {}
+    rpc Files_Restore(RequestId) returns (Response) {}
+    rpc Files_FindByFileID(RequestString) returns (Response) {}
+    rpc Files_FindByFullName(RequestString) returns (Response) {}
+
+    // 
+    rpc OrganizationCasebook_Read(RequestId) returns (Response) {}
+    rpc OrganizationCasebook_Create(RequestModel) returns (Response) {}
+    rpc OrganizationCasebook_Update(RequestModel) returns (Response) {}
+    rpc OrganizationCasebook_Save(RequestModel) returns (Response) {}
+    rpc OrganizationCasebook_Delete(RequestId) returns (Response) {}
+    rpc OrganizationCasebook_Restore(RequestId) returns (Response) {}
+    rpc OrganizationCasebook_FindByInnKpp(RequestInnKpp) returns (Response) {}
+    rpc OrganizationCasebook_FindByInn(RequestString) returns (Response) {}
+    rpc OrganizationCasebook_FindByOrganizationId(RequestId) returns (Response) {}
+
+    //
+    rpc Connections_Read(RequestId) returns (Response) {}
+    rpc Connections_Create(RequestModel) returns (Response) {}
+    rpc Connections_Update(RequestModel) returns (Response) {}
+    rpc Connections_Save(RequestModel) returns (Response) {}
+
+    //
+    rpc Employees_Read(RequestId) returns (Response) {}
+    rpc Employees_Create(RequestModel) returns (Response) {}
+    rpc Employees_Update(RequestModel) returns (Response) {}
+    rpc Employees_Save(RequestModel) returns (Response) {}
+    rpc Employees_Delete(RequestId) returns (Response) {}
+    rpc Employees_Restore(RequestId) returns (Response) {}
+    rpc Employees_FindByExtId(RequestExtId) returns (Response) {}
+    rpc Employees_FindByLogin(RequestString) returns (Response) {}
+    rpc Employees_FindByEMail(RequestString) returns (Response) {}
+    rpc Employees_FindByFIO(RequestString3) returns (Response) {}
+
+    //
+    rpc LawsuitStatusStates_Read(RequestId) returns (Response) {}
+    rpc LawsuitStatusStates_Create(RequestModel) returns (Response) {}
+    rpc LawsuitStatusStates_Update(RequestModel) returns (Response) {}
+    rpc LawsuitStatusStates_Save(RequestModel) returns (Response) {}
+    rpc LawsuitStatusStates_Delete(RequestId) returns (Response) {}
+    rpc LawsuitStatusStates_Restore(RequestId) returns (Response) {}
+    rpc LawsuitStatusStates_FillFromLawsuit(RequestIdId) returns (ResponseEmpty) {}
+    rpc LawsuitStatusStates_FindDebtSum(RequestIdId) returns (ResponseFloat64) {}
+
+    //
+    rpc LawsuitStatusTypes_Read(RequestId) returns (Response) {}
+    rpc LawsuitStatusTypes_Create(RequestModel) returns (Response) {}
+    rpc LawsuitStatusTypes_Update(RequestModel) returns (Response) {}
+    rpc LawsuitStatusTypes_Save(RequestModel) returns (Response) {}
+    rpc LawsuitStatusTypes_Delete(RequestId) returns (Response) {}
+    rpc LawsuitStatusTypes_Restore(RequestId) returns (Response) {}
+
+    //
+    rpc Lawsuits_Read(RequestId) returns (Response) {}
+    rpc Lawsuits_Create(RequestModel) returns (Response) {}
+    rpc Lawsuits_Update(RequestModel) returns (Response) {}
+    rpc Lawsuits_Save(RequestModel) returns (Response) {}
+    rpc Lawsuits_Delete(RequestId) returns (Response) {}
+    rpc Lawsuits_Restore(RequestId) returns (Response) {}
+
+    //
+    rpc MessageAttachements_Read(RequestId) returns (Response) {}
+    rpc MessageAttachements_Create(RequestModel) returns (Response) {}
+    rpc MessageAttachements_Update(RequestModel) returns (Response) {}
+    rpc MessageAttachements_Save(RequestModel) returns (Response) {}
+    rpc MessageAttachements_Delete(RequestId) returns (Response) {}
+    rpc MessageAttachements_Restore(RequestId) returns (Response) {}
+
+    //
+    rpc MessageSendStatuses_Read(RequestId) returns (Response) {}
+    rpc MessageSendStatuses_Create(RequestModel) returns (Response) {}
+    rpc MessageSendStatuses_Update(RequestModel) returns (Response) {}
+    rpc MessageSendStatuses_Save(RequestModel) returns (Response) {}
+    rpc MessageSendStatuses_Delete(RequestId) returns (Response) {}
+    rpc MessageSendStatuses_Restore(RequestId) returns (Response) {}
+
+    //
+    rpc MessageTypes_Read(RequestId) returns (Response) {}
+    rpc MessageTypes_Create(RequestModel) returns (Response) {}
+    rpc MessageTypes_Update(RequestModel) returns (Response) {}
+    rpc MessageTypes_Save(RequestModel) returns (Response) {}
+    rpc MessageTypes_Delete(RequestId) returns (Response) {}
+    rpc MessageTypes_Restore(RequestId) returns (Response) {}
+
+    //
+    rpc Messages_Read(RequestId) returns (Response) {}
+    rpc Messages_Create(RequestModel) returns (Response) {}
+    rpc Messages_Update(RequestModel) returns (Response) {}
+    rpc Messages_Save(RequestModel) returns (Response) {}
+    rpc Messages_Delete(RequestId) returns (Response) {}
+    rpc Messages_Restore(RequestId) returns (Response) {}
+    rpc Messages_FindBy_LawsuitID_MessageTypeID(RequestIdId) returns (Response) {}
+
+}
+
+// RequestId - параметры запроса на сервер
+message RequestId {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 id   = 2; // id записи в БД
+}
+
+// RequestString - параметры запроса на сервер
+message RequestString {
+    uint32 VersionModel= 1; //версия структуры модели
+    string StringFind   = 2; // строка поиска
+}
+
+// RequestString3 - параметры запроса на сервер
+message RequestString3 {
+    uint32 VersionModel= 1; //версия структуры модели
+    string StringFind1   = 2; // строка поиска
+    string StringFind2   = 3; // строка поиска
+    string StringFind3   = 4; // строка поиска
+}
+
+// RequestId - параметры запроса на сервер
+message RequestExtId {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 Ext_id   = 2; // ext_id записи в БД
+    int64 Connection_id	=3; // Connection_id записи в БД
+}
+
+// RequestModel - параметры запроса на сервер
+message RequestModel {
+    uint32 VersionModel= 1; //версия структуры модели
+    string ModelString = 2; //объект-модель в формате json
+}
+
+// RequestInnKpp - параметры запроса на сервер
+message RequestInnKpp {
+    uint32 VersionModel= 1; //версия структуры модели
+    string Inn   = 2; // ИНН
+    string Kpp	=3; // КПП
+}
+
+// RequestId - параметры запроса на сервер
+message RequestIdId {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 id1   = 2; // id записи в БД
+    int64 id2   = 3; // id записи в БД
+}
+
+
+
+// Response - параметры ответа на клиент
+message Response {
+    string ModelString 	= 1; //объект-модель в формате json
+}
+
+// ResponseFloat64 - параметры ответа на клиент
+message ResponseFloat64 {
+    double Otvet 	= 1; //Ответ - число
+}
+
+// Response - параметры ответа на клиент
+message ResponseEmpty {
+}
+

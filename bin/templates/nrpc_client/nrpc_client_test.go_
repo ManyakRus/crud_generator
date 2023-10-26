@@ -1,0 +1,152 @@
+package nrpc_lawsuit_status_types
+
+import (
+	model "gitlab.aescorp.ru/dsp_dev/claim/common/object_model"
+	"gitlab.aescorp.ru/dsp_dev/claim/common/object_model/pkg/nrpc/nrpc_client"
+	config "gitlab.aescorp.ru/dsp_dev/claim/nikitin/config"
+	"testing"
+)
+
+// Postgres_ID_Test - ID таблицы для тестирования
+const Postgres_ID_Test = 1
+
+func TestGetVersionModel(t *testing.T) {
+
+	crud := Crud_NRPC{}
+	Otvet := crud.GetVersionModel()
+	if Otvet == 0 {
+		t.Error("TestGetVersionModel() error: Otvet =0")
+	}
+}
+
+func TestRead(t *testing.T) {
+	config.LoadEnv()
+	nrpc_client.Connect()
+	defer nrpc_client.CloseConnection()
+
+	crud := Crud_NRPC{}
+	Otvet := model.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+
+	if err != nil {
+		t.Error("TestRead() error: ", err)
+	}
+
+	if Otvet.ID == 0 {
+		t.Error("TestRead() error: ID =0")
+	}
+}
+
+func TestCreate(t *testing.T) {
+	config.LoadEnv()
+	nrpc_client.Connect()
+	defer nrpc_client.CloseConnection()
+
+	Model := model.LawsuitStatusType{}
+	Model.ID = -1
+
+	crud := Crud_NRPC{}
+	err := crud.Create(&Model)
+
+	if err == nil {
+		t.Error("TestCreate() error: ", err)
+	}
+
+	if Model.ID > 0 {
+		t.Error("TestCreate() error: ID >0")
+	}
+}
+
+func TestUpdate(t *testing.T) {
+	config.LoadEnv()
+	nrpc_client.Connect()
+	defer nrpc_client.CloseConnection()
+
+	Model := model.LawsuitStatusType{}
+	Model.ID = 0
+
+	crud := Crud_NRPC{}
+	err := crud.Update(&Model)
+
+	if err == nil {
+		t.Error("TestUpdate() error: ", err)
+	}
+
+	if Model.ID != 0 {
+		t.Error("TestUpdate() error: ID =0")
+	}
+}
+
+func TestSave(t *testing.T) {
+	config.LoadEnv()
+	nrpc_client.Connect()
+	defer nrpc_client.CloseConnection()
+
+	crud := Crud_NRPC{}
+	Otvet := model.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+	if err != nil {
+		t.Error("TestSave() error: ", err)
+		return
+	}
+
+	err = crud.Save(&Otvet)
+
+	if err != nil {
+		t.Error("TestSave() error: ", err)
+	}
+
+	if Otvet.ID == 0 {
+		t.Error("TestSave() error: ID =0")
+	}
+}
+
+func TestDelete(t *testing.T) {
+	config.LoadEnv()
+	nrpc_client.Connect()
+	defer nrpc_client.CloseConnection()
+
+	crud := Crud_NRPC{}
+	Otvet := model.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+	if err != nil {
+		t.Error("TestRead() error: ", err)
+	}
+
+	if Otvet.IsDeleted == false {
+		err = crud.Delete(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+
+		err = crud.Restore(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+	} else {
+		err = crud.Restore(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+
+		err = crud.Delete(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+	}
+}
