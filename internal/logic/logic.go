@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/db"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_proto"
@@ -59,6 +60,12 @@ func StartFillAll() error {
 
 	//grpc_proto
 	err = grpc_proto.CreateAllFiles(MapAll)
+	if err != nil {
+		return err
+	}
+
+	//crud_starter
+	err = crud_starter.CreateAllFiles(MapAll)
 	if err != nil {
 		return err
 	}

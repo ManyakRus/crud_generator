@@ -81,7 +81,8 @@ func CreateAllFolders() {
 		}
 		log.Info("CreateFolder() ", Filename)
 	}
-	//
+
+	//model
 	Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "pkg" + micro.SeparatorFile() + "model"
 	ok, err = micro.FileExists(Filename)
 	if ok == false || err != nil {
@@ -91,7 +92,9 @@ func CreateAllFolders() {
 		}
 		log.Info("CreateFolder() ", Filename)
 	}
+
 	if config.Settings.NEED_CRUD == true {
+		//db
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "pkg" + micro.SeparatorFile() + "db"
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
@@ -101,6 +104,18 @@ func CreateAllFolders() {
 			}
 			log.Info("CreateFolder() ", Filename)
 		}
+
+		//crud_starter
+		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "pkg" + micro.SeparatorFile() + "crud_starter"
+		ok, err = micro.FileExists(Filename)
+		if ok == false || err != nil {
+			err = CreateFolder(Filename, 0777)
+			if err != nil {
+				log.Panic("CreateFolder() ", Filename, " error: ", err)
+			}
+			log.Info("CreateFolder() ", Filename)
+		}
+
 	}
 
 	if config.Settings.NEED_GRPC == true {

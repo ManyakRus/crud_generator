@@ -11,25 +11,28 @@ var Settings SettingsINI
 
 // SettingsINI - структура для хранения всех нужных переменных окружения
 type SettingsINI struct {
-	INCLUDE_TABLES                  string
-	EXCLUDE_TABLES                  string
-	TEMPLATE_FOLDERNAME             string
-	TEMPLATE_FOLDERNAME_MODEL       string
-	TEMPLATE_FOLDERNAME_DB          string
-	TEMPLATE_FOLDERNAME_GRPC        string
-	TEMPLATE_FOLDERNAME_GRPC_SERVER string
-	TEMPLATE_FOLDERNAME_GRPC_CLIENT string
-	TEMPLATE_FOLDERNAME_NRPC        string
-	TEMPLATE_FOLDERNAME_NRPC_SERVER string
-	TEMPLATE_FOLDERNAME_NRPC_CLIENT string
-	TEMPLATE_SERVICE_NAME           string
-	NEED_CRUD                       bool
-	NEED_GRPC                       bool
-	NEED_NRPC                       bool
-	SERVICE_NAME                    string
-	TEXT_TEMPLATE_MODEL             string
-	TEXT_TEMPLATE_TABLENAME         string
-	HAS_IS_DELETED                  bool
+	INCLUDE_TABLES                   string
+	EXCLUDE_TABLES                   string
+	TEMPLATE_FOLDERNAME              string
+	TEMPLATE_FOLDERNAME_MODEL        string
+	TEMPLATE_FOLDERNAME_DB           string
+	TEMPLATE_FOLDERNAME_GRPC         string
+	TEMPLATE_FOLDERNAME_GRPC_SERVER  string
+	TEMPLATE_FOLDERNAME_GRPC_CLIENT  string
+	TEMPLATE_FOLDERNAME_NRPC         string
+	TEMPLATE_FOLDERNAME_NRPC_SERVER  string
+	TEMPLATE_FOLDERNAME_NRPC_CLIENT  string
+	TEMPLATE_SERVICE_NAME            string
+	TEMPLATE_FOLDERNAME_CRUD_STARTER string
+	NEED_CRUD                        bool
+	NEED_GRPC                        bool
+	NEED_NRPC                        bool
+	SERVICE_NAME                     string
+	SERVICE_REPOSITORY_URL           string
+	TEXT_TEMPLATE_MODEL              string
+	TEXT_TEMPLATE_TABLENAME          string
+	HAS_IS_DELETED                   bool
+	NEED_MODEL_ONE_FOLDER            bool
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -49,6 +52,9 @@ func FillSettings() {
 	Settings.TEXT_TEMPLATE_MODEL = os.Getenv("TEXT_TEMPLATE_MODEL")
 	Settings.TEXT_TEMPLATE_TABLENAME = os.Getenv("TEXT_TEMPLATE_TABLENAME")
 	Settings.TEMPLATE_SERVICE_NAME = os.Getenv("TEMPLATE_SERVICE_NAME")
+	Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER = os.Getenv("TEMPLATE_FOLDERNAME_CRUD_STARTER")
+	Settings.SERVICE_REPOSITORY_URL = os.Getenv("SERVICE_REPOSITORY_URL")
+
 	sHAS_IS_DELETED := os.Getenv("HAS_IS_DELETED")
 
 	sNEED_CRUD := os.Getenv("NEED_CRUD")
@@ -59,6 +65,9 @@ func FillSettings() {
 
 	sNEED_NRPC := os.Getenv("NEED_NRPC")
 	Settings.NEED_NRPC = BoolFromString(sNEED_NRPC)
+
+	sNEED_MODEL_ONE_FOLDER := os.Getenv("NEED_MODEL_ONE_FOLDER")
+	Settings.NEED_MODEL_ONE_FOLDER = BoolFromString(sNEED_MODEL_ONE_FOLDER)
 
 	Settings.SERVICE_NAME = os.Getenv("SERVICE_NAME")
 
