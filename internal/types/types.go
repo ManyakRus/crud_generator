@@ -20,4 +20,7 @@ type Table struct {
 	//Columns []Column
 	OrderNumber int
 	NameGo      string
+	IDMinimum   string
 }
+
+var MapReplaceName = make(map[string]string, 0)

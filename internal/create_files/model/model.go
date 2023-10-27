@@ -120,11 +120,12 @@ func FindTextColumn(Column1 *types.Column) string {
 	ColumnName := Column1.Name
 	ColumnModelName := create_files.FormatName(Column1.Name)
 	Column1.NameGo = ColumnModelName
-	SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
-	if ok == false {
-		log.Panic("GetMappings() ", Column1.Type, " error: not found")
-	}
-	Type_go := SQLMapping1.GoType
+	//SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
+	//if ok == false {
+	//	log.Panic("GetMappings() ", Column1.Type, " error: not found")
+	//}
+	//Type_go := SQLMapping1.GoType
+	Type_go := Column1.TypeGo
 	Column1.TypeGo = Type_go
 	TextDefaultValue := FindTextDefaultValue(Type_go)
 	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)

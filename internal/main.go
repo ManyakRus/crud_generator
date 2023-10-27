@@ -20,7 +20,7 @@ func StartApp() {
 	config.FillSettings()
 	config.FillFlags()
 
-	load_configs.LoadMappingsAll()
+	load_configs.LoadConfigsAll()
 
 	postgres_gorm.StartDB()
 	postgres_gorm.GetConnection().Logger.LogMode(1)

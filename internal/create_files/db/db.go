@@ -4,6 +4,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
@@ -129,6 +130,12 @@ func CreateTestFiles(Table1 *types.Table) error {
 		TextDB = DeleteFuncTestRestore(TextDB, Table1)
 	}
 	TextDB = DeleteFuncTestFind_byExtID(TextDB, Table1)
+
+	//ID Minimum
+	if Table1.IDMinimum != "" {
+		TextFind := "const Postgres_ID_Test = "
+		TextDB = strings.ReplaceAll(TextDB, TextFind+"1", TextFind+Table1.IDMinimum)
+	}
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -300,7 +307,7 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 	}
 
 `
-		} else if create_files.IsNumberType(TypeGo) == true && Column1.TableKey != "" {
+		} else if mini_func.IsNumberType(TypeGo) == true && Column1.TableKey != "" {
 			TextFind := `if m.` + ColumnNameGo + ` == 0 {`
 			pos1 := strings.Index(TextDB, TextFind)
 			if pos1 >= 0 {

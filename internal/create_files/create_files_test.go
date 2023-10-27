@@ -8,3 +8,11 @@ func TestFindSingularName(t *testing.T) {
 		t.Error("TestFindSingularName() error: Otvet =''")
 	}
 }
+
+func TestFormatName(t *testing.T) {
+	Name := "contract_id"
+	Otvet := FormatName(Name)
+	if Otvet == "" {
+		t.Error("TestFormatName() error")
+	}
+}

@@ -2,10 +2,13 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"github.com/ManyakRus/crud_generator/internal/config"
+	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
+	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/postgres_gorm"
@@ -201,6 +204,16 @@ order by
 		Column1 := types.Column{}
 		Column1.Name = v.ColumnName
 		Column1.Type = v.ColumnType
+
+		//Type_go
+		SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
+		if ok == false {
+			log.Panic("GetMappings() ", Column1.Type, " error: not found")
+		}
+		Type_go := SQLMapping1.GoType
+		Column1.TypeGo = Type_go
+
+		//
 		if v.ColumnIsIdentity == "YES" {
 			Column1.IsIdentity = true
 		}
@@ -218,10 +231,16 @@ order by
 		OrderNumberColumn++
 		TableName0 = v.TableName
 	}
+
+	//
 	if Table1.Name != "" {
 		Table1.MapColumns = MapColumns
 		MapTable[TableName0] = Table1
 	}
+
+	//FillTypeGo(MapTable)
+
+	FillIDMinimum(MapTable)
 
 	return MapTable, err
 }
@@ -232,3 +251,75 @@ func CreateTable() *types.Table {
 
 	return Otvet
 }
+
+func FillIDMinimum(MapTable map[string]*types.Table) {
+	var err error
+
+	//соединение
+	db := postgres_gorm.GetConnection()
+	ctxMain := contextmain.GetContext()
+
+	for TableName, Table1 := range MapTable {
+		//текст запроса
+		NameID, TypeGo := FindNameTypeID(Table1)
+		if NameID == "" {
+			continue
+		}
+		TextSQL := "SELECT Min(" + NameID + ") from \"" + postgres_gorm.Settings.DB_SCHEMA + "\".\"" + TableName + "\""
+		ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*60)
+		defer ctxCancelFunc()
+		db.WithContext(ctx)
+
+		//запрос
+		tx := db.Raw(TextSQL)
+		err = tx.Error
+		if err != nil {
+			log.Panic("Wrong SQL query: ", TextSQL, " error: ", err)
+		}
+
+		var IDMinimum sql.NullString
+		tx = tx.Scan(&IDMinimum)
+		err = tx.Error
+		if err != nil {
+			log.Panic("Wrong SQL Scan(): ", TextSQL, " error: ", err)
+		}
+
+		//
+		if TypeGo == "string" {
+			Table1.IDMinimum = `"` + IDMinimum.String + `"`
+		} else if mini_func.IsNumberType(TypeGo) == true {
+			Table1.IDMinimum = IDMinimum.String
+		}
+	}
+
+}
+
+func FindNameTypeID(Table1 *types.Table) (string, string) {
+	Otvet := ""
+	Type := ""
+
+	for ColumnName, Column1 := range Table1.MapColumns {
+		if Column1.IsIdentity == true {
+			return ColumnName, Column1.TypeGo
+		}
+	}
+
+	return Otvet, Type
+}
+
+//// FillTypeGo - заполняет тип golang из типа postgres
+//func FillTypeGo(MapTable map[string]*types.Table) {
+//
+//	for _, Table1 := range MapTable {
+//		for _, Column1 := range Table1.MapColumns {
+//
+//			SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
+//			if ok == false {
+//				log.Panic("GetMappings() ", Column1.Type, " error: not found")
+//			}
+//			Type_go := SQLMapping1.GoType
+//			Column1.TypeGo = Type_go
+//		}
+//	}
+//
+//}

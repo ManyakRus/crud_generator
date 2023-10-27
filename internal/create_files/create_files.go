@@ -24,6 +24,11 @@ func FindSingularName(s string) string {
 func FormatName(Name string) string {
 	Otvet := Name
 
+	Otvet1, ok := types.MapReplaceName[Name]
+	if ok == true {
+		return Otvet1
+	}
+
 	switch strings.ToLower(Name) {
 	case "id":
 		Otvet = "ID"
@@ -31,16 +36,12 @@ func FormatName(Name string) string {
 		Otvet = strcase.ToCamel(Otvet)
 	}
 
-	return Otvet
-}
-
-func IsNumberType(TypeGo string) bool {
-	Otvet := false
-
-	switch TypeGo {
-	case "int", "int8", "int16", "int32", "int64", "float32", "float64", "uint", "uint8", "uint16", "uint32", "uint64", "byte":
-		{
-			Otvet = true
+	//_id в конце заменяем на ID
+	len1 := len(Name)
+	if len1 >= 3 {
+		last3 := strings.ToLower(Name[len1-3:])
+		if last3 == "_id" {
+			Otvet = Otvet[:len1-2-1] + "ID"
 		}
 	}
 
