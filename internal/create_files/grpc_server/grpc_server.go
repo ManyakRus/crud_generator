@@ -40,8 +40,8 @@ func CreateFiles(Table1 *types.Table) error {
 
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
-	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 	DirReadyGRPCServer := DirReady + "internal" + micro.SeparatorFile() + "grpc_server" + micro.SeparatorFile()
 
@@ -82,8 +82,8 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
-	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 	DirReadyGRPCServer := DirReady + "internal" + micro.SeparatorFile() + "grpc_server" + micro.SeparatorFile()
 

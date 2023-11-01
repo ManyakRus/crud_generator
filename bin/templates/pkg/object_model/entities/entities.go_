@@ -1,8 +1,10 @@
-package object_model
+package lawsuit_status_types
 
 import (
 	"encoding/json"
 	"github.com/vmihailenco/msgpack/v5"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/functions/calc_struct_version"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities"
 	"reflect"
 )
 
@@ -14,8 +16,8 @@ var crud_LawsuitStatusType ICrud_LawsuitStatusType
 
 // LawsuitStatusType Статусы дел (справочник).
 type LawsuitStatusType struct {
-	CommonStruct
-	NameStruct
+	entities.CommonStruct
+	entities.NameStruct
 	Code string `json:"code" gorm:"column:code;default:0"`
 }
 
@@ -26,7 +28,6 @@ type ICrud_LawsuitStatusType interface {
 	Create(*LawsuitStatusType) error
 	Delete(*LawsuitStatusType) error
 	Restore(*LawsuitStatusType) error
-	Find_ByExtID(*LawsuitStatusType) error
 }
 
 // TableName - возвращает имя таблицы в БД, нужен для gorm
@@ -61,7 +62,7 @@ func LawsuitStatusTypeAsBytes(m *LawsuitStatusType) ([]byte, error) {
 // GetStructVersion - возвращает версию модели
 func (m LawsuitStatusType) GetStructVersion() uint32 {
 	if versionLawsuitStatusType == 0 {
-		versionLawsuitStatusType = CalcStructVersion(reflect.TypeOf(m))
+		versionLawsuitStatusType = calc_struct_version.CalcStructVersion(reflect.TypeOf(m))
 	}
 
 	return versionLawsuitStatusType
@@ -92,7 +93,7 @@ func (m LawsuitStatusType) GetJSON() (string, error) {
 	return ReturnVar, err
 }
 
-//---------------------------- CRUD операции ------------------------------------------------------------
+// ---------------------------- CRUD операции ------------------------------------------------------------
 
 // Read - находит запись в БД по ID, и заполняет в объект
 func (m *LawsuitStatusType) Read() error {
@@ -150,4 +151,4 @@ func (m LawsuitStatusType) SetCrudInterface(crud ICrud_LawsuitStatusType) {
 	return
 }
 
-//---------------------------- конец CRUD операции ------------------------------------------------------------
+// ---------------------------- конец CRUD операции ------------------------------------------------------------

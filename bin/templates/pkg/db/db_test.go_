@@ -1,9 +1,9 @@
 package db_lawsuit_status_types
 
 import (
-	model "gitlab.aescorp.ru/dsp_dev/claim/common/object_model"
 	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/config"
 	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/postgres_gorm"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"testing"
 )
 
@@ -16,7 +16,7 @@ func TestRead(t *testing.T) {
 	defer postgres_gorm.CloseConnection()
 
 	crud := Crud_DB{}
-	Otvet := model.LawsuitStatusType{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
 	if err != nil {
@@ -37,7 +37,7 @@ func TestSave(t *testing.T) {
 	defer postgres_gorm.CloseConnection()
 
 	crud := Crud_DB{}
-	Otvet := model.LawsuitStatusType{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
 	if err != nil {
@@ -63,7 +63,7 @@ func TestDelete(t *testing.T) {
 	defer postgres_gorm.CloseConnection()
 
 	crud := Crud_DB{}
-	Otvet := model.LawsuitStatusType{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
 	if err != nil {
@@ -94,6 +94,7 @@ func TestDelete(t *testing.T) {
 	}
 
 }
+
 
 func TestFind_ByExtID(t *testing.T) {
 	config.LoadEnv()

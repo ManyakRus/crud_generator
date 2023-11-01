@@ -3,10 +3,10 @@ package grpc_lawsuit_status_types
 import (
 	"context"
 	"encoding/json"
-	model "gitlab.aescorp.ru/dsp_dev/claim/common/object_model"
-	"gitlab.aescorp.ru/dsp_dev/claim/common/object_model/pkg/grpc/grpc_client"
-	"gitlab.aescorp.ru/dsp_dev/claim/common/object_model/pkg/grpc/grpc_client/constants"
-	"gitlab.aescorp.ru/dsp_dev/claim/common/object_model/pkg/grpc/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"log"
 	"time"
 )
@@ -24,21 +24,21 @@ type Crud_GRPC struct {
 // GetVersionModel - возвращает хэш версии структуры модели
 func (crud Crud_GRPC) GetVersionModel() uint32 {
 	if VersionModel == 0 {
-		VersionModel = model.LawsuitStatusType{}.GetStructVersion()
+		VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	}
 	return VersionModel
 }
 
 // Read - возвращает модель из БД
-func (crud Crud_GRPC) Read(m *model.LawsuitStatusType) error {
-	//var Otvet model.LawsuitStatusType
+func (crud Crud_GRPC) Read(l *lawsuit_status_types.LawsuitStatusType) error {
+	// var Otvet lawsuit_status_types.LawsuitStatusType
 
-	//подключение
+	// подключение
 	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
-	//подготовка запроса
+	// подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
@@ -49,17 +49,17 @@ func (crud Crud_GRPC) Read(m *model.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
 	defer ctxCancelFunc()
 
-	//запрос
-	Response, err := grpc_client.Client.LawsuitStatusTypes_Read(ctx, Request)
+	// запрос
+	Response, err := grpc_client.Client.LawsuitStatusType_Read(ctx, Request)
 	if err != nil {
 		sError := err.Error()
-		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
 	}
 
-	//ответ
+	// ответ
 	sModel := Response.ModelString
 	err = json.Unmarshal([]byte(sModel), l)
 	if err != nil {
@@ -70,15 +70,15 @@ func (crud Crud_GRPC) Read(m *model.LawsuitStatusType) error {
 }
 
 // Create - записывает новую модель в БД
-func (crud Crud_GRPC) Create(m *model.LawsuitStatusType) error {
-	//var Otvet model.LawsuitStatusType
+func (crud Crud_GRPC) Create(l *lawsuit_status_types.LawsuitStatusType) error {
+	// var Otvet lawsuit_status_types.LawsuitStatusType
 
-	//подключение
+	// подключение
 	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
-	//подготовка запроса
+	// подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
 	ModelString, err := l.GetJSON()
@@ -93,17 +93,17 @@ func (crud Crud_GRPC) Create(m *model.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
 	defer ctxCancelFunc()
 
-	//запрос
-	Response, err := grpc_client.Client.LawsuitStatusTypes_Create(ctx, Request)
+	// запрос
+	Response, err := grpc_client.Client.LawsuitStatusType_Create(ctx, Request)
 	if err != nil {
 		sError := err.Error()
-		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
 	}
 
-	//ответ
+	// ответ
 	sModel := Response.ModelString
 	err = json.Unmarshal([]byte(sModel), l)
 	if err != nil {
@@ -114,15 +114,15 @@ func (crud Crud_GRPC) Create(m *model.LawsuitStatusType) error {
 }
 
 // Update - обновляет модель в БД
-func (crud Crud_GRPC) Update(m *model.LawsuitStatusType) error {
-	//var Otvet model.LawsuitStatusType
+func (crud Crud_GRPC) Update(l *lawsuit_status_types.LawsuitStatusType) error {
+	// var Otvet lawsuit_status_types.LawsuitStatusType
 
-	//подключение
+	// подключение
 	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
-	//подготовка запроса
+	// подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
 	ModelString, err := l.GetJSON()
@@ -137,17 +137,17 @@ func (crud Crud_GRPC) Update(m *model.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
 	defer ctxCancelFunc()
 
-	//запрос
-	Response, err := grpc_client.Client.LawsuitStatusTypes_Update(ctx, Request)
+	// запрос
+	Response, err := grpc_client.Client.LawsuitStatusType_Update(ctx, Request)
 	if err != nil {
 		sError := err.Error()
-		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
 	}
 
-	//ответ
+	// ответ
 	sModel := Response.ModelString
 	err = json.Unmarshal([]byte(sModel), l)
 	if err != nil {
@@ -158,15 +158,15 @@ func (crud Crud_GRPC) Update(m *model.LawsuitStatusType) error {
 }
 
 // Save - обновляет (или создаёт) модель в БД
-func (crud Crud_GRPC) Save(m *model.LawsuitStatusType) error {
-	//var Otvet model.LawsuitStatusType
+func (crud Crud_GRPC) Save(l *lawsuit_status_types.LawsuitStatusType) error {
+	// var Otvet lawsuit_status_types.LawsuitStatusType
 
-	//подключение
+	// подключение
 	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
-	//подготовка запроса
+	// подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
 	ModelString, err := l.GetJSON()
@@ -181,17 +181,17 @@ func (crud Crud_GRPC) Save(m *model.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
 	defer ctxCancelFunc()
 
-	//запрос
-	Response, err := grpc_client.Client.LawsuitStatusTypes_Save(ctx, Request)
+	// запрос
+	Response, err := grpc_client.Client.LawsuitStatusType_Save(ctx, Request)
 	if err != nil {
 		sError := err.Error()
-		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
 	}
 
-	//ответ
+	// ответ
 	sModel := Response.ModelString
 	err = json.Unmarshal([]byte(sModel), l)
 	if err != nil {
@@ -202,15 +202,15 @@ func (crud Crud_GRPC) Save(m *model.LawsuitStatusType) error {
 }
 
 // Delete - устанавливает is_deleted = true в БД
-func (crud Crud_GRPC) Delete(m *model.LawsuitStatusType) error {
-	//var Otvet model.LawsuitStatusType
+func (crud Crud_GRPC) Delete(l *lawsuit_status_types.LawsuitStatusType) error {
+	// var Otvet lawsuit_status_types.LawsuitStatusType
 
-	//подключение
+	// подключение
 	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
-	//подготовка запроса
+	// подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
@@ -221,17 +221,17 @@ func (crud Crud_GRPC) Delete(m *model.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
 	defer ctxCancelFunc()
 
-	//запрос
-	Response, err := grpc_client.Client.LawsuitStatusTypes_Delete(ctx, Request)
+	// запрос
+	Response, err := grpc_client.Client.LawsuitStatusType_Delete(ctx, Request)
 	if err != nil {
 		sError := err.Error()
-		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
 	}
 
-	//ответ
+	// ответ
 	sModel := Response.ModelString
 	err = json.Unmarshal([]byte(sModel), l)
 	if err != nil {
@@ -242,15 +242,15 @@ func (crud Crud_GRPC) Delete(m *model.LawsuitStatusType) error {
 }
 
 // Restore - устанавливает is_deleted = false в БД
-func (crud Crud_GRPC) Restore(m *model.LawsuitStatusType) error {
-	//var Otvet model.LawsuitStatusType
+func (crud Crud_GRPC) Restore(l *lawsuit_status_types.LawsuitStatusType) error {
+	// var Otvet lawsuit_status_types.LawsuitStatusType
 
-	//подключение
+	// подключение
 	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
-	//подготовка запроса
+	// подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
@@ -261,17 +261,17 @@ func (crud Crud_GRPC) Restore(m *model.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
 	defer ctxCancelFunc()
 
-	//запрос
-	Response, err := grpc_client.Client.LawsuitStatusTypes_Restore(ctx, Request)
+	// запрос
+	Response, err := grpc_client.Client.LawsuitStatusType_Restore(ctx, Request)
 	if err != nil {
 		sError := err.Error()
-		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
 	}
 
-	//ответ
+	// ответ
 	sModel := Response.ModelString
 	err = json.Unmarshal([]byte(sModel), l)
 	if err != nil {
@@ -282,7 +282,7 @@ func (crud Crud_GRPC) Restore(m *model.LawsuitStatusType) error {
 }
 
 // Find_ByExtID - находит модель в БД по ext_id и connection_id
-func (crud Crud_GRPC) Find_ByExtID(e *model.LawsuitStatusType) error {
+func (crud Crud_GRPC) Find_ByExtID(e *lawsuit_status_types.LawsuitStatusType) error {
 	//подключение
 	if grpc_client.Client == nil {
 		grpc_client.Connect()

@@ -31,15 +31,26 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 func CreateFiles(Table1 *types.Table) error {
 	var err error
 
+	TableName := strings.ToLower(Table1.Name)
+
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
-	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesModel := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_MODEL + micro.SeparatorFile()
-	DirReadyModel := DirReady + "pkg" + micro.SeparatorFile() + "model" + micro.SeparatorFile()
+	DirReadyModel := DirReady + config.Settings.TEMPLATE_FOLDERNAME_MODEL + micro.SeparatorFile() + TableName + micro.SeparatorFile()
 
-	FilenameTemplateModel := DirTemplatesModel + "model.go_"
-	FilenameReadyModel := DirReadyModel + strings.ToLower(Table1.Name) + ".go"
+	FilenameTemplateModel := DirTemplatesModel + "entities.go_"
+	FilenameReadyModel := DirReadyModel + TableName + ".go"
+
+	//создадим каталог
+	ok, err := micro.FileExists(DirReadyModel)
+	if ok == false {
+		err = os.MkdirAll(DirReadyModel, 0777)
+		if err != nil {
+			log.Panic("Mkdir() ", DirReadyModel, " error: ", err)
+		}
+	}
 
 	bytes, err := os.ReadFile(FilenameTemplateModel)
 	if err != nil {

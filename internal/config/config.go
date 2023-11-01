@@ -32,11 +32,13 @@ type SettingsINI struct {
 	TEXT_TEMPLATE_MODEL              string
 	TEXT_TEMPLATE_TABLENAME          string
 	HAS_IS_DELETED                   bool
-	NEED_MODEL_ONE_FOLDER            bool
+	READY_FOLDERNAME                 string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
 func FillSettings() {
+	//dir := micro.ProgramDir_bin()
+
 	Settings = SettingsINI{}
 	Settings.INCLUDE_TABLES = os.Getenv("INCLUDE_TABLES")
 	Settings.EXCLUDE_TABLES = os.Getenv("EXCLUDE_TABLES")
@@ -66,10 +68,8 @@ func FillSettings() {
 	sNEED_NRPC := os.Getenv("NEED_NRPC")
 	Settings.NEED_NRPC = BoolFromString(sNEED_NRPC)
 
-	sNEED_MODEL_ONE_FOLDER := os.Getenv("NEED_MODEL_ONE_FOLDER")
-	Settings.NEED_MODEL_ONE_FOLDER = BoolFromString(sNEED_MODEL_ONE_FOLDER)
-
 	Settings.SERVICE_NAME = os.Getenv("SERVICE_NAME")
+	Settings.READY_FOLDERNAME = strings.ToLower(Settings.SERVICE_NAME)
 
 	if Settings.TEMPLATE_FOLDERNAME == "" {
 		log.Panic("Need fill TEMPLATE_FOLDERNAME")

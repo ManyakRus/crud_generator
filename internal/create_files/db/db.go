@@ -41,10 +41,10 @@ func CreateFiles(Table1 *types.Table) error {
 
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
-	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
-	DirReadyDB := DirReady + "pkg" + micro.SeparatorFile() + "db" + micro.SeparatorFile()
+	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
 
 	FilenameTemplateDB := DirTemplatesDB + "db.go_"
 	TableName := strings.ToLower(Table1.Name)
@@ -54,7 +54,7 @@ func CreateFiles(Table1 *types.Table) error {
 	//создадим каталог
 	ok, err := micro.FileExists(DirTable)
 	if ok == false {
-		err = os.Mkdir(DirTable, 0777)
+		err = os.MkdirAll(DirTable, 0777)
 		if err != nil {
 			log.Panic("Mkdir() ", DirTable, " error: ", err)
 		}
@@ -92,15 +92,16 @@ func CreateFiles(Table1 *types.Table) error {
 func CreateTestFiles(Table1 *types.Table) error {
 	var err error
 
+	TableName := strings.ToLower(Table1.Name)
+
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
-	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
-	DirReadyDB := DirReady + "pkg" + micro.SeparatorFile() + "db" + micro.SeparatorFile()
+	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
 
 	FilenameTemplateDB := DirTemplatesDB + "db_test.go_"
-	TableName := strings.ToLower(Table1.Name)
 	DirTable := DirReadyDB + "db_" + TableName
 	FilenameReadyDB := DirTable + micro.SeparatorFile() + "db_" + TableName + "_test.go"
 

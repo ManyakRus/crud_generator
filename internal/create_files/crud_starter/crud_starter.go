@@ -35,10 +35,10 @@ func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
 	//DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	//DirTemplatesCrudStarter := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 	//FilenameTemplateCrudStarter := DirTemplatesCrudStarter + "crud_starter.go_"
-	DirReadyCrudStarter := DirReady + "pkg" + micro.SeparatorFile() + "crud_starter" + micro.SeparatorFile()
+	DirReadyCrudStarter := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 	FilenameReadyCrudStarter := DirReadyCrudStarter + "crud_starter.go"
 
 	//bytes, err := os.ReadFile(FilenameTemplateCrudStarter)
@@ -53,17 +53,15 @@ func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	TextCrudStarter := constants.TEXT_GENERATED + `package crud_starter`
 
 	//найдём новый текст для каждой таблицы
-	ModelURL := config.Settings.SERVICE_REPOSITORY_URL
-	if config.Settings.NEED_MODEL_ONE_FOLDER == false {
-		ModelURL = ModelURL + "/pkg/model"
-	}
+	RepositoryURL := config.Settings.SERVICE_REPOSITORY_URL
+	ModelURL := RepositoryURL + config.Settings.TEMPLATE_FOLDERNAME_MODEL
 
 	//импорт
 	TextImport := FindTextImport(MapAll, ModelURL)
 	TextCrudStarter = TextCrudStarter + "\n" + TextImport
 
 	//DB
-	TextDB := FindTextDB(MapAll, ModelURL)
+	TextDB := FindText_InitCrudTransport_DB(MapAll, ModelURL)
 	TextCrudStarter = TextCrudStarter + "\n" + TextDB
 
 	//GRPC
@@ -88,7 +86,7 @@ func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 func FindTextImport(MapAll map[string]*types.Table, ModelURL string) string {
 	Otvet := `
 import (
-	model "` + ModelURL + `"`
+	`
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(MapAll))
 	for k := range MapAll {
@@ -96,6 +94,7 @@ import (
 	}
 	sort.Strings(keys)
 
+	TextModel := ""
 	TextDB := ""
 	TextGRPC := ""
 	TextNRPC := ""
@@ -104,44 +103,57 @@ import (
 		if ok == false {
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
-		TextDB = TextDB + FindTextImportDB1(Table1, ModelURL)
-		TextGRPC = TextGRPC + FindTextImportGRPC1(Table1, ModelURL)
-		TextNRPC = TextNRPC + FindTextImportNRPC1(Table1, ModelURL)
+		TextModel = TextModel + FindTextImportModel1(Table1)
+		TextDB = TextDB + FindTextImportDB1(Table1)
+		TextGRPC = TextGRPC + FindTextImportGRPC1(Table1)
+		TextNRPC = TextNRPC + FindTextImportNRPC1(Table1)
 	}
 
-	Otvet = Otvet + TextDB + "\n" + TextGRPC + "\n" + TextNRPC
+	Otvet = Otvet + TextModel + "\n" + TextDB + "\n" + TextGRPC + "\n" + TextNRPC
 
 	Otvet = Otvet + "\n)"
 
 	return Otvet
 }
 
-// FindTextImportDB1 - возвращает текст всех функций .proto для таблицы
-func FindTextImportDB1(Table1 *types.Table, ModelURL string) string {
+// FindTextImportModel1 - возвращает текст импорта Model для 1 таблицы
+func FindTextImportModel1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	Otvet := "\n\t\"" + ModelURL + "/pkg/db/" + TableName + `"`
+	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + config.Settings.TEMPLATE_FOLDERNAME_MODEL + "/" + TableName
+	Otvet := "\n\t\"" + DB_URL
 
 	return Otvet
 }
 
-// FindTextImportGRPC1 - возвращает текст всех функций .proto для таблицы
-func FindTextImportGRPC1(Table1 *types.Table, ModelURL string) string {
+// FindTextImportDB1 - возвращает текст импорта DB для 1 таблицы
+func FindTextImportDB1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	Otvet := "\n\t\"" + ModelURL + "/pkg/grpc/grpc_client/grpc_" + TableName + `"`
+	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + config.Settings.TEMPLATE_FOLDERNAME_DB
+	Otvet := "\n\t\"" + DB_URL + "/db_" + TableName
 
 	return Otvet
 }
 
-// FindTextImportNRPC1 - возвращает текст всех функций .proto для таблицы
-func FindTextImportNRPC1(Table1 *types.Table, ModelURL string) string {
+// FindTextImportGRPC1 - возвращает текст импорта GRPC для 1 таблицы
+func FindTextImportGRPC1(Table1 *types.Table) string {
+	GRPC_URL := config.Settings.SERVICE_REPOSITORY_URL + config.Settings.TEMPLATE_FOLDERNAME_GRPC
 	TableName := strings.ToLower(Table1.Name)
-	Otvet := "\n\t\"" + ModelURL + "/pkg/nrpc/grpc_client/nrpc_" + TableName + `"`
+	Otvet := "\n\t\"" + GRPC_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + "/grpc_" + TableName + `"`
 
 	return Otvet
 }
 
-// FindTextNRPC - возвращает текст всех функций .proto для таблицы
-func FindTextDB(MapAll map[string]*types.Table, ModelURL string) string {
+// FindTextImportNRPC1 - возвращает текст импорта NRPC для 1 таблицы
+func FindTextImportNRPC1(Table1 *types.Table) string {
+	NRPC_URL := config.Settings.SERVICE_REPOSITORY_URL + config.Settings.TEMPLATE_FOLDERNAME_NRPC
+	TableName := strings.ToLower(Table1.Name)
+	Otvet := "\n\t\"" + NRPC_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + "/nrpc_" + TableName + `"`
+
+	return Otvet
+}
+
+// FindText_InitCrudTransport_DB - возвращает текст всех функций .proto для таблицы
+func FindText_InitCrudTransport_DB(MapAll map[string]*types.Table, ModelURL string) string {
 	Otvet := `
 // InitCrudTransport_DB - заполняет объекты crud для работы с БД напрямую
 func InitCrudTransport_DB() {`
@@ -169,7 +181,7 @@ func InitCrudTransport_DB() {`
 func FindTextDB1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
 	ModelName := Table1.NameGo
-	Otvet := "\n\t" + "model." + ModelName + "{}.SetCrudInterface(db_" + TableName + ".Crud_DB{})"
+	Otvet := "\n\t" + TableName + "." + ModelName + "{}.SetCrudInterface(db_" + TableName + ".Crud_DB{})"
 
 	return Otvet
 }
@@ -203,7 +215,7 @@ func InitCrudTransport_GRPC() {`
 func FindTextGRPC1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
 	ModelName := Table1.NameGo
-	Otvet := "\n\t" + "model." + ModelName + "{}.SetCrudInterface(grpc_" + TableName + ".Crud_GRPC{})"
+	Otvet := "\n\t" + "grpc_" + TableName + "." + ModelName + "{}.SetCrudInterface(grpc_" + TableName + ".Crud_GRPC{})"
 
 	return Otvet
 }
@@ -237,7 +249,7 @@ func InitCrudTransport_NRPC() {`
 func FindTextNRPC1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
 	ModelName := Table1.NameGo
-	Otvet := "\n\t" + "model." + ModelName + "{}.SetCrudInterface(nrpc_" + TableName + ".Crud_NRPC{})"
+	Otvet := "\n\t" + "nrpc_" + TableName + "." + ModelName + "{}.SetCrudInterface(nrpc_" + TableName + ".Crud_NRPC{})"
 
 	return Otvet
 }

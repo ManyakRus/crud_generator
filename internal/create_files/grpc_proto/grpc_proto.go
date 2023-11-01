@@ -31,10 +31,10 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
-	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesProto := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile()
-	DirReadyProto := DirReady + "pkg" + micro.SeparatorFile() + "grpc" + micro.SeparatorFile()
+	DirReadyProto := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile()
 	FilenameReadyProto := DirReadyProto + config.Settings.SERVICE_NAME + ".proto"
 
 	FilenameTemplateProto := DirTemplatesProto + "service.proto"

@@ -40,20 +40,20 @@ func CreateFiles(Table1 *types.Table) error {
 
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
-	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
-	DirTemplatesNRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
-	DirReadyNRPCClient := DirReady + "pkg" + micro.SeparatorFile() + "nrpc" + micro.SeparatorFile() + "nrpc_client" + micro.SeparatorFile()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesNRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
+	DirReadyNRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_NRPC + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
 
 	FilenameTemplateNRPCClient := DirTemplatesNRPCClient + "nrpc_client.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirTable := DirReadyNRPCClient + TableName + micro.SeparatorFile()
-	FilenameReadyNRPCClient := DirTable + TableName + ".go"
+	DirTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
+	FilenameReadyNRPCClient := DirTable + "nrpc_" + TableName + ".go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirTable)
 	if ok == false {
-		err = os.Mkdir(DirTable, 0777)
+		err = os.MkdirAll(DirTable, 0777)
 		if err != nil {
 			log.Panic("Mkdir() ", DirTable, " error: ", err)
 		}
@@ -91,20 +91,20 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
-	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
-	DirTemplatesNRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
-	DirReadyNRPCClient := DirReady + "pkg" + micro.SeparatorFile() + "nrpc" + micro.SeparatorFile() + "nrpc_client" + micro.SeparatorFile()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesNRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
+	DirReadyNRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_NRPC + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
 
 	FilenameTemplateNRPCClient := DirTemplatesNRPCClient + "nrpc_client_test.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirTable := DirReadyNRPCClient + TableName + micro.SeparatorFile()
-	FilenameReadyNRPCClient := DirTable + TableName + "_test.go"
+	DirTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
+	FilenameReadyNRPCClient := DirTable + "nrpc_" + TableName + "_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirTable)
 	if ok == false {
-		err = os.Mkdir(DirTable, 0777)
+		err = os.MkdirAll(DirTable, 0777)
 		if err != nil {
 			log.Panic("Mkdir() ", DirTable, " error: ", err)
 		}

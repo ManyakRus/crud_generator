@@ -40,20 +40,20 @@ func CreateFiles(Table1 *types.Table) error {
 
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
-	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
-	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
-	DirReadyGRPCClient := DirReady + "pkg" + micro.SeparatorFile() + "grpc" + micro.SeparatorFile() + "grpc_client" + micro.SeparatorFile()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
+	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 
 	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirTable := DirReadyGRPCClient + TableName + micro.SeparatorFile()
-	FilenameReadyGRPCClient := DirTable + TableName + ".go"
+	DirTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
+	FilenameReadyGRPCClient := DirTable + "grpc_" + TableName + ".go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirTable)
 	if ok == false {
-		err = os.Mkdir(DirTable, 0777)
+		err = os.MkdirAll(DirTable, 0777)
 		if err != nil {
 			log.Panic("Mkdir() ", DirTable, " error: ", err)
 		}
@@ -91,15 +91,15 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//чтение файлов
 	DirBin := micro.ProgramDir_bin()
-	DirTemplates := DirBin + constants.FolderTemplates + micro.SeparatorFile()
-	DirReady := DirBin + constants.FolderReady + micro.SeparatorFile()
-	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
-	DirReadyGRPCClient := DirReady + "pkg" + micro.SeparatorFile() + "grpc" + micro.SeparatorFile() + "grpc_client" + micro.SeparatorFile()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
+	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 
 	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client_test.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirTable := DirReadyGRPCClient + TableName + micro.SeparatorFile()
-	FilenameReadyGRPCClient := DirTable + TableName + "_test.go"
+	DirTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
+	FilenameReadyGRPCClient := DirTable + "grpc_" + TableName + "_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirTable)
