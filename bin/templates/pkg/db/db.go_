@@ -146,7 +146,7 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 		m.DeletedAt = time.Time{}
 	}
 
-	// колонки с null
+	//колонки с null
 	tx := db
 	MassOmit := make([]string, 0)
 	var ColumnName string
@@ -156,12 +156,17 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 		MassOmit = append(MassOmit, ColumnName)
 	}
 
+	ColumnName = "CreatedAt"
+	if m.CreatedAt.IsZero() == true {
+		MassOmit = append(MassOmit, ColumnName)
+	}
+
 	ColumnName = "ExtID"
 	if m.ExtID == 0 {
 		MassOmit = append(MassOmit, ColumnName)
 	}
 
-	// игнор пустых колонок
+	//игнор пустых колонок
 	tx = tx.Omit(MassOmit...)
 
 	// запись

@@ -56,7 +56,7 @@ on
 	
 WHERE 1=1
 	--and c.confrelid = (select oid from pg_class where relname = 'debt_types')
-	AND c.confrelid!=c.conrelid
+	--AND c.confrelid!=c.conrelid
 ;
 
 ------------------------------------------- Все таблицы и колонки ------------------------------

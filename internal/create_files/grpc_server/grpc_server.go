@@ -15,18 +15,25 @@ import (
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
-	for _, table1 := range MapAll {
+	for _, Table1 := range MapAll {
+		//проверка что таблица нормальная
+		err1 := create_files.CheckGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
+			continue
+		}
+
 		//файлы grpc_server
-		err = CreateFiles(table1)
+		err = CreateFiles(Table1)
 		if err != nil {
-			log.Error("CreateFiles() table: ", table1.Name, " error: ", err)
+			log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 
 		//тестовые файлы grpc_server
-		err = CreateTestFiles(table1)
+		err = CreateTestFiles(Table1)
 		if err != nil {
-			log.Error("CreateTestFiles() table: ", table1.Name, " error: ", err)
+			log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 	}
@@ -109,6 +116,12 @@ func CreateTestFiles(Table1 *types.Table) error {
 		TextDB = DeleteFuncTestRestore(TextDB, ModelName, Table1)
 	}
 	TextDB = DeleteFuncTestFind_byExtID(TextDB, ModelName, Table1)
+
+	// замена ID на PrimaryKey
+	TextDB = create_files.ReplacePrimaryKeyID(TextDB, Table1)
+
+	//SkipNow()
+	TextDB = create_files.AddSkipNow(TextDB, Table1)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextDB), constants.FILE_PERMISSIONS)

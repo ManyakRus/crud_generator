@@ -157,9 +157,20 @@ func Test_server_LawsuitStatusType_FindByExtID(t *testing.T) {
 	crud_starter.InitCrudTransport_DB()
 
 	ctx := context.Background()
+	Request := grpc_proto.RequestId{}
+	Request.Id = LawsuitStatusType_ID_Test
+	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+
+	server1 := &ServerGRPC{}
+	Otvet1, err := server1.LawsuitStatusType_Read(ctx, &Request)
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_FindByExtId() error: ", err)
+	}
+
+	ctx := context.Background()
 	Request := grpc_proto.RequestExtId{}
-	Request.ExtId = 1
-	Request.ConnectionId = 3
+	Request.ExtId = Otvet1.ExtID
+	Request.ConnectionId = Otvet1.ConnectionId
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}

@@ -10,9 +10,33 @@ func TestFindSingularName(t *testing.T) {
 }
 
 func TestFormatName(t *testing.T) {
-	Name := "contract_id"
+	Name := "document_invoice_id"
 	Otvet := FormatName(Name)
 	if Otvet == "" {
 		t.Error("TestFormatName() error")
+	}
+}
+
+func TestDeleteLineWithComment(t *testing.T) {
+	s := `import (
+	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/config"
+	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/postgres_gorm"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"testing"
+	//TestFind_ByExtID() "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+)
+`
+	Otvet := DeleteLineWithComment(s, "TestFind_ByExtID")
+	if Otvet == "" {
+		t.Error("TestFormatName() error")
+	}
+}
+
+func TestPrintableString(t *testing.T) {
+	s := `123 // \\ 456
+789`
+	Otvet := PrintableString(s)
+	if Otvet == "" {
+		t.Error("TestPrintableString() error: Otvet = ''")
 	}
 }

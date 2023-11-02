@@ -23,10 +23,10 @@ func TestRead(t *testing.T) {
 		t.Error("TestRead() error: ", err)
 	}
 
-	if Otvet.Name == "" {
-		t.Error(TableName + "_test.TestRead() error name= '' ")
+	if Otvet.ID == 0 {
+		t.Error(TableName + "_test.TestRead() error ID=0 ")
 	} else {
-		t.Log(TableName+"_test.TestRead() Otvet: ", Otvet.Name)
+		t.Log(TableName+"_test.TestRead() Otvet: ", Otvet.ID)
 	}
 }
 
@@ -44,15 +44,15 @@ func TestSave(t *testing.T) {
 		t.Error("TestSave() error: ", err)
 	}
 
-	if Otvet.Name == "" {
-		t.Error(TableName + "_test.TestSave() error name= '' ")
+	if Otvet.ID == 0 {
+		t.Error(TableName + "_test.TestSave() error ID=0 ")
 	}
 
 	err = crud.Save(&Otvet)
 	if err != nil {
 		t.Error("TestSave() error: ", err)
 	}
-	t.Log(TableName+"_test.TestSave() Otvet: ", Otvet.Name)
+	t.Log(TableName+"_test.TestSave() Otvet: ", Otvet.ID)
 
 }
 
@@ -101,7 +101,15 @@ func TestFind_ByExtID(t *testing.T) {
 	postgres_gorm.Connect()
 	defer postgres_gorm.CloseConnection()
 
-	Otvet, err := Find_ByExtID(1, constants.CONNECTION_ID_TEST)
+	crud := Crud_DB{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+	if err != nil {
+		t.Error("TestFind_ByExtID() error: ", err)
+	}
+
+	Otvet, err = Find_ByExtID(Otvet.ExtID, Otvet.ConnectionID)
 	if err != nil {
 		t.Error("TestFind_ByExtID() error: ", err)
 	}

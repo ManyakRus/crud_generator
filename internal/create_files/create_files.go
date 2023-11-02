@@ -1,9 +1,13 @@
 package create_files
 
 import (
+	"errors"
+	"fmt"
+	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/inflection"
+	"strconv"
 	"strings"
 )
 
@@ -32,16 +36,18 @@ func FormatName(Name string) string {
 	switch strings.ToLower(Name) {
 	case "id":
 		Otvet = "ID"
-	default:
-		Otvet = strcase.ToCamel(Otvet)
+		return Otvet
 	}
 
+	Otvet = strcase.ToCamel(Otvet)
+
 	//_id в конце заменяем на ID
-	len1 := len(Name)
-	if len1 >= 3 {
-		last3 := strings.ToLower(Name[len1-3:])
+	lenName := len(Name)
+	lenOtvet := len(Otvet)
+	if lenName >= 3 {
+		last3 := strings.ToLower(Name[lenName-3:])
 		if last3 == "_id" {
-			Otvet = Otvet[:len1-2-1] + "ID"
+			Otvet = Otvet[:lenOtvet-2] + "ID"
 		}
 	}
 
@@ -122,5 +128,115 @@ func Has_Column_IsDeleted(Table1 *types.Table) bool {
 	}
 
 	Otvet = true
+	return Otvet
+}
+
+// DeleteCommentFromFuncName - удаляет комментарий с названием функции
+func DeleteCommentFromFuncName(Text, FuncName string) string {
+	Otvet := Text
+
+	TextFind := "//" + FuncName + "()"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
+
+	//pos1 := strings.Index(Otvet, TextFind)
+	//if pos1 < 0 {
+	//	return Otvet
+	//}
+	//s2 := Otvet[pos1+1:]
+	//
+	//posEnd := strings.Index(s2, "\n}")
+	//if posEnd < 0 {
+	//	return Otvet
+	//}
+	//
+	//Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+3:]
+
+	return Otvet
+}
+
+// DeleteLineWithComment - удаляет текст от комментария до конца строки
+func DeleteLineWithComment(Text, FuncName string) string {
+	Otvet := Text
+
+	TextFind := "//" + FuncName + "()"
+	pos1 := strings.Index(Otvet, TextFind)
+	if pos1 < 0 {
+		return Otvet
+	}
+	s2 := Otvet[pos1:]
+
+	posEnd := strings.Index(s2, "\n")
+	if posEnd < 0 {
+		return Otvet
+	}
+
+	Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+1:]
+
+	return Otvet
+}
+
+// FindPrimaryKeyNameTypeGo - возвращает наименование колонки PrimaryKey
+func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
+	Otvet := ""
+	Type := ""
+
+	for _, Column1 := range Table1.MapColumns {
+		if Column1.IsIdentity == true {
+			return Column1.NameGo, Column1.TypeGo
+		}
+	}
+
+	return Otvet, Type
+}
+
+// ReplacePrimaryKeyID - заменяет "ID" на название колонки PrimaryKey
+func ReplacePrimaryKeyID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	ColumnName, ColumnTypeGo := FindPrimaryKeyNameTypeGo(Table1)
+	if mini_func.IsNumberType(ColumnTypeGo) == true {
+		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", "Otvet."+ColumnName)
+	} else if ColumnTypeGo == "string" {
+		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID == 0", "Otvet."+ColumnName+" == \"\"")
+		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", "Otvet."+ColumnName)
+	}
+
+	return Otvet
+}
+
+// AddSkipNow - добавляет строку t.SkipNow()
+func AddSkipNow(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	if Table1.IDMinimum == "" || Table1.IDMinimum == "0" {
+		TextFind := "(t *testing.T) {"
+		Otvet = strings.ReplaceAll(Otvet, TextFind, TextFind+"\n\tt.SkipNow() //now rows in DB\n")
+	}
+
+	return Otvet
+}
+
+// CheckGoodTable - возвращает ошибку если таблица неправильная
+func CheckGoodTable(Table1 *types.Table) error {
+	var err error
+
+	ColumnName, _ := FindPrimaryKeyNameTypeGo(Table1)
+	if ColumnName == "" {
+		TextError := fmt.Sprint("Wrong table ", Table1.Name, " error: not found Primary key")
+		err = errors.New(TextError)
+	}
+
+	return err
+}
+
+// PrintableString - возвращает строку без запрещённых символов
+func PrintableString(s string) string {
+	Otvet := s
+	Otvet = strconv.Quote(Otvet) //экранирование символов
+	len1 := len(Otvet)
+	if len1 > 0 {
+		Otvet = Otvet[1 : len1-1]
+	}
+
 	return Otvet
 }

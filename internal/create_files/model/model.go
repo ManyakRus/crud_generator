@@ -10,7 +10,6 @@ import (
 	"github.com/ManyakRus/starter/micro"
 	"os"
 	"sort"
-	"strconv"
 	"strings"
 )
 
@@ -141,7 +140,7 @@ func FindTextColumn(Column1 *types.Column) string {
 	TextDefaultValue := FindTextDefaultValue(Type_go)
 	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)
 	Description := Column1.Description
-	Description = strconv.Quote(Description) //экранирование символов
+	Description = create_files.PrintableString(Description) //экранирование символов
 
 	Otvet = Otvet + "\t" + ColumnModelName + " " + Type_go + "\t"
 	Otvet = Otvet + "`json:\"" + ColumnName + "\""

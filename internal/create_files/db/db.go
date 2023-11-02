@@ -16,18 +16,25 @@ import (
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
-	for _, table1 := range MapAll {
+	for _, Table1 := range MapAll {
+		//проверка что таблица нормальная
+		err1 := create_files.CheckGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
+			continue
+		}
+
 		//файлы db
-		err = CreateFiles(table1)
+		err = CreateFiles(Table1)
 		if err != nil {
-			log.Error("CreateFiles() table: ", table1.Name, " error: ", err)
+			log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 
 		//тестовые файлы db
-		err = CreateTestFiles(table1)
+		err = CreateTestFiles(Table1)
 		if err != nil {
-			log.Error("CreateTestFiles() table: ", table1.Name, " error: ", err)
+			log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 	}
@@ -132,11 +139,17 @@ func CreateTestFiles(Table1 *types.Table) error {
 	}
 	TextDB = DeleteFuncTestFind_byExtID(TextDB, Table1)
 
-	//ID Minimum
+	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
 		TextFind := "const Postgres_ID_Test = "
 		TextDB = strings.ReplaceAll(TextDB, TextFind+"1", TextFind+Table1.IDMinimum)
 	}
+
+	//SkipNow()
+	TextDB = create_files.AddSkipNow(TextDB, Table1)
+
+	// замена ID на PrimaryKey
+	TextDB = create_files.ReplacePrimaryKeyID(TextDB, Table1)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -264,14 +277,18 @@ func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
 func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
+	FuncName := "TestFind_ByExtID"
+
 	//если есть обе колонки - ничего не делаем
 	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
 	if ok == true {
+		Otvet = create_files.DeleteCommentFromFuncName(Otvet, FuncName)
 		return Otvet
 	}
 
 	//
-	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "TestFind_ByExtID")
+	Otvet = create_files.DeleteFuncFromFuncName(Otvet, FuncName)
+	//Otvet = create_files.DeleteLineWithComment(Otvet, FuncName)
 
 	return Otvet
 }

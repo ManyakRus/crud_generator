@@ -157,9 +157,17 @@ func TestFindByExtID(t *testing.T) {
 	defer grpc_client.CloseConnection()
 
 	crud := Crud_GRPC{}
+	Otvet1 := lawsuit_status_types.LawsuitStatusType{}
+	Otvet1.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet1)
+
+	if err != nil {
+		t.Error("TestFind_ByExtID() error: ", err)
+	}
+
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
-	Otvet.ExtID = 1
-	Otvet.ConnectionID = constants.CONNECTION_ID_TEST
+	Otvet.ExtID = Otvet1.ExtID
+	Otvet.ConnectionID = Otvet1.ConnectionID
 	err := crud.Find_ByExtID(&Otvet)
 
 	if err != nil {
