@@ -88,6 +88,9 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = DeleteFuncFind_byExtID(TextDB, Table1)
 	TextDB = DeleteFuncFind_byExtIDCtx(TextDB, Table1)
 	TextDB = AddTextOmit(TextDB, Table1)
+	TextDB = ReplaceText_modified_at(TextDB, Table1)
+	TextDB = ReplaceText_is_deleted_deleted_at(TextDB, Table1)
+	TextDB = create_files.DeleteImportModel(TextDB)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -305,12 +308,14 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 
 	TextOmit := ""
 	for _, Column1 := range Table1.MapColumns {
+		ColumnNameGo := Column1.NameGo
 		TypeGo := Column1.TypeGo
+
+		_, is_nullable_config := types.MapNullableFileds[ColumnNameGo]
+
 		if Column1.IsNullable == false {
 			continue
 		}
-
-		ColumnNameGo := Column1.NameGo
 
 		if TypeGo == "time.Time" {
 			TextFind := `if m.` + ColumnNameGo + `.IsZero() == true {`
@@ -325,7 +330,7 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 	}
 
 `
-		} else if mini_func.IsNumberType(TypeGo) == true && Column1.TableKey != "" {
+		} else if mini_func.IsNumberType(TypeGo) == true && (Column1.TableKey != "" || is_nullable_config == true) {
 			TextFind := `if m.` + ColumnNameGo + ` == 0 {`
 			pos1 := strings.Index(TextDB, TextFind)
 			if pos1 >= 0 {
@@ -343,6 +348,43 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 	}
 
 	Otvet = Otvet[:pos1] + TextOmit + Otvet[pos1:]
+
+	return Otvet
+}
+
+// ReplaceText_modified_at - заменяет текст "Text_modified_at" на текст из файла
+func ReplaceText_modified_at(s string, Table1 *types.Table) string {
+	Otvet := s
+
+	TextNew := config.Settings.TEXT_DB_MODIFIED_AT
+	_, ok := Table1.MapColumns["modified_at"]
+	if ok == false {
+		TextNew = ""
+	}
+
+	TextFind := "//Text_modified_at"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	return Otvet
+}
+
+// ReplaceText_is_deleted_deleted_at - заменяет текст "Text_is_deleted_deleted_at" на текст из файла
+func ReplaceText_is_deleted_deleted_at(s string, Table1 *types.Table) string {
+	Otvet := s
+
+	TextNew := config.Settings.TEXT_DB_IS_DELETED
+	_, ok := Table1.MapColumns["is_deleted"]
+	if ok == false {
+		TextNew = ""
+	}
+
+	_, ok = Table1.MapColumns["deleted_at"]
+	if ok == false {
+		TextNew = ""
+	}
+
+	TextFind := "//Text_is_deleted_deleted_at"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 
 	return Otvet
 }

@@ -3,8 +3,10 @@ package create_files
 import (
 	"errors"
 	"fmt"
+	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
+	"github.com/ManyakRus/starter/micro"
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/inflection"
 	"strconv"
@@ -237,6 +239,41 @@ func PrintableString(s string) string {
 	if len1 > 0 {
 		Otvet = Otvet[1 : len1-1]
 	}
+
+	return Otvet
+}
+
+// Find_Template_DB_Foldername - возвращает путь к папке
+func Find_Template_DB_Foldername() string {
+	Otvet := ""
+
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
+
+	Otvet = DirTemplatesDB
+	return Otvet
+}
+
+// DeleteImportModel - удаляет лишний импорт модели
+func DeleteImportModel(s string) string {
+	Otvet := s
+
+	ModelURL := FindModelURL()
+	ImportName := micro.LastWord(ModelURL)
+
+	pos1 := strings.Index(Otvet, ImportName+".")
+	if pos1 < 0 {
+		Otvet = strings.ReplaceAll(Otvet, `"`+ModelURL+`"`, "")
+	}
+
+	return Otvet
+}
+
+func FindModelURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_MODEL
 
 	return Otvet
 }

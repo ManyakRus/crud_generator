@@ -38,7 +38,7 @@ func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.Lawsui
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
-	id := m.ID
+	id := int64(m.ID)
 
 	db := postgres_gorm.GetConnection()
 	db.WithContext(ctx)
@@ -61,7 +61,7 @@ func (crud Crud_DB) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 
 // Save_ctx - записывает новый или существующий объект в базу данных
 func (crud Crud_DB) Save_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
-	is_create := !micro.BoolFromInt64(m.ID)
+	is_create := !micro.BoolFromInt64(int64(m.ID))
 	err := crud.create_update_ctx(ctx, m, is_create)
 	return err
 }
@@ -102,7 +102,7 @@ func (crud Crud_DB) Create_ctx(ctx context.Context, m *lawsuit_status_types.Laws
 func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType, is_create bool) error {
 	var err error
 
-	// log.Trace("start Save() ", TableName, " id: ", m.ID)
+	// log.Trace("start Save() ", TableName, " id: ", int64(m.ID))
 
 	ctxMain := context.Background()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
@@ -116,17 +116,17 @@ func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType, is_
 func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType, is_create bool) error {
 	var err error
 
-	// log.Trace("start Save() ", TableName, " id: ", m.ID)
+	// log.Trace("start Save() ", TableName, " id: ", int64(m.ID))
 
 	// проверка ID
 	if is_create == true {
-		if m.ID != 0 {
+		if int64(m.ID) != 0 {
 			TextError := fmt.Sprint("db.Save() ", TableName, " error: id !=0")
 			// log.Panic(sError)
 			err = errors.New(TextError)
 			return err
 		}
-	} else if m.ID == 0 {
+	} else if int64(m.ID) == 0 {
 		TextError := fmt.Sprint("db.Save() ", TableName, " error: id =0")
 		err = errors.New(TextError)
 		// log.Panic(sError)
@@ -138,33 +138,14 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 	db.WithContext(ctx)
 
 	// заполним даты
-	Now := time.Now()
-	m.ModifiedAt = Now
-	if m.IsDeleted == true && m.DeletedAt.IsZero() == true {
-		m.DeletedAt = Now
-	} else if m.IsDeleted == false && m.DeletedAt.IsZero() == false {
-		m.DeletedAt = time.Time{}
-	}
+	//Text_modified_at
+	//Text_is_deleted_deleted_at
 
 	//колонки с null
 	tx := db
 	MassOmit := make([]string, 0)
 	var ColumnName string
 
-	ColumnName = "DeletedAt"
-	if m.DeletedAt.IsZero() == true {
-		MassOmit = append(MassOmit, ColumnName)
-	}
-
-	ColumnName = "CreatedAt"
-	if m.CreatedAt.IsZero() == true {
-		MassOmit = append(MassOmit, ColumnName)
-	}
-
-	ColumnName = "ExtID"
-	if m.ExtID == 0 {
-		MassOmit = append(MassOmit, ColumnName)
-	}
 
 	//игнор пустых колонок
 	tx = tx.Omit(MassOmit...)
@@ -268,8 +249,8 @@ func Find_ByExtID(ext_id int64, connection_id int64) (lawsuit_status_types.Lawsu
 	var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
-	if ext_id <= 0 {
-		err = errors.New("Error: ext_id <=0")
+	if ext_id == 0 {
+		err = errors.New("Error: ext_id =0")
 		return Otvet, err
 	}
 
@@ -289,8 +270,8 @@ func Find_ByExtID_ctx(ctx context.Context, ext_id int64, connection_id int64) (l
 	var err error
 	//log.Trace("start Find_ByExtID() ", TableName, " ext_id: ", ext_id)
 
-	if ext_id <= 0 {
-		err = errors.New("Error: ext_id <=0")
+	if ext_id == 0 {
+		err = errors.New("Error: ext_id =0")
 		return Otvet, err
 	}
 

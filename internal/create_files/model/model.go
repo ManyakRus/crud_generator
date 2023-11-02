@@ -83,6 +83,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
 
 	TextModel = AddImportTime(TextModel, Table1)
+	TextModel = create_files.DeleteImportModel(TextModel)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)

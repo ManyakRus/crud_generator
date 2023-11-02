@@ -33,6 +33,8 @@ type SettingsINI struct {
 	TEXT_TEMPLATE_TABLENAME          string
 	HAS_IS_DELETED                   bool
 	READY_FOLDERNAME                 string
+	TEXT_DB_MODIFIED_AT              string
+	TEXT_DB_IS_DELETED               string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
