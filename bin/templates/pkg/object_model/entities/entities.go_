@@ -14,7 +14,7 @@ var versionLawsuitStatusType uint32
 // crud_LawsuitStatusType - объект контроллер crud операций
 var crud_LawsuitStatusType ICrud_LawsuitStatusType
 
-// LawsuitStatusType Статусы дел (справочник).
+// LawsuitStatusType
 type LawsuitStatusType struct {
 	entities.CommonStruct
 	entities.NameStruct
@@ -28,6 +28,7 @@ type ICrud_LawsuitStatusType interface {
 	Create(*LawsuitStatusType) error
 	Delete(*LawsuitStatusType) error
 	Restore(*LawsuitStatusType) error
+	Find_ByExtID(*LawsuitStatusType) error
 }
 
 // TableName - возвращает имя таблицы в БД, нужен для gorm

@@ -277,3 +277,23 @@ func FindModelURL() string {
 
 	return Otvet
 }
+
+func FindTextDefaultValue(Type_go string) string {
+	var Otvet string
+
+	sValue := ""
+	switch Type_go {
+	case "string":
+		sValue = "\\\"\\\""
+	case "int", "int32", "int64", "float32", "float64", "uint", "uint32", "uint64":
+		sValue = "0"
+	case "time.Time":
+		sValue = "null"
+	}
+
+	if sValue != "" {
+		Otvet = ";default:" + sValue
+	}
+
+	return Otvet
+}

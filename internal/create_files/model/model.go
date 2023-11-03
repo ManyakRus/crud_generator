@@ -61,16 +61,6 @@ func CreateFiles(Table1 *types.Table) error {
 	TextModelStruct, ModelName, err := FindTextModelStruct(Table1)
 	TextModel = ReplaceModelStruct(TextModel, TextModelStruct)
 
-	////(l LawsuitStatusType) = (b Branch)
-	//TextTemplateVarModel := "(" + strings.ToLower(config.Settings.TEXT_TEMPLATE_MODEL[:1]) + " " + config.Settings.TEXT_TEMPLATE_MODEL
-	//TextVarModel := "(" + strings.ToLower(ModelName[:1]) + " " + ModelName
-	//TextModel = strings.ReplaceAll(TextModel, TextTemplateVarModel, TextVarModel)
-	//
-	////(l *LawsuitStatusType) = (b *Branch)
-	//TextTemplateVarModel = "(" + strings.ToLower(config.Settings.TEXT_TEMPLATE_MODEL[:1]) + " *" + config.Settings.TEXT_TEMPLATE_MODEL
-	//TextVarModel = "(" + strings.ToLower(ModelName[:1]) + " *" + ModelName
-	//TextModel = strings.ReplaceAll(TextModel, TextTemplateVarModel, TextVarModel)
-
 	//
 	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
@@ -101,7 +91,7 @@ func FindTextModelStruct(Table1 *types.Table) (string, string, error) {
 	ModelName = create_files.FormatName(ModelName)
 	Table1.NameGo = ModelName
 
-	Otvet = `// ` + ModelName + ` - model from table ` + TableName + `
+	Otvet = `// ` + ModelName + ` - model from table ` + TableName + `: ` + Table1.Comment + `
 type ` + ModelName + ` struct {
 `
 
@@ -138,37 +128,17 @@ func FindTextColumn(Column1 *types.Column) string {
 	//Type_go := SQLMapping1.GoType
 	Type_go := Column1.TypeGo
 	Column1.TypeGo = Type_go
-	TextDefaultValue := FindTextDefaultValue(Type_go)
+	TextDefaultValue := create_files.FindTextDefaultValue(Type_go)
 	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)
 	Description := Column1.Description
 	Description = create_files.PrintableString(Description) //экранирование символов
 
 	Otvet = Otvet + "\t" + ColumnModelName + " " + Type_go + "\t"
 	Otvet = Otvet + "`json:\"" + ColumnName + "\""
-	Otvet = Otvet + "\tgorm:\"column:" + ColumnName + TextPrimaryKey + TextDefaultValue + "\""
-	Otvet = Otvet + "\tdb:\"" + ColumnName + "\""
+	Otvet = Otvet + " gorm:\"column:" + ColumnName + TextPrimaryKey + TextDefaultValue + "\""
+	Otvet = Otvet + " db:\"" + ColumnName + "\""
 	Otvet = Otvet + "`"
 	Otvet = Otvet + "\t//" + Description
-
-	return Otvet
-}
-
-func FindTextDefaultValue(Type_go string) string {
-	var Otvet string
-
-	sValue := ""
-	switch Type_go {
-	case "string":
-		sValue = "\\\"\\\""
-	case "int", "int32", "int64", "float32", "float64", "uint", "uint32", "uint64":
-		sValue = "0"
-	case "time.Time":
-		sValue = "null"
-	}
-
-	if sValue != "" {
-		Otvet = ";default:" + sValue
-	}
 
 	return Otvet
 }
@@ -322,9 +292,6 @@ func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) st
 
 	//
 	_, ok1 := Table1.MapColumns["ext_id"]
-	//if ok == false {
-	//	return Otvet
-	//}
 
 	//
 	_, ok2 := Table1.MapColumns["connection_id"]

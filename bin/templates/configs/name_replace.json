@@ -7,5 +7,9 @@
   "nsi_flat": "NSIFlat",
   "nsi_flat_id": "NSIFlatID",
   "nsi_id": "NSIID",
-  "www": "WWW"
+  "www": "WWW",
+  "bik": "BIK",
+  "city_name": "City",
+  "edms_link": "EDMSLink",
+  "code_nsi": "CodeNSI"
 }

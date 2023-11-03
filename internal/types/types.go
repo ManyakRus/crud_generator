@@ -21,6 +21,7 @@ type Table struct {
 	OrderNumber int
 	NameGo      string
 	IDMinimum   string
+	Comment     string `json:"table_comment"   gorm:"column:table_comment;default:''"`
 }
 
 var MapReplaceName = make(map[string]string, 0)

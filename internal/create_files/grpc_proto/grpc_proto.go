@@ -61,6 +61,14 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		if ok == false {
 			log.Panic("MapAll[key1] not found")
 		}
+
+		//проверка что таблица нормальная
+		err1 := create_files.CheckGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
+			continue
+		}
+
 		TextProtoNew = TextProtoNew + FindTextProtoTable1(TextProto, Table1)
 	}
 

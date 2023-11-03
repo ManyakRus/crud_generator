@@ -26,6 +26,7 @@ type TableColumn struct {
 	ColumnDescription string `json:"description"   gorm:"column:description;default:''"`
 	ColumnTableKey    string `json:"table_key"   gorm:"column:table_key;default:''"`
 	ColumnColumnKey   string `json:"column_key"   gorm:"column:column_key;default:''"`
+	TableComment      string `json:"table_comment"   gorm:"column:table_comment;default:''"`
 }
 
 // FillMapTable - возвращает массив MassTable данными из БД
@@ -35,7 +36,6 @@ func FillMapTable() (map[string]*types.Table, error) {
 	MapTable := make(map[string]*types.Table, 0)
 
 	TextSQL := `
-
 drop table if exists temp_keys; 
 CREATE TEMPORARY TABLE temp_keys (table_from text,  column_from text, table_to text, column_to text);
 
@@ -46,6 +46,7 @@ SELECT
        UNNEST((select array_agg(attname) from pg_attribute where attrelid = c.conrelid and array[attnum] <@ c.conkey)) as column_from,
        (select  r.relname from pg_class r where r.oid = c.confrelid) as table_to,
        a.attname as column_to
+
 FROM 
 	pg_constraint c 
 	
@@ -55,7 +56,7 @@ on
 	c.confrelid=a.attrelid and a.attnum = ANY(confkey)
 	
 WHERE 1=1
-	--and c.confrelid = (select oid from pg_class where relname = 'debt_types')
+	--and c.confrelid = (select oid from pg_class where relname = 'lawsuit_invoices')
 	--AND c.confrelid!=c.conrelid
 ;
 
@@ -69,23 +70,25 @@ SELECT
 	c.is_nullable as is_nullable, 
 	COALESCE(pgd.description, '') as description,
 	COALESCE(keys.table_to, '') as table_key,
-	COALESCE(keys.column_to, '') as column_key 
-	
+	COALESCE(keys.column_to, '') as column_key, 
+    (SELECT obj_description(oid) FROM pg_class as r WHERE relkind = 'r' and r.oid = st.relid) as table_comment
+
 FROM 
 	pg_catalog.pg_statio_all_tables as st
 	
-inner join 
-	pg_catalog.pg_description pgd 
-on 
-	pgd.objoid = st.relid
-
 right join 
 	information_schema.columns c 
 on 
-	pgd.objsubid   = c.ordinal_position
-	and c.table_schema = st.schemaname
+	
+	c.table_schema = st.schemaname
 	and c.table_name   = st.relname
 
+left join 
+	pg_catalog.pg_description pgd 
+on 
+	pgd.objoid = st.relid
+	and pgd.objsubid   = c.ordinal_position
+	
 
 LEFT JOIN --внешние ключи
 	temp_keys as keys
@@ -106,11 +109,15 @@ where 1=1
 	and v.table_name is null
 	--INCLUDE_TABLES
 	--EXCLUDE_TABLES
+	--and c.table_name = 'lawsuit_invoices'
 
 order by 
 	table_name, 
 	is_identity desc,
 	column_name
+	
+
+	
 `
 
 	SCHEMA := strings.Trim(postgres_gorm.Settings.DB_SCHEMA, " ")
@@ -199,6 +206,7 @@ order by
 			Table1 = CreateTable()
 			Table1.Name = v.TableName
 			Table1.OrderNumber = OrderNumberTable
+			Table1.Comment = v.TableComment
 		}
 
 		Column1 := types.Column{}

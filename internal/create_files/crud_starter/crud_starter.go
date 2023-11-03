@@ -3,6 +3,7 @@ package crud_starter
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
+	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
@@ -94,6 +95,7 @@ import (
 	}
 	sort.Strings(keys)
 
+	//все таблицы
 	TextModel := ""
 	TextDB := ""
 	TextGRPC := ""
@@ -103,6 +105,14 @@ import (
 		if ok == false {
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
+
+		//проверка что таблица нормальная
+		err1 := create_files.CheckGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
+			continue
+		}
+
 		TextModel = TextModel + FindTextImportModel1(Table1)
 		TextDB = TextDB + FindTextImportDB1(Table1)
 		TextGRPC = TextGRPC + FindTextImportGRPC1(Table1)
