@@ -21,10 +21,8 @@ type Crud_DB struct {
 
 // Read - находит запись в БД по ID
 func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
-	// log.Trace("start Read() ", TableName, " id: ", id)
 	ctxMain := context.Background()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
@@ -35,7 +33,6 @@ func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 
 // Read_ctx - находит запись в БД по ID
 func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
 	id := int64(m.ID)
@@ -101,8 +98,6 @@ func (crud Crud_DB) Create_ctx(ctx context.Context, m *lawsuit_status_types.Laws
 // create_update - записывает объект в базу данных
 func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType, is_create bool) error {
 	var err error
-
-	// log.Trace("start Save() ", TableName, " id: ", int64(m.ID))
 
 	ctxMain := context.Background()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
@@ -180,7 +175,6 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 
 // Delete - записывает is_deleted = true
 func (crud Crud_DB) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
 	ctxMain := context.Background()
@@ -193,7 +187,6 @@ func (crud Crud_DB) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 
 // Delete_ctx - записывает is_deleted = true
 func (crud Crud_DB) Delete_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
 	m2 := lawsuit_status_types.LawsuitStatusType{}
@@ -213,7 +206,6 @@ func (crud Crud_DB) Delete_ctx(ctx context.Context, m *lawsuit_status_types.Laws
 
 // Restore - записывает is_deleted = true
 func (crud Crud_DB) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
 	ctxMain := context.Background()
@@ -226,7 +218,6 @@ func (crud Crud_DB) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 
 // Restore_ctx - записывает is_deleted = true
 func (crud Crud_DB) Restore_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
 	m2 := lawsuit_status_types.LawsuitStatusType{}
@@ -245,13 +236,12 @@ func (crud Crud_DB) Restore_ctx(ctx context.Context, m *lawsuit_status_types.Law
 }
 
 // Find_ByExtID - находит запись в БД по ext_id и connection_id
-func Find_ByExtID(ext_id int64, connection_id int64) (lawsuit_status_types.LawsuitStatusType, error) {
-	var Otvet lawsuit_status_types.LawsuitStatusType
+func (crud Crud_DB) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
-	if ext_id == 0 {
+	if m.ExtID == 0 {
 		err = errors.New("Error: ext_id =0")
-		return Otvet, err
+		return err
 	}
 
 	//
@@ -259,27 +249,25 @@ func Find_ByExtID(ext_id int64, connection_id int64) (lawsuit_status_types.Lawsu
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	Otvet, err = Find_ByExtID_ctx(ctx, ext_id, connection_id)
+	err = crud.Find_ByExtID_ctx(ctx, m)
 
-	return Otvet, err
+	return err
 }
 
 // Find_ByExtID_ctx - находит запись в БД по ext_id и connection_id
-func Find_ByExtID_ctx(ctx context.Context, ext_id int64, connection_id int64) (lawsuit_status_types.LawsuitStatusType, error) {
-	var Otvet lawsuit_status_types.LawsuitStatusType
+func (crud Crud_DB) Find_ByExtID_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
-	//log.Trace("start Find_ByExtID() ", TableName, " ext_id: ", ext_id)
 
-	if ext_id == 0 {
-		err = errors.New("Error: ext_id =0")
-		return Otvet, err
+	if m.ExtID == 0 {
+		err = errors.New("Error: ExtID=0")
+		return err
 	}
 
 	db := postgres_gorm.GetConnection()
 	db.WithContext(ctx)
 
-	tx := db.Where("ext_id = ?", ext_id).Where("connection_id = ?", connection_id).First(&Otvet)
+	tx := db.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).First(m)
 	err = tx.Error
 
-	return Otvet, err
+	return err
 }

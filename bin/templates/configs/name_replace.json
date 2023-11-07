@@ -11,5 +11,9 @@
   "bik": "BIK",
   "city_name": "City",
   "edms_link": "EDMSLink",
-  "code_nsi": "CodeNSI"
+  "code_nsi": "CodeNSI",
+  "json_updated_at": "JSONUpdatedAt",
+  "pdf_updated_at": "PDFUpdatedAt",
+  "pdf_file_id": "PDFFileID",
+  "json_file_id": "JSONFileID"
 }

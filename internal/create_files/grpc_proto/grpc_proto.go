@@ -45,7 +45,13 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	TextProto := string(bytes)
 
 	//заменим название сервиса
-	TextProto = strings.ReplaceAll(TextProto, config.Settings.TEMPLATE_SERVICE_NAME, config.Settings.SERVICE_NAME)
+	ServiceName := config.Settings.SERVICE_NAME
+	ServiceNameProto := ServiceName
+	if len(ServiceNameProto) > 0 {
+		//имя сервиса с большой буквы
+		ServiceNameProto = strings.ToUpper(ServiceName[:1]) + config.Settings.SERVICE_NAME[1:]
+	}
+	TextProto = strings.ReplaceAll(TextProto, config.Settings.TEMPLATE_SERVICE_NAME, ServiceNameProto)
 
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(MapAll))
@@ -250,21 +256,21 @@ func TextRead(ModelName string) string {
 
 // TextCreate - возвращает текст .proto
 func TextCreate(ModelName string) string {
-	Otvet := "rpc " + ModelName + "_Create(RequestId) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_Create(RequestModel) returns (Response) {}"
 
 	return Otvet
 }
 
 // TextUpdate - возвращает текст .proto
 func TextUpdate(ModelName string) string {
-	Otvet := "rpc " + ModelName + "_Update(RequestId) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_Update(RequestModel) returns (Response) {}"
 
 	return Otvet
 }
 
 // TextSave - возвращает текст .proto
 func TextSave(ModelName string) string {
-	Otvet := "rpc " + ModelName + "_Save(RequestId) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_Save(RequestModel) returns (Response) {}"
 
 	return Otvet
 }
@@ -285,7 +291,7 @@ func TextRestore(ModelName string) string {
 
 // TextFindByExtId - возвращает текст .proto
 func TextFindByExtId(ModelName string) string {
-	Otvet := "rpc " + ModelName + "_FindByExtId(RequestId) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_FindByExtID(RequestExtId) returns (Response) {}"
 
 	return Otvet
 }

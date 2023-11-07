@@ -307,6 +307,7 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 	}
 
 	TextOmit := ""
+	NullableCount := 0
 	for _, Column1 := range Table1.MapColumns {
 		ColumnNameGo := Column1.NameGo
 		TypeGo := Column1.TypeGo
@@ -318,6 +319,7 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 		}
 
 		if TypeGo == "time.Time" {
+			NullableCount = NullableCount + 1
 			TextFind := `if m.` + ColumnNameGo + `.IsZero() == true {`
 			pos1 := strings.Index(TextDB, TextFind)
 			if pos1 >= 0 {
@@ -331,6 +333,7 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 
 `
 		} else if mini_func.IsNumberType(TypeGo) == true && (Column1.TableKey != "" || is_nullable_config == true) {
+			NullableCount = NullableCount + 1
 			TextFind := `if m.` + ColumnNameGo + ` == 0 {`
 			pos1 := strings.Index(TextDB, TextFind)
 			if pos1 >= 0 {
@@ -348,6 +351,10 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 	}
 
 	Otvet = Otvet[:pos1] + TextOmit + Otvet[pos1:]
+
+	if NullableCount == 0 && config.Settings.USE_DEFAULT_TEMPLATE == true {
+		Otvet = strings.ReplaceAll(Otvet, "\n\tvar ColumnName string", "")
+	}
 
 	return Otvet
 }

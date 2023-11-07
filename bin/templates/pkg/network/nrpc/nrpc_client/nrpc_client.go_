@@ -28,7 +28,7 @@ func (crud Crud_NRPC) GetVersionModel() uint32 {
 }
 
 // Read - возвращает модель из БД
-func (crud Crud_NRPC) Read(l *lawsuit_status_types.LawsuitStatusType) error {
+func (crud Crud_NRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
@@ -40,7 +40,7 @@ func (crud Crud_NRPC) Read(l *lawsuit_status_types.LawsuitStatusType) error {
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.Id = l.ID
+	Request.Id = int64(m.ID)
 	Request.VersionModel = VersionModel
 
 	// запрос
@@ -55,7 +55,7 @@ func (crud Crud_NRPC) Read(l *lawsuit_status_types.LawsuitStatusType) error {
 
 	// ответ
 	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), l)
+	err = json.Unmarshal([]byte(sModel), m)
 	if err != nil {
 		return err
 	}
@@ -64,7 +64,7 @@ func (crud Crud_NRPC) Read(l *lawsuit_status_types.LawsuitStatusType) error {
 }
 
 // Create - записывает новую модель в БД
-func (crud Crud_NRPC) Create(l *lawsuit_status_types.LawsuitStatusType) error {
+func (crud Crud_NRPC) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
@@ -75,7 +75,7 @@ func (crud Crud_NRPC) Create(l *lawsuit_status_types.LawsuitStatusType) error {
 	// подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
-	ModelString, err := l.GetJSON()
+	ModelString, err := m.GetJSON()
 	if err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func (crud Crud_NRPC) Create(l *lawsuit_status_types.LawsuitStatusType) error {
 
 	// ответ
 	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), l)
+	err = json.Unmarshal([]byte(sModel), m)
 	if err != nil {
 		return err
 	}
@@ -104,7 +104,7 @@ func (crud Crud_NRPC) Create(l *lawsuit_status_types.LawsuitStatusType) error {
 }
 
 // Update - обновляет модель в БД
-func (crud Crud_NRPC) Update(l *lawsuit_status_types.LawsuitStatusType) error {
+func (crud Crud_NRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
@@ -115,7 +115,7 @@ func (crud Crud_NRPC) Update(l *lawsuit_status_types.LawsuitStatusType) error {
 	// подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
-	ModelString, err := l.GetJSON()
+	ModelString, err := m.GetJSON()
 	if err != nil {
 		return err
 	}
@@ -135,7 +135,7 @@ func (crud Crud_NRPC) Update(l *lawsuit_status_types.LawsuitStatusType) error {
 
 	// ответ
 	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), l)
+	err = json.Unmarshal([]byte(sModel), m)
 	if err != nil {
 		return err
 	}
@@ -144,7 +144,7 @@ func (crud Crud_NRPC) Update(l *lawsuit_status_types.LawsuitStatusType) error {
 }
 
 // Save - обновляет (или создаёт) модель в БД
-func (crud Crud_NRPC) Save(l *lawsuit_status_types.LawsuitStatusType) error {
+func (crud Crud_NRPC) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
@@ -155,7 +155,7 @@ func (crud Crud_NRPC) Save(l *lawsuit_status_types.LawsuitStatusType) error {
 	// подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
-	ModelString, err := l.GetJSON()
+	ModelString, err := m.GetJSON()
 	if err != nil {
 		return err
 	}
@@ -175,7 +175,7 @@ func (crud Crud_NRPC) Save(l *lawsuit_status_types.LawsuitStatusType) error {
 
 	// ответ
 	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), l)
+	err = json.Unmarshal([]byte(sModel), m)
 	if err != nil {
 		return err
 	}
@@ -184,7 +184,7 @@ func (crud Crud_NRPC) Save(l *lawsuit_status_types.LawsuitStatusType) error {
 }
 
 // Delete - устанавливает is_deleted = true в БД
-func (crud Crud_NRPC) Delete(l *lawsuit_status_types.LawsuitStatusType) error {
+func (crud Crud_NRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
@@ -196,7 +196,7 @@ func (crud Crud_NRPC) Delete(l *lawsuit_status_types.LawsuitStatusType) error {
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.Id = l.ID
+	Request.Id = int64(m.ID)
 	Request.VersionModel = VersionModel
 
 	// запрос
@@ -211,7 +211,7 @@ func (crud Crud_NRPC) Delete(l *lawsuit_status_types.LawsuitStatusType) error {
 
 	// ответ
 	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), l)
+	err = json.Unmarshal([]byte(sModel), m)
 	if err != nil {
 		return err
 	}
@@ -220,7 +220,7 @@ func (crud Crud_NRPC) Delete(l *lawsuit_status_types.LawsuitStatusType) error {
 }
 
 // Restore - устанавливает is_deleted = false в БД
-func (crud Crud_NRPC) Restore(l *lawsuit_status_types.LawsuitStatusType) error {
+func (crud Crud_NRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
@@ -232,7 +232,7 @@ func (crud Crud_NRPC) Restore(l *lawsuit_status_types.LawsuitStatusType) error {
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.Id = l.ID
+	Request.Id = int64(m.ID)
 	Request.VersionModel = VersionModel
 
 	// запрос
@@ -247,7 +247,7 @@ func (crud Crud_NRPC) Restore(l *lawsuit_status_types.LawsuitStatusType) error {
 
 	// ответ
 	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), l)
+	err = json.Unmarshal([]byte(sModel), m)
 	if err != nil {
 		return err
 	}
@@ -256,7 +256,7 @@ func (crud Crud_NRPC) Restore(l *lawsuit_status_types.LawsuitStatusType) error {
 }
 
 // Find_ByExtID - находит модель в БД по ext_id и connection_id
-func (crud Crud_NRPC) Find_ByExtID(e *lawsuit_status_types.LawsuitStatusType) error {
+func (crud Crud_NRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) error {
 	//подключение
 	if nrpc_client.Client == nil {
 		nrpc_client.Connect()
@@ -266,12 +266,12 @@ func (crud Crud_NRPC) Find_ByExtID(e *lawsuit_status_types.LawsuitStatusType) er
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestExtId{}
-	Request.ExtId = e.ExtID
-	Request.ConnectionId = e.ConnectionID
+	Request.ExtId = m.ExtID
+	Request.ConnectionId = m.ConnectionID
 	Request.VersionModel = VersionModel
 
 	//запрос
-	Response, err := nrpc_client.Client.LawsuitStatusType_FindByExtId(Request)
+	Response, err := nrpc_client.Client.LawsuitStatusType_FindByExtID(Request)
 	if err != nil {
 		sError := err.Error()
 		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
@@ -282,7 +282,7 @@ func (crud Crud_NRPC) Find_ByExtID(e *lawsuit_status_types.LawsuitStatusType) er
 
 	//ответ
 	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), e)
+	err = json.Unmarshal([]byte(sModel), m)
 	if err != nil {
 		return err
 	}

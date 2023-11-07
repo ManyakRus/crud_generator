@@ -216,7 +216,7 @@ func (s *ServerGRPC) LawsuitStatusType_FindByExtID(ctx context.Context, Request 
 	VersionServer := lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	VersionClient := Request.VersionModel
 	if VersionServer != VersionClient {
-		err = ErrorModelVersion(model.Employee{})
+		err = ErrorModelVersion(lawsuit_status_types.LawsuitStatusType{})
 		return &Otvet, err
 	}
 

@@ -119,6 +119,7 @@ func FindTextColumn(Column1 *types.Column) string {
 	//	Code string `json:"code" gorm:"column:code;default:0"`
 
 	ColumnName := Column1.Name
+	ColumnNameLowerCase := strings.ToLower(ColumnName)
 	ColumnModelName := create_files.FormatName(Column1.Name)
 	Column1.NameGo = ColumnModelName
 	//SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
@@ -133,9 +134,21 @@ func FindTextColumn(Column1 *types.Column) string {
 	Description := Column1.Description
 	Description = create_files.PrintableString(Description) //экранирование символов
 
+	TextAutoCreateTime := ""
+	TextAutoUpdateTime := ""
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		if ColumnNameLowerCase == "created_at" {
+			TextAutoCreateTime = ";autoCreateTime"
+		}
+
+		if ColumnNameLowerCase == "modified_at" {
+			TextAutoUpdateTime = ";autoUpdateTime"
+		}
+	}
+
 	Otvet = Otvet + "\t" + ColumnModelName + " " + Type_go + "\t"
 	Otvet = Otvet + "`json:\"" + ColumnName + "\""
-	Otvet = Otvet + " gorm:\"column:" + ColumnName + TextPrimaryKey + TextDefaultValue + "\""
+	Otvet = Otvet + " gorm:\"column:" + ColumnName + TextPrimaryKey + TextDefaultValue + TextAutoCreateTime + TextAutoUpdateTime + "\""
 	Otvet = Otvet + " db:\"" + ColumnName + "\""
 	Otvet = Otvet + "`"
 	Otvet = Otvet + "\t//" + Description

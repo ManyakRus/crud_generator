@@ -129,8 +129,8 @@ import (
 // FindTextImportModel1 - возвращает текст импорта Model для 1 таблицы
 func FindTextImportModel1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + config.Settings.TEMPLATE_FOLDERNAME_MODEL + "/" + TableName
-	Otvet := "\n\t\"" + DB_URL
+	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_MODEL + "/" + TableName
+	Otvet := "\n\t\"" + DB_URL + `"`
 
 	return Otvet
 }
@@ -138,15 +138,15 @@ func FindTextImportModel1(Table1 *types.Table) string {
 // FindTextImportDB1 - возвращает текст импорта DB для 1 таблицы
 func FindTextImportDB1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + config.Settings.TEMPLATE_FOLDERNAME_DB
-	Otvet := "\n\t\"" + DB_URL + "/db_" + TableName
+	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_DB
+	Otvet := "\n\t\"" + DB_URL + "/db_" + TableName + `"`
 
 	return Otvet
 }
 
 // FindTextImportGRPC1 - возвращает текст импорта GRPC для 1 таблицы
 func FindTextImportGRPC1(Table1 *types.Table) string {
-	GRPC_URL := config.Settings.SERVICE_REPOSITORY_URL + config.Settings.TEMPLATE_FOLDERNAME_GRPC
+	GRPC_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC
 	TableName := strings.ToLower(Table1.Name)
 	Otvet := "\n\t\"" + GRPC_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + "/grpc_" + TableName + `"`
 
@@ -155,9 +155,9 @@ func FindTextImportGRPC1(Table1 *types.Table) string {
 
 // FindTextImportNRPC1 - возвращает текст импорта NRPC для 1 таблицы
 func FindTextImportNRPC1(Table1 *types.Table) string {
-	NRPC_URL := config.Settings.SERVICE_REPOSITORY_URL + config.Settings.TEMPLATE_FOLDERNAME_NRPC
+	//NRPC_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC
 	TableName := strings.ToLower(Table1.Name)
-	Otvet := "\n\t\"" + NRPC_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + "/nrpc_" + TableName + `"`
+	Otvet := "\n\t\"" + config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + "/nrpc_" + TableName + `"`
 
 	return Otvet
 }
@@ -179,6 +179,14 @@ func InitCrudTransport_DB() {`
 		if ok == false {
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
+
+		//проверка что таблица нормальная
+		err1 := create_files.CheckGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
+			continue
+		}
+
 		Otvet = Otvet + FindTextDB1(Table1)
 	}
 
@@ -213,6 +221,14 @@ func InitCrudTransport_GRPC() {`
 		if ok == false {
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
+
+		//проверка что таблица нормальная
+		err1 := create_files.CheckGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
+			continue
+		}
+
 		Otvet = Otvet + FindTextGRPC1(Table1)
 	}
 
@@ -225,7 +241,7 @@ func InitCrudTransport_GRPC() {`
 func FindTextGRPC1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
 	ModelName := Table1.NameGo
-	Otvet := "\n\t" + "grpc_" + TableName + "." + ModelName + "{}.SetCrudInterface(grpc_" + TableName + ".Crud_GRPC{})"
+	Otvet := "\n\t" + TableName + "." + ModelName + "{}.SetCrudInterface(grpc_" + TableName + ".Crud_GRPC{})"
 
 	return Otvet
 }
@@ -247,6 +263,14 @@ func InitCrudTransport_NRPC() {`
 		if ok == false {
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
+
+		//проверка что таблица нормальная
+		err1 := create_files.CheckGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
+			continue
+		}
+
 		Otvet = Otvet + FindTextNRPC1(Table1)
 	}
 
@@ -259,7 +283,7 @@ func InitCrudTransport_NRPC() {`
 func FindTextNRPC1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
 	ModelName := Table1.NameGo
-	Otvet := "\n\t" + "nrpc_" + TableName + "." + ModelName + "{}.SetCrudInterface(nrpc_" + TableName + ".Crud_NRPC{})"
+	Otvet := "\n\t" + TableName + "." + ModelName + "{}.SetCrudInterface(nrpc_" + TableName + ".Crud_NRPC{})"
 
 	return Otvet
 }

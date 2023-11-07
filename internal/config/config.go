@@ -35,6 +35,9 @@ type SettingsINI struct {
 	READY_FOLDERNAME                 string
 	TEXT_DB_MODIFIED_AT              string
 	TEXT_DB_IS_DELETED               string
+	USE_DEFAULT_TEMPLATE             bool
+	REPOSITORY_URL_ALIAS             string
+	PREFIX_SERVER_GRPC               string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -58,6 +61,8 @@ func FillSettings() {
 	Settings.TEMPLATE_SERVICE_NAME = os.Getenv("TEMPLATE_SERVICE_NAME")
 	Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER = os.Getenv("TEMPLATE_FOLDERNAME_CRUD_STARTER")
 	Settings.SERVICE_REPOSITORY_URL = os.Getenv("SERVICE_REPOSITORY_URL")
+	Settings.REPOSITORY_URL_ALIAS = os.Getenv("REPOSITORY_URL_ALIAS")
+	Settings.PREFIX_SERVER_GRPC = os.Getenv("PREFIX_SERVER_GRPC")
 
 	sHAS_IS_DELETED := os.Getenv("HAS_IS_DELETED")
 
@@ -84,6 +89,9 @@ func FillSettings() {
 	if Settings.TEXT_TEMPLATE_TABLENAME == "" {
 		Settings.TEXT_TEMPLATE_TABLENAME = "lawsuit_status_types"
 	}
+
+	sUSE_DEFAULT_TEMPLATE := os.Getenv("USE_DEFAULT_TEMPLATE")
+	Settings.USE_DEFAULT_TEMPLATE = BoolFromString(sUSE_DEFAULT_TEMPLATE)
 
 	HAS_IS_DELETED := BoolFromString(sHAS_IS_DELETED)
 	Settings.HAS_IS_DELETED = HAS_IS_DELETED

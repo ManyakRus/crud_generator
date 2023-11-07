@@ -50,12 +50,12 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
-	DirReadyGRPCServer := DirReady + "internal" + micro.SeparatorFile() + "grpc_server" + micro.SeparatorFile()
+	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 
-	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + "grpc_server.go_"
+	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + "server_grpc.go_"
 	TableName := strings.ToLower(Table1.Name)
 	DirTable := DirReadyGRPCServer
-	FilenameReadyGRPCServer := DirTable + TableName + ".go"
+	FilenameReadyGRPCServer := DirTable + config.Settings.PREFIX_SERVER_GRPC + TableName + ".go"
 
 	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)
 	if err != nil {
@@ -69,13 +69,16 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextDB = constants.TEXT_GENERATED + TextDB
 
-	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncDeleteCtx(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncRestore(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncRestoreCtx(TextDB, ModelName, Table1)
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		if config.Settings.HAS_IS_DELETED == true {
+			TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
+			TextDB = DeleteFuncDeleteCtx(TextDB, ModelName, Table1)
+			TextDB = DeleteFuncRestore(TextDB, ModelName, Table1)
+			TextDB = DeleteFuncRestoreCtx(TextDB, ModelName, Table1)
+		}
+		TextDB = DeleteFuncFind_byExtID(TextDB, ModelName, Table1)
+		TextDB = ConvertID(TextDB, Table1)
 	}
-	TextDB = DeleteFuncFind_byExtID(TextDB, ModelName, Table1)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -92,12 +95,12 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
-	DirReadyGRPCServer := DirReady + "internal" + micro.SeparatorFile() + "grpc_server" + micro.SeparatorFile()
+	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 
-	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + "grpc_server_test.go_"
+	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + "server_grpc_test.go_"
 	TableName := strings.ToLower(Table1.Name)
 	DirTable := DirReadyGRPCServer
-	FilenameReadyGRPCServer := DirTable + TableName + "_test.go"
+	FilenameReadyGRPCServer := DirTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_test.go"
 
 	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)
 	if err != nil {
@@ -138,7 +141,7 @@ func DeleteFuncDelete(Text, ModelName string, Table1 *types.Table) string {
 		return Otvet
 	}
 
-	Otvet = create_files.DeleteFuncFromComment(Text, "\n// "+ModelName+"_Delete ")
+	Otvet = create_files.DeleteFuncFromComment(Otvet, "\n// "+ModelName+"_Delete ")
 
 	return Otvet
 }
@@ -210,7 +213,7 @@ func DeleteFuncTestDelete(Text, ModelName string, Table1 *types.Table) string {
 		return Otvet
 	}
 
-	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "Test_server_"+ModelName+"Delete")
+	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "Test_server_"+ModelName+"_Delete")
 
 	return Otvet
 }
@@ -241,6 +244,31 @@ func DeleteFuncTestFind_byExtID(Text, ModelName string, Table1 *types.Table) str
 
 	//
 	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "Test_server_"+ModelName+"_FindByExtID")
+
+	return Otvet
+}
+
+// ConvertID - заменяет ID на Alias
+func ConvertID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TableName := Table1.Name
+	TextConvert, ok := types.MapConvertID[TableName]
+	if ok == false {
+		return Otvet
+	}
+
+	Otvet = strings.ReplaceAll(Otvet, "Request.Id", TextConvert+"(Request.Id)")
+	if TextConvert[:6] != "alias." {
+		return Otvet
+	}
+
+	URL := create_files.FindURL_Alias()
+	if URL == "" {
+		return Otvet
+	}
+
+	Otvet = create_files.AddImport(Otvet, URL)
 
 	return Otvet
 }

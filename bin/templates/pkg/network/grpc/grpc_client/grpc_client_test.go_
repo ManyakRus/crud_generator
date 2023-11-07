@@ -168,7 +168,7 @@ func TestFindByExtID(t *testing.T) {
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ExtID = Otvet1.ExtID
 	Otvet.ConnectionID = Otvet1.ConnectionID
-	err := crud.Find_ByExtID(&Otvet)
+	err = crud.Find_ByExtID(&Otvet)
 
 	if err != nil {
 		t.Error("TestFindByExtID() error: ", err)

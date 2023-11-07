@@ -18,6 +18,7 @@ func LoadConfigsAll() {
 	LoadNullable()
 	Load_TEXT_DB_MODIFIED_AT()
 	Load_TEXT_DB_IS_DELETED()
+	LoadConvertID()
 }
 
 // LoadMappings - загружает маппинг ТипБД = ТипGolang, из файла .json
@@ -109,5 +110,28 @@ func Load_TEXT_DB_IS_DELETED() {
 	}
 
 	config.Settings.TEXT_DB_IS_DELETED = string(bytes)
+
+}
+
+// LoadConvertID - загружает map: ИмяТаблицы:Тип
+func LoadConvertID() {
+	dir := micro.ProgramDir_bin()
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + "configs" + micro.SeparatorFile() + "convert_id.json"
+
+	var err error
+
+	//чтение файла
+	bytes, err := os.ReadFile(FileName)
+	if err != nil {
+		TextError := fmt.Sprint("ReadFile() error: ", err)
+		log.Panic(TextError)
+	}
+
+	//json в map
+	//var MapServiceURL2 = make(map[string]string)
+	err = json.Unmarshal(bytes, &types.MapConvertID)
+	if err != nil {
+		log.Panic("Unmarshal() error: ", err)
+	}
 
 }

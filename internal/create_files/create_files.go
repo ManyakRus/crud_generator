@@ -6,6 +6,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
+	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/inflection"
@@ -294,6 +295,42 @@ func FindTextDefaultValue(Type_go string) string {
 	if sValue != "" {
 		Otvet = ";default:" + sValue
 	}
+
+	return Otvet
+}
+
+// FindURL_Alias - возвращает URL репозитория с пакетом "alias"
+func FindURL_Alias() string {
+	Otvet := ""
+	if config.Settings.REPOSITORY_URL_ALIAS == "" {
+		return Otvet
+	}
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/"
+	Otvet = Otvet + config.Settings.REPOSITORY_URL_ALIAS
+
+	return Otvet
+}
+
+// AddImport - добавляет URL в секцию Import, если его там нет
+func AddImport(Text, URL string) string {
+	Otvet := Text
+
+	//если уже есть импорт
+	pos1 := strings.Index(Otvet, `"`+URL+`"`)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	//
+	TextFind := "import ("
+	LenFind := len(TextFind)
+	pos1 = strings.Index(Otvet, TextFind)
+	if pos1 < 0 {
+		log.Error("not found word: import (")
+		return Otvet
+	}
+
+	Otvet = Otvet[:pos1+LenFind] + "\n\t" + `"` + URL + `"` + Otvet[pos1+LenFind:]
 
 	return Otvet
 }
