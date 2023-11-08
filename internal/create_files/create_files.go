@@ -6,6 +6,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
+	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/iancoleman/strcase"
@@ -331,6 +332,51 @@ func AddImport(Text, URL string) string {
 	}
 
 	Otvet = Otvet[:pos1+LenFind] + "\n\t" + `"` + URL + `"` + Otvet[pos1+LenFind:]
+
+	return Otvet
+}
+
+// FindHasTimeColumn - возвращает true если есть колонка с типом время
+func FindHasTimeColumn(Table1 *types.Table) bool {
+	Otvet := false
+
+	for _, Column1 := range Table1.MapColumns {
+		SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
+		if ok == false {
+			log.Panic("GetMappings() ", Column1.Type, " error: not found")
+		}
+		if SQLMapping1.GoType == "time.Time" {
+			Otvet = true
+			break
+		}
+	}
+
+	return Otvet
+}
+
+// AddImportTime - добавляет покет в секцию Import, если его там нет
+func AddImportTime(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//если уже есть импорт
+	pos1 := strings.Index(Otvet, `"time"`)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	HasTimeColumn := FindHasTimeColumn(Table1)
+	if HasTimeColumn == false {
+		return Otvet
+	}
+
+	//
+	pos1 = strings.Index(Otvet, "import (")
+	if pos1 < 0 {
+		log.Error("not found word: import (")
+		return TextModel
+	}
+
+	Otvet = Otvet[:pos1+8] + "\n\t" + `"time"` + Otvet[pos1+8:]
 
 	return Otvet
 }

@@ -253,7 +253,8 @@ func ConvertID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	TableName := Table1.Name
-	TextConvert, ok := types.MapConvertID[TableName]
+	IDName, _ := create_files.FindPrimaryKeyNameTypeGo(Table1)
+	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
 	if ok == false {
 		return Otvet
 	}

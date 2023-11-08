@@ -1,5 +1,5 @@
 {
-  "lawsuit_payments": "alias.PaymentId",
+  "lawsuit_payments.ID": "alias.PaymentId",
   "invoice_debt_type_stats.InvoiceID": "alias.InvoiceId",
   "invoice_debt_type_stats.LawsuitID": "alias.LawsuitId",
   "contract_black_items.ContractNumber": "alias.ContractNumber",

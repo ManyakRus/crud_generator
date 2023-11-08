@@ -5,7 +5,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/types"
-	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"os"
@@ -13,6 +12,7 @@ import (
 	"strings"
 )
 
+// CreateAllFiles - создаёт все файлы в папке model
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
@@ -27,6 +27,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 	return err
 }
 
+// CreateFiles - создаёт 1 файл в папке model
 func CreateFiles(Table1 *types.Table) error {
 	var err error
 
@@ -58,7 +59,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextModel := string(bytes)
 
 	//создание текста
-	TextModelStruct, ModelName, err := FindTextModelStruct(Table1)
+	TextModel, TextModelStruct, ModelName, err := FindTextModelStruct(TextModel, Table1)
 	TextModel = ReplaceModelStruct(TextModel, TextModelStruct)
 
 	//
@@ -72,7 +73,7 @@ func CreateFiles(Table1 *types.Table) error {
 	}
 	TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
 
-	TextModel = AddImportTime(TextModel, Table1)
+	TextModel = create_files.AddImportTime(TextModel, Table1)
 	TextModel = create_files.DeleteImportModel(TextModel)
 
 	//запись файла
@@ -81,7 +82,8 @@ func CreateFiles(Table1 *types.Table) error {
 	return err
 }
 
-func FindTextModelStruct(Table1 *types.Table) (string, string, error) {
+// FindTextModelStruct - возвращает текст структуры и тегов gorm
+func FindTextModelStruct(TextModel string, Table1 *types.Table) (string, string, string, error) {
 	var Otvet string
 	var ModelName string
 	var err error
@@ -105,16 +107,18 @@ type ` + ModelName + ` struct {
 	//цикл по всем колонкам
 	for _, key1 := range keys {
 		Column1, _ := Table1.MapColumns[key1]
-		TextColumn := FindTextColumn(&Column1)
+		var TextColumn string
+		TextModel, TextColumn = FindTextColumn(TextModel, Table1, &Column1)
 		Otvet = Otvet + TextColumn + "\n"
 		Table1.MapColumns[key1] = Column1
 	}
 
 	Otvet = Otvet + "\n}"
-	return Otvet, ModelName, err
+	return TextModel, Otvet, ModelName, err
 }
 
-func FindTextColumn(Column1 *types.Column) string {
+// FindTextColumn - возвращает текст gorm
+func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
 	Otvet := ""
 	//	Code string `json:"code" gorm:"column:code;default:0"`
 
@@ -128,6 +132,7 @@ func FindTextColumn(Column1 *types.Column) string {
 	//}
 	//Type_go := SQLMapping1.GoType
 	Type_go := Column1.TypeGo
+	TextModel, Type_go = FindColumnTypeGo(TextModel, Table1, Column1)
 	Column1.TypeGo = Type_go
 	TextDefaultValue := create_files.FindTextDefaultValue(Type_go)
 	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)
@@ -153,9 +158,10 @@ func FindTextColumn(Column1 *types.Column) string {
 	Otvet = Otvet + "`"
 	Otvet = Otvet + "\t//" + Description
 
-	return Otvet
+	return TextModel, Otvet
 }
 
+// FindTextPrimaryKey - возвращает строку gorm для primaryKey
 func FindTextPrimaryKey(Is_identity bool) string {
 	Otvet := ""
 
@@ -166,6 +172,7 @@ func FindTextPrimaryKey(Is_identity bool) string {
 	return Otvet
 }
 
+// ReplaceModelStruct - заменяет структуру модели на новую
 func ReplaceModelStruct(TextTemplateModel, TextModelStruct string) string {
 	Otvet := ""
 
@@ -256,49 +263,6 @@ func DeleteFuncRestore(TextModel, Modelname string, Table1 *types.Table) string 
 	return Otvet
 }
 
-func AddImportTime(TextModel string, Table1 *types.Table) string {
-	Otvet := TextModel
-
-	//если уже есть импорт
-	pos1 := strings.Index(Otvet, `"time"`)
-	if pos1 >= 0 {
-		return Otvet
-	}
-
-	HasTimeColumn := FindHasTimeColumn(Table1)
-	if HasTimeColumn == false {
-		return Otvet
-	}
-
-	//
-	pos1 = strings.Index(Otvet, "import (")
-	if pos1 < 0 {
-		log.Error("not found word: import (")
-		return TextModel
-	}
-
-	Otvet = Otvet[:pos1+8] + "\n\t" + `"time"` + Otvet[pos1+8:]
-
-	return Otvet
-}
-
-func FindHasTimeColumn(Table1 *types.Table) bool {
-	Otvet := false
-
-	for _, Column1 := range Table1.MapColumns {
-		SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
-		if ok == false {
-			log.Panic("GetMappings() ", Column1.Type, " error: not found")
-		}
-		if SQLMapping1.GoType == "time.Time" {
-			Otvet = true
-			break
-		}
-	}
-
-	return Otvet
-}
-
 // DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
 func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) string {
 	Otvet := TextModel
@@ -331,4 +295,29 @@ func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) st
 	Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+3:]
 
 	return Otvet
+}
+
+// FindColumnTypeGo - заменяет ID на Alias
+func FindColumnTypeGo(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
+	Otvet := Column1.TypeGo
+
+	//тип колонки из БД или из convert_id.json
+	TableName := Table1.Name
+	IDName := Column1.NameGo
+	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+	if ok == false {
+		return TextModel, Otvet
+	}
+
+	Otvet = TextConvert
+
+	//добавим импорт
+	URL := create_files.FindURL_Alias()
+	if URL == "" {
+		return TextModel, Otvet
+	}
+
+	TextModel = create_files.AddImport(TextModel, URL)
+
+	return TextModel, Otvet
 }
