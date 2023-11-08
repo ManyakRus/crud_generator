@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
@@ -100,7 +101,7 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	}
 	TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
 
-	TextModel = create_files.CheckAndAddImportTime_FromTable(TextModel, Table1)
+	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
 	TextModel = create_files.DeleteImportModel(TextModel)
 
 	//запись файла
@@ -171,11 +172,46 @@ type ` + ModelName + ` struct {
 	}
 	sort.Strings(keys)
 
+	has_Columns_CommonStruct := create_files.Has_Columns_CommonStruct(Table1)
+	has_Columns_NameStruct := create_files.Has_Columns_NameStruct(Table1)
+	has_Columns_Groups := create_files.Has_Columns_Groups(Table1)
+	has_Columns_ExtLinks := create_files.Has_Columns_ExtLink(Table1)
+
+	ImportModelsName := micro.LastWord(config.Settings.TEMPLATE_FOLDERNAME_MODEL)
+
+	if has_Columns_CommonStruct == true {
+		Otvet = Otvet + "\t" + ImportModelsName + ".CommonStruct\n"
+	}
+
+	if has_Columns_NameStruct == true {
+		Otvet = Otvet + "\t" + ImportModelsName + ".NameStruct\n"
+	}
+
+	if has_Columns_Groups == true {
+		Otvet = Otvet + "\t" + ImportModelsName + ".GroupStruct\n"
+	}
+
+	if has_Columns_ExtLinks == true {
+		Otvet = Otvet + "\t" + ImportModelsName + ".ExtLinkStruct\n"
+	}
+
 	//цикл по всем колонкам
 	for _, key1 := range keys {
 		Column1, _ := Table1.MapColumns[key1]
+
+		//пропускаем колонки если они уже есть в CommonStruct
+		if has_Columns_CommonStruct == true && create_files.Is_Column_CommonStruct(Column1) == true {
+			continue
+		} else if has_Columns_NameStruct == true && create_files.Is_Column_NameStruct(Column1) == true {
+			continue
+		} else if has_Columns_Groups == true && create_files.Is_Column_GroupsStruct(Column1) == true {
+			continue
+		} else if has_Columns_ExtLinks == true && create_files.Is_Column_ExtLinksStruct(Column1) == true {
+			continue
+		}
+
 		var TextColumn string
-		TextModel, TextColumn = FindTextColumn(TextModel, Table1, &Column1)
+		TextModel, TextColumn = FindTextColumn(TextModel, Table1, Column1)
 		Otvet = Otvet + TextColumn + "\n"
 		Table1.MapColumns[key1] = Column1
 	}
@@ -192,15 +228,15 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	ColumnName := Column1.Name
 	ColumnNameLowerCase := strings.ToLower(ColumnName)
 	ColumnModelName := create_files.FormatName(Column1.Name)
-	Column1.NameGo = ColumnModelName
+	//Column1.NameGo = ColumnModelName
 	//SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
 	//if ok == false {
 	//	log.Panic("GetMappings() ", Column1.Type, " error: not found")
 	//}
 	//Type_go := SQLMapping1.GoType
 	Type_go := Column1.TypeGo
-	TextModel, Type_go = FindColumnTypeGo(TextModel, Table1, Column1)
-	Column1.TypeGo = Type_go
+	TextModel, Type_go = FindColumnTypeGoImport(TextModel, Table1, Column1)
+	//Column1.TypeGo = Type_go
 	TextDefaultValue := create_files.FindTextDefaultValue(Type_go)
 	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)
 	Description := Column1.Description
@@ -364,8 +400,8 @@ func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) st
 	return Otvet
 }
 
-// FindColumnTypeGo - заменяет ID на Alias
-func FindColumnTypeGo(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
+// FindColumnTypeGoImport - заменяет ID на Alias
+func FindColumnTypeGoImport(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
 	Otvet := Column1.TypeGo
 
 	//тип колонки из БД или из convert_id.json
@@ -387,4 +423,23 @@ func FindColumnTypeGo(TextModel string, Table1 *types.Table, Column1 *types.Colu
 	TextModel = create_files.AddImport(TextModel, URL)
 
 	return TextModel, Otvet
+}
+
+// FillColumnsNameGo - заполняет NameGo во все колонки
+func FillColumnsNameGo(MapAll *map[string]*types.Table) error {
+	var err error
+
+	for _, Table1 := range *MapAll {
+		for _, Column1 := range Table1.MapColumns {
+			ColumnName := Column1.Name
+			ColumnModelName := create_files.FormatName(ColumnName)
+			Column1.NameGo = ColumnModelName
+			if ColumnModelName == "" {
+				err = errors.New("Table: " + Table1.Name + " Column: " + ColumnName + " = \"\"")
+			}
+		}
+
+	}
+
+	return err
 }

@@ -28,6 +28,12 @@ func StartFillAll() error {
 		return err
 	}
 
+	////заполним типы TypeGo
+	//err = model.FillColumnsNameGo(&MapAll)
+	//if err != nil {
+	//	return err
+	//}
+
 	//модель
 	err = model.CreateAllFiles(MapAll)
 	if err != nil {

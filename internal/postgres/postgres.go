@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ManyakRus/crud_generator/internal/config"
+	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
@@ -188,7 +189,7 @@ order by
 	}
 
 	//заполним MapTable
-	MapColumns := make(map[string]types.Column, 0)
+	MapColumns := make(map[string]*types.Column, 0)
 	OrderNumberColumn := 0
 	OrderNumberTable := 0
 	TableName0 := ""
@@ -197,7 +198,7 @@ order by
 		if v.TableName != TableName0 {
 			OrderNumberColumn = 0
 			Table1.MapColumns = MapColumns
-			MapColumns = make(map[string]types.Column, 0)
+			MapColumns = make(map[string]*types.Column, 0)
 			if TableName0 != "" {
 				//MassTable = append(MassTable, Table1)
 				MapTable[TableName0] = Table1
@@ -212,14 +213,16 @@ order by
 		Column1 := types.Column{}
 		Column1.Name = v.ColumnName
 		Column1.Type = v.ColumnType
+		FillNameGo(&Column1)
 
 		//Type_go
-		SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
-		if ok == false {
-			log.Panic("GetMappings() ", Column1.Type, " error: not found")
-		}
-		Type_go := SQLMapping1.GoType
-		Column1.TypeGo = Type_go
+		FillTypeGo(&Column1)
+		//SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
+		//if ok == false {
+		//	log.Panic("GetMappings() ", Column1.Type, " error: not found")
+		//}
+		//Type_go := SQLMapping1.GoType
+		//Column1.TypeGo = Type_go
 
 		//
 		if v.ColumnIsIdentity == "YES" {
@@ -233,7 +236,7 @@ order by
 		Column1.TableKey = v.ColumnTableKey
 		Column1.ColumnKey = v.ColumnColumnKey
 
-		MapColumns[v.ColumnName] = Column1
+		MapColumns[v.ColumnName] = &Column1
 		//Table1.Columns = append(Table1.Columns, Column1)
 
 		OrderNumberColumn++
@@ -255,7 +258,7 @@ order by
 
 func CreateTable() *types.Table {
 	Otvet := &types.Table{}
-	Otvet.MapColumns = make(map[string]types.Column, 0)
+	Otvet.MapColumns = make(map[string]*types.Column, 0)
 
 	return Otvet
 }
@@ -331,3 +334,36 @@ func FindNameTypeID(Table1 *types.Table) (string, string) {
 //	}
 //
 //}
+
+// FillNameGo - заполняет NameGo во все колонки
+func FillNameGo(Column1 *types.Column) error {
+	var err error
+
+	ColumnName := Column1.Name
+	ColumnNameGo := create_files.FormatName(ColumnName)
+	Column1.NameGo = ColumnNameGo
+	if ColumnNameGo == "" {
+		err = errors.New("Column: " + ColumnName + " Type: " + Column1.Type + " NameGo= \"\"")
+	}
+
+	return err
+}
+
+// FillTypeGo - заполняет тип golang из типа postgres
+func FillTypeGo(Column1 *types.Column) error {
+	var err error
+
+	SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
+	if ok == false {
+		log.Panic("GetMappings() ", Column1.Type, " error: not found")
+	}
+
+	ColumnName := Column1.Name
+	Type_go := SQLMapping1.GoType
+	Column1.TypeGo = Type_go
+	if Type_go == "" {
+		err = errors.New("Column: " + ColumnName + " Type: " + Column1.Type + " TypeGo= \"\"")
+	}
+
+	return err
+}

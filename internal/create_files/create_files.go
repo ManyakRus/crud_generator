@@ -6,7 +6,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
-	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/iancoleman/strcase"
@@ -99,40 +98,6 @@ func DeleteFuncFromComment(Text, Comment string) string {
 
 	return Otvet
 
-}
-
-// Has_Column_ExtID_ConnectionID - возвращает true если есть поля ExtId и ConnectionID
-func Has_Column_ExtID_ConnectionID(Table1 *types.Table) bool {
-	Otvet := false
-
-	//
-	_, ok := Table1.MapColumns["ext_id"]
-	if ok == false {
-		return Otvet
-	}
-
-	//
-	_, ok = Table1.MapColumns["connection_id"]
-	if ok == false {
-		return Otvet
-	}
-
-	Otvet = true
-	return Otvet
-}
-
-// Has_Column_IsDeleted - возвращает true если есть поле is_deleted
-func Has_Column_IsDeleted(Table1 *types.Table) bool {
-	Otvet := false
-
-	//
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == false {
-		return Otvet
-	}
-
-	Otvet = true
-	return Otvet
 }
 
 // DeleteCommentFromFuncName - удаляет комментарий с названием функции
@@ -336,24 +301,6 @@ func AddImport(Text, URL string) string {
 	return Otvet
 }
 
-// FindHasTimeColumn - возвращает true если есть колонка с типом время
-func FindHasTimeColumn(Table1 *types.Table) bool {
-	Otvet := false
-
-	for _, Column1 := range Table1.MapColumns {
-		SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
-		if ok == false {
-			log.Panic("GetMappings() ", Column1.Type, " error: not found")
-		}
-		if SQLMapping1.GoType == "time.Time" {
-			Otvet = true
-			break
-		}
-	}
-
-	return Otvet
-}
-
 // AddImportTime - добавляет покет в секцию Import, если его там нет
 func AddImportTime(TextModel string) string {
 	Otvet := TextModel
@@ -380,7 +327,7 @@ func AddImportTime(TextModel string) string {
 func CheckAndAddImportTime_FromTable(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
-	HasTimeColumn := FindHasTimeColumn(Table1)
+	HasTimeColumn := Has_ColumnType_Time(Table1)
 	if HasTimeColumn == false {
 		return Otvet
 	}
