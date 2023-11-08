@@ -120,6 +120,12 @@ func CreateTestFiles(Table1 *types.Table) error {
 	}
 	TextDB = DeleteFuncTestFind_byExtID(TextDB, ModelName, Table1)
 
+	//Postgres_ID_Test = ID Minimum
+	if Table1.IDMinimum != "" {
+		TextFind := "const " + ModelName + "_ID_Test = "
+		TextDB = strings.ReplaceAll(TextDB, TextFind+"1", TextFind+Table1.IDMinimum)
+	}
+
 	// замена ID на PrimaryKey
 	TextDB = create_files.ReplacePrimaryKeyID(TextDB, Table1)
 

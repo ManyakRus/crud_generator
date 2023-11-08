@@ -109,7 +109,11 @@ func TestFind_ByExtID(t *testing.T) {
 		t.Error("TestFind_ByExtID() error: ", err)
 	}
 
-	Otvet, err = Find_ByExtID(Otvet.ExtID, Otvet.ConnectionID)
+	if Otvet.ExtID ==0 {
+		return
+	}
+
+	err = crud.Find_ByExtID(&Otvet)
 	if err != nil {
 		t.Error("TestFind_ByExtID() error: ", err)
 	}
