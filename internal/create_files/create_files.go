@@ -355,17 +355,12 @@ func FindHasTimeColumn(Table1 *types.Table) bool {
 }
 
 // AddImportTime - добавляет покет в секцию Import, если его там нет
-func AddImportTime(TextModel string, Table1 *types.Table) string {
+func AddImportTime(TextModel string) string {
 	Otvet := TextModel
 
 	//если уже есть импорт
 	pos1 := strings.Index(Otvet, `"time"`)
 	if pos1 >= 0 {
-		return Otvet
-	}
-
-	HasTimeColumn := FindHasTimeColumn(Table1)
-	if HasTimeColumn == false {
 		return Otvet
 	}
 
@@ -377,6 +372,34 @@ func AddImportTime(TextModel string, Table1 *types.Table) string {
 	}
 
 	Otvet = Otvet[:pos1+8] + "\n\t" + `"time"` + Otvet[pos1+8:]
+
+	return Otvet
+}
+
+// CheckAndAddImportTime_FromTable - добавляет пакет "time" в секцию Import, если его там нет
+func CheckAndAddImportTime_FromTable(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	HasTimeColumn := FindHasTimeColumn(Table1)
+	if HasTimeColumn == false {
+		return Otvet
+	}
+
+	Otvet = AddImportTime(Otvet)
+
+	return Otvet
+}
+
+// CheckAndAddImportTime_FromText - добавляет пакет "time" в секцию Import, если его там нет
+func CheckAndAddImportTime_FromText(Text string) string {
+	Otvet := Text
+
+	pos1 := strings.Index(Text, " time.")
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	Otvet = AddImportTime(Otvet)
 
 	return Otvet
 }

@@ -27,6 +27,8 @@ type SettingsINI struct {
 	NEED_CRUD                        bool
 	NEED_GRPC                        bool
 	NEED_NRPC                        bool
+	NEED_CREATE_MODEL_STRUCT         bool
+	NEED_CREATE_MODEL_CRUD           bool
 	SERVICE_NAME                     string
 	SERVICE_REPOSITORY_URL           string
 	TEXT_TEMPLATE_MODEL              string
@@ -38,6 +40,7 @@ type SettingsINI struct {
 	USE_DEFAULT_TEMPLATE             bool
 	REPOSITORY_URL_ALIAS             string
 	PREFIX_SERVER_GRPC               string
+	COMMENT_MODEL_STRUCT             string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -75,6 +78,12 @@ func FillSettings() {
 	sNEED_NRPC := os.Getenv("NEED_NRPC")
 	Settings.NEED_NRPC = BoolFromString(sNEED_NRPC)
 
+	sNEED_CREATE_MODEL_STRUCT := os.Getenv("NEED_CREATE_MODEL_STRUCT")
+	Settings.NEED_CREATE_MODEL_STRUCT = BoolFromString(sNEED_CREATE_MODEL_STRUCT)
+
+	sNEED_CREATE_MODEL_CRUD := os.Getenv("NEED_CREATE_MODEL_CRUD")
+	Settings.NEED_CREATE_MODEL_CRUD = BoolFromString(sNEED_CREATE_MODEL_CRUD)
+
 	Settings.SERVICE_NAME = os.Getenv("SERVICE_NAME")
 	Settings.READY_FOLDERNAME = strings.ToLower(Settings.SERVICE_NAME)
 
@@ -95,6 +104,7 @@ func FillSettings() {
 
 	HAS_IS_DELETED := BoolFromString(sHAS_IS_DELETED)
 	Settings.HAS_IS_DELETED = HAS_IS_DELETED
+	Settings.COMMENT_MODEL_STRUCT = os.Getenv("COMMENT_MODEL_STRUCT")
 }
 
 // CurrentDirectory - возвращает текущую директорию ОС

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/vmihailenco/msgpack/v5"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/functions/calc_struct_version"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities"
 	"reflect"
 )
 
@@ -13,13 +12,6 @@ var versionLawsuitStatusType uint32
 
 // crud_LawsuitStatusType - объект контроллер crud операций
 var crud_LawsuitStatusType ICrud_LawsuitStatusType
-
-// LawsuitStatusType
-type LawsuitStatusType struct {
-	entities.CommonStruct
-	entities.NameStruct
-	Code string `json:"code" gorm:"column:code;default:0"`
-}
 
 type ICrud_LawsuitStatusType interface {
 	Read(*LawsuitStatusType) error

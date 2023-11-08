@@ -40,9 +40,6 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplatesModel := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_MODEL + micro.SeparatorFile()
 	DirReadyModel := DirReady + config.Settings.TEMPLATE_FOLDERNAME_MODEL + micro.SeparatorFile() + TableName + micro.SeparatorFile()
 
-	FilenameTemplateModel := DirTemplatesModel + "entities.go_"
-	FilenameReadyModel := DirReadyModel + TableName + ".go"
-
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyModel)
 	if ok == false {
@@ -52,6 +49,36 @@ func CreateFiles(Table1 *types.Table) error {
 		}
 	}
 
+	// создание файла struct
+	if config.Settings.NEED_CREATE_MODEL_STRUCT == true {
+		err = CreateFilesModel_struct(Table1, DirTemplatesModel, DirReadyModel)
+		if err != nil {
+			log.Error("CreateFilesModel_struct() table: ", Table1.Name, " error: ", err)
+			return err
+		}
+	}
+
+	// создание файла crud
+	if config.Settings.NEED_CREATE_MODEL_CRUD == true {
+		err = CreateFilesModel_crud(Table1, DirTemplatesModel, DirReadyModel)
+		if err != nil {
+			log.Error("CreateFilesModel_struct() table: ", Table1.Name, " error: ", err)
+			return err
+		}
+	}
+	return err
+}
+
+// CreateFilesModel_struct - создаёт 1 файл со структурой в папке model
+func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
+	var err error
+	var ModelName string
+
+	TableName := strings.ToLower(Table1.Name)
+	FilenameTemplateModel := DirTemplatesModel + "model.go_"
+	FilenameReadyModel := DirReadyModel + TableName + ".go"
+
+	//чтение файла шаблона
 	bytes, err := os.ReadFile(FilenameTemplateModel)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
@@ -73,7 +100,46 @@ func CreateFiles(Table1 *types.Table) error {
 	}
 	TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
 
-	TextModel = create_files.AddImportTime(TextModel, Table1)
+	TextModel = create_files.CheckAndAddImportTime_FromTable(TextModel, Table1)
+	TextModel = create_files.DeleteImportModel(TextModel)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// CreateFilesModel_crud - создаёт 1 файл с crud операциями
+func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
+	var err error
+
+	ModelName := Table1.NameGo
+
+	TableName := strings.ToLower(Table1.Name)
+	FilenameTemplateModel := DirTemplatesModel + "model_crud.go_"
+	FilenameReadyModel := DirReadyModel + TableName + "_crud.go"
+
+	//чтение файла шаблона
+	bytes, err := os.ReadFile(FilenameTemplateModel)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
+	}
+	TextModel := string(bytes)
+
+	//создание текста
+
+	//
+	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextModel = constants.TEXT_GENERATED + TextModel
+
+	if config.Settings.HAS_IS_DELETED == true {
+		TextModel = DeleteFuncDelete(TextModel, ModelName, Table1)
+		TextModel = DeleteFuncRestore(TextModel, ModelName, Table1)
+	}
+	TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
+
+	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
 	TextModel = create_files.DeleteImportModel(TextModel)
 
 	//запись файла
@@ -92,8 +158,9 @@ func FindTextModelStruct(TextModel string, Table1 *types.Table) (string, string,
 	ModelName = create_files.FindSingularName(TableName)
 	ModelName = create_files.FormatName(ModelName)
 	Table1.NameGo = ModelName
+	COMMENT_MODEL_STRUCT := config.Settings.COMMENT_MODEL_STRUCT
 
-	Otvet = `// ` + ModelName + ` - model from table ` + TableName + `: ` + Table1.Comment + `
+	Otvet = `// ` + ModelName + ` - ` + COMMENT_MODEL_STRUCT + TableName + `: ` + Table1.Comment + `
 type ` + ModelName + ` struct {
 `
 
