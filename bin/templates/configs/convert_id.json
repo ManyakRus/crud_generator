@@ -1,3 +1,11 @@
 {
-  "lawsuit_payments": "alias.PaymentId"
+  "lawsuit_payments": "alias.PaymentId",
+  "invoice_debt_type_stats.InvoiceID": "alias.InvoiceId",
+  "invoice_debt_type_stats.LawsuitID": "alias.LawsuitId",
+  "contract_black_items.ContractNumber": "alias.ContractNumber",
+  "contract_white_items.ContractNumber": "alias.ContractNumber",
+  "lawsuits.NumberClaim": "alias.ClaimNumber",
+  "lawsuits.Number": "alias.LawsuitNumber",
+  "contracts.Number": "alias.ContractNumber"
 }
+
