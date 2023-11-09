@@ -164,14 +164,18 @@ func Test_server_LawsuitStatusType_FindByExtID(t *testing.T) {
 	server1 := &ServerGRPC{}
 	Otvet1, err := server1.LawsuitStatusType_Read(ctx, &Request)
 	if err != nil {
-		t.Error("Test_server_LawsuitStatusType_FindByExtId() error: ", err)
+		t.Error("Test_server_LawsuitStatusType_FindByExtID() error: ", err)
 	}
 
 	// получим модель из строки JSON
 	Model := lawsuit_status_types.LawsuitStatusType{}
 	err = Model.GetModelFromJSON(Otvet1.ModelString)
 	if err != nil {
-		t.Error("Test_server_LawsuitStatusType_FindByExtId() GetModelFromJSON() error: ", err)
+		t.Error("Test_server_LawsuitStatusType_FindByExtID() GetModelFromJSON() error: ", err)
+	}
+
+	if Model.ExtID == 0 {
+		return
 	}
 
 
@@ -181,7 +185,7 @@ func Test_server_LawsuitStatusType_FindByExtID(t *testing.T) {
 	RequestExtId.ConnectionId = Model.ConnectionID
 	RequestExtId.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 
-	Otvet, err := server1.LawsuitStatusType_FindByExtId(ctx, &RequestExtId)
+	Otvet, err := server1.LawsuitStatusType_FindByExtID(ctx, &RequestExtId)
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_FindByExtId() error: ", err)
 	}

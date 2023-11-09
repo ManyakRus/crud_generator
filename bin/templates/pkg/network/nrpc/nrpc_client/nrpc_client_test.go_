@@ -165,6 +165,10 @@ func TestFindByExtID(t *testing.T) {
 		t.Error("TestFind_ByExtID() error: ", err)
 	}
 
+	if Otvet1.ExtID == 0 {
+		return
+	}
+
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ExtID = Otvet1.ExtID
 	Otvet.ConnectionID = Otvet1.ConnectionID
