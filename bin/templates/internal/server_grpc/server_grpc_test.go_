@@ -13,7 +13,6 @@ import (
 const LawsuitStatusType_ID_Test = 1
 
 func Test_server_LawsuitStatusType_Read(t *testing.T) {
-	// t.SkipNow()
 	config.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
@@ -119,8 +118,6 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 func Test_server_LawsuitStatusType_Save(t *testing.T) {
 	config.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
-
-	// Model := lawsuit_status_types.LawsuitStatusType{}
 
 	ctx := context.Background()
 	Request := grpc_proto.RequestId{}
