@@ -1,7 +1,7 @@
 package server_grpc
 
 import (
-	config_main "gitlab.aescorp.ru/dsp_dev/claim/nikitin/config"
+	config_main "github.com/ManyakRus/starter/config"
 	"testing"
 )
 

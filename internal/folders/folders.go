@@ -93,7 +93,7 @@ func CreateAllFolders() {
 		log.Info("CreateFolder() ", Filename)
 	}
 
-	if config.Settings.NEED_CRUD == true {
+	if config.Settings.NEED_CREATE_CRUD == true {
 		//db
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_DB
 		ok, err = micro.FileExists(Filename)
@@ -118,7 +118,7 @@ func CreateAllFolders() {
 
 	}
 
-	if config.Settings.NEED_GRPC == true {
+	if config.Settings.NEED_CREATE_GRPC == true {
 		//grpc
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC
 		ok, err = micro.FileExists(Filename)
@@ -164,7 +164,7 @@ func CreateAllFolders() {
 		}
 	}
 
-	if config.Settings.NEED_NRPC == true {
+	if config.Settings.NEED_CREATE_NRPC == true {
 		//nrpc
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC
 		ok, err = micro.FileExists(Filename)

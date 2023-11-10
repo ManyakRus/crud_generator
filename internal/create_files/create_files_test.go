@@ -19,8 +19,8 @@ func TestFormatName(t *testing.T) {
 
 func TestDeleteLineWithComment(t *testing.T) {
 	s := `import (
-	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/config"
-	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/postgres_gorm"
+	"github.com/ManyakRus/starter/config"
+	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"testing"
 	//TestFind_ByExtID() "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"

@@ -29,7 +29,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	var err error
 
-	if config.Settings.NEED_CRUD == false {
+	if config.Settings.NEED_CREATE_CRUD == false {
 		return err
 	}
 
@@ -66,13 +66,13 @@ func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	TextCrudStarter = TextCrudStarter + "\n" + TextDB
 
 	//GRPC
-	if config.Settings.NEED_GRPC == true {
+	if config.Settings.NEED_CREATE_GRPC == true {
 		TextGRPC := FindTextGRPC(MapAll, ModelURL)
 		TextCrudStarter = TextCrudStarter + "\n" + TextGRPC
 	}
 
 	//NRPC
-	if config.Settings.NEED_NRPC == true {
+	if config.Settings.NEED_CREATE_NRPC == true {
 		TextNRPC := FindTextNRPC(MapAll, ModelURL)
 		TextCrudStarter = TextCrudStarter + "\n" + TextNRPC
 	}

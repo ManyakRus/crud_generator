@@ -268,11 +268,11 @@ func FindTextDefaultValue(Type_go string) string {
 // FindURL_Alias - возвращает URL репозитория с пакетом "alias"
 func FindURL_Alias() string {
 	Otvet := ""
-	if config.Settings.REPOSITORY_URL_ALIAS == "" {
+	if config.Settings.TEMPLATE_FOLDERNAME_ALIAS == "" {
 		return Otvet
 	}
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/"
-	Otvet = Otvet + config.Settings.REPOSITORY_URL_ALIAS
+	Otvet = Otvet + config.Settings.TEMPLATE_FOLDERNAME_ALIAS
 
 	return Otvet
 }

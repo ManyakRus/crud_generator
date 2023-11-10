@@ -1,8 +1,8 @@
 package db_lawsuit_status_types
 
 import (
-	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/config"
-	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/postgres_gorm"
+	"github.com/ManyakRus/starter/config"
+	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"testing"
 )

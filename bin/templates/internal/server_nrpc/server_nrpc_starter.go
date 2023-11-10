@@ -1,10 +1,10 @@
 package server_grpc
 
 import (
+	"github.com/ManyakRus/starter/contextmain"
+	"github.com/ManyakRus/starter/log"
+	"github.com/ManyakRus/starter/stopapp"
 	"github.com/nats-io/nats.go"
-	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/contextmain"
-	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/log"
-	"gitlab.aescorp.ru/dsp_dev/claim/nikitin/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/internal/app/grpc/server_grpc"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
 	"os"

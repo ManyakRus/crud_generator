@@ -24,9 +24,10 @@ type SettingsINI struct {
 	TEMPLATE_FOLDERNAME_NRPC_CLIENT  string
 	TEMPLATE_SERVICE_NAME            string
 	TEMPLATE_FOLDERNAME_CRUD_STARTER string
-	NEED_CRUD                        bool
-	NEED_GRPC                        bool
-	NEED_NRPC                        bool
+	TEMPLATE_FOLDERNAME_ALIAS        string
+	NEED_CREATE_CRUD                 bool
+	NEED_CREATE_GRPC                 bool
+	NEED_CREATE_NRPC                 bool
 	NEED_CREATE_MODEL_STRUCT         bool
 	NEED_CREATE_MODEL_CRUD           bool
 	SERVICE_NAME                     string
@@ -38,7 +39,6 @@ type SettingsINI struct {
 	TEXT_DB_MODIFIED_AT              string
 	TEXT_DB_IS_DELETED               string
 	USE_DEFAULT_TEMPLATE             bool
-	REPOSITORY_URL_ALIAS             string
 	PREFIX_SERVER_GRPC               string
 	COMMENT_MODEL_STRUCT             string
 }
@@ -64,19 +64,19 @@ func FillSettings() {
 	Settings.TEMPLATE_SERVICE_NAME = os.Getenv("TEMPLATE_SERVICE_NAME")
 	Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER = os.Getenv("TEMPLATE_FOLDERNAME_CRUD_STARTER")
 	Settings.SERVICE_REPOSITORY_URL = os.Getenv("SERVICE_REPOSITORY_URL")
-	Settings.REPOSITORY_URL_ALIAS = os.Getenv("REPOSITORY_URL_ALIAS")
+	Settings.TEMPLATE_FOLDERNAME_ALIAS = os.Getenv("TEMPLATE_FOLDERNAME_ALIAS")
 	Settings.PREFIX_SERVER_GRPC = os.Getenv("PREFIX_SERVER_GRPC")
 
 	sHAS_IS_DELETED := os.Getenv("HAS_IS_DELETED")
 
-	sNEED_CRUD := os.Getenv("NEED_CRUD")
-	Settings.NEED_CRUD = BoolFromString(sNEED_CRUD)
+	sNEED_CRUD := os.Getenv("NEED_CREATE_CRUD")
+	Settings.NEED_CREATE_CRUD = BoolFromString(sNEED_CRUD)
 
-	sNEED_GRPC := os.Getenv("NEED_GRPC")
-	Settings.NEED_GRPC = BoolFromString(sNEED_GRPC)
+	sNEED_GRPC := os.Getenv("NEED_CREATE_GRPC")
+	Settings.NEED_CREATE_GRPC = BoolFromString(sNEED_GRPC)
 
-	sNEED_NRPC := os.Getenv("NEED_NRPC")
-	Settings.NEED_NRPC = BoolFromString(sNEED_NRPC)
+	sNEED_NRPC := os.Getenv("NEED_CREATE_NRPC")
+	Settings.NEED_CREATE_NRPC = BoolFromString(sNEED_NRPC)
 
 	sNEED_CREATE_MODEL_STRUCT := os.Getenv("NEED_CREATE_MODEL_STRUCT")
 	Settings.NEED_CREATE_MODEL_STRUCT = BoolFromString(sNEED_CREATE_MODEL_STRUCT)
