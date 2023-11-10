@@ -41,6 +41,7 @@ type SettingsINI struct {
 	USE_DEFAULT_TEMPLATE             bool
 	PREFIX_SERVER_GRPC               string
 	COMMENT_MODEL_STRUCT             string
+	TEXT_MODULE_GENERATED            string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -105,6 +106,8 @@ func FillSettings() {
 	HAS_IS_DELETED := BoolFromString(sHAS_IS_DELETED)
 	Settings.HAS_IS_DELETED = HAS_IS_DELETED
 	Settings.COMMENT_MODEL_STRUCT = os.Getenv("COMMENT_MODEL_STRUCT")
+
+	Settings.TEXT_MODULE_GENERATED = os.Getenv("TEXT_MODULE_GENERATED")
 }
 
 // CurrentDirectory - возвращает текущую директорию ОС

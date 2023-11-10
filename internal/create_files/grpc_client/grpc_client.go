@@ -76,7 +76,7 @@ func CreateFiles(Table1 *types.Table) error {
 	ModelName := Table1.NameGo
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = constants.TEXT_GENERATED + TextDB
+	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
 	if config.Settings.HAS_IS_DELETED == true {
 		TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
@@ -127,7 +127,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	ModelName := Table1.NameGo
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = constants.TEXT_GENERATED + TextDB
+	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
 	if config.Settings.HAS_IS_DELETED == true {
 		TextDB = DeleteFuncTestDelete(TextDB, ModelName, Table1)

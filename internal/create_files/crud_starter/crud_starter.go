@@ -51,7 +51,7 @@ func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	////заменим название сервиса
 	//TextCrudStarter = strings.ReplaceAll(TextCrudStarter, config.Settings.TEMPLATE_SERVICE_NAME, config.Settings.SERVICE_NAME)
 
-	TextCrudStarter := constants.TEXT_GENERATED + `package crud_starter`
+	TextCrudStarter := config.Settings.TEXT_MODULE_GENERATED + `package crud_starter`
 
 	//найдём новый текст для каждой таблицы
 	RepositoryURL := config.Settings.SERVICE_REPOSITORY_URL
