@@ -13,6 +13,7 @@ var versionLawsuitStatusType uint32
 // crud_LawsuitStatusType - объект контроллер crud операций
 var crud_LawsuitStatusType ICrud_LawsuitStatusType
 
+// интерфейс стандартных CRUD операций, для использования в DB или GRPC или NRPC
 type ICrud_LawsuitStatusType interface {
 	Read(*LawsuitStatusType) error
 	Save(*LawsuitStatusType) error

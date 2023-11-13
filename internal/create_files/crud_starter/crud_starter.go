@@ -167,6 +167,11 @@ func FindText_InitCrudTransport_DB(MapAll map[string]*types.Table, ModelURL stri
 	Otvet := `
 // InitCrudTransport_DB - заполняет объекты crud для работы с БД напрямую
 func InitCrudTransport_DB() {`
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		Otvet = Otvet + ` 
+	initCrudTransport_manual_DB()
+`
+	}
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(MapAll))
 	for k := range MapAll {
@@ -209,6 +214,13 @@ func FindTextGRPC(MapAll map[string]*types.Table, ModelURL string) string {
 	Otvet := `
 // InitCrudTransport_GRPC - заполняет объекты crud для работы с БД напрямую
 func InitCrudTransport_GRPC() {`
+
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		Otvet = Otvet + ` 
+	initCrudTransport_manual_GRPC()
+`
+	}
+
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(MapAll))
 	for k := range MapAll {
@@ -251,6 +263,12 @@ func FindTextNRPC(MapAll map[string]*types.Table, ModelURL string) string {
 	Otvet := `
 // InitCrudTransport_NRPC - заполняет объекты crud для работы с БД напрямую
 func InitCrudTransport_NRPC() {`
+
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		Otvet = Otvet + ` 
+	initCrudTransport_manual_NRPC()
+`
+	}
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(MapAll))
 	for k := range MapAll {

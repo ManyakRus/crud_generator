@@ -31,13 +31,14 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 		}
 
 		//тестовые файлы nrpc_client
-		err = CreateTestFiles(Table1)
-		if err != nil {
-			log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
-			return err
+		if config.Settings.NEED_CREATE_NRPC_CLIENT_TEST == true {
+			err = CreateTestFiles(Table1)
+			if err != nil {
+				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+				return err
+			}
 		}
 	}
-
 	return err
 }
 

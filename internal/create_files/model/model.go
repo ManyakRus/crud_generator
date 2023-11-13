@@ -93,7 +93,7 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	//
 	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
+	//TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
 
 	if config.Settings.HAS_IS_DELETED == true {
 		TextModel = DeleteFuncDelete(TextModel, ModelName, Table1)

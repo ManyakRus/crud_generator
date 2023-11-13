@@ -10,6 +10,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gorm.io/gorm"
 	"time"
+	"github.com/ManyakRus/starter/contextmain"
 )
 
 // TableName - имя таблицы в БД Postgres
@@ -23,7 +24,7 @@ type Crud_DB struct {
 func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
-	ctxMain := context.Background()
+	ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -34,6 +35,11 @@ func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 // Read_ctx - находит запись в БД по ID
 func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
+
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
 
 	id := int64(m.ID)
 
@@ -48,7 +54,7 @@ func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.Lawsui
 
 // Save - записывает новый или существующий объект в базу данных
 func (crud Crud_DB) Save(m *lawsuit_status_types.LawsuitStatusType) error {
-	ctxMain := context.Background()
+	ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -58,14 +64,20 @@ func (crud Crud_DB) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 
 // Save_ctx - записывает новый или существующий объект в базу данных
 func (crud Crud_DB) Save_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
+
 	is_create := !micro.BoolFromInt64(int64(m.ID))
-	err := crud.create_update_ctx(ctx, m, is_create)
+	err = crud.create_update_ctx(ctx, m, is_create)
 	return err
 }
 
 // Update - записывает существующий объект в базу данных
 func (crud Crud_DB) Update(m *lawsuit_status_types.LawsuitStatusType) error {
-	ctxMain := context.Background()
+	ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -75,13 +87,19 @@ func (crud Crud_DB) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 
 // Update_ctx - записывает существующий объект в базу данных
 func (crud Crud_DB) Update_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
-	err := crud.create_update_ctx(ctx, m, false)
+	var err error
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
+
+	err = crud.create_update_ctx(ctx, m, false)
 	return err
 }
 
 // Create - записывает новый объект в базу данных
 func (crud Crud_DB) Create(m *lawsuit_status_types.LawsuitStatusType) error {
-	ctxMain := context.Background()
+	ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -91,7 +109,13 @@ func (crud Crud_DB) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 
 // Create_ctx - записывает новый объект в базу данных
 func (crud Crud_DB) Create_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
-	err := crud.create_update_ctx(ctx, m, true)
+	var err error
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
+
+	err = crud.create_update_ctx(ctx, m, true)
 	return err
 }
 
@@ -99,7 +123,7 @@ func (crud Crud_DB) Create_ctx(ctx context.Context, m *lawsuit_status_types.Laws
 func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType, is_create bool) error {
 	var err error
 
-	ctxMain := context.Background()
+	ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -112,6 +136,11 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 	var err error
 
 	// log.Trace("start Save() ", TableName, " id: ", int64(m.ID))
+
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
 
 	// проверка ID
 	if is_create == true {
@@ -177,7 +206,7 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 func (crud Crud_DB) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
-	ctxMain := context.Background()
+	ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -188,6 +217,11 @@ func (crud Crud_DB) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 // Delete_ctx - записывает is_deleted = true
 func (crud Crud_DB) Delete_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
+
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
 
 	m2 := lawsuit_status_types.LawsuitStatusType{}
 	m2.ID = m.ID
@@ -208,7 +242,7 @@ func (crud Crud_DB) Delete_ctx(ctx context.Context, m *lawsuit_status_types.Laws
 func (crud Crud_DB) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
-	ctxMain := context.Background()
+	ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -219,6 +253,11 @@ func (crud Crud_DB) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 // Restore_ctx - записывает is_deleted = true
 func (crud Crud_DB) Restore_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
+
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
 
 	m2 := lawsuit_status_types.LawsuitStatusType{}
 	m2.ID = m.ID
@@ -245,7 +284,7 @@ func (crud Crud_DB) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) erro
 	}
 
 	//
-	ctxMain := context.Background()
+	ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -257,6 +296,11 @@ func (crud Crud_DB) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) erro
 // Find_ByExtID_ctx - находит запись в БД по ext_id и connection_id
 func (crud Crud_DB) Find_ByExtID_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
+
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
 
 	if m.ExtID == 0 {
 		err = errors.New("Error: ExtID=0")
