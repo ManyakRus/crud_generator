@@ -47,6 +47,7 @@ type SettingsINI struct {
 	PREFIX_SERVER_GRPC               string
 	COMMENT_MODEL_STRUCT             string
 	TEXT_MODULE_GENERATED            string
+	TEMPLATE_FOLDERNAME_MAIN         string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -133,6 +134,8 @@ func FillSettings() {
 	sNEED_CREATE_NRPC_CLIENT_TEST := os.Getenv("NEED_CREATE_NRPC_CLIENT_TEST")
 	NEED_CREATE_NRPC_CLIENT_TEST := BoolFromString(sNEED_CREATE_NRPC_CLIENT_TEST)
 	Settings.NEED_CREATE_NRPC_CLIENT_TEST = NEED_CREATE_NRPC_CLIENT_TEST
+
+	Settings.TEMPLATE_FOLDERNAME_MAIN = os.Getenv("TEMPLATE_FOLDERNAME_MAIN")
 
 }
 

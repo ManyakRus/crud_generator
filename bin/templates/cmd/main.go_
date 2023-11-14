@@ -1,0 +1,36 @@
+package main
+
+import (
+	configmain "github.com/ManyakRus/starter/config"
+	"github.com/ManyakRus/starter/stopapp"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
+)
+
+// main - старт приложения
+func main() {
+	StartApp()
+}
+
+// StartApp - выполнение всех операций для старта приложения
+func StartApp() {
+	configmain.LoadEnv()
+
+	stopapp.StartWaitStop()
+	crud_starter.InitCrudTransport_DB()
+	postgres_gorm.StartDB()
+	StartGRPSServer()
+	StartNRPSServer()
+
+	stopapp.GetWaitGroup_Main().Wait()
+
+}
+
+// StartGRPSServer - запускает GRPC server
+func StartGRPSServer() {
+	server_grpc.Start()
+}
+
+// StartNRPSServer - запускает GRPC server
+func StartNRPSServer() {
+	server_nrpc.Start()
+}

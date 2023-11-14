@@ -5,6 +5,8 @@ For each table in the Postgres SQL database, files will be created to perform cr
 create, read, update, save, delete (or delete + restore)
 files are generated:
 1. model - struct structure with all fields from the database, and gorm + db + json annotations
+   Tables with fields in the database must be created manually in advance.
+   The code generator will find all the tables and their fields in the database and use them.
 2. db - files for performing crud operations, exchange with the database,
    as well as files with tests
 3. grpc server - files for performing crud operations over the network, using the GRPC protocol,
