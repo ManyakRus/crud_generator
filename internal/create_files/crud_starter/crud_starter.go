@@ -29,7 +29,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	var err error
 
-	if config.Settings.NEED_CREATE_CRUD == false {
+	if config.Settings.NEED_CREATE_DB == false {
 		return err
 	}
 

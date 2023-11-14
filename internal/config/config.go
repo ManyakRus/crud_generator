@@ -25,11 +25,16 @@ type SettingsINI struct {
 	TEMPLATE_SERVICE_NAME            string
 	TEMPLATE_FOLDERNAME_CRUD_STARTER string
 	TEMPLATE_FOLDERNAME_ALIAS        string
-	NEED_CREATE_CRUD                 bool
-	NEED_CREATE_GRPC                 bool
-	NEED_CREATE_NRPC                 bool
 	NEED_CREATE_MODEL_STRUCT         bool
 	NEED_CREATE_MODEL_CRUD           bool
+	NEED_CREATE_DB                   bool
+	NEED_CREATE_DB_TEST              bool
+	NEED_CREATE_GRPC                 bool
+	NEED_CREATE_GRPC_SERVER_TEST     bool
+	NEED_CREATE_GRPC_CLIENT_TEST     bool
+	NEED_CREATE_NRPC                 bool
+	NEED_CREATE_NRPC_SERVER_TEST     bool
+	NEED_CREATE_NRPC_CLIENT_TEST     bool
 	SERVICE_NAME                     string
 	SERVICE_REPOSITORY_URL           string
 	TEXT_TEMPLATE_MODEL              string
@@ -42,11 +47,6 @@ type SettingsINI struct {
 	PREFIX_SERVER_GRPC               string
 	COMMENT_MODEL_STRUCT             string
 	TEXT_MODULE_GENERATED            string
-	NEED_CREATE_DB_TEST              bool
-	NEED_CREATE_GRPC_SERVER_TEST     bool
-	NEED_CREATE_GRPC_CLIENT_TEST     bool
-	NEED_CREATE_NRPC_SERVER_TEST     bool
-	NEED_CREATE_NRPC_CLIENT_TEST     bool
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -75,8 +75,8 @@ func FillSettings() {
 
 	sHAS_IS_DELETED := os.Getenv("HAS_IS_DELETED")
 
-	sNEED_CRUD := os.Getenv("NEED_CREATE_CRUD")
-	Settings.NEED_CREATE_CRUD = BoolFromString(sNEED_CRUD)
+	sNEED_CREATE_DB := os.Getenv("NEED_CREATE_DB")
+	Settings.NEED_CREATE_DB = BoolFromString(sNEED_CREATE_DB)
 
 	sNEED_GRPC := os.Getenv("NEED_CREATE_GRPC")
 	Settings.NEED_CREATE_GRPC = BoolFromString(sNEED_GRPC)

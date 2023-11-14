@@ -1,27 +1,27 @@
 #---------------------Database settings---------------------
 #DB_HOST - Database server name or ip-address. Only Postgres SQL
-DB_HOST=
+DB_HOST="10.1.9.23"
 
 #DB_NAME - Database table name
-DB_NAME=
+DB_NAME="claim"
 
 #DB_SCHEME - Database schema name
-DB_SCHEME=
+DB_SCHEME="public"
 
 #DB_PORT - Database port number
 DB_PORT="5432"
 
 #DB_USER - Database login (user)
-DB_USER=
+DB_USER="dev"
 
 #DB_PASSWORD - Database login password
-DB_PASSWORD=
+DB_PASSWORD="like8Day"
 
 #INCLUDE_TABLES - table name filter. Regular expression
 INCLUDE_TABLES=""
 
 #INCLUDE_TABLES - table name ignore filter. Regular expression
-EXCLUDE_TABLES=""
+EXCLUDE_TABLES="ext_"
 
 #---------------------Template settings---------------------
 
@@ -96,6 +96,21 @@ NEED_CREATE_MODEL_STRUCT=true
 
 #NEED_CREATE_MODEL_CRUD - fill "true" if you want create crud operations in model files
 NEED_CREATE_MODEL_CRUD=true
+
+#NEED_CREATE_DB_TEST - fill "true" if you want create DB _test.go files
+NEED_CREATE_DB_TEST=true
+
+#NEED_CREATE_GRPC_SERVER_TEST - fill "true" if you want create GRPC server _test.go files
+NEED_CREATE_GRPC_SERVER_TEST=true
+
+#NEED_CREATE_GRPC_CLIENT_TEST - fill "true" if you want create GRPC client _test.go files
+NEED_CREATE_GRPC_CLIENT_TEST=true
+
+#NEED_CREATE_NRPC_SERVER_TEST - fill "true" if you want create NRPC server _test.go files
+NEED_CREATE_NRPC_SERVER_TEST=true
+
+#NEED_CREATE_NRPC_CLIENT_TEST - fill "true" if you want create NRPC client _test.go files
+NEED_CREATE_NRPC_CLIENT_TEST=true
 
 #PREFIX_SERVER_GRPC - filename prefix for grpc server files
 PREFIX_SERVER_GRPC="server_grpc_"

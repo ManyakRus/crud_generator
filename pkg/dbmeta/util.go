@@ -98,7 +98,9 @@ func RenameReservedName(s string) string {
 // FmtFieldName formats a string as a struct key
 //
 // Example:
-// 	fmtFieldName("foo_id")
+//
+//	fmtFieldName("foo_id")
+//
 // Output: FooID
 func FmtFieldName(s string) string {
 	name := lintFieldName(s)

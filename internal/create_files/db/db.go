@@ -25,12 +25,13 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 		}
 
 		//файлы db
-		err = CreateFiles(Table1)
-		if err != nil {
-			log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
-			return err
+		if config.Settings.NEED_CREATE_DB_TEST == true {
+			err = CreateFiles(Table1)
+			if err != nil {
+				log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
+				return err
+			}
 		}
-
 		//тестовые файлы db
 		if config.Settings.NEED_CREATE_DB_TEST == true {
 			err = CreateTestFiles(Table1)

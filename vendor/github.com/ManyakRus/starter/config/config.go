@@ -3,9 +3,9 @@
 package config
 
 import (
-	"github.com/joho/godotenv"
 	"github.com/ManyakRus/starter/logger"
 	"github.com/ManyakRus/starter/micro"
+	"github.com/joho/godotenv"
 	//log "github.com/sirupsen/logrus"
 	//log "github.com/sirupsen/logrus"
 	//"gitlab.aescorp.ru/dsp_dev/notifier/notifier_adp_eml/internal/v0/app/types"
@@ -15,7 +15,7 @@ import (
 // log хранит используемый логгер
 var log = logger.GetLog()
 
-// LoadEnv - загружает переменные окружения в структуру из файла или из переменных окружения
+// LoadEnv - загружает из файла .env переменные в переменные окружения
 func LoadEnv() {
 
 	dir := micro.ProgramDir()
@@ -23,20 +23,66 @@ func LoadEnv() {
 	LoadEnv_from_file(filename)
 }
 
-// LoadEnv_from_file загружает переменные окружения в структуру из файла или из переменных окружения
+// LoadEnv - загружает из файла .env переменные в переменные окружения, возвращает ошибку
+func LoadEnv_err() error {
+	var err error
+
+	dir := micro.ProgramDir()
+	filename := dir + ".env"
+	err = LoadEnv_from_file_err(filename)
+
+	return err
+}
+
+// LoadSettingsTxt - загружает из файла settings.txt переменные в переменные окружения
+func LoadSettingsTxt() {
+
+	dir := micro.ProgramDir()
+	filename := dir + "settings.txt"
+	LoadEnv_from_file(filename)
+}
+
+// LoadSettingsTxt_err - загружает из файла settings.txt переменные в переменные окружения, возвращает ошибку
+func LoadSettingsTxt_err() error {
+	var err error
+
+	dir := micro.ProgramDir()
+	filename := dir + "settings.txt"
+	err = LoadEnv_from_file_err(filename)
+
+	return err
+}
+
+// LoadEnv_from_file загружает из файла переменные в переменные окружения
 func LoadEnv_from_file(filename string) {
 
-	err := godotenv.Load(filename)
+	FilenameShort := micro.LastWord(filename)
+
+	err := LoadEnv_from_file_err(filename)
 	if err != nil {
-		log.Debug("Can not parse .env file: ", filename, " warning: "+err.Error())
+		log.Debug("Can not parse "+FilenameShort+" file: ", filename, " warning: "+err.Error())
 	} else {
-		log.Info("load .env from file: ", filename)
+		log.Info("load "+FilenameShort+" from file: ", filename)
 	}
+}
 
-	//LOG_LEVEL := os.Getenv("LOG_LEVEL")
-	//if LOG_LEVEL == "" {
-	//	LOG_LEVEL = "info"
-	//}
-	//logger.SetLevel(LOG_LEVEL)
+// LoadEnv_from_file загружает из файла переменные в переменные окружения, возвращает ошибку
+func LoadEnv_from_file_err(filename string) error {
+	var err error
 
+	err = godotenv.Load(filename)
+
+	return err
+}
+
+// LoadENV_or_SettingsTXT - загружает из файла .env или settings.txt переменные в переменные окружения
+func LoadENV_or_SettingsTXT() {
+	errENV := LoadEnv_err()
+	var err2 error
+	if errENV != nil {
+		err2 = LoadSettingsTxt_err()
+	}
+	if err2 != nil {
+		log.Panic("LoadENV_or_SettingsTXT() error: ", err2)
+	}
 }

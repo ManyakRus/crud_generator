@@ -1,7 +1,7 @@
-# github.com/ManyakRus/logrus v0.0.0-20230913114322-14246ee4c48b
+# github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792
 ## explicit; go 1.13
 github.com/ManyakRus/logrus
-# github.com/ManyakRus/starter v0.0.0-20230913104819-4ee2118a3638
+# github.com/ManyakRus/starter v0.0.0-20231114124845-a0ceb75547b8
 ## explicit; go 1.20
 github.com/ManyakRus/starter/config
 github.com/ManyakRus/starter/contextmain
@@ -11,9 +11,6 @@ github.com/ManyakRus/starter/micro
 github.com/ManyakRus/starter/ping
 github.com/ManyakRus/starter/postgres_gorm
 github.com/ManyakRus/starter/stopapp
-# github.com/beevik/etree v1.2.0
-## explicit; go 1.13
-github.com/beevik/etree
 # github.com/bxcodec/faker/v3 v3.8.1
 ## explicit; go 1.12
 github.com/bxcodec/faker/v3
@@ -21,6 +18,14 @@ github.com/bxcodec/faker/v3/support/slice
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
+# github.com/golang/protobuf v1.5.3
+## explicit; go 1.9
+github.com/golang/protobuf/jsonpb
+github.com/golang/protobuf/proto
+github.com/golang/protobuf/ptypes
+github.com/golang/protobuf/ptypes/any
+github.com/golang/protobuf/ptypes/duration
+github.com/golang/protobuf/ptypes/timestamp
 # github.com/iancoleman/strcase v0.3.0
 ## explicit; go 1.16
 github.com/iancoleman/strcase
@@ -30,7 +35,7 @@ github.com/jackc/pgpassfile
 # github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a
 ## explicit; go 1.14
 github.com/jackc/pgservicefile
-# github.com/jackc/pgx/v5 v5.4.3
+# github.com/jackc/pgx/v5 v5.5.0
 ## explicit; go 1.19
 github.com/jackc/pgx/v5
 github.com/jackc/pgx/v5/internal/anynil
@@ -43,7 +48,12 @@ github.com/jackc/pgx/v5/pgconn/internal/bgreader
 github.com/jackc/pgx/v5/pgconn/internal/ctxwatch
 github.com/jackc/pgx/v5/pgproto3
 github.com/jackc/pgx/v5/pgtype
+github.com/jackc/pgx/v5/pgxpool
 github.com/jackc/pgx/v5/stdlib
+# github.com/jackc/puddle/v2 v2.2.1
+## explicit; go 1.19
+github.com/jackc/puddle/v2
+github.com/jackc/puddle/v2/internal/genstack
 # github.com/jimsmart/schema v0.2.1
 ## explicit; go 1.16
 github.com/jimsmart/schema
@@ -56,32 +66,361 @@ github.com/jinzhu/now
 # github.com/joho/godotenv v1.5.1
 ## explicit; go 1.12
 github.com/joho/godotenv
+# github.com/klauspost/compress v1.17.2
+## explicit; go 1.18
+github.com/klauspost/compress/flate
 # github.com/logrusorgru/aurora v2.0.3+incompatible
 ## explicit
 github.com/logrusorgru/aurora
+# github.com/nats-io/nats.go v1.31.0
+## explicit; go 1.20
+github.com/nats-io/nats.go
+github.com/nats-io/nats.go/encoders/builtin
+github.com/nats-io/nats.go/internal/parser
+github.com/nats-io/nats.go/util
+# github.com/nats-io/nkeys v0.4.6
+## explicit; go 1.19
+github.com/nats-io/nkeys
+# github.com/nats-io/nuid v1.0.1
+## explicit
+github.com/nats-io/nuid
+# github.com/nats-rpc/nrpc v0.0.0-20231018091755-18e69326f052
+## explicit; go 1.11
+github.com/nats-rpc/nrpc
 # github.com/ompluscator/dynamic-struct v1.4.0
 ## explicit
 github.com/ompluscator/dynamic-struct
 # github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e
 ## explicit
 github.com/serenize/snaker
-# gitlab.aescorp.ru/dsp_dev/claim/nikitin v0.0.18
+# github.com/vmihailenco/msgpack/v5 v5.4.1
+## explicit; go 1.19
+github.com/vmihailenco/msgpack/v5
+github.com/vmihailenco/msgpack/v5/msgpcode
+# github.com/vmihailenco/tagparser/v2 v2.0.0
+## explicit; go 1.15
+github.com/vmihailenco/tagparser/v2
+github.com/vmihailenco/tagparser/v2/internal
+github.com/vmihailenco/tagparser/v2/internal/parser
+# gitlab.aescorp.ru/dsp_dev/claim/sync_service v1.2.24
 ## explicit; go 1.20
-# golang.org/x/crypto v0.14.0
-## explicit; go 1.17
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/internal/app/grpc/server_grpc
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_accounting_areas
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_accrual_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_balances
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_bank_account_organizations
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_banks
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_bill_kind_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_branches
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_calendars
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_change_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_channel_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_claim_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_comments
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_completed_months
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_connections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_contract_black_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_contract_category_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_contract_white_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_contracts
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_courts
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_day_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_debt_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_direction_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_document_link_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_document_links
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_document_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_documents
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_employees
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_event_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_events
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_facsimiles
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_file_changes
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_file_templates
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_file_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_files
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_gender_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_hashtag_links
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_hashtags
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_individuals
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_invoice_debt_type_stats
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_lawsuit_invoice_corrections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_lawsuit_invoices
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_lawsuit_payment_corrections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_lawsuit_payments
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_lawsuit_reason_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_lawsuit_stage_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_lawsuit_status_states
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_lawsuit_status_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_lawsuit_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_lawsuits
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_legal_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_message_attachements
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_message_send_statuses
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_message_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_messages
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_organization_casebooks
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_organization_category_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_organization_state_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_organizations
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_payment_days
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_payment_schedules
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_penalty_calculation_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_service_providers
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_service_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_state_duties
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_table_names
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_user_roles
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_white_list_reason_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/functions/calc_struct_version
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/functions/format_date
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/functions/format_time
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/constants
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_accounting_areas
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_accrual_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_balances
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_bank_account_organizations
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_banks
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_bill_kind_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_branches
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_calendars
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_change_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_channel_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_claim_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_comments
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_completed_months
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_connections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_contract_black_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_contract_category_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_contract_white_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_contracts
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_courts
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_day_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_debt_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_direction_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_document_link_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_document_links
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_document_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_documents
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_employees
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_event_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_events
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_facsimiles
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_file_changes
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_file_templates
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_file_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_files
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_gender_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_hashtag_links
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_hashtags
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_individuals
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_invoice_debt_type_stats
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_invoice_corrections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_invoices
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_payment_corrections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_payments
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_reason_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_stage_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_status_states
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_status_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuits
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_legal_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_message_attachements
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_message_send_statuses
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_message_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_messages
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_organization_casebooks
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_organization_category_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_organization_state_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_organizations
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_payment_days
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_payment_schedules
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_penalty_calculation_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_service_providers
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_service_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_state_duties
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_table_names
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_user_roles
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_white_list_reason_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/constants
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_accounting_areas
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_accrual_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_balances
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_bank_account_organizations
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_banks
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_bill_kind_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_branches
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_calendars
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_change_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_channel_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_claim_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_comments
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_completed_months
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_connections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_contract_black_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_contract_category_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_contract_white_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_contracts
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_courts
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_day_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_debt_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_direction_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_document_link_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_document_links
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_document_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_documents
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_employees
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_event_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_events
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_facsimiles
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_file_changes
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_file_templates
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_file_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_files
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_gender_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_hashtag_links
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_hashtags
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_individuals
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_invoice_debt_type_stats
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_lawsuit_invoice_corrections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_lawsuit_invoices
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_lawsuit_payment_corrections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_lawsuit_payments
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_lawsuit_reason_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_lawsuit_stage_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_lawsuit_status_states
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_lawsuit_status_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_lawsuit_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_lawsuits
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_legal_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_message_attachements
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_message_send_statuses
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_message_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_messages
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_organization_casebooks
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_organization_category_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_organization_state_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_organizations
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_payment_days
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_payment_schedules
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_penalty_calculation_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_service_providers
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_service_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_state_duties
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_table_names
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_user_roles
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_white_list_reason_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/accounting_areas
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/accrual_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/balances
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/bank_account_organizations
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/banks
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/bill_kind_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/branches
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/calendars
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/change_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/channel_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/claim_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/comments
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/completed_months
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/connections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/contract_black_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/contract_category_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/contract_white_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/contracts
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/courts
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/day_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/debt_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/direction_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/document_link_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/document_links
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/document_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/documents
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/employees
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/event_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/events
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/facsimiles
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/file_changes
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/file_templates
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/file_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/files
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/gender_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/hashtag_links
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/hashtags
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/individuals
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/invoice_debt_type_stats
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_invoice_corrections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_invoices
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_payment_corrections
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_payments
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_reason_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_stage_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_states
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuits
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/legal_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/message_attachements
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/message_send_statuses
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/message_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/messages
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/organization_casebooks
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/organization_category_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/organization_state_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/organizations
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/payment_days
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/payment_schedules
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/penalty_calculation_items
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/service_providers
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/service_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/state_duties
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/table_names
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/user_roles
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/white_list_reason_types
+gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/types/alias
+# golang.org/x/crypto v0.15.0
+## explicit; go 1.18
+golang.org/x/crypto/blake2b
+golang.org/x/crypto/curve25519
+golang.org/x/crypto/curve25519/internal/field
+golang.org/x/crypto/ed25519
+golang.org/x/crypto/internal/alias
+golang.org/x/crypto/internal/poly1305
+golang.org/x/crypto/nacl/box
+golang.org/x/crypto/nacl/secretbox
 golang.org/x/crypto/pbkdf2
-# golang.org/x/mod v0.13.0
+golang.org/x/crypto/salsa20/salsa
+# golang.org/x/mod v0.14.0
 ## explicit; go 1.18
 golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/sys v0.13.0
-## explicit; go 1.17
+# golang.org/x/net v0.18.0
+## explicit; go 1.18
+golang.org/x/net/http/httpguts
+golang.org/x/net/http2
+golang.org/x/net/http2/hpack
+golang.org/x/net/idna
+golang.org/x/net/internal/timeseries
+golang.org/x/net/trace
+# golang.org/x/sync v0.5.0
+## explicit; go 1.18
+golang.org/x/sync/semaphore
+# golang.org/x/sys v0.14.0
+## explicit; go 1.18
+golang.org/x/sys/cpu
 golang.org/x/sys/execabs
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/text v0.13.0
-## explicit; go 1.17
+# golang.org/x/text v0.14.0
+## explicit; go 1.18
 golang.org/x/text/cases
 golang.org/x/text/internal
 golang.org/x/text/internal/language
@@ -95,7 +434,7 @@ golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
-# golang.org/x/tools v0.14.0
+# golang.org/x/tools v0.15.0
 ## explicit; go 1.18
 golang.org/x/tools/go/ast/astutil
 golang.org/x/tools/imports
@@ -104,12 +443,99 @@ golang.org/x/tools/internal/event/core
 golang.org/x/tools/internal/event/keys
 golang.org/x/tools/internal/event/label
 golang.org/x/tools/internal/event/tag
-golang.org/x/tools/internal/fastwalk
 golang.org/x/tools/internal/gocommand
 golang.org/x/tools/internal/gopathwalk
 golang.org/x/tools/internal/imports
 golang.org/x/tools/internal/typeparams
-# gorm.io/driver/postgres v1.5.3
+# google.golang.org/genproto/googleapis/rpc v0.0.0-20231106174013-bbf56f31fb17
+## explicit; go 1.19
+google.golang.org/genproto/googleapis/rpc/status
+# google.golang.org/grpc v1.59.0
+## explicit; go 1.19
+google.golang.org/grpc
+google.golang.org/grpc/attributes
+google.golang.org/grpc/backoff
+google.golang.org/grpc/balancer
+google.golang.org/grpc/balancer/base
+google.golang.org/grpc/balancer/grpclb/state
+google.golang.org/grpc/balancer/roundrobin
+google.golang.org/grpc/binarylog/grpc_binarylog_v1
+google.golang.org/grpc/channelz
+google.golang.org/grpc/codes
+google.golang.org/grpc/connectivity
+google.golang.org/grpc/credentials
+google.golang.org/grpc/credentials/insecure
+google.golang.org/grpc/encoding
+google.golang.org/grpc/encoding/proto
+google.golang.org/grpc/grpclog
+google.golang.org/grpc/internal
+google.golang.org/grpc/internal/backoff
+google.golang.org/grpc/internal/balancer/gracefulswitch
+google.golang.org/grpc/internal/balancerload
+google.golang.org/grpc/internal/binarylog
+google.golang.org/grpc/internal/buffer
+google.golang.org/grpc/internal/channelz
+google.golang.org/grpc/internal/credentials
+google.golang.org/grpc/internal/envconfig
+google.golang.org/grpc/internal/grpclog
+google.golang.org/grpc/internal/grpcrand
+google.golang.org/grpc/internal/grpcsync
+google.golang.org/grpc/internal/grpcutil
+google.golang.org/grpc/internal/idle
+google.golang.org/grpc/internal/metadata
+google.golang.org/grpc/internal/pretty
+google.golang.org/grpc/internal/resolver
+google.golang.org/grpc/internal/resolver/dns
+google.golang.org/grpc/internal/resolver/passthrough
+google.golang.org/grpc/internal/resolver/unix
+google.golang.org/grpc/internal/serviceconfig
+google.golang.org/grpc/internal/status
+google.golang.org/grpc/internal/syscall
+google.golang.org/grpc/internal/transport
+google.golang.org/grpc/internal/transport/networktype
+google.golang.org/grpc/keepalive
+google.golang.org/grpc/metadata
+google.golang.org/grpc/peer
+google.golang.org/grpc/resolver
+google.golang.org/grpc/serviceconfig
+google.golang.org/grpc/stats
+google.golang.org/grpc/status
+google.golang.org/grpc/tap
+# google.golang.org/protobuf v1.31.0
+## explicit; go 1.11
+google.golang.org/protobuf/encoding/protojson
+google.golang.org/protobuf/encoding/prototext
+google.golang.org/protobuf/encoding/protowire
+google.golang.org/protobuf/internal/descfmt
+google.golang.org/protobuf/internal/descopts
+google.golang.org/protobuf/internal/detrand
+google.golang.org/protobuf/internal/encoding/defval
+google.golang.org/protobuf/internal/encoding/json
+google.golang.org/protobuf/internal/encoding/messageset
+google.golang.org/protobuf/internal/encoding/tag
+google.golang.org/protobuf/internal/encoding/text
+google.golang.org/protobuf/internal/errors
+google.golang.org/protobuf/internal/filedesc
+google.golang.org/protobuf/internal/filetype
+google.golang.org/protobuf/internal/flags
+google.golang.org/protobuf/internal/genid
+google.golang.org/protobuf/internal/impl
+google.golang.org/protobuf/internal/order
+google.golang.org/protobuf/internal/pragma
+google.golang.org/protobuf/internal/set
+google.golang.org/protobuf/internal/strs
+google.golang.org/protobuf/internal/version
+google.golang.org/protobuf/proto
+google.golang.org/protobuf/reflect/protodesc
+google.golang.org/protobuf/reflect/protoreflect
+google.golang.org/protobuf/reflect/protoregistry
+google.golang.org/protobuf/runtime/protoiface
+google.golang.org/protobuf/runtime/protoimpl
+google.golang.org/protobuf/types/descriptorpb
+google.golang.org/protobuf/types/known/anypb
+google.golang.org/protobuf/types/known/durationpb
+google.golang.org/protobuf/types/known/timestamppb
+# gorm.io/driver/postgres v1.5.4
 ## explicit; go 1.18
 gorm.io/driver/postgres
 # gorm.io/gorm v1.25.5
