@@ -188,6 +188,9 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 	// запишем NULL в пустые колонки
 	for f := 0; f < len(MassOmit); f++ {
 		ColumnName := MassOmit[f]
+		if ColumnName == "CreatedAt" {
+			continue
+		}
 		tx = db.Model(&m).Update(ColumnName, gorm.Expr("NULL"))
 
 		err = tx.Error
