@@ -231,6 +231,7 @@ func DeleteImportModel(s string) string {
 
 	pos1 := strings.Index(Otvet, ImportName+".")
 	if pos1 < 0 {
+		Otvet = strings.ReplaceAll(Otvet, `"`+ModelURL+`"\n`, "")
 		Otvet = strings.ReplaceAll(Otvet, `"`+ModelURL+`"`, "")
 	}
 
