@@ -1,9 +1,9 @@
 #---------------------Database settings---------------------
 #DB_HOST - Database server name or ip-address. Only Postgres SQL
-DB_HOST="10.1.9.23"
+DB_HOST=""
 
 #DB_NAME - Database table name
-DB_NAME="claim"
+DB_NAME=""
 
 #DB_SCHEME - Database schema name
 DB_SCHEME="public"
@@ -12,10 +12,10 @@ DB_SCHEME="public"
 DB_PORT="5432"
 
 #DB_USER - Database login (user)
-DB_USER="dev"
+DB_USER=""
 
 #DB_PASSWORD - Database login password
-DB_PASSWORD="like8Day"
+DB_PASSWORD=""
 
 #INCLUDE_TABLES - table name filter. Regular expression
 INCLUDE_TABLES=""
