@@ -3,7 +3,7 @@ module github.com/ManyakRus/crud_generator
 go 1.20
 
 require (
-	github.com/ManyakRus/starter v0.0.0-20231114124845-a0ceb75547b8
+	github.com/ManyakRus/starter v0.0.0-20231115082945-e2f3f8f5ed62
 	github.com/bxcodec/faker/v3 v3.8.1
 	github.com/davecgh/go-spew v1.1.1
 	github.com/iancoleman/strcase v0.3.0
@@ -13,7 +13,6 @@ require (
 	github.com/nats-io/nats.go v1.31.0
 	github.com/ompluscator/dynamic-struct v1.4.0
 	github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e
-	github.com/vmihailenco/msgpack/v5 v5.4.1
 	gitlab.aescorp.ru/dsp_dev/claim/sync_service v1.2.24
 	golang.org/x/tools v0.15.0
 	gorm.io/gorm v1.25.5
@@ -32,6 +31,7 @@ require (
 	github.com/nats-io/nkeys v0.4.6 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/nats-rpc/nrpc v0.0.0-20231018091755-18e69326f052 // indirect
+	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	golang.org/x/crypto v0.15.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect

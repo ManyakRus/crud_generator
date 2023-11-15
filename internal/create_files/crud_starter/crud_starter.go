@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// CreateAllFiles - создаёт все файлы в папке grpc
+// CreateAllFiles - создаёт все файлы в папке crud_starter
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
@@ -41,15 +41,6 @@ func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	//FilenameTemplateCrudStarter := DirTemplatesCrudStarter + "crud_starter.go_"
 	DirReadyCrudStarter := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 	FilenameReadyCrudStarter := DirReadyCrudStarter + "crud_starter.go"
-
-	//bytes, err := os.ReadFile(FilenameTemplateCrudStarter)
-	//if err != nil {
-	//	log.Panic("ReadFile() ", FilenameTemplateCrudStarter, " error: ", err)
-	//}
-	//TextCrudStarter := string(bytes)
-	//
-	////заменим название сервиса
-	//TextCrudStarter = strings.ReplaceAll(TextCrudStarter, config.Settings.TEMPLATE_SERVICE_NAME, config.Settings.SERVICE_NAME)
 
 	TextCrudStarter := config.Settings.TEXT_MODULE_GENERATED + `package crud_starter`
 

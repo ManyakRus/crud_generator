@@ -1,7 +1,0 @@
-package constants
-
-const CONNECTION_ID_TEST = 3
-
-const TIMEOUT_DB_SECONDS = 30
-
-const TEXT_RECORD_NOT_FOUND = "record not found"

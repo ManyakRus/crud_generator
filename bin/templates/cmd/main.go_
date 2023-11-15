@@ -18,19 +18,10 @@ func StartApp() {
 	stopapp.StartWaitStop()
 	crud_starter.InitCrudTransport_DB()
 	postgres_gorm.StartDB()
-	StartGRPSServer()
-	StartNRPSServer()
+	server_grpc.Start()
+	server_nrpc.Start()
 
 	stopapp.GetWaitGroup_Main().Wait()
 
 }
 
-// StartGRPSServer - запускает GRPC server
-func StartGRPSServer() {
-	server_grpc.Start()
-}
-
-// StartNRPSServer - запускает GRPC server
-func StartNRPSServer() {
-	server_nrpc.Start()
-}

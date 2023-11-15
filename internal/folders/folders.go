@@ -9,7 +9,22 @@ import (
 )
 
 // CreateFolder - создаёт папку на диске
-func CreateFolder(FilenameFull string, FilePermissions uint32) error {
+func CreateFolder(FoldernameFull string) {
+	var err error
+
+	ok, err := micro.FileExists(FoldernameFull)
+	if ok == false || err != nil {
+		err = CreateFolder_err(FoldernameFull, 0777)
+		if err != nil {
+			log.Panic("CreateFolder_err() ", FoldernameFull, " error: ", err)
+		}
+		log.Info("CreateFolder_err() ", FoldernameFull)
+	}
+
+}
+
+// CreateFolder_err - создаёт папку на диске
+func CreateFolder_err(FilenameFull string, FilePermissions uint32) error {
 	var err error
 
 	FileMode1 := os.FileMode(FilePermissions)
@@ -53,44 +68,44 @@ func CreateAllFolders() {
 	Filename := dir + config.Settings.SERVICE_NAME
 	ok, err := micro.FileExists(Filename)
 	if ok == false || err != nil {
-		err = CreateFolder(Filename, 0777)
+		err = CreateFolder_err(Filename, 0777)
 		if err != nil {
-			log.Panic("CreateFolder() ", Filename, " error: ", err)
+			log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 		}
-		log.Info("CreateFolder() ", Filename)
+		log.Info("CreateFolder_err() ", Filename)
 	}
 
 	//
 	Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "internal"
 	ok, err = micro.FileExists(Filename)
 	if ok == false || err != nil {
-		err = CreateFolder(Filename, 0777)
+		err = CreateFolder_err(Filename, 0777)
 		if err != nil {
-			log.Panic("CreateFolder() ", Filename, " error: ", err)
+			log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 		}
-		log.Info("CreateFolder() ", Filename)
+		log.Info("CreateFolder_err() ", Filename)
 	}
 
 	//
 	//Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "pkg"
 	//ok, err = micro.FileExists(Filename)
 	//if ok == false || err != nil {
-	//	err = CreateFolder(Filename, 0777)
+	//	err = CreateFolder_err(Filename, 0777)
 	//	if err != nil {
-	//		log.Panic("CreateFolder() ", Filename, " error: ", err)
+	//		log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 	//	}
-	//	log.Info("CreateFolder() ", Filename)
+	//	log.Info("CreateFolder_err() ", Filename)
 	//}
 
 	//model
 	Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_MODEL
 	ok, err = micro.FileExists(Filename)
 	if ok == false || err != nil {
-		err = CreateFolder(Filename, 0777)
+		err = CreateFolder_err(Filename, 0777)
 		if err != nil {
-			log.Panic("CreateFolder() ", Filename, " error: ", err)
+			log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 		}
-		log.Info("CreateFolder() ", Filename)
+		log.Info("CreateFolder_err() ", Filename)
 	}
 
 	if config.Settings.NEED_CREATE_DB == true {
@@ -98,22 +113,22 @@ func CreateAllFolders() {
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_DB
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
-			err = CreateFolder(Filename, 0777)
+			err = CreateFolder_err(Filename, 0777)
 			if err != nil {
-				log.Panic("CreateFolder() ", Filename, " error: ", err)
+				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 			}
-			log.Info("CreateFolder() ", Filename)
+			log.Info("CreateFolder_err() ", Filename)
 		}
 
 		//crud_starter
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
-			err = CreateFolder(Filename, 0777)
+			err = CreateFolder_err(Filename, 0777)
 			if err != nil {
-				log.Panic("CreateFolder() ", Filename, " error: ", err)
+				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 			}
-			log.Info("CreateFolder() ", Filename)
+			log.Info("CreateFolder_err() ", Filename)
 		}
 
 	}
@@ -123,44 +138,44 @@ func CreateAllFolders() {
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
-			err = CreateFolder(Filename, 0777)
+			err = CreateFolder_err(Filename, 0777)
 			if err != nil {
-				log.Panic("CreateFolder() ", Filename, " error: ", err)
+				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 			}
-			log.Info("CreateFolder() ", Filename)
+			log.Info("CreateFolder_err() ", Filename)
 		}
 
 		//grpc_server
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
-			err = CreateFolder(Filename, 0777)
+			err = CreateFolder_err(Filename, 0777)
 			if err != nil {
-				log.Panic("CreateFolder() ", Filename, " error: ", err)
+				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 			}
-			log.Info("CreateFolder() ", Filename)
+			log.Info("CreateFolder_err() ", Filename)
 		}
 
 		//grpc client
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
-			err = CreateFolder(Filename, 0777)
+			err = CreateFolder_err(Filename, 0777)
 			if err != nil {
-				log.Panic("CreateFolder() ", Filename, " error: ", err)
+				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 			}
-			log.Info("CreateFolder() ", Filename)
+			log.Info("CreateFolder_err() ", Filename)
 		}
 
 		//grpc_proto
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile() + "grpc_proto"
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
-			err = CreateFolder(Filename, 0777)
+			err = CreateFolder_err(Filename, 0777)
 			if err != nil {
-				log.Panic("CreateFolder() ", Filename, " error: ", err)
+				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 			}
-			log.Info("CreateFolder() ", Filename)
+			log.Info("CreateFolder_err() ", Filename)
 		}
 	}
 
@@ -169,44 +184,44 @@ func CreateAllFolders() {
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
-			err = CreateFolder(Filename, 0777)
+			err = CreateFolder_err(Filename, 0777)
 			if err != nil {
-				log.Panic("CreateFolder() ", Filename, " error: ", err)
+				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 			}
-			log.Info("CreateFolder() ", Filename)
+			log.Info("CreateFolder_err() ", Filename)
 		}
 
 		//server_nrpc
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
-			err = CreateFolder(Filename, 0777)
+			err = CreateFolder_err(Filename, 0777)
 			if err != nil {
-				log.Panic("CreateFolder() ", Filename, " error: ", err)
+				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 			}
-			log.Info("CreateFolder() ", Filename)
+			log.Info("CreateFolder_err() ", Filename)
 		}
 
 		//nrpc client
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
-			err = CreateFolder(Filename, 0777)
+			err = CreateFolder_err(Filename, 0777)
 			if err != nil {
-				log.Panic("CreateFolder() ", Filename, " error: ", err)
+				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 			}
-			log.Info("CreateFolder() ", Filename)
+			log.Info("CreateFolder_err() ", Filename)
 		}
 
 		//grpc_proto
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile() + "grpc_proto"
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
-			err = CreateFolder(Filename, 0777)
+			err = CreateFolder_err(Filename, 0777)
 			if err != nil {
-				log.Panic("CreateFolder() ", Filename, " error: ", err)
+				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
 			}
-			log.Info("CreateFolder() ", Filename)
+			log.Info("CreateFolder_err() ", Filename)
 		}
 	}
 

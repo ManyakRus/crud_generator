@@ -406,8 +406,8 @@ func FindColumnTypeGoImport(TextModel string, Table1 *types.Table, Column1 *type
 
 	//тип колонки из БД или из convert_id.json
 	TableName := Table1.Name
-	IDName := Column1.NameGo
-	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+	//IDName := Column1.NameGo
+	TextConvert, ok := types.MapConvertID[TableName+"."+TableName]
 	if ok == false {
 		return TextModel, Otvet
 	}

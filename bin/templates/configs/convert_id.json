@@ -1,11 +1,11 @@
 {
-  "lawsuit_payments.ID": "alias.PaymentId",
-  "invoice_debt_type_stats.InvoiceID": "alias.InvoiceId",
-  "invoice_debt_type_stats.LawsuitID": "alias.LawsuitId",
-  "contract_black_items.ContractNumber": "alias.ContractNumber",
-  "contract_white_items.ContractNumber": "alias.ContractNumber",
-  "lawsuits.NumberClaim": "alias.ClaimNumber",
-  "lawsuits.Number": "alias.LawsuitNumber",
-  "contracts.Number": "alias.ContractNumber"
+  "lawsuit_payments.id": "alias.PaymentId",
+  "invoice_debt_type_stats.invoice_id": "alias.InvoiceId",
+  "invoice_debt_type_stats.lawsuit_id": "alias.LawsuitId",
+  "contract_black_items.contract_number": "alias.ContractNumber",
+  "contract_white_items.contract_number": "alias.ContractNumber",
+  "lawsuits.number_claim": "alias.ClaimNumber",
+  "lawsuits.number": "alias.LawsuitNumber",
+  "contracts.number": "alias.ContractNumber"
 }
 

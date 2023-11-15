@@ -39,8 +39,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792 h1:bxwxD0H3kSUAH3uNk/b74gkImcUiP7dyibmMoVwk338=
 github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792/go.mod h1:OUyxCVbPW/2lC1e6cM7Am941SJiC88BhNnb24x2R3a8=
-github.com/ManyakRus/starter v0.0.0-20231114124845-a0ceb75547b8 h1:Fh5RL2IlfmTA5gZjLyBICNSfVMPmqMUxQ0FTtN/Es/Y=
-github.com/ManyakRus/starter v0.0.0-20231114124845-a0ceb75547b8/go.mod h1:a+wYuguDadLR6xaj9fN8m6acWhUjzPuxaPtZfJhMNW4=
+github.com/ManyakRus/starter v0.0.0-20231115082945-e2f3f8f5ed62 h1:ajjWHc+dktmSXEbfVdZqWThYBfhGqIdPTWQUTy/H5p0=
+github.com/ManyakRus/starter v0.0.0-20231115082945-e2f3f8f5ed62/go.mod h1:a+wYuguDadLR6xaj9fN8m6acWhUjzPuxaPtZfJhMNW4=
 github.com/alecthomas/kingpin/v2 v2.3.1/go.mod h1:oYL5vtsvEHZGHxU7DMp32Dvx+qL+ptGn6lWaot2vCNE=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=

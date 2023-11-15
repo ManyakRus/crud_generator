@@ -1,7 +1,6 @@
 package crud_starter
 
-import (
-)
+import ()
 
 // initCrudTransport_manual_DB - заполняет объекты crud для работы с БД напрямую
 func initCrudTransport_manual_DB() {

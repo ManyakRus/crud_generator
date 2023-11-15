@@ -144,7 +144,7 @@ func DeleteLineWithComment(Text, FuncName string) string {
 	return Otvet
 }
 
-// FindPrimaryKeyNameTypeGo - возвращает наименование колонки PrimaryKey
+// FindPrimaryKeyNameTypeGo - возвращает наименование и тип golang колонки PrimaryKey
 func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
 	Otvet := ""
 	Type := ""
@@ -152,6 +152,20 @@ func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
 	for _, Column1 := range Table1.MapColumns {
 		if Column1.IsIdentity == true {
 			return Column1.NameGo, Column1.TypeGo
+		}
+	}
+
+	return Otvet, Type
+}
+
+// FindPrimaryKeyNameType - возвращает наименование и тип БД колонки PrimaryKey
+func FindPrimaryKeyNameType(Table1 *types.Table) (string, string) {
+	Otvet := ""
+	Type := ""
+
+	for _, Column1 := range Table1.MapColumns {
+		if Column1.IsIdentity == true {
+			return Column1.Name, Column1.Type
 		}
 	}
 
@@ -238,10 +252,29 @@ func DeleteImportModel(s string) string {
 	return Otvet
 }
 
+// FindModelURL - возвращает URL репозитория с пакетом "model"
 func FindModelURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_MODEL
+
+	return Otvet
+}
+
+// FindGRPCServerlURL - возвращает URL репозитория с пакетом "server_grpc"
+func FindGRPCServerlURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER
+
+	return Otvet
+}
+
+// FindNRPCServerlURL - возвращает URL репозитория с пакетом "server_nrpc"
+func FindNRPCServerlURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER
 
 	return Otvet
 }

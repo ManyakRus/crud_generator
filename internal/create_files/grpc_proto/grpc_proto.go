@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// CreateAllFiles - создаёт все файлы в папке grpc
+// CreateAllFiles - создаёт все файлы в папке grpc proto
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
