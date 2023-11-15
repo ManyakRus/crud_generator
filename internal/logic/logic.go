@@ -4,10 +4,12 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/db"
+	"github.com/ManyakRus/crud_generator/internal/create_files/generation_code_sh"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_proto"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_server"
 	"github.com/ManyakRus/crud_generator/internal/create_files/main_file"
+	"github.com/ManyakRus/crud_generator/internal/create_files/makefile"
 	"github.com/ManyakRus/crud_generator/internal/create_files/model"
 	"github.com/ManyakRus/crud_generator/internal/create_files/nrpc_client"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_starter"
@@ -101,20 +103,17 @@ func StartFillAll() error {
 		return err
 	}
 
+	//makefile
+	err = makefile.CreateAllFiles()
+	if err != nil {
+		return err
+	}
+
+	//generation_code.sh
+	err = generation_code_sh.CreateAllFiles()
+	if err != nil {
+		return err
+	}
+
 	return err
 }
-
-//// MassFromMapColumns - возвращает Slice из Map
-//func MassFromMapColumns(MapColumns map[string]types.Column) []types.Column {
-//	Otvet := make([]types.Column, 0)
-//
-//	for _, v := range MapColumns {
-//		Otvet = append(Otvet, v)
-//	}
-//
-//	sort.Slice(Otvet[:], func(i, j int) bool {
-//		return Otvet[i].OrderNumber < Otvet[j].OrderNumber
-//	})
-//
-//	return Otvet
-//}

@@ -71,24 +71,27 @@ func CreateFiles(Table1 *types.Table) error {
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 	}
-	TextDB := string(bytes)
+	TextNRPCClient := string(bytes)
 
 	//создание текста
 	ModelName := Table1.NameGo
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
-		//TextDB = DeleteFuncDeleteCtx(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncRestore(TextDB, ModelName, Table1)
-		//TextDB = DeleteFuncRestoreCtx(TextDB, ModelName, Table1)
+		TextNRPCClient = DeleteFuncDelete(TextNRPCClient, ModelName, Table1)
+		//TextNRPCClient = DeleteFuncDeleteCtx(TextNRPCClient, ModelName, Table1)
+		TextNRPCClient = DeleteFuncRestore(TextNRPCClient, ModelName, Table1)
+		//TextNRPCClient = DeleteFuncRestoreCtx(TextNRPCClient, ModelName, Table1)
 	}
-	TextDB = DeleteFuncFind_byExtID(TextDB, ModelName, Table1)
+	TextNRPCClient = DeleteFuncFind_byExtID(TextNRPCClient, ModelName, Table1)
+
+	//замена импортов на новые URL
+	TextNRPCClient = create_files.ReplaceServiceURLImports(TextNRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
 
 	return err
 }
@@ -122,34 +125,37 @@ func CreateTestFiles(Table1 *types.Table) error {
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 	}
-	TextDB := string(bytes)
+	TextNRPCClient := string(bytes)
 
 	//создание текста
 	ModelName := Table1.NameGo
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncTestDelete(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncTestRestore(TextDB, ModelName, Table1)
+		TextNRPCClient = DeleteFuncTestDelete(TextNRPCClient, ModelName, Table1)
+		TextNRPCClient = DeleteFuncTestRestore(TextNRPCClient, ModelName, Table1)
 	}
-	TextDB = DeleteFuncTestFind_byExtID(TextDB, ModelName, Table1)
+	TextNRPCClient = DeleteFuncTestFind_byExtID(TextNRPCClient, ModelName, Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
 		TextFind := "const Postgres_ID_Test = "
-		TextDB = strings.ReplaceAll(TextDB, TextFind+"1", TextFind+Table1.IDMinimum)
+		TextNRPCClient = strings.ReplaceAll(TextNRPCClient, TextFind+"1", TextFind+Table1.IDMinimum)
 	}
 
 	// замена ID на PrimaryKey
-	TextDB = create_files.ReplacePrimaryKeyID(TextDB, Table1)
+	TextNRPCClient = create_files.ReplacePrimaryKeyID(TextNRPCClient, Table1)
 
 	//SkipNow()
-	TextDB = create_files.AddSkipNow(TextDB, Table1)
+	TextNRPCClient = create_files.AddSkipNow(TextNRPCClient, Table1)
+
+	//замена импортов на новые URL
+	TextNRPCClient = create_files.ReplaceServiceURLImports(TextNRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
 
 	return err
 }

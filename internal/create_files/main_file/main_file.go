@@ -64,6 +64,9 @@ func CreateFileMain() error {
 		}
 	}
 
+	//замена импортов на новые URL
+	TextMain = create_files.ReplaceServiceURLImports(TextMain)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextMain), constants.FILE_PERMISSIONS)
 

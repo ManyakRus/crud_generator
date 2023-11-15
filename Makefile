@@ -1,7 +1,7 @@
 SERVICENAME=crud_generator
 SERVICEURL=github.com/ManyakRus/$(SERVICENAME)
 
-FILEMAIN=./internal/main.go
+FILEMAIN=./cmd/$(SERVICENAME)/main.go
 FILEAPP=./bin/$(SERVICENAME)
 
 NEW_REPO=$(SERVICENAME)
@@ -11,7 +11,7 @@ run:
 	clear
 	go build -race -o $(FILEAPP) $(FILEMAIN)
 	#	cd ./bin && \
-	./bin/app_race
+	./bin/$(SERVICENAME)
 mod:
 	clear
 	go get -u ./...
@@ -21,7 +21,7 @@ mod:
 build:
 	clear
 	go build -race -o $(FILEAPP) $(FILEMAIN)
-	cd ./cmd && \
+	cd ./scripts && \
 	./VersionToFile.py
 
 lint:

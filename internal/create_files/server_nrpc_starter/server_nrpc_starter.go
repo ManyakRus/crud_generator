@@ -8,7 +8,6 @@ import (
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"os"
-	"strings"
 )
 
 // CreateAllFiles - создаёт все файлы в папке grpc proto
@@ -52,18 +51,26 @@ func CreateServerGRPCStarter() error {
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		//заменим имя сервиса на новое
-		ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
-		ServiceName := config.Settings.SERVICE_NAME
-		TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, ServiceNameTemplate, ServiceName)
-		TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+		//ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+		//ServiceName := config.Settings.SERVICE_NAME
+		//TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, ServiceNameTemplate, ServiceName)
+		//TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
 		TextNRPCStarter = create_files.DeleteTemplateRepositoryImports(TextNRPCStarter)
 
-		ProtoURL := create_files.FindProtoURL() + "/grpc_proto"
-		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, ProtoURL)
+		//ProtoURL := create_files.FindProtoURL() + "/grpc_proto"
+		//TextNRPCStarter = create_files.AddImport(TextNRPCStarter, ProtoURL)
+		//
+		//GRPCServer_URL := create_files.FindGRPCServerlURL()
+		//TextNRPCStarter = create_files.AddImport(TextNRPCStarter, GRPCServer_URL)
 
-		GRPCServer_URL := create_files.FindGRPCServerlURL()
-		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, GRPCServer_URL)
+		//Proto URL
+		RepositoryProtoURL := create_files.FindGRPCProtoURL()
+		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, RepositoryProtoURL)
+
+		//server grpc URL
+		RepositoryServerGRPCURL := create_files.FindGRPCServerlURL()
+		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, RepositoryServerGRPCURL)
 	}
 
 	//запись файла

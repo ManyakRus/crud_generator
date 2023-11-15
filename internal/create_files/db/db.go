@@ -95,6 +95,9 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = ReplaceText_is_deleted_deleted_at(TextDB, Table1)
 	TextDB = create_files.DeleteImportModel(TextDB)
 
+	//замена импортов на новые URL
+	TextDB = create_files.ReplaceServiceURLImports(TextDB)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
 
@@ -156,6 +159,9 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	// замена ID на PrimaryKey
 	TextDB = create_files.ReplacePrimaryKeyID(TextDB, Table1)
+
+	//замена импортов на новые URL
+	TextDB = create_files.ReplaceServiceURLImports(TextDB)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)

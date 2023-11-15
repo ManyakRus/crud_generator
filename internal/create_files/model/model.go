@@ -104,6 +104,9 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
 	TextModel = create_files.DeleteImportModel(TextModel)
 
+	//замена импортов на новые URL
+	TextModel = create_files.ReplaceServiceURLImports(TextModel)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
 
@@ -142,6 +145,9 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 
 	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
 	TextModel = create_files.DeleteImportModel(TextModel)
+
+	//замена импортов на новые URL
+	TextModel = create_files.ReplaceServiceURLImports(TextModel)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)

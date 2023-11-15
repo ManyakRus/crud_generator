@@ -62,27 +62,39 @@ func CreateFiles(Table1 *types.Table) error {
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCServer, " error: ", err)
 	}
-	TextDB := string(bytes)
+	TextGRPCServer := string(bytes)
 
 	//создание текста
 	ModelName := Table1.NameGo
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		if config.Settings.HAS_IS_DELETED == true {
-			TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
-			TextDB = DeleteFuncDeleteCtx(TextDB, ModelName, Table1)
-			TextDB = DeleteFuncRestore(TextDB, ModelName, Table1)
-			TextDB = DeleteFuncRestoreCtx(TextDB, ModelName, Table1)
+			TextGRPCServer = DeleteFuncDelete(TextGRPCServer, ModelName, Table1)
+			TextGRPCServer = DeleteFuncDeleteCtx(TextGRPCServer, ModelName, Table1)
+			TextGRPCServer = DeleteFuncRestore(TextGRPCServer, ModelName, Table1)
+			TextGRPCServer = DeleteFuncRestoreCtx(TextGRPCServer, ModelName, Table1)
 		}
-		TextDB = DeleteFuncFind_byExtID(TextDB, ModelName, Table1)
-		TextDB = ConvertID(TextDB, Table1)
+		TextGRPCServer = DeleteFuncFind_byExtID(TextGRPCServer, ModelName, Table1)
+		TextGRPCServer = ConvertID(TextGRPCServer, Table1)
+
+		//замена импортов на новые URL
+		//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
+		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+
+		//proto
+		RepositoryGRPCProtoURL := create_files.FindGRPCProtoURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, RepositoryGRPCProtoURL)
+
+		//model
+		RepositoryModelURL := create_files.FindModelTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, RepositoryModelURL)
 	}
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
 
 	return err
 }
@@ -107,34 +119,37 @@ func CreateTestFiles(Table1 *types.Table) error {
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCServer, " error: ", err)
 	}
-	TextDB := string(bytes)
+	TextGRPCServer := string(bytes)
 
 	//создание текста
 	ModelName := Table1.NameGo
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncTestDelete(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncTestRestore(TextDB, ModelName, Table1)
+		TextGRPCServer = DeleteFuncTestDelete(TextGRPCServer, ModelName, Table1)
+		TextGRPCServer = DeleteFuncTestRestore(TextGRPCServer, ModelName, Table1)
 	}
-	TextDB = DeleteFuncTestFind_byExtID(TextDB, ModelName, Table1)
+	TextGRPCServer = DeleteFuncTestFind_byExtID(TextGRPCServer, ModelName, Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
 		TextFind := "const " + ModelName + "_ID_Test = "
-		TextDB = strings.ReplaceAll(TextDB, TextFind+"1", TextFind+Table1.IDMinimum)
+		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, TextFind+"1", TextFind+Table1.IDMinimum)
 	}
 
 	// замена ID на PrimaryKey
-	TextDB = create_files.ReplacePrimaryKeyID(TextDB, Table1)
+	TextGRPCServer = create_files.ReplacePrimaryKeyID(TextGRPCServer, Table1)
 
 	//SkipNow()
-	TextDB = create_files.AddSkipNow(TextDB, Table1)
+	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)
+
+	//замена импортов на новые URL
+	TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
 
 	return err
 }

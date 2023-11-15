@@ -51,6 +51,8 @@ func CreateServerGRPCStarter() error {
 	folders.CreateFolder(DirReadyServerGRPC)
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCStarter = create_files.DeleteTemplateRepositoryImports(TextGRPCStarter)
+
 		//заменим имя сервиса на новое
 		ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
 		ServiceName := config.Settings.SERVICE_NAME
@@ -63,8 +65,8 @@ func CreateServerGRPCStarter() error {
 		TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, ServiceNameTemplate, ServiceName)
 		TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
-		TextGRPCStarter = create_files.DeleteTemplateRepositoryImports(TextGRPCStarter)
-		ProtoURL := create_files.FindProtoURL() + "/grpc_proto"
+		//proto
+		ProtoURL := create_files.FindGRPCProtoURL()
 		TextGRPCStarter = create_files.AddImport(TextGRPCStarter, ProtoURL)
 	}
 

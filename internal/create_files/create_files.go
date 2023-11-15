@@ -270,6 +270,24 @@ func FindGRPCServerlURL() string {
 	return Otvet
 }
 
+// FindGRPCClientURL - возвращает URL репозитория с пакетом "client_grpc"
+func FindGRPClientURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT
+
+	return Otvet
+}
+
+// FindGRPCConstantsURL - возвращает URL репозитория с пакетом "client_grpc"
+func FindGRPCConstantsURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC + "/" + "constants"
+
+	return Otvet
+}
+
 // FindNRPCServerlURL - возвращает URL репозитория с пакетом "server_nrpc"
 func FindNRPCServerlURL() string {
 	Otvet := ""
@@ -279,11 +297,29 @@ func FindNRPCServerlURL() string {
 	return Otvet
 }
 
-// FindProtoURL - возвращает URL репозитория с пакетом "proto"
+// FindProtoURL - возвращает URL репозитория с файлом .proto
 func FindProtoURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO
+
+	return Otvet
+}
+
+// FindGRPCProtoURL - возвращает URL репозитория с пакетом "grpc_proto"
+func FindGRPCProtoURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + "/" + "grpc_proto"
+
+	return Otvet
+}
+
+// FindModelTableURL - возвращает URL репозитория model для таблицы TableName
+func FindModelTableURL(TableName string) string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_MODEL + "/" + TableName
 
 	return Otvet
 }
@@ -425,6 +461,36 @@ func DeleteTemplateRepositoryImports(Text string) string {
 	Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+1:]
 
 	Otvet = DeleteTemplateRepositoryImports(Otvet)
+
+	return Otvet
+}
+
+// ReplaceServiceURLImports - заменяет URL репозитория шаблона на URL репозитория сервиса
+func ReplaceServiceURLImports(Text string) string {
+	Otvet := Text
+
+	if config.Settings.SERVICE_REPOSITORY_URL == "" {
+		return Otvet
+	}
+
+	if config.Settings.TEMPLATE_REPOSITORY_URL == "" {
+		return Otvet
+	}
+
+	if config.Settings.USE_DEFAULT_TEMPLATE == false {
+		return Otvet
+	}
+
+	//
+	TextFind := "import ("
+	pos1 := strings.Index(Otvet, TextFind)
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	TEMPLATE_REPOSITORY_URL := config.Settings.TEMPLATE_REPOSITORY_URL
+	SERVICE_REPOSITORY_URL := config.Settings.SERVICE_REPOSITORY_URL
+	Otvet = strings.ReplaceAll(Otvet, TEMPLATE_REPOSITORY_URL, SERVICE_REPOSITORY_URL)
 
 	return Otvet
 }

@@ -158,16 +158,16 @@ func CreateAllFolders() {
 			log.Info("CreateFolder_err() ", Filename)
 		}
 
-		//grpc client
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT
-		ok, err = micro.FileExists(Filename)
-		if ok == false || err != nil {
-			err = CreateFolder_err(Filename, 0777)
-			if err != nil {
-				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-			}
-			log.Info("CreateFolder_err() ", Filename)
-		}
+		////grpc client
+		//Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT
+		//ok, err = micro.FileExists(Filename)
+		//if ok == false || err != nil {
+		//	err = CreateFolder_err(Filename, 0777)
+		//	if err != nil {
+		//		log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+		//	}
+		//	log.Info("CreateFolder_err() ", Filename)
+		//}
 
 		//grpc_proto
 		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + "grpc_proto"

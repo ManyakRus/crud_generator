@@ -16,3 +16,5 @@
 /bin/ready/pkg/model/
 /bin/ready/
 /bin/sync_service/
+/bin/sync_service_test/
+/bin/crud_service/

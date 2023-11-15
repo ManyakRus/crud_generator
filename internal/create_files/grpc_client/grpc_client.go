@@ -51,8 +51,8 @@ func CreateFiles(Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
-	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
+	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
+	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 
 	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client.go_"
 	TableName := strings.ToLower(Table1.Name)
@@ -72,24 +72,48 @@ func CreateFiles(Table1 *types.Table) error {
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
-	TextDB := string(bytes)
+	TextGRPCClient := string(bytes)
 
 	//создание текста
 	ModelName := Table1.NameGo
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncDelete(TextDB, ModelName, Table1)
-		//TextDB = DeleteFuncDeleteCtx(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncRestore(TextDB, ModelName, Table1)
-		//TextDB = DeleteFuncRestoreCtx(TextDB, ModelName, Table1)
+		TextGRPCClient = DeleteFuncDelete(TextGRPCClient, ModelName, Table1)
+		//TextGRPCClient = DeleteFuncDeleteCtx(TextGRPCClient, ModelName, Table1)
+		TextGRPCClient = DeleteFuncRestore(TextGRPCClient, ModelName, Table1)
+		//TextGRPCClient = DeleteFuncRestoreCtx(TextGRPCClient, ModelName, Table1)
 	}
-	TextDB = DeleteFuncFind_byExtID(TextDB, ModelName, Table1)
+	TextGRPCClient = DeleteFuncFind_byExtID(TextGRPCClient, ModelName, Table1)
+
+	//замена импортов на новые URL
+	//TextGRPCClient = create_files.ReplaceServiceURLImports(TextGRPCClient)
+
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
+		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
+
+		//proto
+		RepositoryGRPCProtoURL := create_files.FindGRPCProtoURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCProtoURL)
+
+		//model
+		RepositoryModelURL := create_files.FindModelTableURL(TableName)
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryModelURL)
+
+		//grpc client
+		RepositoryGRPCClientlURL := create_files.FindGRPClientURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCClientlURL)
+
+		//constants
+		RepositoryGRPCConstantsURL := create_files.FindGRPCConstantsURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCConstantsURL)
+	}
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
 
 	return err
 }
@@ -102,8 +126,8 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
-	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
+	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
+	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 
 	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client_test.go_"
 	TableName := strings.ToLower(Table1.Name)
@@ -123,34 +147,37 @@ func CreateTestFiles(Table1 *types.Table) error {
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
-	TextDB := string(bytes)
+	TextGRPCClient := string(bytes)
 
 	//создание текста
 	ModelName := Table1.NameGo
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncTestDelete(TextDB, ModelName, Table1)
-		TextDB = DeleteFuncTestRestore(TextDB, ModelName, Table1)
+		TextGRPCClient = DeleteFuncTestDelete(TextGRPCClient, ModelName, Table1)
+		TextGRPCClient = DeleteFuncTestRestore(TextGRPCClient, ModelName, Table1)
 	}
-	TextDB = DeleteFuncTestFind_byExtID(TextDB, ModelName, Table1)
+	TextGRPCClient = DeleteFuncTestFind_byExtID(TextGRPCClient, ModelName, Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
 		TextFind := "const Postgres_ID_Test = "
-		TextDB = strings.ReplaceAll(TextDB, TextFind+"1", TextFind+Table1.IDMinimum)
+		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, TextFind+"1", TextFind+Table1.IDMinimum)
 	}
 
 	// замена ID на PrimaryKey
-	TextDB = create_files.ReplacePrimaryKeyID(TextDB, Table1)
+	TextGRPCClient = create_files.ReplacePrimaryKeyID(TextGRPCClient, Table1)
 
 	//SkipNow()
-	TextDB = create_files.AddSkipNow(TextDB, Table1)
+	TextGRPCClient = create_files.AddSkipNow(TextGRPCClient, Table1)
+
+	//замена импортов на новые URL
+	TextGRPCClient = create_files.ReplaceServiceURLImports(TextGRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
 
 	return err
 }
