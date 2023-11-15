@@ -279,6 +279,15 @@ func FindNRPCServerlURL() string {
 	return Otvet
 }
 
+// FindProtoURL - возвращает URL репозитория с пакетом "proto"
+func FindProtoURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO
+
+	return Otvet
+}
+
 func FindTextDefaultValue(Type_go string) string {
 	var Otvet string
 
@@ -381,6 +390,41 @@ func CheckAndAddImportTime_FromText(Text string) string {
 	}
 
 	Otvet = AddImportTime(Otvet)
+
+	return Otvet
+}
+
+// DeleteTemplateRepositoryImports - удаляет импорты репозитория шаблона
+func DeleteTemplateRepositoryImports(Text string) string {
+	Otvet := Text
+
+	if config.Settings.TEMPLATE_REPOSITORY_URL == "" {
+		return Otvet
+	}
+
+	//
+	TextFind := "import ("
+	pos1 := strings.Index(Otvet, TextFind)
+	if pos1 < 0 {
+		log.Error("not found word: import (")
+		return Otvet
+	}
+
+	TextFind = `"` + config.Settings.TEMPLATE_REPOSITORY_URL
+	pos1 = strings.Index(Otvet, TextFind)
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	s2 := Otvet[pos1:]
+	posEnd := strings.Index(s2, "\n")
+	if posEnd < 0 {
+		return Otvet
+	}
+
+	Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+1:]
+
+	Otvet = DeleteTemplateRepositoryImports(Otvet)
 
 	return Otvet
 }

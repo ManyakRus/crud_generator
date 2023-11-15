@@ -137,7 +137,7 @@ func FindTextImportDB1(Table1 *types.Table) string {
 
 // FindTextImportGRPC1 - возвращает текст импорта GRPC для 1 таблицы
 func FindTextImportGRPC1(Table1 *types.Table) string {
-	GRPC_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC
+	GRPC_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO
 	TableName := strings.ToLower(Table1.Name)
 	Otvet := "\n\t\"" + GRPC_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + "/grpc_" + TableName + `"`
 

@@ -27,9 +27,9 @@ func StartApp() {
 
 	folders.CreateAllFolders()
 
-	log.Info("postgres host: ", postgres_gorm.Settings.DB_HOST)
 	err := logic.StartFillAll()
 	if err != nil {
+		log.Error("StartFillAll() error: ", err)
 		println(constants.TEXT_HELP)
 	}
 

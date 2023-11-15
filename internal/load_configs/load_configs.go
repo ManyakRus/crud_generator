@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ManyakRus/crud_generator/internal/config"
+	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
@@ -24,7 +25,7 @@ func LoadConfigsAll() {
 // LoadMappings - загружает маппинг ТипБД = ТипGolang, из файла .json
 func LoadMappings() {
 	dir := micro.ProgramDir_bin()
-	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + "configs" + micro.SeparatorFile() + "mapping.json"
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + "mapping.json"
 	err := dbmeta.LoadMappings(FileName, false)
 	if err != nil {
 		log.Panic("LoadMappings() error: ", err)
@@ -34,7 +35,7 @@ func LoadMappings() {
 // LoadNameReplace - загружает маппинг ТипБД = ТипGolang, из файла .json
 func LoadNameReplace() {
 	dir := micro.ProgramDir_bin()
-	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + "configs" + micro.SeparatorFile() + "name_replace.json"
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + "name_replace.json"
 
 	var err error
 
@@ -57,7 +58,7 @@ func LoadNameReplace() {
 // LoadNullable - загружает список полей которые могут быть null
 func LoadNullable() {
 	dir := micro.ProgramDir_bin()
-	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + "configs" + micro.SeparatorFile() + "nullable.json"
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + "nullable.json"
 
 	var err error
 
@@ -116,7 +117,7 @@ func Load_TEXT_DB_IS_DELETED() {
 // LoadConvertID - загружает map: ИмяТаблицы:Тип
 func LoadConvertID() {
 	dir := micro.ProgramDir_bin()
-	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + "configs" + micro.SeparatorFile() + "convert_id.json"
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + "convert_id.json"
 
 	var err error
 

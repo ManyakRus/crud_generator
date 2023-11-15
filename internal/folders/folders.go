@@ -5,7 +5,9 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	copy_files "github.com/otiai10/copy"
 	"os"
+	"path/filepath"
 )
 
 // CreateFolder - создаёт папку на диске
@@ -18,7 +20,7 @@ func CreateFolder(FoldernameFull string) {
 		if err != nil {
 			log.Panic("CreateFolder_err() ", FoldernameFull, " error: ", err)
 		}
-		log.Info("CreateFolder_err() ", FoldernameFull)
+		//log.Info("CreateFolder_err() ", FoldernameFull)
 	}
 
 }
@@ -135,7 +137,7 @@ func CreateAllFolders() {
 
 	if config.Settings.NEED_CREATE_GRPC == true {
 		//grpc
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC
+		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
 			err = CreateFolder_err(Filename, 0777)
@@ -157,7 +159,7 @@ func CreateAllFolders() {
 		}
 
 		//grpc client
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT
+		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
 			err = CreateFolder_err(Filename, 0777)
@@ -168,7 +170,7 @@ func CreateAllFolders() {
 		}
 
 		//grpc_proto
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile() + "grpc_proto"
+		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + "grpc_proto"
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
 			err = CreateFolder_err(Filename, 0777)
@@ -214,7 +216,7 @@ func CreateAllFolders() {
 		}
 
 		//grpc_proto
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile() + "grpc_proto"
+		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + "grpc_proto"
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
 			err = CreateFolder_err(Filename, 0777)
@@ -226,4 +228,36 @@ func CreateAllFolders() {
 	}
 
 	//return err
+}
+
+// CopyAllFiles_Exclude_ - копирует все файлы из src в dest, кроме "*_"
+func CopyAllFiles_Exclude_(src, dest string) error {
+	var err error
+
+	opt := copy_files.Options{
+		Skip: CopyFilesFilterGo,
+	}
+	err = copy_files.Copy(src, dest, opt)
+
+	return err
+}
+
+// filter to all files, insted of "*_"
+func CopyFilesFilterGo(info os.FileInfo, src, dest string) (bool, error) {
+	var err error
+	var Otvet bool
+
+	Filename := src
+	if Filename[len(Filename)-1:] == "_" {
+		Otvet = true
+		return Otvet, err
+	}
+
+	FolderName := filepath.Dir(src)
+	if len(FolderName) > 0 && FolderName[len(FolderName)-1:] == "_" {
+		Otvet = true
+		return Otvet, err
+	}
+
+	return Otvet, err
 }

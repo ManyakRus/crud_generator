@@ -33,8 +33,8 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesProto := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile()
-	DirReadyProto := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC + micro.SeparatorFile()
+	DirTemplatesProto := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile()
+	DirReadyProto := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile()
 	FilenameReadyProto := DirReadyProto + config.Settings.SERVICE_NAME + ".proto"
 
 	FilenameTemplateProto := DirTemplatesProto + "service.proto"

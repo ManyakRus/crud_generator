@@ -1,4 +1,4 @@
-package server_grpc_starter
+package server_nrpc_starter
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
@@ -36,40 +36,38 @@ func CreateServerGRPCStarter() error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesServerGRPC := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
-	DirReadyServerGRPC := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
-	FilenameReadyMain := DirReadyServerGRPC + "server_grpc_starter.go"
-	FilenameTemplateMain := DirTemplatesServerGRPC + "server_grpc_starter.go_"
+	DirTemplatesServerNRPC := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER + micro.SeparatorFile()
+	DirReadyServerNRPC := DirReady + config.Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER + micro.SeparatorFile()
+	FilenameReadyMain := DirReadyServerNRPC + "server_nrpc_starter.go"
+	FilenameTemplateMain := DirTemplatesServerNRPC + "server_nrpc_starter.go_"
 
 	bytes, err := os.ReadFile(FilenameTemplateMain)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMain, " error: ", err)
 	}
-	TextGRPCStarter := string(bytes)
+	TextNRPCStarter := string(bytes)
 
 	//создадим папку ready
-	folders.CreateFolder(DirReadyServerGRPC)
+	folders.CreateFolder(DirReadyServerNRPC)
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		//заменим имя сервиса на новое
 		ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
 		ServiceName := config.Settings.SERVICE_NAME
-		TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, ServiceNameTemplate, ServiceName)
-		TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+		TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, ServiceNameTemplate, ServiceName)
+		TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
-		//заменим имя сервиса на новое с CamelCase
-		ServiceNameTemplate = create_files.FormatName(ServiceNameTemplate)
-		ServiceName = create_files.FormatName(ServiceName)
-		TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, ServiceNameTemplate, ServiceName)
-		TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+		TextNRPCStarter = create_files.DeleteTemplateRepositoryImports(TextNRPCStarter)
 
-		TextGRPCStarter = create_files.DeleteTemplateRepositoryImports(TextGRPCStarter)
 		ProtoURL := create_files.FindProtoURL() + "/grpc_proto"
-		TextGRPCStarter = create_files.AddImport(TextGRPCStarter, ProtoURL)
+		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, ProtoURL)
+
+		GRPCServer_URL := create_files.FindGRPCServerlURL()
+		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, GRPCServer_URL)
 	}
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCStarter), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyMain, []byte(TextNRPCStarter), constants.FILE_PERMISSIONS)
 
 	return err
 }

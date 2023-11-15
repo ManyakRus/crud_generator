@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/db"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client"
@@ -10,8 +11,11 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/model"
 	"github.com/ManyakRus/crud_generator/internal/create_files/nrpc_client"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_starter"
+	"github.com/ManyakRus/crud_generator/internal/create_files/server_nrpc_starter"
+	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/postgres"
 	"github.com/ManyakRus/starter/log"
+	"github.com/ManyakRus/starter/micro"
 )
 
 //var MassTable []types.Table
@@ -30,11 +34,12 @@ func StartFillAll() error {
 		return err
 	}
 
-	////заполним типы TypeGo
-	//err = model.FillColumnsNameGo(&MapAll)
-	//if err != nil {
-	//	return err
-	//}
+	//копируем все файлы
+	dir := micro.ProgramDir_bin()
+	err = folders.CopyAllFiles_Exclude_(dir+config.Settings.TEMPLATE_FOLDERNAME, dir+config.Settings.READY_FOLDERNAME)
+	if err != nil {
+		return err
+	}
 
 	//модель
 	err = model.CreateAllFiles(MapAll)
@@ -86,6 +91,12 @@ func StartFillAll() error {
 
 	//server_grpc_starter
 	err = server_grpc_starter.CreateAllFiles()
+	if err != nil {
+		return err
+	}
+
+	//server_nrpc_starter
+	err = server_nrpc_starter.CreateAllFiles()
 	if err != nil {
 		return err
 	}

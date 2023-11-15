@@ -1,7 +1,7 @@
 package constants
 
 const TEXT_HELP = `
-Need create .env file with settings
+Need fill settings in settings.txt file
 `
 
 //const FolderTemplates string = "templates"
@@ -9,3 +9,5 @@ Need create .env file with settings
 //const FolderReady string = "ready"
 
 const FILE_PERMISSIONS = 0666
+
+const CONFIG_FOLDER_NAME = "configs_"
