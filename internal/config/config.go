@@ -15,7 +15,8 @@ type SettingsINI struct {
 	EXCLUDE_TABLES                   string
 	TEMPLATE_FOLDERNAME              string
 	TEMPLATE_FOLDERNAME_MODEL        string
-	TEMPLATE_FOLDERNAME_DB           string
+	TEMPLATE_FOLDERNAME_CRUD         string
+	TEMPLATE_FOLDERNAME_TABLES       string
 	TEMPLATE_FOLDERNAME_GRPC         string
 	TEMPLATE_FOLDERNAME_GRPC_PROTO   string
 	TEMPLATE_FOLDERNAME_GRPC_SERVER  string
@@ -46,10 +47,13 @@ type SettingsINI struct {
 	TEXT_DB_IS_DELETED               string
 	USE_DEFAULT_TEMPLATE             bool
 	PREFIX_SERVER_GRPC               string
+	PREFIX_CRUD                      string
+	PREFIX_MODEL                     string
 	COMMENT_MODEL_STRUCT             string
 	TEXT_MODULE_GENERATED            string
 	TEMPLATE_FOLDERNAME_MAIN         string
 	TEMPLATE_REPOSITORY_URL          string
+	PREFIX_TABLE                     string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -61,7 +65,7 @@ func FillSettings() {
 	Settings.EXCLUDE_TABLES = os.Getenv("EXCLUDE_TABLES")
 	Settings.TEMPLATE_FOLDERNAME = os.Getenv("TEMPLATE_FOLDERNAME")
 	Settings.TEMPLATE_FOLDERNAME_MODEL = os.Getenv("TEMPLATE_FOLDERNAME_MODEL")
-	Settings.TEMPLATE_FOLDERNAME_DB = os.Getenv("TEMPLATE_FOLDERNAME_DB")
+	Settings.TEMPLATE_FOLDERNAME_CRUD = os.Getenv("TEMPLATE_FOLDERNAME_CRUD")
 	Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_PROTO")
 	Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_SERVER")
 	Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_CLIENT")
@@ -140,6 +144,10 @@ func FillSettings() {
 	Settings.TEMPLATE_FOLDERNAME_MAIN = os.Getenv("TEMPLATE_FOLDERNAME_MAIN")
 	Settings.TEMPLATE_REPOSITORY_URL = os.Getenv("TEMPLATE_REPOSITORY_URL")
 	Settings.TEMPLATE_FOLDERNAME_GRPC = os.Getenv("TEMPLATE_FOLDERNAME_GRPC")
+	Settings.PREFIX_CRUD = os.Getenv("PREFIX_CRUD")
+	Settings.PREFIX_TABLE = os.Getenv("PREFIX_TABLE")
+	Settings.TEMPLATE_FOLDERNAME_TABLES = os.Getenv("TEMPLATE_FOLDERNAME_TABLES")
+	Settings.PREFIX_MODEL = os.Getenv("PREFIX_MODEL")
 
 }
 

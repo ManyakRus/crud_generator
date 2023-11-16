@@ -132,7 +132,7 @@ func FindTextImportModel1(Table1 *types.Table) string {
 // FindTextImportDB1 - возвращает текст импорта DB для 1 таблицы
 func FindTextImportDB1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_DB
+	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD
 	Otvet := "\n\t\"" + DB_URL + "/db_" + TableName + `"`
 
 	return Otvet

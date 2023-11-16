@@ -11,3 +11,5 @@ Need fill settings in settings.txt file
 const FILE_PERMISSIONS = 0666
 
 const CONFIG_FOLDER_NAME = "configs_"
+
+const TemplateFilenameCrudGo = "crud.go_"

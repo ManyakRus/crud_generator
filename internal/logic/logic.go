@@ -3,7 +3,8 @@ package logic
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
-	"github.com/ManyakRus/crud_generator/internal/create_files/db"
+	"github.com/ManyakRus/crud_generator/internal/create_files/db_crud"
+	"github.com/ManyakRus/crud_generator/internal/create_files/db_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/generation_code_sh"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_proto"
@@ -50,7 +51,7 @@ func StartFillAll() error {
 	}
 
 	//db crud
-	err = db.CreateAllFiles(MapAll)
+	err = db_crud.CreateAllFiles(MapAll)
 	if err != nil {
 		return err
 	}
@@ -111,6 +112,12 @@ func StartFillAll() error {
 
 	//generation_code.sh
 	err = generation_code_sh.CreateAllFiles()
+	if err != nil {
+		return err
+	}
+
+	//tables
+	err = db_tables.CreateAllFiles(MapAll)
 	if err != nil {
 		return err
 	}

@@ -1,4 +1,4 @@
-package db
+package db_crud
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
@@ -53,13 +53,13 @@ func CreateFiles(Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
-	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
+	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
+	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + "db.go_"
+	FilenameTemplateDB := DirTemplatesDB + constants.TemplateFilenameCrudGo
 	TableName := strings.ToLower(Table1.Name)
-	DirTable := DirReadyDB + "db_" + TableName
-	FilenameReadyDB := DirTable + micro.SeparatorFile() + "db_" + TableName + ".go"
+	DirTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
+	FilenameReadyDB := DirTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + ".go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirTable)
@@ -114,12 +114,12 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
-	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
+	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
+	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + "db_test.go_"
-	DirTable := DirReadyDB + "db_" + TableName
-	FilenameReadyDB := DirTable + micro.SeparatorFile() + "db_" + TableName + "_test.go"
+	FilenameTemplateDB := DirTemplatesDB + config.Settings.PREFIX_CRUD + "test.go_"
+	DirTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
+	FilenameReadyDB := DirTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirTable)

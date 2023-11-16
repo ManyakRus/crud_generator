@@ -112,7 +112,7 @@ func CreateAllFolders() {
 
 	if config.Settings.NEED_CREATE_DB == true {
 		//db
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_DB
+		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_CRUD
 		ok, err = micro.FileExists(Filename)
 		if ok == false || err != nil {
 			err = CreateFolder_err(Filename, 0777)

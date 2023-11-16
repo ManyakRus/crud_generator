@@ -230,7 +230,7 @@ func Find_Template_DB_Foldername() string {
 
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_DB + micro.SeparatorFile()
+	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
 	Otvet = DirTemplatesDB
 	return Otvet
@@ -306,6 +306,15 @@ func FindProtoURL() string {
 	return Otvet
 }
 
+// FindTablesURL - возвращает URL репозитория с пакетом "tables"
+func FindTablesURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_TABLES
+
+	return Otvet
+}
+
 // FindGRPCProtoURL - возвращает URL репозитория с пакетом "grpc_proto"
 func FindGRPCProtoURL() string {
 	Otvet := ""
@@ -324,17 +333,23 @@ func FindModelTableURL(TableName string) string {
 	return Otvet
 }
 
-func FindTextDefaultValue(Type_go string) string {
+func FindTextDefaultValue(Column1 *types.Column) string {
 	var Otvet string
 
 	sValue := ""
-	switch Type_go {
-	case "string":
-		sValue = "\\\"\\\""
-	case "int", "int32", "int64", "float32", "float64", "uint", "uint32", "uint64":
-		sValue = "0"
-	case "time.Time":
+	Type_go := Column1.TypeGo
+	if Column1.TableKey != "" {
 		sValue = "null"
+	} else {
+
+		switch Type_go {
+		case "string":
+			sValue = "\\\"\\\""
+		case "int", "int32", "int64", "float32", "float64", "uint", "uint32", "uint64":
+			sValue = "0"
+		case "time.Time":
+			sValue = "null"
+		}
 	}
 
 	if sValue != "" {
