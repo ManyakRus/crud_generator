@@ -25,7 +25,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 		}
 
 		//файлы db
-		if config.Settings.NEED_CREATE_DB_TEST == true {
+		if config.Settings.NEED_CREATE_DB == true {
 			err = CreateFiles(Table1)
 			if err != nil {
 				log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
@@ -321,12 +321,17 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 		ColumnNameGo := Column1.NameGo
 		TypeGo := Column1.TypeGo
 
-		_, is_nullable_config := types.MapNullableFileds[ColumnNameGo]
-
 		if Column1.IsNullable == false {
 			continue
 		}
 
+		//ищем в файле настроек nullable.json
+		is_nullable_config, has_is_nullable_config := types.MapNullableFileds[ColumnNameGo]
+		if has_is_nullable_config == true && is_nullable_config == false {
+			continue
+		}
+
+		//
 		if TypeGo == "time.Time" {
 			NullableCount = NullableCount + 1
 			TextFind := `if m.` + ColumnNameGo + `.IsZero() == true {`

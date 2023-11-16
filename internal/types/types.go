@@ -26,6 +26,6 @@ type Table struct {
 
 var MapReplaceName = make(map[string]string, 0)
 
-var MapNullableFileds = make(map[string]string, 0)
+var MapNullableFileds = make(map[string]bool, 0)
 
 var MapConvertID = make(map[string]string, 0)

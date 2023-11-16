@@ -243,7 +243,10 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	Type_go := Column1.TypeGo
 	TextModel, Type_go = FindColumnTypeGoImport(TextModel, Table1, Column1)
 	//Column1.TypeGo = Type_go
-	TextDefaultValue := create_files.FindTextDefaultValue(Type_go)
+	TextDefaultValue := ""
+	if Column1.IsIdentity == false {
+		TextDefaultValue = create_files.FindTextDefaultValue(Type_go)
+	}
 	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)
 	Description := Column1.Description
 	Description = create_files.PrintableString(Description) //экранирование символов
@@ -263,7 +266,7 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	Otvet = Otvet + "\t" + ColumnModelName + " " + Type_go + "\t"
 	Otvet = Otvet + "`json:\"" + ColumnName + "\""
 	Otvet = Otvet + " gorm:\"column:" + ColumnName + TextPrimaryKey + TextDefaultValue + TextAutoCreateTime + TextAutoUpdateTime + "\""
-	Otvet = Otvet + " db:\"" + ColumnName + "\""
+	//Otvet = Otvet + " db:\"" + ColumnName + "\""
 	Otvet = Otvet + "`"
 	Otvet = Otvet + "\t//" + Description
 
