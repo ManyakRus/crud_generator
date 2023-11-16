@@ -76,6 +76,7 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	//var ModelName string
 
 	TableName := strings.ToLower(Table1.Name)
+	ModelName := Table1.NameGo
 	FilenameTemplateModel := DirTemplatesModel + "model.go_"
 	FilenameReadyModel := DirReadyModel + config.Settings.PREFIX_MODEL + TableName + ".go"
 
@@ -107,12 +108,18 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	//замена импортов на новые URL
 	//TextModel = create_files.ReplaceServiceURLImports(TextModel)
 
+	TextModel = create_files.ReplaceModelAndTableName(TextModel, Table1)
+
 	//замена импортов на новые URL
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		Comment := create_files.FindModelComment(Table1)
+		TextTemplate := "// " + ModelName
+		TextModel = strings.ReplaceAll(TextModel, TextTemplate, Comment)
+
 		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
 
-		TablesURL := create_files.FindTablesURL()
-		TextModel = create_files.AddImport(TextModel, TablesURL)
+		TableNameURL := create_files.FindTableNameURL(TableName)
+		TextModel = create_files.AddImport(TextModel, TableNameURL)
 	}
 
 	//запись файла
@@ -170,9 +177,9 @@ func FindTextModelStruct(TextModel string, Table1 *types.Table) (string, string,
 	var err error
 
 	TableName := Table1.Name
-	ModelName = create_files.FindSingularName(TableName)
-	ModelName = create_files.FormatName(ModelName)
-	Table1.NameGo = ModelName
+	//ModelName = create_files.FindSingularName(TableName)
+	//ModelName = create_files.FormatName(ModelName)
+	//Table1.NameGo = ModelName
 	COMMENT_MODEL_STRUCT := config.Settings.COMMENT_MODEL_STRUCT
 
 	Otvet = `// ` + ModelName + ` - ` + COMMENT_MODEL_STRUCT + TableName + `: ` + Table1.Comment + `

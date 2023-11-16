@@ -39,7 +39,7 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesTable := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_TABLES + micro.SeparatorFile()
-	DirReadyTable := DirReady + config.Settings.TEMPLATE_FOLDERNAME_TABLES + micro.SeparatorFile() + TableName + micro.SeparatorFile()
+	DirReadyTable := DirReady + config.Settings.TEMPLATE_FOLDERNAME_TABLES + micro.SeparatorFile() + config.Settings.PREFIX_TABLE + TableName + micro.SeparatorFile()
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -115,10 +115,16 @@ func FindTextModelStruct(TextModel string, Table1 *types.Table) (string, string,
 	ModelName = create_files.FindSingularName(TableName)
 	ModelName = create_files.FormatName(ModelName)
 	Table1.NameGo = ModelName
-	COMMENT_MODEL_STRUCT := config.Settings.COMMENT_MODEL_STRUCT
 
-	Otvet = `// ` + ModelName + ` - ` + COMMENT_MODEL_STRUCT + TableName + `: ` + Table1.Comment + `
-type ` + ModelName + ` struct {
+	//	Otvet = `// ` + ModelName + ` - ` + COMMENT_MODEL_STRUCT + TableName + `: ` + Table1.Comment + `
+	//type ` + ModelName + ` struct {
+	//`
+
+	Prefix := micro.StringFromUpperCase(config.Settings.PREFIX_TABLE)
+	ModelNameWithPrefix := Prefix + ModelName
+	Otvet = create_files.FindModelNameComment(ModelNameWithPrefix, Table1)
+	Otvet = Otvet + `
+type ` + ModelNameWithPrefix + ` struct {
 `
 
 	//сортировка
@@ -133,6 +139,14 @@ type ` + ModelName + ` struct {
 	has_Columns_Groups := create_files.Has_Columns_Groups(Table1)
 	has_Columns_ExtLinks := create_files.Has_Columns_ExtLink(Table1)
 
+	// если у id есть alias то колонка id будет отдельно
+	ColumnIDName, _ := create_files.FindPrimaryKeyNameType(Table1)
+	_, ok := types.MapConvertID[TableName+"."+ColumnIDName]
+	if ok == true {
+		has_Columns_CommonStruct = false
+	}
+
+	//
 	ImportModelsName := micro.LastWord(config.Settings.TEMPLATE_FOLDERNAME_TABLES)
 
 	if has_Columns_CommonStruct == true {
@@ -170,6 +184,11 @@ type ` + ModelName + ` struct {
 		TextModel, TextColumn = FindTextColumn(TextModel, Table1, Column1)
 		Otvet = Otvet + TextColumn + "\n"
 		Table1.MapColumns[key1] = Column1
+	}
+
+	if has_Columns_CommonStruct == true || has_Columns_NameStruct == true || has_Columns_Groups == true || has_Columns_ExtLinks == true {
+		TablesURL := create_files.FindURL_Tables()
+		TextModel = create_files.AddImport(TextModel, TablesURL)
 	}
 
 	Otvet = Otvet + "\n}"

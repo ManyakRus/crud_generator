@@ -1,11 +1,11 @@
 package lawsuit_status_types
 
 import (
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/tables/lawsuit_status_types"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/tables/table_lawsuit_status_types"
 )
 
 // LawsuitStatusType
 type LawsuitStatusType struct {
-	Table_LawsuitStatusType	
+	table_lawsuit_status_types.Table_LawsuitStatusType	
 }
 

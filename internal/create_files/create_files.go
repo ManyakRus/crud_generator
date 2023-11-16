@@ -315,6 +315,15 @@ func FindTablesURL() string {
 	return Otvet
 }
 
+// FindTableNameURL - возвращает URL репозитория с пакетом "tables" + TableName
+func FindTableNameURL(TableName string) string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_TABLES + "/" + config.Settings.PREFIX_TABLE + TableName
+
+	return Otvet
+}
+
 // FindGRPCProtoURL - возвращает URL репозитория с пакетом "grpc_proto"
 func FindGRPCProtoURL() string {
 	Otvet := ""
@@ -367,6 +376,15 @@ func FindURL_Alias() string {
 	}
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/"
 	Otvet = Otvet + config.Settings.TEMPLATE_FOLDERNAME_ALIAS
+
+	return Otvet
+}
+
+// FindURL_Tables - возвращает URL репозитория с пакетом "tables"
+func FindURL_Tables() string {
+	Otvet := ""
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/"
+	Otvet = Otvet + config.Settings.TEMPLATE_FOLDERNAME_TABLES
 
 	return Otvet
 }
@@ -506,6 +524,42 @@ func ReplaceServiceURLImports(Text string) string {
 	TEMPLATE_REPOSITORY_URL := config.Settings.TEMPLATE_REPOSITORY_URL
 	SERVICE_REPOSITORY_URL := config.Settings.SERVICE_REPOSITORY_URL
 	Otvet = strings.ReplaceAll(Otvet, TEMPLATE_REPOSITORY_URL, SERVICE_REPOSITORY_URL)
+
+	return Otvet
+}
+
+// ReplaceModelAndTableName - заменяет имя модели и имя таблицы в шаблоне на новые
+func ReplaceModelAndTableName(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+
+	return Otvet
+}
+
+// FindModelComment - возвращает комментарий для модели
+func FindModelComment(Table1 *types.Table) string {
+	Otvet := ""
+
+	TableName := Table1.Name
+	ModelName := Table1.NameGo
+	COMMENT_MODEL_STRUCT := config.Settings.COMMENT_MODEL_STRUCT
+
+	Otvet = `// ` + ModelName + ` - ` + COMMENT_MODEL_STRUCT + TableName + `: ` + Table1.Comment
+
+	return Otvet
+}
+
+// FindModelNameComment - возвращает комментарий для названия модели
+func FindModelNameComment(ModelName string, Table1 *types.Table) string {
+	Otvet := ""
+
+	TableName := Table1.Name
+	//ModelName := Table1.NameGo
+	COMMENT_MODEL_STRUCT := config.Settings.COMMENT_MODEL_STRUCT
+
+	Otvet = `// ` + ModelName + ` - ` + COMMENT_MODEL_STRUCT + TableName + `: ` + Table1.Comment
 
 	return Otvet
 }

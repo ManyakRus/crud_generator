@@ -117,7 +117,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + config.Settings.PREFIX_CRUD + "test.go_"
+	FilenameTemplateDB := DirTemplatesDB + constants.TemplateFilenameCrudGoTest
 	DirTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
 	FilenameReadyDB := DirTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_test.go"
 

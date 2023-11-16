@@ -13,3 +13,4 @@ const FILE_PERMISSIONS = 0666
 const CONFIG_FOLDER_NAME = "configs_"
 
 const TemplateFilenameCrudGo = "crud.go_"
+const TemplateFilenameCrudGoTest = "crud_test.go_"

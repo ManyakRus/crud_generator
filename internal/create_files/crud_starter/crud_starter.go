@@ -133,7 +133,8 @@ func FindTextImportModel1(Table1 *types.Table) string {
 func FindTextImportDB1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
 	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD
-	Otvet := "\n\t\"" + DB_URL + "/db_" + TableName + `"`
+	TableNameWithPrefix := config.Settings.PREFIX_CRUD + TableName
+	Otvet := "\n\t" + TableNameWithPrefix + " \"" + DB_URL + "/" + TableNameWithPrefix + `"`
 
 	return Otvet
 }
@@ -198,7 +199,7 @@ func InitCrudTransport_DB() {`
 func FindTextDB1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
 	ModelName := Table1.NameGo
-	Otvet := "\n\t" + TableName + "." + ModelName + "{}.SetCrudInterface(db_" + TableName + ".Crud_DB{})"
+	Otvet := "\n\t" + TableName + "." + ModelName + "{}.SetCrudInterface(" + config.Settings.PREFIX_CRUD + TableName + ".Crud_DB{})"
 
 	return Otvet
 }

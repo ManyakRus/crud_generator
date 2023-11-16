@@ -204,10 +204,19 @@ order by
 				MapTable[TableName0] = Table1
 				OrderNumberTable++
 			}
+
+			//найдём имя модели golang
+			TableName := v.TableName
+			ModelName := create_files.FindSingularName(TableName)
+			ModelName = create_files.FormatName(ModelName)
+
+			//
 			Table1 = CreateTable()
-			Table1.Name = v.TableName
+			Table1.Name = TableName
 			Table1.OrderNumber = OrderNumberTable
 			Table1.Comment = v.TableComment
+			Table1.NameGo = ModelName
+
 		}
 
 		Column1 := types.Column{}
