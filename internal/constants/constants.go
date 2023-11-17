@@ -14,3 +14,5 @@ const CONFIG_FOLDER_NAME = "configs_"
 
 const TemplateFilenameCrudGo = "crud.go_"
 const TemplateFilenameCrudGoTest = "crud_test.go_"
+
+const SETTINGS_FOLDER_NAME = "templates/configs_"

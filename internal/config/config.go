@@ -1,6 +1,9 @@
 package config
 
 import (
+	"github.com/ManyakRus/crud_generator/internal/constants"
+	ConfigMain "github.com/ManyakRus/starter/config"
+	"github.com/ManyakRus/starter/micro"
 	"log"
 	"os"
 	"strings"
@@ -185,4 +188,23 @@ func BoolFromString(s string) bool {
 	}
 
 	return Otvet
+}
+
+func LoadSettingsTxt() {
+	var err error
+
+	DirBin := micro.ProgramDir_bin()
+	Dir := DirBin + constants.SETTINGS_FOLDER_NAME + micro.SeparatorFile()
+	FilenameEnv := Dir + ".env"
+	err = ConfigMain.LoadEnv_from_file_err(FilenameEnv)
+	if err == nil {
+		return
+	}
+
+	FilenameSettings := Dir + "settings.txt"
+	err = ConfigMain.LoadEnv_from_file_err(FilenameSettings)
+	if err != nil {
+		log.Panic("LoadSettingsTxt() filename: ", FilenameSettings, " error: ", err)
+	}
+
 }

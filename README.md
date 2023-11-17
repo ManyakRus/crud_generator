@@ -32,7 +32,7 @@ Installation procedure:
 make build
 the crud_generator file will appear in the bin folder
 
-2. Fill settings in the bin/settings.txt file
+2. Fill settings in the bin/templates/configs_/settings.txt file
 - connections to your database
 - name of your new service
 - URL of your new service

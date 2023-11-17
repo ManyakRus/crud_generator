@@ -6,7 +6,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/load_configs"
 	"github.com/ManyakRus/crud_generator/internal/logic"
-	ConfigMain "github.com/ManyakRus/starter/config"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/postgres_gorm"
 )
@@ -16,7 +15,9 @@ func main() {
 }
 
 func StartApp() {
-	ConfigMain.LoadENV_or_SettingsTXT()
+	//ConfigMain.LoadENV_or_SettingsTXT()
+	config.LoadSettingsTxt()
+
 	config.FillSettings()
 	config.FillFlags()
 

@@ -33,7 +33,7 @@ create, read, update, save, delete (или delete + restore)
 make build
 в папке bin появится файл crud_generator
 
-2. Заполнить найстройки в файле bin/settings.txt
+2. Заполнить найстройки в файле bin/templates/configs_/settings.txt
 - подключения к вашей базе данных
 - имя вашего нового сервиса
 - URL вашего нового сервиса
