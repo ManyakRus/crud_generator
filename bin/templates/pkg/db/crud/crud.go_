@@ -1,4 +1,4 @@
-package db_lawsuit_status_types
+package crud_lawsuit_status_types
 
 import (
 	"context"

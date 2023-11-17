@@ -116,6 +116,11 @@ func FindTextModelStruct(TextModel string, Table1 *types.Table) (string, string,
 	ModelName = create_files.FormatName(ModelName)
 	Table1.NameGo = ModelName
 
+	//удалим старые импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+	}
+
 	//	Otvet = `// ` + ModelName + ` - ` + COMMENT_MODEL_STRUCT + TableName + `: ` + Table1.Comment + `
 	//type ` + ModelName + ` struct {
 	//`
@@ -186,6 +191,7 @@ type ` + ModelNameWithPrefix + ` struct {
 		Table1.MapColumns[key1] = Column1
 	}
 
+	//добавим новый импорт
 	if has_Columns_CommonStruct == true || has_Columns_NameStruct == true || has_Columns_Groups == true || has_Columns_ExtLinks == true {
 		TablesURL := create_files.FindURL_Tables()
 		TextModel = create_files.AddImport(TextModel, TablesURL)
@@ -203,12 +209,7 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	ColumnName := Column1.Name
 	ColumnNameLowerCase := strings.ToLower(ColumnName)
 	ColumnModelName := create_files.FormatName(Column1.Name)
-	//Column1.NameGo = ColumnModelName
-	//SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
-	//if ok == false {
-	//	log.Panic("GetMappings() ", Column1.Type, " error: not found")
-	//}
-	//Type_go := SQLMapping1.GoType
+
 	Type_go := Column1.TypeGo
 	TextModel, Type_go = FindColumnTypeGoImport(TextModel, Table1, Column1)
 	//Column1.TypeGo = Type_go

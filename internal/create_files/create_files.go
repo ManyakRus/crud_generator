@@ -563,3 +563,27 @@ func FindModelNameComment(ModelName string, Table1 *types.Table) string {
 
 	return Otvet
 }
+
+// ReplacePackageName - заменяет имя пакета в шаблоне на новое
+func ReplacePackageName(Text, PackageName string) string {
+	Otvet := Text
+
+	//
+	TextFind := "\tpackage "
+	pos1 := strings.Index(Otvet, TextFind)
+	if pos1 < 0 {
+		log.Error("not found word: package ")
+		return Otvet
+	}
+
+	s2 := Otvet[pos1:]
+	posEnd := strings.Index(s2, "\n")
+	if posEnd < 0 {
+		log.Error("not found word: \n")
+		return Otvet
+	}
+
+	Otvet = Otvet[:pos1] + "\t" + PackageName + Otvet[pos1+posEnd:]
+
+	return Otvet
+}
