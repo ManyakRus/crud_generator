@@ -1,0 +1,13 @@
+package table_lawsuit_status_types
+
+import (
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/tables"
+)
+
+// LawsuitStatusType
+type LawsuitStatusType struct {
+	tables.CommonStruct
+	tables.NameStruct
+	Code string `json:"code" gorm:"column:code;default:0"`
+}
+

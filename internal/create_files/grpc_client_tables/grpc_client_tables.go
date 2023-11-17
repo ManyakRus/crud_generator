@@ -54,7 +54,7 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 
-	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client.go_"
+	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client_table.go_"
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
 	FilenameReadyGRPCClient := DirReadyTable + "grpc_" + TableName + ".go"
@@ -143,7 +143,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 
-	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client_test.go_"
+	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client_table_test.go_"
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
 	FilenameReadyGRPCClient := DirReadyTable + "grpc_" + TableName + "_test.go"
