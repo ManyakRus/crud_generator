@@ -77,6 +77,17 @@ func CreateFiles(Table1 *types.Table) error {
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
 
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
+
+		ConstantsURL := create_files.FindGRPCConstantsURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, ConstantsURL)
+
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, ProtoURL)
+	}
+
 	//создание текста
 	ModelName := Table1.NameGo
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
@@ -154,6 +165,14 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
+
+		ConstantsURL := create_files.FindGRPCConstantsURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, ConstantsURL)
+	}
 
 	//создание текста
 	ModelName := Table1.NameGo

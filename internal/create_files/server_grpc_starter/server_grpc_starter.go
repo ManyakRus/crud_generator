@@ -53,22 +53,22 @@ func CreateServerGRPCStarter() error {
 	//создадим папку ready
 	folders.CreateFolder(DirReadyServerGRPC)
 
+	//заменим имя сервиса на новое
+	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+	ServiceName := config.Settings.SERVICE_NAME
+	TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, ServiceNameTemplate, ServiceName)
+	TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+
+	//заменим имя сервиса на новое с CamelCase
+	ServiceNameTemplate = create_files.FormatName(ServiceNameTemplate)
+	ServiceName = create_files.FormatName(ServiceName)
+	TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, ServiceNameTemplate, ServiceName)
+	TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+
+	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPCStarter = create_files.DeleteTemplateRepositoryImports(TextGRPCStarter)
 
-		//заменим имя сервиса на новое
-		ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
-		ServiceName := config.Settings.SERVICE_NAME
-		TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, ServiceNameTemplate, ServiceName)
-		TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
-
-		//заменим имя сервиса на новое с CamelCase
-		ServiceNameTemplate = create_files.FormatName(ServiceNameTemplate)
-		ServiceName = create_files.FormatName(ServiceName)
-		TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, ServiceNameTemplate, ServiceName)
-		TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
-
-		//proto
 		ProtoURL := create_files.FindGRPCProtoURL()
 		TextGRPCStarter = create_files.AddImport(TextGRPCStarter, ProtoURL)
 	}

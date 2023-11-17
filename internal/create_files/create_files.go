@@ -261,8 +261,8 @@ func FindModelURL() string {
 	return Otvet
 }
 
-// FindGRPCServerlURL - возвращает URL репозитория с пакетом "server_grpc"
-func FindGRPCServerlURL() string {
+// FindGRPCServerURL - возвращает URL репозитория с пакетом "server_grpc"
+func FindGRPCServerURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER
@@ -338,6 +338,42 @@ func FindModelTableURL(TableName string) string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_MODEL + "/" + TableName
+
+	return Otvet
+}
+
+// FindNRPCClientURL - возвращает URL репозитория с пакетом "nrpc_client"
+func FindNRPCClientURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT
+
+	return Otvet
+}
+
+// FindDBConstantsURL - возвращает URL репозитория с пакетом db "constants"
+func FindDBConstantsURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_DB + "/" + "constants"
+
+	return Otvet
+}
+
+// FindCrudStarterURL - возвращает URL репозитория с пакетом "crud_starter"
+func FindCrudStarterURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER
+
+	return Otvet
+}
+
+// FindCalcStructVersionURL - возвращает URL репозитория с пакетом "calc_struct_version"
+func FindCalcStructVersionURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_DB + "/" + "calc_struct_version"
 
 	return Otvet
 }

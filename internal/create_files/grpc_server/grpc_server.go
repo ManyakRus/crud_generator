@@ -67,6 +67,17 @@ func CreateFiles(Table1 *types.Table) error {
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
 
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
+
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+	}
+
 	//создание текста
 	ModelName := Table1.NameGo
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
@@ -126,6 +137,20 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
+
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+
+		CrudStarterURL := create_files.FindCrudStarterURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
+	}
 
 	//создание текста
 	ModelName := Table1.NameGo

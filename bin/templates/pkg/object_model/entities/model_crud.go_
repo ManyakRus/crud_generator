@@ -3,7 +3,7 @@ package lawsuit_status_types
 import (
 	"encoding/json"
 	"github.com/vmihailenco/msgpack/v5"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/functions/calc_struct_version"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/calc_struct_version"
 	"reflect"
 )
 

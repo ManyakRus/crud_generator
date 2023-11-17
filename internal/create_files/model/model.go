@@ -90,6 +90,14 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextModel, DirReadyModel)
 
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+
+		TableURL := create_files.FindTableNameURL(TableName)
+		TextModel = create_files.AddImport(TextModel, TableURL)
+	}
+
 	//создание текста
 	//TextModel, TextModelStruct, ModelName, err := FindTextModelStruct(TextModel, Table1)
 	//TextModel = ReplaceModelStruct(TextModel, TextModelStruct)
@@ -150,6 +158,14 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextModel, DirReadyModel)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+
+		TableURL := create_files.FindCalcStructVersionURL()
+		TextModel = create_files.AddImport(TextModel, TableURL)
+	}
 
 	//создание текста
 	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)

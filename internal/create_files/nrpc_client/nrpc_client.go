@@ -76,6 +76,23 @@ func CreateFiles(Table1 *types.Table) error {
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
 
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextNRPCClient = create_files.DeleteTemplateRepositoryImports(TextNRPCClient)
+
+		GRPCProtoURL := create_files.FindGRPCProtoURL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPCProtoURL)
+
+		NRPCClientURL := create_files.FindNRPCClientURL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, NRPCClientURL)
+
+		GRPCConstantsURL := create_files.FindGRPCConstantsURL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPCConstantsURL)
+
+		TableURL := create_files.FindModelTableURL(TableName)
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, TableURL)
+	}
+
 	//создание текста
 	ModelName := Table1.NameGo
 	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
@@ -132,6 +149,17 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextNRPCClient = create_files.DeleteTemplateRepositoryImports(TextNRPCClient)
+
+		NRPCClientURL := create_files.FindNRPCClientURL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, NRPCClientURL)
+
+		TableURL := create_files.FindModelTableURL(TableName)
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, TableURL)
+	}
 
 	//создание текста
 	ModelName := Table1.NameGo

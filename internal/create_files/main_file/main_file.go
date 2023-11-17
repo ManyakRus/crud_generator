@@ -49,7 +49,7 @@ func CreateFileMain() error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		//GRPC
 		if config.Settings.NEED_CREATE_GRPC == true {
-			TextImport := create_files.FindGRPCServerlURL()
+			TextImport := create_files.FindGRPCServerURL()
 			TextMain = create_files.AddImport(TextMain, TextImport)
 		} else {
 			TextMain = strings.ReplaceAll(TextMain, "\n\tserver_grpc.Start()", "")

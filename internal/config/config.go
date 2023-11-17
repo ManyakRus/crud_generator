@@ -15,6 +15,7 @@ type SettingsINI struct {
 	EXCLUDE_TABLES                   string
 	TEMPLATE_FOLDERNAME              string
 	TEMPLATE_FOLDERNAME_MODEL        string
+	TEMPLATE_FOLDERNAME_DB           string
 	TEMPLATE_FOLDERNAME_CRUD         string
 	TEMPLATE_FOLDERNAME_TABLES       string
 	TEMPLATE_FOLDERNAME_GRPC         string
@@ -148,6 +149,7 @@ func FillSettings() {
 	Settings.PREFIX_TABLE = os.Getenv("PREFIX_TABLE")
 	Settings.TEMPLATE_FOLDERNAME_TABLES = os.Getenv("TEMPLATE_FOLDERNAME_TABLES")
 	Settings.PREFIX_MODEL = os.Getenv("PREFIX_MODEL")
+	Settings.TEMPLATE_FOLDERNAME_DB = os.Getenv("TEMPLATE_FOLDERNAME_DB")
 
 }
 

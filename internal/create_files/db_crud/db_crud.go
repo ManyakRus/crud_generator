@@ -58,15 +58,15 @@ func CreateFiles(Table1 *types.Table) error {
 
 	FilenameTemplateDB := DirTemplatesDB + constants.TemplateFilenameCrudGo
 	TableName := strings.ToLower(Table1.Name)
-	DirTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
-	FilenameReadyDB := DirTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + ".go"
+	DirReadyTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
+	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + ".go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirTable)
+	ok, err := micro.FileExists(DirReadyTable)
 	if ok == false {
-		err = os.MkdirAll(DirTable, 0777)
+		err = os.MkdirAll(DirReadyTable, 0777)
 		if err != nil {
-			log.Panic("Mkdir() ", DirTable, " error: ", err)
+			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
 		}
 	}
 
@@ -77,7 +77,17 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextDB, DirTable)
+	create_files.ReplacePackageName(TextDB, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextDB = create_files.DeleteTemplateRepositoryImports(TextDB)
+
+		TextDB = create_files.AddImport(TextDB, DirReadyTable)
+
+		ConstantsURL := create_files.FindGRPCConstantsURL()
+		TextDB = create_files.AddImport(TextDB, ConstantsURL)
+	}
 
 	//создание текста
 	ModelName := Table1.NameGo
@@ -121,15 +131,15 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
 	FilenameTemplateDB := DirTemplatesDB + constants.TemplateFilenameCrudGoTest
-	DirTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
-	FilenameReadyDB := DirTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_test.go"
+	DirReadyTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
+	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_test.go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirTable)
+	ok, err := micro.FileExists(DirReadyTable)
 	if ok == false {
-		err = os.Mkdir(DirTable, 0777)
+		err = os.Mkdir(DirReadyTable, 0777)
 		if err != nil {
-			log.Panic("Mkdir() ", DirTable, " error: ", err)
+			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
 		}
 	}
 
@@ -140,7 +150,17 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextDB := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextDB, DirTable)
+	create_files.ReplacePackageName(TextDB, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextDB = create_files.DeleteTemplateRepositoryImports(TextDB)
+
+		TextDB = create_files.AddImport(TextDB, DirReadyTable)
+
+		ConstantsURL := create_files.FindGRPCConstantsURL()
+		TextDB = create_files.AddImport(TextDB, ConstantsURL)
+	}
 
 	//создание текста
 	ModelName := Table1.NameGo
