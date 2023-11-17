@@ -1,4 +1,4 @@
-package grpc_client_tables
+package nrpc_client_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// CreateAllFiles - создаёт все файлы в папке grpc_client
+// CreateAllFiles - создаёт все файлы в папке nrpc_client
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
@@ -23,15 +23,15 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			continue
 		}
 
-		//файлы grpc_client
+		//файлы nrpc_client
 		err = CreateFiles(Table1)
 		if err != nil {
 			log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 
-		//тестовые файлы grpc_client
-		if config.Settings.NEED_CREATE_GRPC_CLIENT_TEST == true {
+		//тестовые файлы nrpc_client
+		if config.Settings.NEED_CREATE_NRPC_CLIENT_TEST == true {
 			err = CreateTestFiles(Table1)
 			if err != nil {
 				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
@@ -39,11 +39,10 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			}
 		}
 	}
-
 	return err
 }
 
-// CreateFiles - создаёт 1 файл в папке grpc_client
+// CreateFiles - создаёт 1 файл в папке nrpc_client
 func CreateFiles(Table1 *types.Table) error {
 	var err error
 
@@ -51,13 +50,13 @@ func CreateFiles(Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
-	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
+	DirTemplatesNRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
+	DirReadyNRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
 
-	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client_table.go_"
+	FilenameTemplateNRPCClient := DirTemplatesNRPCClient + "nrpc_client.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
-	FilenameReadyGRPCClient := DirReadyTable + "grpc_" + TableName + ".go"
+	DirReadyTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
+	FilenameReadyNRPCClient := DirReadyTable + "nrpc_" + TableName + ".go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -68,71 +67,56 @@ func CreateFiles(Table1 *types.Table) error {
 		}
 	}
 
-	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
+	bytes, err := os.ReadFile(FilenameTemplateNRPCClient)
 	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
+		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 	}
-	TextGRPCClient := string(bytes)
+	TextNRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
+	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
+		TextNRPCClient = create_files.DeleteTemplateRepositoryImports(TextNRPCClient)
 
-		ConstantsURL := create_files.FindGRPCConstantsURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, ConstantsURL)
+		GRPCProtoURL := create_files.FindProtoURL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPCProtoURL)
 
-		//ProtoURL := create_files.FindProtobufURL()
-		//TextGRPCClient = create_files.AddImport(TextGRPCClient, ProtoURL)
+		NRPCClientURL := create_files.FindNRPCClientURL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, NRPCClientURL)
+
+		GRPCConstantsURL := create_files.FindGRPCConstantsURL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPCConstantsURL)
+
+		TableURL := create_files.FindModelTableURL(TableName)
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, TableURL)
 	}
 
 	//создание текста
 	ModelName := Table1.NameGo
-	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
+	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextGRPCClient = DeleteFuncDelete(TextGRPCClient, ModelName, Table1)
-		//TextGRPCClient = DeleteFuncDeleteCtx(TextGRPCClient, ModelName, Table1)
-		TextGRPCClient = DeleteFuncRestore(TextGRPCClient, ModelName, Table1)
-		//TextGRPCClient = DeleteFuncRestoreCtx(TextGRPCClient, ModelName, Table1)
+		TextNRPCClient = DeleteFuncDelete(TextNRPCClient, ModelName, Table1)
+		//TextNRPCClient = DeleteFuncDeleteCtx(TextNRPCClient, ModelName, Table1)
+		TextNRPCClient = DeleteFuncRestore(TextNRPCClient, ModelName, Table1)
+		//TextNRPCClient = DeleteFuncRestoreCtx(TextNRPCClient, ModelName, Table1)
 	}
-	TextGRPCClient = DeleteFuncFind_byExtID(TextGRPCClient, ModelName, Table1)
+	TextNRPCClient = DeleteFuncFind_byExtID(TextNRPCClient, ModelName, Table1)
 
 	//замена импортов на новые URL
-	//TextGRPCClient = create_files.ReplaceServiceURLImports(TextGRPCClient)
-
-	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
-		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
-
-		//proto
-		RepositoryGRPCProtoURL := create_files.FindProtoURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCProtoURL)
-
-		//model
-		RepositoryModelURL := create_files.FindModelTableURL(TableName)
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryModelURL)
-
-		//grpc client
-		RepositoryGRPCClientlURL := create_files.FindGRPClientURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCClientlURL)
-
-		//constants
-		RepositoryGRPCConstantsURL := create_files.FindGRPCConstantsURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCConstantsURL)
-	}
+	TextNRPCClient = create_files.ReplaceServiceURLImports(TextNRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
 
 	return err
 }
 
-// CreateTestFiles - создаёт 1 файл в папке grpc_client
+// CreateTestFiles - создаёт 1 файл в папке nrpc_client
 func CreateTestFiles(Table1 *types.Table) error {
 	var err error
 
@@ -140,69 +124,72 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
-	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
+	DirTemplatesNRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
+	DirReadyNRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
 
-	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client_table_test.go_"
+	FilenameTemplateNRPCClient := DirTemplatesNRPCClient + "nrpc_client_test.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
-	FilenameReadyGRPCClient := DirReadyTable + "grpc_" + TableName + "_test.go"
+	DirReadyTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
+	FilenameReadyNRPCClient := DirReadyTable + "nrpc_" + TableName + "_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
 	if ok == false {
-		err = os.Mkdir(DirReadyTable, 0777)
+		err = os.MkdirAll(DirReadyTable, 0777)
 		if err != nil {
 			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
 		}
 	}
 
-	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
+	bytes, err := os.ReadFile(FilenameTemplateNRPCClient)
 	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
+		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 	}
-	TextGRPCClient := string(bytes)
+	TextNRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
+	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
+		TextNRPCClient = create_files.DeleteTemplateRepositoryImports(TextNRPCClient)
 
-		ConstantsURL := create_files.FindGRPCConstantsURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, ConstantsURL)
+		NRPCClientURL := create_files.FindNRPCClientURL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, NRPCClientURL)
+
+		TableURL := create_files.FindModelTableURL(TableName)
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, TableURL)
 	}
 
 	//создание текста
 	ModelName := Table1.NameGo
-	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
+	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextGRPCClient = DeleteFuncTestDelete(TextGRPCClient, ModelName, Table1)
-		TextGRPCClient = DeleteFuncTestRestore(TextGRPCClient, ModelName, Table1)
+		TextNRPCClient = DeleteFuncTestDelete(TextNRPCClient, ModelName, Table1)
+		TextNRPCClient = DeleteFuncTestRestore(TextNRPCClient, ModelName, Table1)
 	}
-	TextGRPCClient = DeleteFuncTestFind_byExtID(TextGRPCClient, ModelName, Table1)
+	TextNRPCClient = DeleteFuncTestFind_byExtID(TextNRPCClient, ModelName, Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
 		TextFind := "const Postgres_ID_Test = "
-		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, TextFind+"1", TextFind+Table1.IDMinimum)
+		TextNRPCClient = strings.ReplaceAll(TextNRPCClient, TextFind+"1", TextFind+Table1.IDMinimum)
 	}
 
 	// замена ID на PrimaryKey
-	TextGRPCClient = create_files.ReplacePrimaryKeyID(TextGRPCClient, Table1)
+	TextNRPCClient = create_files.ReplacePrimaryKeyID(TextNRPCClient, Table1)
 
 	//SkipNow()
-	TextGRPCClient = create_files.AddSkipNow(TextGRPCClient, Table1)
+	TextNRPCClient = create_files.AddSkipNow(TextNRPCClient, Table1)
 
 	//замена импортов на новые URL
-	TextGRPCClient = create_files.ReplaceServiceURLImports(TextGRPCClient)
+	TextNRPCClient = create_files.ReplaceServiceURLImports(TextNRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
 
 	return err
 }
@@ -318,6 +305,7 @@ func DeleteFuncTestFind_byExtID(Text, ModelName string, Table1 *types.Table) str
 	}
 
 	//
+
 	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "TestFindByExtID")
 
 	return Otvet

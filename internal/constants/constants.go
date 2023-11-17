@@ -16,3 +16,5 @@ const TemplateFilenameCrudGo = "crud.go_"
 const TemplateFilenameCrudGoTest = "crud_test.go_"
 
 const SETTINGS_FOLDER_NAME = "templates/configs_"
+
+const GENERATION_PROTO_FILENAME = "generation_code.sh"

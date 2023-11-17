@@ -83,7 +83,8 @@ func CreateFiles(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextDB = create_files.DeleteTemplateRepositoryImports(TextDB)
 
-		TextDB = create_files.AddImport(TextDB, DirReadyTable)
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextDB = create_files.AddImport(TextDB, ModelTableURL)
 
 		ConstantsURL := create_files.FindGRPCConstantsURL()
 		TextDB = create_files.AddImport(TextDB, ConstantsURL)
@@ -156,10 +157,11 @@ func CreateTestFiles(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextDB = create_files.DeleteTemplateRepositoryImports(TextDB)
 
-		TextDB = create_files.AddImport(TextDB, DirReadyTable)
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextDB = create_files.AddImport(TextDB, ModelTableURL)
 
-		ConstantsURL := create_files.FindGRPCConstantsURL()
-		TextDB = create_files.AddImport(TextDB, ConstantsURL)
+		//ConstantsURL := create_files.FindGRPCConstantsURL()
+		//TextDB = create_files.AddImport(TextDB, ConstantsURL)
 	}
 
 	//создание текста

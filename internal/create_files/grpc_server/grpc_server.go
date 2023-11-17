@@ -96,15 +96,15 @@ func CreateFiles(Table1 *types.Table) error {
 
 		//замена импортов на новые URL
 		//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
-		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+		//TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
 
-		//proto
-		RepositoryGRPCProtoURL := create_files.FindGRPCProtoURL()
-		TextGRPCServer = create_files.AddImport(TextGRPCServer, RepositoryGRPCProtoURL)
-
-		//model
-		RepositoryModelURL := create_files.FindModelTableURL(TableName)
-		TextGRPCServer = create_files.AddImport(TextGRPCServer, RepositoryModelURL)
+		////proto
+		//RepositoryGRPCProtoURL := create_files.FindProtoURL()
+		//TextGRPCServer = create_files.AddImport(TextGRPCServer, RepositoryGRPCProtoURL)
+		//
+		////model
+		//RepositoryModelURL := create_files.FindModelTableURL(TableName)
+		//TextGRPCServer = create_files.AddImport(TextGRPCServer, RepositoryModelURL)
 	}
 
 	//запись файла
@@ -145,8 +145,8 @@ func CreateTestFiles(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-		ProtoURL := create_files.FindProtoURL()
-		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+		//ProtoURL := create_files.FindProtobufURL()
+		//TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
 		CrudStarterURL := create_files.FindCrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
@@ -177,7 +177,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)
 
 	//замена импортов на новые URL
-	TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
+	//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)

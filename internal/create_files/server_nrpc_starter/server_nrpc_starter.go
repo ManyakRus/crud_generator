@@ -56,7 +56,7 @@ func CreateServerGRPCStarter() error {
 		TextNRPCStarter = create_files.DeleteTemplateRepositoryImports(TextNRPCStarter)
 
 		//Proto URL
-		RepositoryProtoURL := create_files.FindGRPCProtoURL()
+		RepositoryProtoURL := create_files.FindProtoURL()
 		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, RepositoryProtoURL)
 
 		//server grpc URL
