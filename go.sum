@@ -3,8 +3,8 @@ github.com/Azure/azure-sdk-for-go/sdk/azidentity v0.11.0/go.mod h1:HcM1YX14R7CJc
 github.com/Azure/azure-sdk-for-go/sdk/internal v0.7.0/go.mod h1:yqy467j36fJxcRV2TzfVZ1pCb5vxm4BtZPUdYWe/Xo8=
 github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792 h1:bxwxD0H3kSUAH3uNk/b74gkImcUiP7dyibmMoVwk338=
 github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792/go.mod h1:OUyxCVbPW/2lC1e6cM7Am941SJiC88BhNnb24x2R3a8=
-github.com/ManyakRus/starter v0.0.0-20231115082945-e2f3f8f5ed62 h1:ajjWHc+dktmSXEbfVdZqWThYBfhGqIdPTWQUTy/H5p0=
-github.com/ManyakRus/starter v0.0.0-20231115082945-e2f3f8f5ed62/go.mod h1:a+wYuguDadLR6xaj9fN8m6acWhUjzPuxaPtZfJhMNW4=
+github.com/ManyakRus/starter v0.0.0-20231117100514-f4caf3891bce h1:13ozzODjO4WargasPbewy4a+L8DJ+shs+cuCuOq4GYU=
+github.com/ManyakRus/starter v0.0.0-20231117100514-f4caf3891bce/go.mod h1:a+wYuguDadLR6xaj9fN8m6acWhUjzPuxaPtZfJhMNW4=
 github.com/bxcodec/faker/v3 v3.8.1 h1:qO/Xq19V6uHt2xujwpaetgKhraGCapqY2CRWGD/SqcM=
 github.com/bxcodec/faker/v3 v3.8.1/go.mod h1:DdSDccxF5msjFo5aO4vrobRQ8nIApg8kq3QWPEQD6+o=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
@@ -127,8 +127,8 @@ github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcU
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.4.1/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
-gitlab.aescorp.ru/dsp_dev/claim/sync_service v1.2.24 h1:sUIyfhb7Yq3hVeqFu0ti1zVhk5NDuGgoIbYXFecBhFU=
-gitlab.aescorp.ru/dsp_dev/claim/sync_service v1.2.24/go.mod h1:WDjha5KBoluGomO6iq41ZDiEaEFj1KPHtOSf9+usk/s=
+gitlab.aescorp.ru/dsp_dev/claim/sync_service v1.2.26 h1:jcII3+d63i6JCiv9uKDcD413No+Fmd50jNbQ19F1YYc=
+gitlab.aescorp.ru/dsp_dev/claim/sync_service v1.2.26/go.mod h1:79bzXRg7wjmLFHkXiCmM/9VZTxwKudzaXR+TfsGxWVs=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=

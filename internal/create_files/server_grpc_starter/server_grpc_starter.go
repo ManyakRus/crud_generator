@@ -47,6 +47,9 @@ func CreateServerGRPCStarter() error {
 	}
 	TextGRPCStarter := string(bytes)
 
+	//заменим имя пакета на новое
+	create_files.ReplacePackageName(TextGRPCStarter, DirReadyServerGRPC)
+
 	//создадим папку ready
 	folders.CreateFolder(DirReadyServerGRPC)
 

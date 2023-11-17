@@ -55,15 +55,15 @@ func CreateFiles(Table1 *types.Table) error {
 
 	FilenameTemplateNRPCClient := DirTemplatesNRPCClient + "nrpc_client.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
-	FilenameReadyNRPCClient := DirTable + "nrpc_" + TableName + ".go"
+	DirReadyTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
+	FilenameReadyNRPCClient := DirReadyTable + "nrpc_" + TableName + ".go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirTable)
+	ok, err := micro.FileExists(DirReadyTable)
 	if ok == false {
-		err = os.MkdirAll(DirTable, 0777)
+		err = os.MkdirAll(DirReadyTable, 0777)
 		if err != nil {
-			log.Panic("Mkdir() ", DirTable, " error: ", err)
+			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
 		}
 	}
 
@@ -72,6 +72,9 @@ func CreateFiles(Table1 *types.Table) error {
 		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 	}
 	TextNRPCClient := string(bytes)
+
+	//заменим имя пакета на новое
+	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
 
 	//создание текста
 	ModelName := Table1.NameGo
@@ -109,15 +112,15 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	FilenameTemplateNRPCClient := DirTemplatesNRPCClient + "nrpc_client_test.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
-	FilenameReadyNRPCClient := DirTable + "nrpc_" + TableName + "_test.go"
+	DirReadyTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
+	FilenameReadyNRPCClient := DirReadyTable + "nrpc_" + TableName + "_test.go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirTable)
+	ok, err := micro.FileExists(DirReadyTable)
 	if ok == false {
-		err = os.MkdirAll(DirTable, 0777)
+		err = os.MkdirAll(DirReadyTable, 0777)
 		if err != nil {
-			log.Panic("Mkdir() ", DirTable, " error: ", err)
+			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
 		}
 	}
 
@@ -126,6 +129,9 @@ func CreateTestFiles(Table1 *types.Table) error {
 		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 	}
 	TextNRPCClient := string(bytes)
+
+	//заменим имя пакета на новое
+	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
 
 	//создание текста
 	ModelName := Table1.NameGo

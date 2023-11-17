@@ -76,6 +76,9 @@ func CreateFiles(Table1 *types.Table) error {
 	}
 	TextDB := string(bytes)
 
+	//заменим имя пакета на новое
+	create_files.ReplacePackageName(TextDB, DirTable)
+
 	//создание текста
 	ModelName := Table1.NameGo
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
@@ -135,6 +138,9 @@ func CreateTestFiles(Table1 *types.Table) error {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
 	}
 	TextDB := string(bytes)
+
+	//заменим имя пакета на новое
+	create_files.ReplacePackageName(TextDB, DirTable)
 
 	//создание текста
 	ModelName := Table1.NameGo

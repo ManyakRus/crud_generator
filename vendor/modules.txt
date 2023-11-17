@@ -1,7 +1,7 @@
 # github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792
 ## explicit; go 1.13
 github.com/ManyakRus/logrus
-# github.com/ManyakRus/starter v0.0.0-20231115082945-e2f3f8f5ed62
+# github.com/ManyakRus/starter v0.0.0-20231117100514-f4caf3891bce
 ## explicit; go 1.20
 github.com/ManyakRus/starter/config
 github.com/ManyakRus/starter/contextmain
@@ -70,7 +70,7 @@ github.com/otiai10/copy
 # github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e
 ## explicit
 github.com/serenize/snaker
-# gitlab.aescorp.ru/dsp_dev/claim/sync_service v1.2.24
+# gitlab.aescorp.ru/dsp_dev/claim/sync_service v1.2.26
 ## explicit; go 1.20
 gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/constants
 # golang.org/x/crypto v0.15.0

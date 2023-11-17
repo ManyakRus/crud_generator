@@ -568,8 +568,12 @@ func FindModelNameComment(ModelName string, Table1 *types.Table) string {
 func ReplacePackageName(Text, PackageName string) string {
 	Otvet := Text
 
+	//найдём имя каталога, это будет имя пакета
+	PackageName = micro.DeleteEndSlash(PackageName)
+	PackageName = micro.LastWord(PackageName)
+
 	//
-	TextFind := "\tpackage "
+	TextFind := "package "
 	pos1 := strings.Index(Otvet, TextFind)
 	if pos1 < 0 {
 		log.Error("not found word: package ")

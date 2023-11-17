@@ -87,6 +87,9 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	}
 	TextModel := string(bytes)
 
+	//заменим имя пакета на новое
+	create_files.ReplacePackageName(TextModel, DirReadyModel)
+
 	//создание текста
 	//TextModel, TextModelStruct, ModelName, err := FindTextModelStruct(TextModel, Table1)
 	//TextModel = ReplaceModelStruct(TextModel, TextModelStruct)
@@ -145,9 +148,10 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 	}
 	TextModel := string(bytes)
 
-	//создание текста
+	//заменим имя пакета на новое
+	create_files.ReplacePackageName(TextModel, DirReadyModel)
 
-	//
+	//создание текста
 	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
