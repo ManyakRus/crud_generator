@@ -72,7 +72,7 @@ func CreateENV() error {
 	TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
 
 	//DB_SCHEMA
-	VariableName = "DB_SCHEMA"
+	VariableName = "DB_SCHEME"
 	Value = postgres_gorm.Settings.DB_SCHEMA
 	TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
 
