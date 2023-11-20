@@ -1,4 +1,4 @@
-package server_grpc
+package server_nrpc
 
 import (
 	config_main "github.com/ManyakRus/starter/config"

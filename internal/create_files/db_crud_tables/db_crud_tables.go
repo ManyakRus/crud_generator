@@ -1,9 +1,10 @@
-package db_crud
+package db_crud_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
@@ -86,7 +87,7 @@ func CreateFiles(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextDB = create_files.AddImport(TextDB, ModelTableURL)
 
-		ConstantsURL := create_files.FindGRPCConstantsURL()
+		ConstantsURL := create_files.FindDBConstantsURL()
 		TextDB = create_files.AddImport(TextDB, ConstantsURL)
 	}
 
@@ -135,20 +136,14 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirReadyTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
 	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_test.go"
 
-	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.Mkdir(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
-
 	bytes, err := os.ReadFile(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
 	}
 	TextDB := string(bytes)
+
+	//создадим папку ready
+	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextDB, DirReadyTable)

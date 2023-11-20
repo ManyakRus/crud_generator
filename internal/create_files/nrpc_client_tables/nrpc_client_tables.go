@@ -4,6 +4,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
@@ -53,25 +54,19 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplatesNRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
 	DirReadyNRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
 
-	FilenameTemplateNRPCClient := DirTemplatesNRPCClient + "nrpc_client.go_"
+	FilenameTemplateNRPCClient := DirTemplatesNRPCClient + constants.NRPC_CLIENT_TABLE_FILENAME + "_"
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
 	FilenameReadyNRPCClient := DirReadyTable + "nrpc_" + TableName + ".go"
-
-	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
 
 	bytes, err := os.ReadFile(FilenameTemplateNRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 	}
 	TextNRPCClient := string(bytes)
+
+	//создадим папку ready
+	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
@@ -127,25 +122,19 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirTemplatesNRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
 	DirReadyNRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
 
-	FilenameTemplateNRPCClient := DirTemplatesNRPCClient + "nrpc_client_test.go_"
+	FilenameTemplateNRPCClient := DirTemplatesNRPCClient + constants.NRPC_CLIENT_TABLE_TEST_FILENAME + "_"
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
 	FilenameReadyNRPCClient := DirReadyTable + "nrpc_" + TableName + "_test.go"
-
-	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
 
 	bytes, err := os.ReadFile(FilenameTemplateNRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 	}
 	TextNRPCClient := string(bytes)
+
+	//создадим папку ready
+	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)

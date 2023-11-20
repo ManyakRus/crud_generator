@@ -1,4 +1,4 @@
-package server_grpc
+package server_nrpc
 
 import (
 	"github.com/ManyakRus/starter/contextmain"
@@ -65,9 +65,19 @@ func Connect() {
 // FillSettings - заполняет настройки из переменных окружения
 func FillSettings() {
 	Settings = SettingsINI{}
-	Settings.NATS_HOST = os.Getenv("BUS_LOCAL_HOST")
-	Settings.NATS_PORT = os.Getenv("BUS_LOCAL_PORT")
+	Settings.NATS_HOST = os.Getenv("NATS_HOST")
+	Settings.NATS_PORT = os.Getenv("NATS_PORT")
 
+	//синонимы
+	if Settings.NATS_HOST == "" {
+		Settings.NATS_HOST = os.Getenv("BUS_LOCAL_HOST")
+	}
+
+	if Settings.NATS_PORT == "" {
+		Settings.NATS_PORT = os.Getenv("BUS_LOCAL_PORT")
+	}
+
+	//проверка
 	if Settings.NATS_HOST == "" {
 		log.Panic("Need fill BUS_LOCAL_HOST ! in OS Environment ")
 	}

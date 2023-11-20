@@ -46,7 +46,10 @@ func CreateFileMain() error {
 	//создадим папку ready
 	folders.CreateFolder(DirReadyMain)
 
+	//
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextMain = create_files.DeleteTemplateRepositoryImports(TextMain)
+
 		//GRPC
 		if config.Settings.NEED_CREATE_GRPC == true {
 			TextImport := create_files.FindGRPCServerURL()
@@ -62,6 +65,9 @@ func CreateFileMain() error {
 		} else {
 			TextMain = strings.ReplaceAll(TextMain, "\n\tserver_nrpc.Start()", "")
 		}
+
+		URLCrudStarter := create_files.FindCrudStarterURL()
+		TextMain = create_files.AddImport(TextMain, URLCrudStarter)
 	}
 
 	//замена импортов на новые URL

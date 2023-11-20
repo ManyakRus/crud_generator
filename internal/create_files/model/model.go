@@ -5,6 +5,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
@@ -41,14 +42,8 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplatesModel := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_MODEL + micro.SeparatorFile()
 	DirReadyModel := DirReady + config.Settings.TEMPLATE_FOLDERNAME_MODEL + micro.SeparatorFile() + TableName + micro.SeparatorFile()
 
-	//создадим каталог
-	ok, err := micro.FileExists(DirReadyModel)
-	if ok == false {
-		err = os.MkdirAll(DirReadyModel, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyModel, " error: ", err)
-		}
-	}
+	//создадим папку ready
+	folders.CreateFolder(DirReadyModel)
 
 	// создание файла struct
 	if config.Settings.NEED_CREATE_MODEL_STRUCT == true {
@@ -86,6 +81,9 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
 	}
 	TextModel := string(bytes)
+
+	//создадим папку ready
+	folders.CreateFolder(DirReadyModel)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextModel, DirReadyModel)

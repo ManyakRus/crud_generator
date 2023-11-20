@@ -8,6 +8,7 @@ import (
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"os"
+	"strings"
 )
 
 // CreateAllFiles - создаёт все файлы в папке grpc proto
@@ -46,6 +47,9 @@ func CreateServerGRPCStarter() error {
 	}
 	TextNRPCStarter := string(bytes)
 
+	//создадим папку ready
+	folders.CreateFolder(DirReadyServerNRPC)
+
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextNRPCStarter, DirReadyServerNRPC)
 
@@ -63,6 +67,15 @@ func CreateServerGRPCStarter() error {
 		RepositoryServerGRPCURL := create_files.FindGRPCServerURL()
 		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, RepositoryServerGRPCURL)
 	}
+
+	//заменим название сервиса
+	ServiceName := config.Settings.SERVICE_NAME
+	ServiceNameProto := micro.StringFromUpperCase(ServiceName)
+	TEMPLATE_SERVICE_NAME := config.Settings.TEMPLATE_SERVICE_NAME
+	TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, TEMPLATE_SERVICE_NAME, ServiceNameProto)
+	//заменим ещё раз с большой буквы
+	TEMPLATE_SERVICE_NAME = micro.StringFromUpperCase(TEMPLATE_SERVICE_NAME)
+	TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, TEMPLATE_SERVICE_NAME, ServiceNameProto)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextNRPCStarter), constants.FILE_PERMISSIONS)

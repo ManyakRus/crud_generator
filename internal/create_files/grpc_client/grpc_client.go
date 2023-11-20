@@ -44,8 +44,8 @@ func CreateGRPCClient() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesClientGRPC := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyClientGRPC := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
-	FilenameReadyMain := DirReadyClientGRPC + "grpc_client.go"
-	FilenameTemplateMain := DirTemplatesClientGRPC + "grpc_client.go_"
+	FilenameReadyMain := DirReadyClientGRPC + constants.GRPC_CLIENT_FILENAME
+	FilenameTemplateMain := DirTemplatesClientGRPC + constants.GRPC_CLIENT_FILENAME + "_"
 
 	bytes, err := os.ReadFile(FilenameTemplateMain)
 	if err != nil {
@@ -65,6 +65,12 @@ func CreateGRPCClient() error {
 
 		DBConstantsURL := create_files.FindDBConstantsURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, DBConstantsURL)
+
+		//заменим имя сервиса на новое
+		ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+		ServiceName := config.Settings.SERVICE_NAME
+		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, ServiceNameTemplate, ServiceName)
+		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, strings.ToUpper(ServiceNameTemplate), strings.ToUpper(ServiceName))
 	}
 
 	//создадим папку ready
@@ -98,14 +104,17 @@ func CreateGRPCClientTest() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesClientGRPC := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyClientGRPC := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
-	FilenameReadyMain := DirReadyClientGRPC + "grpc_client_test.go"
-	FilenameTemplateMain := DirTemplatesClientGRPC + "grpc_client_test.go_"
+	FilenameReadyMain := DirReadyClientGRPC + constants.GRPC_CLIENT_TEST_FILENAME
+	FilenameTemplateMain := DirTemplatesClientGRPC + constants.GRPC_CLIENT_TEST_FILENAME + "_"
 
 	bytes, err := os.ReadFile(FilenameTemplateMain)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMain, " error: ", err)
 	}
 	TextGRPCClient := string(bytes)
+
+	//создадим папку ready
+	folders.CreateFolder(DirReadyClientGRPC)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCClient, DirReadyClientGRPC)
@@ -116,6 +125,13 @@ func CreateGRPCClientTest() error {
 
 		DBConstantsURL := create_files.FindDBConstantsURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, DBConstantsURL)
+
+		//заменим имя сервиса на новое
+		ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+		ServiceName := config.Settings.SERVICE_NAME
+		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, ServiceNameTemplate, ServiceName)
+		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, strings.ToUpper(ServiceNameTemplate), strings.ToUpper(ServiceName))
+
 	}
 
 	//создадим папку ready

@@ -1,292 +1,124 @@
-package nrpc_lawsuit_status_types
+package nrpc_client
 
 import (
-	"encoding/json"
+	"github.com/ManyakRus/starter/contextmain"
+	"github.com/ManyakRus/starter/log"
+	"github.com/ManyakRus/starter/stopapp"
+	"github.com/nats-io/nats.go"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/grpc_client/constants"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
-	"log"
+
+	"os"
+	"strings"
+	"time"
 )
 
-// VersionModel - хранит версию структуры модели
-var VersionModel uint32
-
-// TableName - имя таблицы в БД Postgres
-const TableName string = "lawsuit_status_types"
-
-// объект для CRUD операций через GRPC
-type Crud_NRPC struct {
+type SettingsINI struct {
+	NATS_HOST string
+	NATS_PORT string
 }
 
-// GetVersionModel - возвращает хэш версии структуры модели
-func (crud Crud_NRPC) GetVersionModel() uint32 {
-	if VersionModel == 0 {
-		VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+var Settings SettingsINI
+
+// Conn - подключение к NATS
+var Conn *nats.Conn
+
+// Client - подключение к клиенту NRPC
+var Client *grpc_proto.Sync_serviceClient
+
+// Connect - подключается к NATS
+func Connect() {
+	var err error
+
+	if Settings.NATS_HOST == "" {
+		FillSettings()
 	}
-	return VersionModel
+
+	NatsURL := "nats://" + Settings.NATS_HOST + ":" + Settings.NATS_PORT
+	// Connect to the NATS server.
+	Conn, err = nats.Connect(NatsURL, nats.Timeout(5*time.Second))
+	if err != nil {
+		log.Panic(err)
+	}
+	// defer Conn.Close()
+
+	// This is our generated client.
+	Client = grpc_proto.NewSync_serviceClient(Conn)
+
+	log.Info("Client NRPC connected: ", NatsURL)
 }
 
-// Read - возвращает модель из БД
-func (crud Crud_NRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
+// FillSettings - заполняет настройки из переменных окружения
+func FillSettings() {
+	Settings = SettingsINI{}
+	Settings.NATS_HOST = os.Getenv("NATS_HOST")
+	Settings.NATS_PORT = os.Getenv("NATS_PORT")
 
-	// подключение
-	if nrpc_client.Client == nil {
-		nrpc_client.Connect()
+	//синонимы
+	if Settings.NATS_HOST == "" {
+		Settings.NATS_HOST = os.Getenv("BUS_LOCAL_HOST")
 	}
 
-	// подготовка запроса
-	var VersionModel = crud.GetVersionModel()
-
-	Request := &grpc_proto.RequestId{}
-	Request.Id = int64(m.ID)
-	Request.VersionModel = VersionModel
-
-	// запрос
-	Response, err := nrpc_client.Client.LawsuitStatusType_Read(Request)
-	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
-		}
-		return err
+	if Settings.NATS_PORT == "" {
+		Settings.NATS_PORT = os.Getenv("BUS_LOCAL_PORT")
 	}
 
-	// ответ
-	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), m)
-	if err != nil {
-		return err
+
+	if Settings.NATS_HOST == "" {
+		log.Panic("Need fill BUS_LOCAL_HOST ! in OS Environment ")
 	}
 
-	return err
+	if Settings.NATS_PORT == "" {
+		log.Panic("Need fill BUS_LOCAL_PORT ! in OS Environment ")
+	}
 }
 
-// Create - записывает новую модель в БД
-func (crud Crud_NRPC) Create(m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
+// WaitStop - ожидает отмену глобального контекста
+func WaitStop() {
 
-	// подключение
-	if nrpc_client.Client == nil {
-		nrpc_client.Connect()
+	select {
+	case <-contextmain.GetContext().Done():
+		log.Warn("Context app is canceled. nrpc client connect")
 	}
 
-	// подготовка запроса
-	var VersionModel = crud.GetVersionModel()
+	// ждём пока отправляемых сейчас сообщений будет =0
+	stopapp.WaitTotalMessagesSendingNow("sync_service_client")
 
-	ModelString, err := m.GetJSON()
-	if err != nil {
-		return err
-	}
-	Request := &grpc_proto.RequestModel{}
-	Request.ModelString = ModelString
-	Request.VersionModel = VersionModel
-
-	// запрос
-	Response, err := nrpc_client.Client.LawsuitStatusType_Create(Request)
-	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
-		}
-		return err
-	}
-
-	// ответ
-	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), m)
-	if err != nil {
-		return err
-	}
-
-	return err
+	// закрываем соединение
+	CloseConnection()
+	stopapp.GetWaitGroup_Main().Done()
 }
 
-// Update - обновляет модель в БД
-func (crud Crud_NRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
+// Start - необходимые процедуры для запуска сервера NRPC
+func Start() {
+	Connect()
 
-	// подключение
-	if nrpc_client.Client == nil {
-		nrpc_client.Connect()
-	}
+	stopapp.GetWaitGroup_Main().Add(1)
+	go WaitStop()
 
-	// подготовка запроса
-	var VersionModel = crud.GetVersionModel()
-
-	ModelString, err := m.GetJSON()
-	if err != nil {
-		return err
-	}
-	Request := &grpc_proto.RequestModel{}
-	Request.ModelString = ModelString
-	Request.VersionModel = VersionModel
-
-	// запрос
-	Response, err := nrpc_client.Client.LawsuitStatusType_Update(Request)
-	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
-		}
-		return err
-	}
-
-	// ответ
-	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), m)
-	if err != nil {
-		return err
-	}
-
-	return err
 }
 
-// Save - обновляет (или создаёт) модель в БД
-func (crud Crud_NRPC) Save(m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
-
-	// подключение
-	if nrpc_client.Client == nil {
-		nrpc_client.Connect()
-	}
-
-	// подготовка запроса
-	var VersionModel = crud.GetVersionModel()
-
-	ModelString, err := m.GetJSON()
-	if err != nil {
-		return err
-	}
-	Request := &grpc_proto.RequestModel{}
-	Request.ModelString = ModelString
-	Request.VersionModel = VersionModel
-
-	// запрос
-	Response, err := nrpc_client.Client.LawsuitStatusType_Save(Request)
-	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
-		}
-		return err
-	}
-
-	// ответ
-	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), m)
-	if err != nil {
-		return err
-	}
-
-	return err
+// CloseConnection - закрывает подключение к NATS
+func CloseConnection() {
+	Conn.Close()
+	log.Info("NRPC client connection closed")
 }
 
-// Delete - устанавливает is_deleted = true в БД
-func (crud Crud_NRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
+// IsRecordNotFound - возвращает true если ошибка = "record not found"
+func IsRecordNotFound(err error) bool {
+	Otvet := false
 
-	// подключение
-	if nrpc_client.Client == nil {
-		nrpc_client.Connect()
+	if err == nil {
+		return Otvet
 	}
 
-	// подготовка запроса
-	var VersionModel = crud.GetVersionModel()
-
-	Request := &grpc_proto.RequestId{}
-	Request.Id = int64(m.ID)
-	Request.VersionModel = VersionModel
-
-	// запрос
-	Response, err := nrpc_client.Client.LawsuitStatusType_Delete(Request)
-	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
-		}
-		return err
+	// len1 := len(constants.TEXT_RECORD_NOT_FOUND)
+	TextErr := err.Error()
+	pos1 := strings.Index(TextErr, constants.TEXT_RECORD_NOT_FOUND)
+	// if TextErr[0:len1] == constants.TEXT_RECORD_NOT_FOUND {
+	if pos1 >= 0 {
+		Otvet = true
 	}
 
-	// ответ
-	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), m)
-	if err != nil {
-		return err
-	}
-
-	return err
+	return Otvet
 }
-
-// Restore - устанавливает is_deleted = false в БД
-func (crud Crud_NRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
-	// var Otvet lawsuit_status_types.LawsuitStatusType
-
-	// подключение
-	if nrpc_client.Client == nil {
-		nrpc_client.Connect()
-	}
-
-	// подготовка запроса
-	var VersionModel = crud.GetVersionModel()
-
-	Request := &grpc_proto.RequestId{}
-	Request.Id = int64(m.ID)
-	Request.VersionModel = VersionModel
-
-	// запрос
-	Response, err := nrpc_client.Client.LawsuitStatusType_Restore(Request)
-	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
-		}
-		return err
-	}
-
-	// ответ
-	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), m)
-	if err != nil {
-		return err
-	}
-
-	return err
-}
-
-// Find_ByExtID - находит модель в БД по ext_id и connection_id
-func (crud Crud_NRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) error {
-	//подключение
-	if nrpc_client.Client == nil {
-		nrpc_client.Connect()
-	}
-
-	//подготовка запроса
-	var VersionModel = crud.GetVersionModel()
-
-	Request := &grpc_proto.RequestExtId{}
-	Request.ExtId = m.ExtID
-	Request.ConnectionId = m.ConnectionID
-	Request.VersionModel = VersionModel
-
-	//запрос
-	Response, err := nrpc_client.Client.LawsuitStatusType_FindByExtID(Request)
-	if err != nil {
-		sError := err.Error()
-		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
-		}
-		return err
-	}
-
-	//ответ
-	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), m)
-	if err != nil {
-		return err
-	}
-
-	return err
-}
-

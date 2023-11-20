@@ -1,9 +1,10 @@
-package grpc_proto
+package protobuf
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
@@ -44,14 +45,17 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	}
 	TextProto := string(bytes)
 
+	//создадим папку ready
+	folders.CreateFolder(DirReadyProto)
+
 	//заменим название сервиса
 	ServiceName := config.Settings.SERVICE_NAME
-	ServiceNameProto := ServiceName
-	if len(ServiceNameProto) > 0 {
-		//имя сервиса с большой буквы
-		ServiceNameProto = strings.ToUpper(ServiceName[:1]) + config.Settings.SERVICE_NAME[1:]
-	}
-	TextProto = strings.ReplaceAll(TextProto, config.Settings.TEMPLATE_SERVICE_NAME, ServiceNameProto)
+	ServiceNameProto := micro.StringFromUpperCase(ServiceName)
+	TEMPLATE_SERVICE_NAME := config.Settings.TEMPLATE_SERVICE_NAME
+	TextProto = strings.ReplaceAll(TextProto, TEMPLATE_SERVICE_NAME, ServiceNameProto)
+	//заменим ещё раз с большой буквы
+	TEMPLATE_SERVICE_NAME = micro.StringFromUpperCase(TEMPLATE_SERVICE_NAME)
+	TextProto = strings.ReplaceAll(TextProto, TEMPLATE_SERVICE_NAME, ServiceNameProto)
 
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(MapAll))

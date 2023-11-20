@@ -37,8 +37,8 @@ func CreateMakefile() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesMakefile := DirTemplates
 	DirReadyMakefile := DirReady
-	FilenameReadyMakefile := DirReadyMakefile + "Makefile"
-	FilenameTemplateMakefile := DirTemplatesMakefile + "Makefile_"
+	FilenameReadyMakefile := DirReadyMakefile + constants.MAKEFILE_FILENAME
+	FilenameTemplateMakefile := DirTemplatesMakefile + constants.MAKEFILE_FILENAME + "_"
 
 	bytes, err := os.ReadFile(FilenameTemplateMakefile)
 	if err != nil {

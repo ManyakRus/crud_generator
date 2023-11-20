@@ -4,6 +4,7 @@ import (
 	configmain "github.com/ManyakRus/starter/config"
 	"github.com/ManyakRus/starter/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
+	"github.com/ManyakRus/starter/postgres_gorm"
 )
 
 // main - старт приложения

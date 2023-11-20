@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
-	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/load_configs"
 	"github.com/ManyakRus/crud_generator/internal/logic"
 	"github.com/ManyakRus/starter/log"
@@ -26,7 +25,7 @@ func StartApp() {
 	postgres_gorm.StartDB()
 	postgres_gorm.GetConnection().Logger.LogMode(1)
 
-	folders.CreateAllFolders()
+	//folders.CreateAllFolders()
 
 	err := logic.StartFillAll()
 	if err != nil {

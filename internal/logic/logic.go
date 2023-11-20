@@ -3,17 +3,20 @@ package logic
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
-	"github.com/ManyakRus/crud_generator/internal/create_files/db_crud"
+	"github.com/ManyakRus/crud_generator/internal/create_files/db_crud_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/db_tables"
+	"github.com/ManyakRus/crud_generator/internal/create_files/env_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/generation_code_sh"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client_tables"
-	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_proto"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_server"
 	"github.com/ManyakRus/crud_generator/internal/create_files/main_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/makefile"
 	"github.com/ManyakRus/crud_generator/internal/create_files/model"
+	"github.com/ManyakRus/crud_generator/internal/create_files/nrpc_client"
 	"github.com/ManyakRus/crud_generator/internal/create_files/nrpc_client_tables"
+	"github.com/ManyakRus/crud_generator/internal/create_files/protobuf"
+	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_func"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_nrpc_starter"
 	"github.com/ManyakRus/crud_generator/internal/folders"
@@ -52,7 +55,7 @@ func StartFillAll() error {
 	}
 
 	//db crud
-	err = db_crud.CreateAllFiles(MapAll)
+	err = db_crud_tables.CreateAllFiles(MapAll)
 	if err != nil {
 		return err
 	}
@@ -75,6 +78,12 @@ func StartFillAll() error {
 		return err
 	}
 
+	//nrpc_client
+	err = nrpc_client.CreateAllFiles()
+	if err != nil {
+		return err
+	}
+
 	//grpc_client
 	err = nrpc_client_tables.CreateAllFiles(MapAll)
 	if err != nil {
@@ -82,7 +91,7 @@ func StartFillAll() error {
 	}
 
 	//grpc_proto
-	err = grpc_proto.CreateAllFiles(MapAll)
+	err = protobuf.CreateAllFiles(MapAll)
 	if err != nil {
 		return err
 	}
@@ -111,6 +120,12 @@ func StartFillAll() error {
 		return err
 	}
 
+	//server_grpc_func
+	err = server_grpc_func.CreateAllFiles()
+	if err != nil {
+		return err
+	}
+
 	//makefile
 	err = makefile.CreateAllFiles()
 	if err != nil {
@@ -125,6 +140,12 @@ func StartFillAll() error {
 
 	//tables
 	err = db_tables.CreateAllFiles(MapAll)
+	if err != nil {
+		return err
+	}
+
+	//env
+	err = env_file.CreateAllFiles()
 	if err != nil {
 		return err
 	}

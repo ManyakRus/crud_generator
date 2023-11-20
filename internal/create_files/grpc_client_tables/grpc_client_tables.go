@@ -4,6 +4,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
@@ -59,20 +60,14 @@ func CreateFiles(Table1 *types.Table) error {
 	DirReadyTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
 	FilenameReadyGRPCClient := DirReadyTable + "grpc_" + TableName + ".go"
 
-	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
-
 	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
 	TextGRPCClient := string(bytes)
+
+	//создадим папку ready
+	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
@@ -148,20 +143,14 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirReadyTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
 	FilenameReadyGRPCClient := DirReadyTable + "grpc_" + TableName + "_test.go"
 
-	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.Mkdir(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
-
 	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
 	TextGRPCClient := string(bytes)
+
+	//создадим папку ready
+	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
@@ -170,8 +159,11 @@ func CreateTestFiles(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
 
-		ConstantsURL := create_files.FindGRPCConstantsURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, ConstantsURL)
+		GRPClientURL := create_files.FindGRPClientURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientURL)
+
+		ModelTableName := create_files.FindModelTableURL(TableName)
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, ModelTableName)
 	}
 
 	//создание текста

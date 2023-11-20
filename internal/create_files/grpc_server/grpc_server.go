@@ -4,6 +4,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
@@ -63,6 +64,9 @@ func CreateFiles(Table1 *types.Table) error {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCServer, " error: ", err)
 	}
 	TextGRPCServer := string(bytes)
+
+	//создадим папку ready
+	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
@@ -134,6 +138,9 @@ func CreateTestFiles(Table1 *types.Table) error {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCServer, " error: ", err)
 	}
 	TextGRPCServer := string(bytes)
+
+	//создадим папку ready
+	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)

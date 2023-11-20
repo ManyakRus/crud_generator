@@ -2,7 +2,6 @@ package folders
 
 import (
 	"errors"
-	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	copy_files "github.com/otiai10/copy"
@@ -60,175 +59,176 @@ func DeleteFolder(FilenameFull string) error {
 	return err
 }
 
-// CreateAllFolders - создаёт все нужные каталоги Ready
-func CreateAllFolders() {
-	var err error
-
-	dir := micro.ProgramDir_bin()
-
-	//
-	Filename := dir + config.Settings.SERVICE_NAME
-	ok, err := micro.FileExists(Filename)
-	if ok == false || err != nil {
-		err = CreateFolder_err(Filename, 0777)
-		if err != nil {
-			log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-		}
-		log.Info("CreateFolder_err() ", Filename)
-	}
-
-	//
-	Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "internal"
-	ok, err = micro.FileExists(Filename)
-	if ok == false || err != nil {
-		err = CreateFolder_err(Filename, 0777)
-		if err != nil {
-			log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-		}
-		log.Info("CreateFolder_err() ", Filename)
-	}
-
-	//
-	//Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "pkg"
-	//ok, err = micro.FileExists(Filename)
-	//if ok == false || err != nil {
-	//	err = CreateFolder_err(Filename, 0777)
-	//	if err != nil {
-	//		log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-	//	}
-	//	log.Info("CreateFolder_err() ", Filename)
-	//}
-
-	//model
-	Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_MODEL
-	ok, err = micro.FileExists(Filename)
-	if ok == false || err != nil {
-		err = CreateFolder_err(Filename, 0777)
-		if err != nil {
-			log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-		}
-		log.Info("CreateFolder_err() ", Filename)
-	}
-
-	if config.Settings.NEED_CREATE_DB == true {
-		//db
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_CRUD
-		ok, err = micro.FileExists(Filename)
-		if ok == false || err != nil {
-			err = CreateFolder_err(Filename, 0777)
-			if err != nil {
-				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-			}
-			log.Info("CreateFolder_err() ", Filename)
-		}
-
-		//crud_starter
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER
-		ok, err = micro.FileExists(Filename)
-		if ok == false || err != nil {
-			err = CreateFolder_err(Filename, 0777)
-			if err != nil {
-				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-			}
-			log.Info("CreateFolder_err() ", Filename)
-		}
-
-	}
-
-	if config.Settings.NEED_CREATE_GRPC == true {
-		//grpc
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO
-		ok, err = micro.FileExists(Filename)
-		if ok == false || err != nil {
-			err = CreateFolder_err(Filename, 0777)
-			if err != nil {
-				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-			}
-			log.Info("CreateFolder_err() ", Filename)
-		}
-
-		//grpc_server
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER
-		ok, err = micro.FileExists(Filename)
-		if ok == false || err != nil {
-			err = CreateFolder_err(Filename, 0777)
-			if err != nil {
-				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-			}
-			log.Info("CreateFolder_err() ", Filename)
-		}
-
-		////grpc client
-		//Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT
-		//ok, err = micro.FileExists(Filename)
-		//if ok == false || err != nil {
-		//	err = CreateFolder_err(Filename, 0777)
-		//	if err != nil {
-		//		log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-		//	}
-		//	log.Info("CreateFolder_err() ", Filename)
-		//}
-
-		//grpc_proto
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + "grpc_proto"
-		ok, err = micro.FileExists(Filename)
-		if ok == false || err != nil {
-			err = CreateFolder_err(Filename, 0777)
-			if err != nil {
-				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-			}
-			log.Info("CreateFolder_err() ", Filename)
-		}
-	}
-
-	if config.Settings.NEED_CREATE_NRPC == true {
-		//nrpc
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC
-		ok, err = micro.FileExists(Filename)
-		if ok == false || err != nil {
-			err = CreateFolder_err(Filename, 0777)
-			if err != nil {
-				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-			}
-			log.Info("CreateFolder_err() ", Filename)
-		}
-
-		//server_nrpc
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER
-		ok, err = micro.FileExists(Filename)
-		if ok == false || err != nil {
-			err = CreateFolder_err(Filename, 0777)
-			if err != nil {
-				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-			}
-			log.Info("CreateFolder_err() ", Filename)
-		}
-
-		//nrpc client
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT
-		ok, err = micro.FileExists(Filename)
-		if ok == false || err != nil {
-			err = CreateFolder_err(Filename, 0777)
-			if err != nil {
-				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-			}
-			log.Info("CreateFolder_err() ", Filename)
-		}
-
-		//grpc_proto
-		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + "grpc_proto"
-		ok, err = micro.FileExists(Filename)
-		if ok == false || err != nil {
-			err = CreateFolder_err(Filename, 0777)
-			if err != nil {
-				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
-			}
-			log.Info("CreateFolder_err() ", Filename)
-		}
-	}
-
-	//return err
-}
+//// CreateAllFolders - создаёт все нужные каталоги Ready
+//func CreateAllFolders() {
+//	var err error
+//
+//	dir := micro.ProgramDir_bin()
+//
+//	//
+//	Filename := dir + config.Settings.SERVICE_NAME
+//	ok, err := micro.FileExists(Filename)
+//	if ok == false || err != nil {
+//		err = CreateFolder_err(Filename, 0777)
+//		if err != nil {
+//			log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//		}
+//		log.Info("CreateFolder_err() ", Filename)
+//	}
+//
+//	//
+//	Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "internal"
+//	ok, err = micro.FileExists(Filename)
+//	if ok == false || err != nil {
+//		err = CreateFolder_err(Filename, 0777)
+//		if err != nil {
+//			log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//		}
+//		log.Info("CreateFolder_err() ", Filename)
+//	}
+//
+//	//
+//	//Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + "pkg"
+//	//ok, err = micro.FileExists(Filename)
+//	//if ok == false || err != nil {
+//	//	err = CreateFolder_err(Filename, 0777)
+//	//	if err != nil {
+//	//		log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//	//	}
+//	//	log.Info("CreateFolder_err() ", Filename)
+//	//}
+//
+//	//model
+//	Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_MODEL
+//	ok, err = micro.FileExists(Filename)
+//	if ok == false || err != nil {
+//		err = CreateFolder_err(Filename, 0777)
+//		if err != nil {
+//			log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//		}
+//		log.Info("CreateFolder_err() ", Filename)
+//	}
+//
+//	if config.Settings.NEED_CREATE_DB == true {
+//		//db
+//		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_CRUD
+//		ok, err = micro.FileExists(Filename)
+//		if ok == false || err != nil {
+//			err = CreateFolder_err(Filename, 0777)
+//			if err != nil {
+//				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//			}
+//			log.Info("CreateFolder_err() ", Filename)
+//		}
+//
+//		//crud_starter
+//		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER
+//		ok, err = micro.FileExists(Filename)
+//		if ok == false || err != nil {
+//			err = CreateFolder_err(Filename, 0777)
+//			if err != nil {
+//				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//			}
+//			log.Info("CreateFolder_err() ", Filename)
+//		}
+//
+//	}
+//
+//	if config.Settings.NEED_CREATE_GRPC == true {
+//		//grpc
+//		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO
+//		ok, err = micro.FileExists(Filename)
+//		if ok == false || err != nil {
+//			err = CreateFolder_err(Filename, 0777)
+//			if err != nil {
+//				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//			}
+//			log.Info("CreateFolder_err() ", Filename)
+//		}
+//
+//		//grpc_server
+//		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER
+//		ok, err = micro.FileExists(Filename)
+//		if ok == false || err != nil {
+//			err = CreateFolder_err(Filename, 0777)
+//			if err != nil {
+//				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//			}
+//			log.Info("CreateFolder_err() ", Filename)
+//		}
+//
+//		////grpc client
+//		//Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT
+//		//ok, err = micro.FileExists(Filename)
+//		//if ok == false || err != nil {
+//		//	err = CreateFolder_err(Filename, 0777)
+//		//	if err != nil {
+//		//		log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//		//	}
+//		//	log.Info("CreateFolder_err() ", Filename)
+//		//}
+//
+//		//grpc_proto
+//		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + "grpc_proto"
+//		ok, err = micro.FileExists(Filename)
+//		if ok == false || err != nil {
+//			err = CreateFolder_err(Filename, 0777)
+//			if err != nil {
+//				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//			}
+//			log.Info("CreateFolder_err() ", Filename)
+//		}
+//	}
+//
+//	if config.Settings.NEED_CREATE_NRPC == true {
+//		//nrpc
+//		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC
+//		ok, err = micro.FileExists(Filename)
+//		if ok == false || err != nil {
+//			err = CreateFolder_err(Filename, 0777)
+//			if err != nil {
+//				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//			}
+//			log.Info("CreateFolder_err() ", Filename)
+//		}
+//
+//		//server_nrpc
+//		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER
+//		ok, err = micro.FileExists(Filename)
+//		if ok == false || err != nil {
+//			err = CreateFolder_err(Filename, 0777)
+//			if err != nil {
+//				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//			}
+//			log.Info("CreateFolder_err() ", Filename)
+//		}
+//
+//		//nrpc client
+//		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT
+//		ok, err = micro.FileExists(Filename)
+//		if ok == false || err != nil {
+//			err = CreateFolder_err(Filename, 0777)
+//			if err != nil {
+//				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//			}
+//			log.Info("CreateFolder_err() ", Filename)
+//		}
+//
+//		//grpc_proto
+//		Filename = dir + config.Settings.SERVICE_NAME + micro.SeparatorFile() + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile() + "grpc_proto"
+//		ok, err = micro.FileExists(Filename)
+//		if ok == false || err != nil {
+//			err = CreateFolder_err(Filename, 0777)
+//			if err != nil {
+//				log.Panic("CreateFolder_err() ", Filename, " error: ", err)
+//			}
+//			log.Info("CreateFolder_err() ", Filename)
+//		}
+//	}
+//
+//	//return err
+//}
+//
 
 // CopyAllFiles_Exclude_ - копирует все файлы из src в dest, кроме "*_"
 func CopyAllFiles_Exclude_(src, dest string) error {

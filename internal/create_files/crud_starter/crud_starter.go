@@ -4,6 +4,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
@@ -42,6 +43,10 @@ func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	DirReadyCrudStarter := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 	FilenameReadyCrudStarter := DirReadyCrudStarter + "crud_starter.go"
 
+	//создадим папку ready
+	folders.CreateFolder(DirReadyCrudStarter)
+
+	//
 	TextCrudStarter := config.Settings.TEXT_MODULE_GENERATED + `package crud_starter`
 
 	//найдём новый текст для каждой таблицы

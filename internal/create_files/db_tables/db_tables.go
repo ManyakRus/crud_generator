@@ -5,6 +5,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
@@ -41,14 +42,8 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplatesTable := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_TABLES + micro.SeparatorFile()
 	DirReadyTable := DirReady + config.Settings.TEMPLATE_FOLDERNAME_TABLES + micro.SeparatorFile() + config.Settings.PREFIX_TABLE + TableName + micro.SeparatorFile()
 
-	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
+	//создадим папку ready
+	folders.CreateFolder(DirReadyTable)
 
 	// создание файла struct
 	if config.Settings.NEED_CREATE_MODEL_STRUCT == true {
