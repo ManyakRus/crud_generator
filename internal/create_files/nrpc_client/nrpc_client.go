@@ -47,14 +47,14 @@ func CreateNRPCClient() error {
 	FilenameReadyNRPC := DirReadyClientNRPC + constants.NRPC_CLIENT_FILENAME
 	FilenameTemplateNRPC := DirTemplatesClientNRPC + constants.NRPC_CLIENT_FILENAME + "_"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyClientNRPC)
+
 	bytes, err := os.ReadFile(FilenameTemplateNRPC)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateNRPC, " error: ", err)
 	}
 	TextNRPCClient := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(FilenameReadyNRPC)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextNRPCClient, DirReadyClientNRPC)
@@ -72,9 +72,6 @@ func CreateNRPCClient() error {
 		DBConstantsURL := create_files.FindDBConstantsURL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, DBConstantsURL)
 	}
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyClientNRPC)
 
 	//заменим имя сервиса на новое
 	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
@@ -107,14 +104,14 @@ func CreateNRPCClientTest() error {
 	FilenameReadyNRPC := DirReadyClientNRPC + constants.NRPC_CLIENT_TEST_FILENAME
 	FilenameTemplateNRPC := DirTemplatesClientNRPC + constants.NRPC_CLIENT_TEST_FILENAME + "_"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyClientNRPC)
+
 	bytes, err := os.ReadFile(FilenameTemplateNRPC)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateNRPC, " error: ", err)
 	}
 	TextNRPCClient := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(FilenameReadyNRPC)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextNRPCClient, DirReadyClientNRPC)
@@ -129,9 +126,6 @@ func CreateNRPCClientTest() error {
 	//	DBConstantsURL := create_files.FindDBConstantsURL()
 	//	TextNRPCClient = create_files.AddImport(TextNRPCClient, DBConstantsURL)
 	//}
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyClientNRPC)
 
 	//заменим имя сервиса на новое
 	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME

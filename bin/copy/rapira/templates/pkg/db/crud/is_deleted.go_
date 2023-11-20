@@ -1,5 +1,0 @@
-if m.IsDeleted == true && m.DeletedAt.IsZero() == true {
-		m.DeletedAt = time.Now()
-	} else if m.IsDeleted == false && m.DeletedAt.IsZero() == false {
-		m.DeletedAt = time.Time{}
-	}

@@ -42,7 +42,7 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplatesTable := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_TABLES + micro.SeparatorFile()
 	DirReadyTable := DirReady + config.Settings.TEMPLATE_FOLDERNAME_TABLES + micro.SeparatorFile() + config.Settings.PREFIX_TABLE + TableName + micro.SeparatorFile()
 
-	//создадим папку ready
+	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
 	// создание файла struct

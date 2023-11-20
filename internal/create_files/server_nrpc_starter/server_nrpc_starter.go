@@ -41,20 +41,17 @@ func CreateServerGRPCStarter() error {
 	FilenameReadyMain := DirReadyServerNRPC + "server_nrpc_starter.go"
 	FilenameTemplateMain := DirTemplatesServerNRPC + "server_nrpc_starter.go_"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyServerNRPC)
+
 	bytes, err := os.ReadFile(FilenameTemplateMain)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMain, " error: ", err)
 	}
 	TextNRPCStarter := string(bytes)
 
-	//создадим папку ready
-	folders.CreateFolder(DirReadyServerNRPC)
-
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextNRPCStarter, DirReadyServerNRPC)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyServerNRPC)
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextNRPCStarter = create_files.DeleteTemplateRepositoryImports(TextNRPCStarter)

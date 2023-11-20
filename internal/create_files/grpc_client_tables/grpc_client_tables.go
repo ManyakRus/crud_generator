@@ -60,14 +60,14 @@ func CreateFiles(Table1 *types.Table) error {
 	DirReadyTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
 	FilenameReadyGRPCClient := DirReadyTable + "grpc_" + TableName + ".go"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
 	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
 	TextGRPCClient := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
@@ -143,14 +143,14 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirReadyTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
 	FilenameReadyGRPCClient := DirReadyTable + "grpc_" + TableName + "_test.go"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
 	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
 	TextGRPCClient := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)

@@ -47,14 +47,14 @@ func CreateFileGenerationCodeSh() error {
 	FilenameReadyProto := DirReadyProto + "generation_code.sh"
 	FilenameTemplateProto := DirTemplatesProto + "generation_code.sh_"
 
+	//создадим папку готовых файлов proto
+	folders.CreateFolder(DirReadyProto)
+
 	bytes, err := os.ReadFile(FilenameTemplateProto)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateProto, " error: ", err)
 	}
 	TextGenerationCode := string(bytes)
-
-	//создадим папку ready proto
-	folders.CreateFolder(DirReadyProto)
 
 	//replace
 	TextGenerationCode = strings.ReplaceAll(TextGenerationCode, config.Settings.TEMPLATE_SERVICE_NAME, config.Settings.SERVICE_NAME)

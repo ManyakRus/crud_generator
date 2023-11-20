@@ -41,7 +41,7 @@ func CreateENV() error {
 	FilenameReadyENV := DirReadyENV + constants.ENV_FILENAME
 	FilenameTemplateENV := DirTemplatesMakefile + constants.ENV_FILENAME + "_"
 
-	//создадим папку ready
+	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyENV)
 
 	//не стираем файл .env

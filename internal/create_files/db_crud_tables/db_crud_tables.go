@@ -136,14 +136,14 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirReadyTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
 	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_test.go"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
 	bytes, err := os.ReadFile(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
 	}
 	TextDB := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextDB, DirReadyTable)

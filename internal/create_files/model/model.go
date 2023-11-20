@@ -42,7 +42,7 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplatesModel := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_MODEL + micro.SeparatorFile()
 	DirReadyModel := DirReady + config.Settings.TEMPLATE_FOLDERNAME_MODEL + micro.SeparatorFile() + TableName + micro.SeparatorFile()
 
-	//создадим папку ready
+	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyModel)
 
 	// создание файла struct
@@ -75,15 +75,15 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	FilenameTemplateModel := DirTemplatesModel + "model.go_"
 	FilenameReadyModel := DirReadyModel + config.Settings.PREFIX_MODEL + TableName + ".go"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyModel)
+
 	//чтение файла шаблона
 	bytes, err := os.ReadFile(FilenameTemplateModel)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
 	}
 	TextModel := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyModel)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextModel, DirReadyModel)

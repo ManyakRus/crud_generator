@@ -38,15 +38,15 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	DirReadyProto := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile()
 	FilenameReadyProto := DirReadyProto + config.Settings.SERVICE_NAME + ".proto"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyProto)
+
 	FilenameTemplateProto := DirTemplatesProto + "service.proto_"
 	bytes, err := os.ReadFile(FilenameTemplateProto)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateProto, " error: ", err)
 	}
 	TextProto := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyProto)
 
 	//заменим название сервиса
 	ServiceName := config.Settings.SERVICE_NAME

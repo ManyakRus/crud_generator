@@ -59,14 +59,14 @@ func CreateFiles(Table1 *types.Table) error {
 	DirReadyTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
 	FilenameReadyNRPCClient := DirReadyTable + "nrpc_" + TableName + ".go"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
 	bytes, err := os.ReadFile(FilenameTemplateNRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 	}
 	TextNRPCClient := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
@@ -127,14 +127,14 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirReadyTable := DirReadyNRPCClient + "nrpc_" + TableName + micro.SeparatorFile()
 	FilenameReadyNRPCClient := DirReadyTable + "nrpc_" + TableName + "_test.go"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
 	bytes, err := os.ReadFile(FilenameTemplateNRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 	}
 	TextNRPCClient := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyTable)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)

@@ -47,6 +47,9 @@ func CreateGRPCClient() error {
 	FilenameReadyMain := DirReadyClientGRPC + constants.GRPC_CLIENT_FILENAME
 	FilenameTemplateMain := DirTemplatesClientGRPC + constants.GRPC_CLIENT_FILENAME + "_"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyClientGRPC)
+
 	bytes, err := os.ReadFile(FilenameTemplateMain)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMain, " error: ", err)
@@ -72,9 +75,6 @@ func CreateGRPCClient() error {
 		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, ServiceNameTemplate, ServiceName)
 		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, strings.ToUpper(ServiceNameTemplate), strings.ToUpper(ServiceName))
 	}
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyClientGRPC)
 
 	//заменим имя сервиса на новое
 	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
@@ -107,14 +107,14 @@ func CreateGRPCClientTest() error {
 	FilenameReadyMain := DirReadyClientGRPC + constants.GRPC_CLIENT_TEST_FILENAME
 	FilenameTemplateMain := DirTemplatesClientGRPC + constants.GRPC_CLIENT_TEST_FILENAME + "_"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyClientGRPC)
+
 	bytes, err := os.ReadFile(FilenameTemplateMain)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMain, " error: ", err)
 	}
 	TextGRPCClient := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyClientGRPC)
 
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCClient, DirReadyClientGRPC)
@@ -133,9 +133,6 @@ func CreateGRPCClientTest() error {
 		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, strings.ToUpper(ServiceNameTemplate), strings.ToUpper(ServiceName))
 
 	}
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyClientGRPC)
 
 	//заменим имя сервиса на новое
 	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME

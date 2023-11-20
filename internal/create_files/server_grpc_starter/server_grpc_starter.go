@@ -41,20 +41,17 @@ func CreateServerGRPCStarter() error {
 	FilenameReadyMain := DirReadyServerGRPC + constants.SERVER_GRPC_STARTER_FILENAME
 	FilenameTemplateMain := DirTemplatesServerGRPC + constants.SERVER_GRPC_STARTER_FILENAME + "_"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyServerGRPC)
+
 	bytes, err := os.ReadFile(FilenameTemplateMain)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMain, " error: ", err)
 	}
 	TextGRPCStarter := string(bytes)
 
-	//создадим папку ready
-	folders.CreateFolder(DirReadyServerGRPC)
-
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCStarter, DirReadyServerGRPC)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyServerGRPC)
 
 	//заменим имя сервиса на новое
 	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME

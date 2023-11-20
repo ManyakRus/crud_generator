@@ -6,10 +6,10 @@ DB_HOST=""
 DB_NAME=""
 
 #DB_SCHEME - Database schema name
-DB_SCHEME="public"
+DB_SCHEME=""
 
 #DB_PORT - Database port number
-DB_PORT="5432"
+DB_PORT=""
 
 #DB_USER - Database login (user)
 DB_USER=""
@@ -32,29 +32,45 @@ SERVICE_REPOSITORY_URL="gitlab.aescorp.ru/dsp_dev/claim/sync_service"
 SERVICE_NAME=sync_service
 
 #TEMPLATE_SERVICE_NAME - service name in your template files
-TEMPLATE_SERVICE_NAME=Sync_service
+TEMPLATE_SERVICE_NAME=sync_service
+
+#TEMPLATE_REPOSITORY_URL - repository URL in template files
+TEMPLATE_REPOSITORY_URL="gitlab.aescorp.ru/dsp_dev/claim/sync_service"
 
 #same folder names uses for read template files and create new files
 #TEMPLATE_FOLDERNAME - filder name in your computer with templates
 TEMPLATE_FOLDERNAME="templates"
 
+#TEMPLATE_FOLDERNAME_MAIN - folder name for create models (golang struct with all table fields)
+TEMPLATE_FOLDERNAME_MAIN="cmd"
+
 #TEMPLATE_FOLDERNAME_MODEL - folder name for create models (golang struct with all table fields)
 TEMPLATE_FOLDERNAME_MODEL="pkg/object_model/entities"
 
 #TEMPLATE_FOLDERNAME_DB - folder name for create database crud operations
+TEMPLATE_FOLDERNAME_CRUD="pkg/db/crud"
+
+#TEMPLATE_FOLDERNAME_TABLES - folder name for create database tables models
+TEMPLATE_FOLDERNAME_TABLES="pkg/db/tables"
+
+#TEMPLATE_FOLDERNAME_DB - folder name for create db constants
 TEMPLATE_FOLDERNAME_DB="pkg/db"
 
+
 #TEMPLATE_FOLDERNAME_GRPC - folder name for create .proto file
+TEMPLATE_FOLDERNAME_GRPC_PROTO="pkg/network/grpc"
+
+#TEMPLATE_FOLDERNAME_GRPC - folder name for grpc
 TEMPLATE_FOLDERNAME_GRPC="pkg/network/grpc"
 
 #TEMPLATE_FOLDERNAME_GRPC_SERVER - filder name for create grpc server files
-TEMPLATE_FOLDERNAME_GRPC_SERVER="internal/server_grpc"
+TEMPLATE_FOLDERNAME_GRPC_SERVER="internal/app/grpc/server_grpc"
 
 #TEMPLATE_FOLDERNAME_GRPC_CLIENT - folder name for create grpc client files
-TEMPLATE_FOLDERNAME_GRPC_CLIENT="grpc_client"
+TEMPLATE_FOLDERNAME_GRPC_CLIENT="pkg/network/grpc/grpc_client"
 
 #TEMPLATE_FOLDERNAME_NRPC_SERVER - folder name for create nrpc server files
-TEMPLATE_FOLDERNAME_NRPC_SERVER="internal/server_nrpc"
+TEMPLATE_FOLDERNAME_NRPC_SERVER="internal/app/nrpc/server_nrpc"
 
 #TEMPLATE_FOLDERNAME_NRPC - folder name for create common nrpc files
 TEMPLATE_FOLDERNAME_NRPC="pkg/network/nrpc"
@@ -100,6 +116,9 @@ NEED_CREATE_MODEL_CRUD=true
 #NEED_CREATE_DB_TEST - fill "true" if you want create DB _test.go files
 NEED_CREATE_DB_TEST=true
 
+#NEED_CREATE_DB - fill "true" if you want create DB .go files
+NEED_CREATE_DB=true
+
 #NEED_CREATE_GRPC_SERVER_TEST - fill "true" if you want create GRPC server _test.go files
 NEED_CREATE_GRPC_SERVER_TEST=true
 
@@ -115,9 +134,18 @@ NEED_CREATE_NRPC_CLIENT_TEST=true
 #PREFIX_SERVER_GRPC - filename prefix for grpc server files
 PREFIX_SERVER_GRPC="server_grpc_"
 
+#PREFIC_CRUD - filename prefix for crud database files
+PREFIX_CRUD="crud_"
+
+#PREFIX_TABLE - filename prefix for database table model files
+PREFIX_TABLE="table_"
+
+#PREFIX_MODEL - filename prefix for view model files
+PREFIX_MODEL=""
+
 #COMMENT_MODEL_STRUCT - fill comments to every model structure
 COMMENT_MODEL_STRUCT="модель для таблицы "
 
 #TEXT_MODULE_GENERATED - comment text for every module file
-TEXT_MODULE_GENERATED="//File generated automatic with crud_generator app\n//Do not change anything here.\n"
+TEXT_MODULE_GENERATED="//Файл создан автоматически кодогенератором crud_generator\n//Не изменяйте ничего здесь.\n\n"
 

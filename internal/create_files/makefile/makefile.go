@@ -40,14 +40,14 @@ func CreateMakefile() error {
 	FilenameReadyMakefile := DirReadyMakefile + constants.MAKEFILE_FILENAME
 	FilenameTemplateMakefile := DirTemplatesMakefile + constants.MAKEFILE_FILENAME + "_"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyMakefile)
+
 	bytes, err := os.ReadFile(FilenameTemplateMakefile)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMakefile, " error: ", err)
 	}
 	TextMakefile := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyMakefile)
 
 	//ReplaceAll
 	TextMakefile = strings.ReplaceAll(TextMakefile, config.Settings.TEMPLATE_SERVICE_NAME, strings.ToLower(config.Settings.SERVICE_NAME))

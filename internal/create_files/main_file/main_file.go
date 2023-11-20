@@ -37,14 +37,14 @@ func CreateFileMain() error {
 	FilenameReadyMain := DirReadyMain + "main.go"
 	FilenameTemplateMain := DirTemplatesMain + "main.go_"
 
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyMain)
+
 	bytes, err := os.ReadFile(FilenameTemplateMain)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMain, " error: ", err)
 	}
 	TextMain := string(bytes)
-
-	//создадим папку ready
-	folders.CreateFolder(DirReadyMain)
 
 	//
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {

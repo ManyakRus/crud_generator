@@ -43,7 +43,7 @@ func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	DirReadyCrudStarter := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 	FilenameReadyCrudStarter := DirReadyCrudStarter + "crud_starter.go"
 
-	//создадим папку ready
+	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyCrudStarter)
 
 	//
