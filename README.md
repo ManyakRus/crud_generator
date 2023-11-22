@@ -1,13 +1,15 @@
 The crud_generator application is designed to automatically generate source code files
 in golang language to perform CRUD operations.
+A completely ready-made microservice is created that can be launched immediately.
 
 For each table in the Postgres SQL database, files will be created to perform crud operations:
 create, read, update, save, delete (or delete + restore)
 files are generated:
-1. model - struct structure with all fields from the database, and gorm + db + json annotations
+1. table - struct structure with all fields from the database, and gorm + json annotations
    Tables with fields in the database must be created manually in advance.
    The code generator will find all the tables and their fields in the database and use them.
-2. db - files for performing crud operations, exchange with the database,
+2. model - struct structure, including table, with crud operations functions
+2. crud - files for performing crud operations, exchange with the database,
    as well as files with tests
 3. grpc server - files for performing crud operations over the network, using the GRPC protocol,
    as well as files with tests
@@ -18,6 +20,10 @@ files are generated:
 6. nrpc client - client files for use by NRPC third-party services,
    as well as files with tests
 7. crud_starter - a file with functions for switching to the desired protocol db or grpc or nrpc
+8. main.go and other .go files
+9. Makefile - script launch configuration file
+10. .env - file for filling in the microservice configuration (database connection parameters, etc.)
+
 
 Code templates are stored in the bin/templates folder.
 The code template is a .go file copied from the real project -
@@ -32,9 +38,9 @@ Installation procedure:
 make build
 the crud_generator file will appear in the bin folder
 
-2. Fill settings in the bin/templates/configs_/settings.txt file
+2. Fill in the settings in the file bin/templates/configs_/settings.txt
 - connections to your database
-- name of your new service
+- the name of your new service
 - URL of your new service
 - and etc.
 
@@ -42,8 +48,10 @@ the crud_generator file will appear in the bin folder
 A new folder with the name of your service will appear in the bin folder,
 with subfolders and finished files inside.
 
-4. Copy the finished files to your service.
-(TODO: later I’ll generate a completely ready-made microservice launched with 1 line of code)
+4. Fill in the configuration parameters in the .env file
+Start microservice:
+make run
+
 
 
 P.S.
