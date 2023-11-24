@@ -89,6 +89,9 @@ func CreateFiles(Table1 *types.Table) error {
 
 		ConstantsURL := create_files.FindDBConstantsURL()
 		TextDB = create_files.AddImport(TextDB, ConstantsURL)
+
+		CrudFunctionsURL := create_files.FindCrudFunctionsURL()
+		TextDB = create_files.AddImport(TextDB, CrudFunctionsURL)
 	}
 
 	//создание текста

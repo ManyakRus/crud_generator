@@ -8,9 +8,9 @@ import (
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
-	"gorm.io/gorm"
 	"time"
 	"github.com/ManyakRus/starter/contextmain"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_functions"
 )
 
 // TableName - имя таблицы в БД Postgres
@@ -170,7 +170,6 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 	MassOmit := make([]string, 0)
 	var ColumnName string
 
-
 	//игнор пустых колонок
 	tx = tx.Omit(MassOmit...)
 
@@ -185,18 +184,14 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 		return err
 	}
 
-	// запишем NULL в пустые колонки
-	for f := 0; f < len(MassOmit); f++ {
-		ColumnName := MassOmit[f]
-		tx = db.Model(&m).Update(ColumnName, gorm.Expr("NULL"))
-
-		err = tx.Error
-		if err != nil {
-			TextError := fmt.Sprint("db.Update() ", TableName, " id: ", m.ID, " error: ", err)
-			err = errors.New(TextError)
-			return err
-			// log.Panic(sError)
-		}
+	//запишем NULL в пустые колонки
+	MapOmit := crud_functions.MapOmit_from_MassOmit(MassOmit)
+	tx = db.Model(&m).Updates(MapOmit)
+	err = tx.Error
+	if err != nil {
+		TextError := fmt.Sprint("Updates() ", TableName, " id: ", m.ID, " error: ", err)
+		err = errors.New(TextError)
+		return err
 	}
 
 	return err

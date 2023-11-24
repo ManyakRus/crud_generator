@@ -378,6 +378,15 @@ func FindCalcStructVersionURL() string {
 	return Otvet
 }
 
+// FindCrudFunctionsURL - возвращает URL репозитория с пакетом crud_functions
+func FindCrudFunctionsURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_DB + "/" + "crud_functions"
+
+	return Otvet
+}
+
 func FindTextDefaultValue(Column1 *types.Column) string {
 	var Otvet string
 
