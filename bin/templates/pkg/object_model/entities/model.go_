@@ -8,4 +8,3 @@ import (
 type LawsuitStatusType struct {
 	table_lawsuit_status_types.Table_LawsuitStatusType	
 }
-

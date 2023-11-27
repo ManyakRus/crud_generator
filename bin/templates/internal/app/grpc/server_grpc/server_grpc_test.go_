@@ -190,4 +190,3 @@ func Test_server_LawsuitStatusType_FindByExtID(t *testing.T) {
 		t.Error("Test_server_LawsuitStatusType_FindByExtId() error: ModelString=''")
 	}
 }
-

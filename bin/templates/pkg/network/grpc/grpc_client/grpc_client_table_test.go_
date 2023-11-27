@@ -182,4 +182,3 @@ func TestFindByExtID(t *testing.T) {
 		t.Error("TestFindByExtID() error: ID =0")
 	}
 }
-

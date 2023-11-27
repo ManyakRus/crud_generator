@@ -281,4 +281,3 @@ func (s *ServerGRPC) LawsuitStatusType_FindByExtID(ctx context.Context, Request 
 
 	return &Otvet, err
 }
-
