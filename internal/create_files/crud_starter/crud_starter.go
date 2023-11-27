@@ -76,6 +76,9 @@ func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	//замена импортов на новые URL
 	TextCrudStarter = create_files.ReplaceServiceURLImports(TextCrudStarter)
 
+	//удаление пустого импорта
+	TextCrudStarter = create_files.DeleteEmptyImport(TextCrudStarter)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), constants.FILE_PERMISSIONS)
 

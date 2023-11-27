@@ -116,6 +116,9 @@ func CreateFiles(Table1 *types.Table) error {
 	//замена импортов на новые URL
 	TextDB = create_files.ReplaceServiceURLImports(TextDB)
 
+	//удаление пустого импорта
+	TextDB = create_files.DeleteEmptyImport(TextDB)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
 
@@ -188,6 +191,9 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//замена импортов на новые URL
 	TextDB = create_files.ReplaceServiceURLImports(TextDB)
+
+	//удаление пустого импорта
+	TextDB = create_files.DeleteEmptyImport(TextDB)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)

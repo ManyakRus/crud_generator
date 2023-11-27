@@ -97,6 +97,9 @@ func CreateFilesTable_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTab
 	//замена импортов на новые URL
 	TextModel = create_files.ReplaceServiceURLImports(TextModel)
 
+	//удаление пустого импорта
+	TextModel = create_files.DeleteEmptyImport(TextModel)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
 

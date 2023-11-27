@@ -72,6 +72,9 @@ func CreateServerGRPCFunc() error {
 		TextGRPCFunc = create_files.AddImport(TextGRPCFunc, ConstantsURL)
 	}
 
+	//удаление пустого импорта
+	TextGRPCFunc = create_files.DeleteEmptyImport(TextGRPCFunc)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyServerGRPCFunc, []byte(TextGRPCFunc), constants.FILE_PERMISSIONS)
 

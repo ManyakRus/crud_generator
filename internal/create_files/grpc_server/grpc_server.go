@@ -111,6 +111,9 @@ func CreateFiles(Table1 *types.Table) error {
 		//TextGRPCServer = create_files.AddImport(TextGRPCServer, RepositoryModelURL)
 	}
 
+	//удаление пустого импорта
+	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
 
@@ -185,6 +188,9 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//замена импортов на новые URL
 	//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
+
+	//удаление пустого импорта
+	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)

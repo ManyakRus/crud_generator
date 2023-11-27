@@ -73,6 +73,9 @@ func CreateServerGRPCStarter() error {
 		TextGRPCStarter = create_files.AddImport(TextGRPCStarter, ProtoURL)
 	}
 
+	//удаление пустого импорта
+	TextGRPCStarter = create_files.DeleteEmptyImport(TextGRPCStarter)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCStarter), constants.FILE_PERMISSIONS)
 

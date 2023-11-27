@@ -131,6 +131,9 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 		TextModel = create_files.AddImport(TextModel, TableNameURL)
 	}
 
+	//удаление пустого импорта
+	TextModel = create_files.DeleteEmptyImport(TextModel)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
 
@@ -181,6 +184,9 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 
 	//замена импортов на новые URL
 	TextModel = create_files.ReplaceServiceURLImports(TextModel)
+
+	//удаление пустого импорта
+	TextModel = create_files.DeleteEmptyImport(TextModel)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)

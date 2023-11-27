@@ -74,6 +74,9 @@ func CreateServerGRPCStarter() error {
 	TEMPLATE_SERVICE_NAME = micro.StringFromUpperCase(TEMPLATE_SERVICE_NAME)
 	TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, TEMPLATE_SERVICE_NAME, ServiceNameProto)
 
+	//удаление пустого импорта
+	TextNRPCStarter = create_files.DeleteEmptyImport(TextNRPCStarter)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextNRPCStarter), constants.FILE_PERMISSIONS)
 

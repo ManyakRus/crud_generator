@@ -73,6 +73,9 @@ func CreateFileMain() error {
 	//замена импортов на новые URL
 	TextMain = create_files.ReplaceServiceURLImports(TextMain)
 
+	//удаление пустого импорта
+	TextMain = create_files.DeleteEmptyImport(TextMain)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextMain), constants.FILE_PERMISSIONS)
 

@@ -642,3 +642,15 @@ func ReplacePackageName(Text, PackageName string) string {
 
 	return Otvet
 }
+
+// DeleteEmptyImport - удаляет пустой импорт
+func DeleteEmptyImport(Text string) string {
+	Otvet := Text
+
+	sFind := `import (
+)
+`
+	Otvet = strings.ReplaceAll(Otvet, sFind, "")
+
+	return Otvet
+}

@@ -105,6 +105,9 @@ func CreateFiles(Table1 *types.Table) error {
 	//замена импортов на новые URL
 	TextNRPCClient = create_files.ReplaceServiceURLImports(TextNRPCClient)
 
+	//удаление пустого импорта
+	TextNRPCClient = create_files.DeleteEmptyImport(TextNRPCClient)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
 
@@ -176,6 +179,9 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//замена импортов на новые URL
 	TextNRPCClient = create_files.ReplaceServiceURLImports(TextNRPCClient)
+
+	//удаление пустого импорта
+	TextNRPCClient = create_files.DeleteEmptyImport(TextNRPCClient)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)

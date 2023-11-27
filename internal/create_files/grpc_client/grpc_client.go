@@ -88,6 +88,9 @@ func CreateGRPCClient() error {
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, ServiceNameTemplate, ServiceName)
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
+	//удаление пустого импорта
+	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
 
@@ -145,6 +148,9 @@ func CreateGRPCClientTest() error {
 	ServiceName = create_files.FormatName(ServiceName)
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, ServiceNameTemplate, ServiceName)
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+
+	//удаление пустого импорта
+	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)

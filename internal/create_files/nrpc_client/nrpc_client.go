@@ -85,6 +85,9 @@ func CreateNRPCClient() error {
 	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, ServiceNameTemplate, ServiceName)
 	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
+	//удаление пустого импорта
+	TextNRPCClient = create_files.DeleteEmptyImport(TextNRPCClient)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
 
@@ -138,6 +141,9 @@ func CreateNRPCClientTest() error {
 	ServiceName = create_files.FormatName(ServiceName)
 	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, ServiceNameTemplate, ServiceName)
 	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+
+	//удаление пустого импорта
+	TextNRPCClient = create_files.DeleteEmptyImport(TextNRPCClient)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
