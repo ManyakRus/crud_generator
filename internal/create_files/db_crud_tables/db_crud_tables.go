@@ -344,6 +344,7 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 	TextOmit := ""
 	NullableCount := 0
 	for _, Column1 := range Table1.MapColumns {
+		ColumnName := Column1.Name
 		ColumnNameGo := Column1.NameGo
 		TypeGo := Column1.TypeGo
 
@@ -352,7 +353,7 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 		}
 
 		//ищем в файле настроек nullable.json
-		is_nullable_config, has_is_nullable_config := types.MapNullableFileds[ColumnNameGo]
+		is_nullable_config, has_is_nullable_config := types.MapNullableFileds[ColumnName]
 		if has_is_nullable_config == true && is_nullable_config == false {
 			continue
 		}

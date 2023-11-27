@@ -390,9 +390,15 @@ func FindCrudFunctionsURL() string {
 func FindTextDefaultValue(Column1 *types.Column) string {
 	var Otvet string
 
+	ColumnName := Column1.Name
+
+	//ищем в файле настроек nullable.json
+	is_nullable_config, has_is_nullable_config := types.MapNullableFileds[ColumnName]
+
+	//
 	sValue := ""
 	Type_go := Column1.TypeGo
-	if Column1.TableKey != "" {
+	if Column1.TableKey != "" && Column1.IsNullable == true && (is_nullable_config == true || has_is_nullable_config == false) {
 		sValue = "null"
 	} else {
 
