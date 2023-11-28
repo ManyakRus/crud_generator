@@ -166,6 +166,9 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 
 		TableURL := create_files.FindCalcStructVersionURL()
 		TextModel = create_files.AddImport(TextModel, TableURL)
+
+		DBConstantsURL := create_files.FindDBConstantsURL()
+		TextModel = create_files.AddImport(TextModel, DBConstantsURL)
 	}
 
 	//создание текста
