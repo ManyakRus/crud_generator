@@ -5,8 +5,7 @@ FILEMAIN=./cmd/$(SERVICENAME)/main.go
 FILEAPP=./bin/$(SERVICENAME)
 
 NEW_REPO=$(SERVICENAME)
-CD_GENERATION_PROTO=cd ./api
-GENERATION_PROTO=generation_code.sh
+GENERATION_PROTO=cd ./api && ./generation_code.sh
 
 
 run:
@@ -54,7 +53,6 @@ conn:
 init:
 	clear
 	go mod init gitlab.aescorp.ru/dsp_dev/claim/sync_service
-	$(CD_GENERATION_PROTO)
 	$(GENERATION_PROTO)
 	go mod tidy
 	go mod vendor

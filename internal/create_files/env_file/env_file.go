@@ -91,7 +91,13 @@ func CreateENV() error {
 	Value = postgres_gorm.Settings.DB_PASSWORD
 	TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
 
-	//запись файла
+	//запись файла в корень проекта
+	err = os.WriteFile(FilenameReadyENV, []byte(TextMakefile), constants.FILE_PERMISSIONS)
+
+	//запись файла в bin
+	Dir := DirReady + "bin" + micro.SeparatorFile()
+	folders.CreateFolder(Dir)
+	FilenameReadyENV = Dir + constants.ENV_FILENAME
 	err = os.WriteFile(FilenameReadyENV, []byte(TextMakefile), constants.FILE_PERMISSIONS)
 
 	return err

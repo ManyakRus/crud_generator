@@ -53,18 +53,6 @@ func CreateServerGRPCStarter() error {
 	//заменим имя пакета на новое
 	create_files.ReplacePackageName(TextGRPCStarter, DirReadyServerGRPC)
 
-	//заменим имя сервиса на новое
-	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
-	ServiceName := config.Settings.SERVICE_NAME
-	TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, ServiceNameTemplate, ServiceName)
-	TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
-
-	//заменим имя сервиса на новое с CamelCase
-	ServiceNameTemplate = create_files.FormatName(ServiceNameTemplate)
-	ServiceName = create_files.FormatName(ServiceName)
-	TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, ServiceNameTemplate, ServiceName)
-	TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
-
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPCStarter = create_files.DeleteTemplateRepositoryImports(TextGRPCStarter)
@@ -72,6 +60,26 @@ func CreateServerGRPCStarter() error {
 		ProtoURL := create_files.FindProtoURL()
 		TextGRPCStarter = create_files.AddImport(TextGRPCStarter, ProtoURL)
 	}
+
+	//найдём текст после конца импортов
+	TextAfterImport := ""
+	pos1 := strings.Index(TextGRPCStarter, "\n)")
+	if pos1 >= 0 {
+		TextAfterImport = TextGRPCStarter[pos1+2:]
+	}
+
+	//заменим имя сервиса на новое
+	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+	ServiceName := config.Settings.SERVICE_NAME
+	TextAfterImport = strings.ReplaceAll(TextAfterImport, ServiceNameTemplate, ServiceName)
+	TextAfterImport = strings.ReplaceAll(TextAfterImport, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+
+	//заменим имя сервиса на новое с CamelCase
+	ServiceNameTemplate = create_files.FormatName(ServiceNameTemplate)
+	ServiceName = create_files.FormatName(ServiceName)
+	TextAfterImport = strings.ReplaceAll(TextAfterImport, ServiceNameTemplate, ServiceName)
+	TextAfterImport = strings.ReplaceAll(TextAfterImport, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+	TextGRPCStarter = TextGRPCStarter[:pos1+2] + TextAfterImport
 
 	//удаление пустого импорта
 	TextGRPCStarter = create_files.DeleteEmptyImport(TextGRPCStarter)

@@ -38,6 +38,7 @@ func StartFillAll() error {
 	}
 
 	if len(MapAll) == 0 {
+		log.Error("FillMapTable()error: len(MapAll) == 0")
 		return err
 	}
 
@@ -45,108 +46,126 @@ func StartFillAll() error {
 	dir := micro.ProgramDir_bin()
 	err = folders.CopyAllFiles_Exclude_(dir+config.Settings.TEMPLATE_FOLDERNAME, dir+config.Settings.READY_FOLDERNAME)
 	if err != nil {
+		//log.Error("folders.CopyAllFiles_Exclude_() error: ", err)
 		return err
 	}
 
 	//модель
 	err = model.CreateAllFiles(MapAll)
 	if err != nil {
+		//log.Error("model.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//db crud
 	err = db_crud_tables.CreateAllFiles(MapAll)
 	if err != nil {
+		//log.Error("db_crud_tables.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//grpc_server
 	err = grpc_server.CreateAllFiles(MapAll)
 	if err != nil {
+		//log.Error("grpc_server.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//grpc_client tables
 	err = grpc_client_tables.CreateAllFiles(MapAll)
 	if err != nil {
+		//log.Error("grpc_client_tables.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//grpc_client
 	err = grpc_client.CreateAllFiles()
 	if err != nil {
+		//log.Error("grpc_client.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//nrpc_client
 	err = nrpc_client.CreateAllFiles()
 	if err != nil {
+		//log.Error("nrpc_client.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//grpc_client
 	err = nrpc_client_tables.CreateAllFiles(MapAll)
 	if err != nil {
+		//log.Error("nrpc_client_tables.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//grpc_proto
 	err = protobuf.CreateAllFiles(MapAll)
 	if err != nil {
+		//log.Error("protobuf.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//crud_starter
 	err = crud_starter.CreateAllFiles(MapAll)
 	if err != nil {
+		//log.Error("crud_starter.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//main file
 	err = main_file.CreateAllFiles()
 	if err != nil {
+		//log.Error("main_file.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//server_grpc_starter
 	err = server_grpc_starter.CreateAllFiles()
 	if err != nil {
+		//log.Error("server_grpc_starter.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//server_nrpc_starter
 	err = server_nrpc_starter.CreateAllFiles()
 	if err != nil {
+		//log.Error("server_nrpc_starter.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//server_grpc_func
 	err = server_grpc_func.CreateAllFiles()
 	if err != nil {
+		//log.Error("server_grpc_func.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//makefile
 	err = makefile.CreateAllFiles()
 	if err != nil {
+		//log.Error("makefile.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//generation_code.sh
 	err = generation_code_sh.CreateAllFiles()
 	if err != nil {
+		//log.Error("generation_code_sh.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//tables
 	err = db_tables.CreateAllFiles(MapAll)
 	if err != nil {
+		//log.Error("db_tables.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//env
 	err = env_file.CreateAllFiles()
 	if err != nil {
+		//log.Error("env_file.CreateAllFiles() error: ", err)
 		return err
 	}
 

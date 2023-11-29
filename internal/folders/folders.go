@@ -234,6 +234,10 @@ func DeleteFolder(FilenameFull string) error {
 func CopyAllFiles_Exclude_(src, dest string) error {
 	var err error
 
+	//создадим папку готовых файлов
+	CreateFolder(dest)
+
+	//скопируем все файлы
 	opt := copy_files.Options{
 		Skip: CopyFilesFilterGo,
 	}

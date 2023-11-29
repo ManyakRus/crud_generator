@@ -57,14 +57,14 @@ func CreateMakefile() error {
 	Value := config.Settings.SERVICE_REPOSITORY_URL
 	TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
 
-	//заполним GENERATION_PROTO
-	VariableName = "CD_GENERATION_PROTO"
-	Value = "cd ./" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + " && \\"
-	TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
+	////заполним GENERATION_PROTO
+	//VariableName = "CD_GENERATION_PROTO"
+	//Value = "cd ./" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + " && \\"
+	//TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
 
 	//заполним GENERATION_PROTO
 	VariableName = "GENERATION_PROTO"
-	Value = "./" + constants.GENERATION_PROTO_FILENAME
+	Value = "cd ./" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + " && " + "./" + constants.GENERATION_PROTO_FILENAME
 	TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
 
 	//запись файла
