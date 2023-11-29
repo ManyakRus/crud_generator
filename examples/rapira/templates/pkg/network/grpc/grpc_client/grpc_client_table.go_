@@ -319,4 +319,3 @@ func (crud Crud_GRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) er
 
 	return err
 }
-

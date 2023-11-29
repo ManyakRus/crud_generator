@@ -1,21 +1,21 @@
 #---------------------Database settings---------------------
 #DB_HOST - Database server name or ip-address. Only Postgres SQL
-DB_HOST=""
+DB_HOST=
 
 #DB_NAME - Database table name
-DB_NAME=""
+DB_NAME=
 
 #DB_SCHEME - Database schema name
-DB_SCHEME=""
+DB_SCHEME=
 
 #DB_PORT - Database port number
-DB_PORT=""
+DB_PORT=
 
 #DB_USER - Database login (user)
-DB_USER=""
+DB_USER=
 
 #DB_PASSWORD - Database login password
-DB_PASSWORD=""
+DB_PASSWORD=
 
 #INCLUDE_TABLES - table name filter. Regular expression
 INCLUDE_TABLES=""
@@ -53,12 +53,11 @@ TEMPLATE_FOLDERNAME_CRUD="pkg/db/crud"
 #TEMPLATE_FOLDERNAME_TABLES - folder name for create database tables models
 TEMPLATE_FOLDERNAME_TABLES="pkg/db/tables"
 
-#TEMPLATE_FOLDERNAME_DB - folder name for create db constants
+#TEMPLATE_FOLDERNAME_DB - folder name for create db
 TEMPLATE_FOLDERNAME_DB="pkg/db"
 
-
 #TEMPLATE_FOLDERNAME_GRPC - folder name for create .proto file
-TEMPLATE_FOLDERNAME_GRPC_PROTO="pkg/network/grpc"
+TEMPLATE_FOLDERNAME_GRPC_PROTO="api"
 
 #TEMPLATE_FOLDERNAME_GRPC - folder name for grpc
 TEMPLATE_FOLDERNAME_GRPC="pkg/network/grpc"
@@ -83,6 +82,9 @@ TEMPLATE_FOLDERNAME_CRUD_STARTER="pkg/crud_starter"
 
 #TEMPLATE_FOLDERNAME_ALIAS - folder name for create alias.go file, with go types with aliases
 TEMPLATE_FOLDERNAME_ALIAS="pkg/object_model/types/alias"
+
+#TEMPLATE_FOLDER_CRUD_FUNCTIONS - folder name for create crud_functions.go file
+TEMPLATE_FOLDER_CRUD_FUNCTIONS="pkg/db/crud_functions"
 
 #TEXT_TEMPLATE_MODEL - model name text in templates, for replace to new model names
 TEXT_TEMPLATE_MODEL="LawsuitStatusType"

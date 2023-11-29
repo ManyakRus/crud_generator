@@ -5,11 +5,16 @@ import (
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/stopapp"
 	"github.com/nats-io/nats.go"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/internal/app/grpc/server_grpc"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
 	"os"
+	"strings"
 	"time"
 )
+
+//// server is used to implement UnimplementedSyncServiceServer.
+//type server struct {
+//}
 
 type SettingsINI struct {
 	NATS_HOST string
@@ -77,6 +82,14 @@ func FillSettings() {
 		Settings.NATS_PORT = os.Getenv("BUS_LOCAL_PORT")
 	}
 
+	//удалим лишний :порт
+	if Settings.NATS_PORT != "" {
+		pos1 := strings.Index(Settings.NATS_HOST, ":")
+		if pos1 > 0 {
+			Settings.NATS_HOST = Settings.NATS_HOST[0:pos1]
+		}
+	}
+
 	//проверка
 	if Settings.NATS_HOST == "" {
 		log.Panic("Need fill BUS_LOCAL_HOST ! in OS Environment ")
@@ -89,6 +102,7 @@ func FillSettings() {
 
 // WaitStop - ожидает отмену глобального контекста
 func WaitStop() {
+	defer stopapp.GetWaitGroup_Main().Done()
 
 	select {
 	case <-contextmain.GetContext().Done():
@@ -100,7 +114,7 @@ func WaitStop() {
 
 	//закрываем соединение
 	CloseConnection()
-	stopapp.GetWaitGroup_Main().Done()
+
 }
 
 // Start - необходимые процедуры для запуска сервера GRPC

@@ -3,7 +3,7 @@ package server_grpc
 import (
 	"errors"
 	"github.com/ManyakRus/starter/micro"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/constants"
 )
 
 // ErrorModelVersion

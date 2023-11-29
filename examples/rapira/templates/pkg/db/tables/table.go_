@@ -10,4 +10,3 @@ type LawsuitStatusType struct {
 	tables.NameStruct
 	Code string `json:"code" gorm:"column:code;default:0"`
 }
-

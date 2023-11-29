@@ -92,4 +92,3 @@ func Start() {
 func CloseConnection() {
 	Conn.Stop()
 }
-
