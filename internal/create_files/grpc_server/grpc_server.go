@@ -155,8 +155,8 @@ func CreateTestFiles(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-		//ProtoURL := create_files.FindProtobufURL()
-		//TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
 		CrudStarterURL := create_files.FindCrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
