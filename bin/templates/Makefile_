@@ -5,7 +5,7 @@ FILEMAIN=./cmd/$(SERVICENAME)/main.go
 FILEAPP=./bin/$(SERVICENAME)
 
 NEW_REPO=$(SERVICENAME)
-CD_GENERATION_PROTO=cd ./pkg/network/grpc
+CD_GENERATION_PROTO=cd ./api
 GENERATION_PROTO=generation_code.sh
 
 
@@ -57,3 +57,4 @@ init:
 	$(CD_GENERATION_PROTO)
 	$(GENERATION_PROTO)
 	go mod tidy
+	go mod vendor

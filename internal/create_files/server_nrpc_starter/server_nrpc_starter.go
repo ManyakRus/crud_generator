@@ -65,14 +65,22 @@ func CreateServerGRPCStarter() error {
 		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, RepositoryServerGRPCURL)
 	}
 
+	//найдём текст после конца импортов
+	TextAfterImport := ""
+	pos1 := strings.Index(TextNRPCStarter, "\n)")
+	if pos1 >= 0 {
+		TextAfterImport = TextNRPCStarter[pos1+2:]
+	}
+
 	//заменим название сервиса
 	ServiceName := config.Settings.SERVICE_NAME
 	ServiceNameProto := micro.StringFromUpperCase(ServiceName)
 	TEMPLATE_SERVICE_NAME := config.Settings.TEMPLATE_SERVICE_NAME
-	TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, TEMPLATE_SERVICE_NAME, ServiceNameProto)
+	TextAfterImport = strings.ReplaceAll(TextAfterImport, TEMPLATE_SERVICE_NAME, ServiceNameProto)
 	//заменим ещё раз с большой буквы
 	TEMPLATE_SERVICE_NAME = micro.StringFromUpperCase(TEMPLATE_SERVICE_NAME)
-	TextNRPCStarter = strings.ReplaceAll(TextNRPCStarter, TEMPLATE_SERVICE_NAME, ServiceNameProto)
+	TextAfterImport = strings.ReplaceAll(TextAfterImport, TEMPLATE_SERVICE_NAME, ServiceNameProto)
+	TextNRPCStarter = TextNRPCStarter[:pos1+2] + TextAfterImport
 
 	//удаление пустого импорта
 	TextNRPCStarter = create_files.DeleteEmptyImport(TextNRPCStarter)

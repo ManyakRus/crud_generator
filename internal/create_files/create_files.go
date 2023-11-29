@@ -82,7 +82,7 @@ func DeleteFuncFromFuncName(Text, FuncName string) string {
 func DeleteFuncFromComment(Text, Comment string) string {
 	Otvet := Text
 
-	TextFind := "\n// " + Comment
+	TextFind := Comment
 	pos1 := strings.Index(Otvet, TextFind)
 	if pos1 < 0 {
 		return Otvet
@@ -328,7 +328,8 @@ func FindTableNameURL(TableName string) string {
 func FindProtoURL() string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + "/" + "grpc_proto"
+	TEMPLATE_FOLDERNAME_GRPC_PROTO := strings.ToLower(config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO)
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + TEMPLATE_FOLDERNAME_GRPC_PROTO + "/" + "grpc_proto"
 
 	return Otvet
 }

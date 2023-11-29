@@ -59,7 +59,7 @@ func CreateMakefile() error {
 
 	//заполним GENERATION_PROTO
 	VariableName = "CD_GENERATION_PROTO"
-	Value = "cd ./" + config.Settings.TEMPLATE_FOLDERNAME_GRPC + " && \\"
+	Value = "cd ./" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + " && \\"
 	TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
 
 	//заполним GENERATION_PROTO

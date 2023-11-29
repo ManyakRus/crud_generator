@@ -211,7 +211,7 @@ func DeleteFunctions(Text, TableName string, MapModelCrudDeleteFunctions map[str
 
 	MassDelete := strings.Split(TextDelete, ",")
 	for _, FunctionName1 := range MassDelete {
-		Otvet = create_files.DeleteFuncFromComment(Otvet, FunctionName1)
+		Otvet = create_files.DeleteFuncFromComment(Otvet, "\n// "+FunctionName1)
 		Otvet = create_files.DeleteFuncFromFuncName(Otvet, FunctionName1)
 	}
 
