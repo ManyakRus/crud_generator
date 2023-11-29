@@ -1,0 +1,153 @@
+#---------------------Database settings---------------------
+#DB_HOST - Database server name or ip-address. Only Postgres SQL
+DB_HOST=
+
+#DB_NAME - Database table name
+DB_NAME=
+
+#DB_SCHEME - Database schema name
+DB_SCHEME=
+
+#DB_PORT - Database port number
+DB_PORT=
+
+#DB_USER - Database login (user)
+DB_USER=
+
+#DB_PASSWORD - Database login password
+DB_PASSWORD=
+
+#INCLUDE_TABLES - table name filter. Regular expression
+INCLUDE_TABLES=""
+
+#INCLUDE_TABLES - table name ignore filter. Regular expression
+EXCLUDE_TABLES="ext_"
+
+#---------------------Template settings---------------------
+
+#SERVICE_REPOSITORY_URL - URL of your new service repository (Github, gitlab, etc.)
+SERVICE_REPOSITORY_URL="gitlab.aescorp.ru/dsp_dev/claim/sync_service"
+
+#SERVICE_NAME - service name for your new service
+SERVICE_NAME=sync_service
+
+#TEMPLATE_SERVICE_NAME - service name in your template files
+TEMPLATE_SERVICE_NAME=sync_service
+
+#TEMPLATE_REPOSITORY_URL - repository URL in template files
+TEMPLATE_REPOSITORY_URL="gitlab.aescorp.ru/dsp_dev/claim/sync_service"
+
+#same folder names uses for read template files and create new files
+#TEMPLATE_FOLDERNAME - filder name in your computer with templates
+TEMPLATE_FOLDERNAME="templates"
+
+#TEMPLATE_FOLDERNAME_MAIN - folder name for create models (golang struct with all table fields)
+TEMPLATE_FOLDERNAME_MAIN="cmd"
+
+#TEMPLATE_FOLDERNAME_MODEL - folder name for create models (golang struct with all table fields)
+TEMPLATE_FOLDERNAME_MODEL="pkg/object_model/entities"
+
+#TEMPLATE_FOLDERNAME_DB - folder name for create database crud operations
+TEMPLATE_FOLDERNAME_CRUD="pkg/db/crud"
+
+#TEMPLATE_FOLDERNAME_TABLES - folder name for create database tables models
+TEMPLATE_FOLDERNAME_TABLES="pkg/db/tables"
+
+#TEMPLATE_FOLDERNAME_DB - folder name for create db
+TEMPLATE_FOLDERNAME_DB="pkg/db"
+
+#TEMPLATE_FOLDERNAME_GRPC - folder name for create .proto file
+TEMPLATE_FOLDERNAME_GRPC_PROTO="api"
+
+#TEMPLATE_FOLDERNAME_GRPC - folder name for grpc
+TEMPLATE_FOLDERNAME_GRPC="pkg/network/grpc"
+
+#TEMPLATE_FOLDERNAME_GRPC_SERVER - filder name for create grpc server files
+TEMPLATE_FOLDERNAME_GRPC_SERVER="internal/app/grpc/server_grpc"
+
+#TEMPLATE_FOLDERNAME_GRPC_CLIENT - folder name for create grpc client files
+TEMPLATE_FOLDERNAME_GRPC_CLIENT="pkg/network/grpc/grpc_client"
+
+#TEMPLATE_FOLDERNAME_NRPC_SERVER - folder name for create nrpc server files
+TEMPLATE_FOLDERNAME_NRPC_SERVER="internal/app/nrpc/server_nrpc"
+
+#TEMPLATE_FOLDERNAME_NRPC - folder name for create common nrpc files
+TEMPLATE_FOLDERNAME_NRPC="pkg/network/nrpc"
+
+#TEMPLATE_FOLDERNAME_NRPC_CLIENT - foldr name for create nrpc client files
+TEMPLATE_FOLDERNAME_NRPC_CLIENT="pkg/network/nrpc/nrpc_client"
+
+#TEMPLATE_FOLDERNAME_CRUD_STARTER - folder name for create crud_starter.go file
+TEMPLATE_FOLDERNAME_CRUD_STARTER="pkg/crud_starter"
+
+#TEMPLATE_FOLDERNAME_ALIAS - folder name for create alias.go file, with go types with aliases
+TEMPLATE_FOLDERNAME_ALIAS="pkg/object_model/types/alias"
+
+#TEMPLATE_FOLDER_CRUD_FUNCTIONS - folder name for create crud_functions.go file
+TEMPLATE_FOLDER_CRUD_FUNCTIONS="pkg/db/crud_functions"
+
+#TEXT_TEMPLATE_MODEL - model name text in templates, for replace to new model names
+TEXT_TEMPLATE_MODEL="LawsuitStatusType"
+
+#TEXT_TEMPLATE_TABLENAME - table name text in tamplates, for replace to new table names
+TEXT_TEMPLATE_TABLENAME="lawsuit_status_types"
+
+#USE_DEFAULT_TEMPLATE - "true" will do default text replaces. "false" - for use own templates
+USE_DEFAULT_TEMPLATE=true
+
+#HAS_IS_DELETED - fill "true" if you have "is_deleted" column, and want Delete() Restore() functions.
+HAS_IS_DELETED=true
+
+#---------------------Create files settings---------------------
+
+#NEED_CREATE_CRUD - fill "true" if you want create crud operations files
+NEED_CREATE_CRUD=true
+
+#NEED_CREATE_GRPC - fill "true" if you want create grpc operations files
+NEED_CREATE_GRPC=true
+
+#NEED_CREATE_NRPC - fill "true" if you want create nrpc operations files (need NATS message query server)
+NEED_CREATE_NRPC=true
+
+#NEED_CREATE_MODEL_STRUCT - fill "true" if you want create model files with golang struct with all database fields
+NEED_CREATE_MODEL_STRUCT=true
+
+#NEED_CREATE_MODEL_CRUD - fill "true" if you want create crud operations in model files
+NEED_CREATE_MODEL_CRUD=true
+
+#NEED_CREATE_DB_TEST - fill "true" if you want create DB _test.go files
+NEED_CREATE_DB_TEST=true
+
+#NEED_CREATE_DB - fill "true" if you want create DB .go files
+NEED_CREATE_DB=true
+
+#NEED_CREATE_GRPC_SERVER_TEST - fill "true" if you want create GRPC server _test.go files
+NEED_CREATE_GRPC_SERVER_TEST=true
+
+#NEED_CREATE_GRPC_CLIENT_TEST - fill "true" if you want create GRPC client _test.go files
+NEED_CREATE_GRPC_CLIENT_TEST=true
+
+#NEED_CREATE_NRPC_SERVER_TEST - fill "true" if you want create NRPC server _test.go files
+NEED_CREATE_NRPC_SERVER_TEST=true
+
+#NEED_CREATE_NRPC_CLIENT_TEST - fill "true" if you want create NRPC client _test.go files
+NEED_CREATE_NRPC_CLIENT_TEST=true
+
+#PREFIX_SERVER_GRPC - filename prefix for grpc server files
+PREFIX_SERVER_GRPC="server_grpc_"
+
+#PREFIC_CRUD - filename prefix for crud database files
+PREFIX_CRUD="crud_"
+
+#PREFIX_TABLE - filename prefix for database table model files
+PREFIX_TABLE="table_"
+
+#PREFIX_MODEL - filename prefix for view model files
+PREFIX_MODEL=""
+
+#COMMENT_MODEL_STRUCT - fill comments to every model structure
+COMMENT_MODEL_STRUCT="модель для таблицы "
+
+#TEXT_MODULE_GENERATED - comment text for every module file
+TEXT_MODULE_GENERATED="//Файл создан автоматически кодогенератором crud_generator\n//Не изменяйте ничего здесь.\n\n"
+

@@ -1,0 +1,184 @@
+package grpc_lawsuit_status_types
+
+import (
+	config "github.com/ManyakRus/starter/config"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"testing"
+)
+
+// Postgres_ID_Test - ID таблицы для тестирования
+const Postgres_ID_Test = 1
+
+func TestGetVersionModel(t *testing.T) {
+
+	crud := Crud_GRPC{}
+	Otvet := crud.GetVersionModel()
+	if Otvet == 0 {
+		t.Error("TestGetVersionModel() error: Otvet =0")
+	}
+}
+
+func TestRead(t *testing.T) {
+	config.LoadEnv()
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	crud := Crud_GRPC{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+
+	if err != nil {
+		t.Error("TestRead() error: ", err)
+	}
+
+	if Otvet.ID == 0 {
+		t.Error("TestRead() error: ID =0")
+	}
+}
+
+func TestCreate(t *testing.T) {
+	config.LoadEnv()
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = -1
+
+	crud := Crud_GRPC{}
+	err := crud.Create(&Model)
+
+	if err == nil {
+		t.Error("TestCreate() error: ", err)
+	}
+
+	if Model.ID > 0 {
+		t.Error("TestCreate() error: ID >0")
+	}
+}
+
+func TestUpdate(t *testing.T) {
+	config.LoadEnv()
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = 0
+
+	crud := Crud_GRPC{}
+	err := crud.Update(&Model)
+
+	if err == nil {
+		t.Error("TestUpdate() error: ", err)
+	}
+
+	if Model.ID != 0 {
+		t.Error("TestUpdate() error: ID =0")
+	}
+}
+
+func TestSave(t *testing.T) {
+	config.LoadEnv()
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	crud := Crud_GRPC{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+	if err != nil {
+		t.Error("TestSave() error: ", err)
+		return
+	}
+
+	err = crud.Save(&Otvet)
+
+	if err != nil {
+		t.Error("TestSave() error: ", err)
+	}
+
+	if Otvet.ID == 0 {
+		t.Error("TestSave() error: ID =0")
+	}
+}
+
+func TestDelete(t *testing.T) {
+	config.LoadEnv()
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	crud := Crud_GRPC{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+	if err != nil {
+		t.Error("TestRead() error: ", err)
+	}
+
+	if Otvet.IsDeleted == false {
+		err = crud.Delete(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+
+		err = crud.Restore(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+	} else {
+		err = crud.Restore(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+
+		err = crud.Delete(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+	}
+}
+
+func TestFindByExtID(t *testing.T) {
+	config.LoadEnv()
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	crud := Crud_GRPC{}
+	Otvet1 := lawsuit_status_types.LawsuitStatusType{}
+	Otvet1.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet1)
+
+	if err != nil {
+		t.Error("TestFind_ByExtID() error: ", err)
+	}
+
+	if Otvet1.ExtID == 0 {
+		return
+	}
+
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ExtID = Otvet1.ExtID
+	Otvet.ConnectionID = Otvet1.ConnectionID
+	err = crud.Find_ByExtID(&Otvet)
+
+	if err != nil {
+		t.Error("TestFindByExtID() error: ", err)
+	}
+
+	if Otvet.ID == 0 {
+		t.Error("TestFindByExtID() error: ID =0")
+	}
+}

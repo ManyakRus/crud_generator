@@ -383,7 +383,7 @@ func FindCalcStructVersionURL() string {
 func FindCrudFunctionsURL() string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_DB + "/" + "crud_functions"
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDER_CRUD_FUNCTIONS
 
 	return Otvet
 }

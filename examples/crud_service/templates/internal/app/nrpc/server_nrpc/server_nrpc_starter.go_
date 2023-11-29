@@ -1,0 +1,141 @@
+package server_nrpc
+
+import (
+	"github.com/ManyakRus/starter/contextmain"
+	"github.com/ManyakRus/starter/log"
+	"github.com/ManyakRus/starter/stopapp"
+	"github.com/nats-io/nats.go"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/internal/app/grpc/server_grpc"
+	"os"
+	"strings"
+	"time"
+)
+
+//// server is used to implement UnimplementedSyncServiceServer.
+//type server struct {
+//}
+
+type SettingsINI struct {
+	NATS_HOST string
+	NATS_PORT string
+}
+
+var Settings SettingsINI
+
+// Conn - подключение к NATS
+var Conn *nats.Conn
+
+// NRPCSubscription - подписка на топик NATS
+var NRPCSubscription *nats.Subscription
+
+type server struct{}
+
+func Connect() {
+	var err error
+
+	if Settings.NATS_HOST == "" {
+		FillSettings()
+	}
+
+	NatsURL := "nats://" + Settings.NATS_HOST + ":" + Settings.NATS_PORT
+	// Connect to the NATS server.
+	Conn, err := nats.Connect(NatsURL, nats.Timeout(60*time.Second))
+	if err != nil {
+		log.Panic(err)
+	}
+	//defer Conn.Close()
+
+	// Our server implementation.
+	s := &server_grpc.ServerGRPC{}
+	//s := &server{}
+
+	// The NATS handler from the helloworld.nrpc.proto file.
+	h := grpc_proto.NewSync_serviceHandler(contextmain.GetContext(), Conn, s)
+
+	// Start a NATS subscription using the handler. You can also use the
+	// QueueSubscribe() method for a load-balanced set of servers.
+	NRPCSubscription2, err := Conn.Subscribe(h.Subject(), h.Handler)
+	if err != nil {
+		log.Panic(err)
+	}
+	if NRPCSubscription2 == nil {
+		log.Panic(err)
+	}
+	NRPCSubscription = NRPCSubscription2
+
+	log.Info("Server NRPC started. NATS: ", NatsURL)
+}
+
+// FillSettings - заполняет настройки из переменных окружения
+func FillSettings() {
+	Settings = SettingsINI{}
+	Settings.NATS_HOST = os.Getenv("NATS_HOST")
+	Settings.NATS_PORT = os.Getenv("NATS_PORT")
+
+	//синонимы
+	if Settings.NATS_HOST == "" {
+		Settings.NATS_HOST = os.Getenv("BUS_LOCAL_HOST")
+	}
+
+	if Settings.NATS_PORT == "" {
+		Settings.NATS_PORT = os.Getenv("BUS_LOCAL_PORT")
+	}
+
+	//удалим лишний :порт
+	if Settings.NATS_PORT != "" {
+		pos1 := strings.Index(Settings.NATS_HOST, ":")
+		if pos1 > 0 {
+			Settings.NATS_HOST = Settings.NATS_HOST[0:pos1]
+		}
+	}
+
+	//проверка
+	if Settings.NATS_HOST == "" {
+		log.Panic("Need fill BUS_LOCAL_HOST ! in OS Environment ")
+	}
+
+	if Settings.NATS_PORT == "" {
+		log.Panic("Need fill BUS_LOCAL_PORT ! in OS Environment ")
+	}
+}
+
+// WaitStop - ожидает отмену глобального контекста
+func WaitStop() {
+	defer stopapp.GetWaitGroup_Main().Done()
+
+	select {
+	case <-contextmain.GetContext().Done():
+		log.Warn("Context app is canceled. nrpc server connect")
+	}
+
+	//ждём пока отправляемых сейчас сообщений будет =0
+	stopapp.WaitTotalMessagesSendingNow("nrpc server connect")
+
+	//закрываем соединение
+	CloseConnection()
+
+}
+
+// Start - необходимые процедуры для запуска сервера GRPC
+func Start() {
+	Connect()
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go WaitStop()
+
+}
+
+func CloseConnection() {
+	if NRPCSubscription != nil {
+		NRPCSubscription.Unsubscribe()
+	}
+	Conn.Close()
+	log.Info("Server NRPC connection closed")
+}
+
+//func (s *server) Read(ctx context.Context, Reques *grpc_proto.RequestId) *grpc_proto.Response {
+//	var Otvet *grpc_proto.Response
+//
+//	return Otvet
+//}
