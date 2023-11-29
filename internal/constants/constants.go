@@ -1,5 +1,7 @@
 package constants
 
+const SERVICE_NAME = "crud_generator"
+
 const TEXT_HELP = `
 Need fill settings in settings.txt file
 `

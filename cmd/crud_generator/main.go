@@ -22,7 +22,7 @@ func StartApp() {
 
 	load_configs.LoadConfigsAll()
 
-	postgres_gorm.StartDB()
+	postgres_gorm.Start(constants.SERVICE_NAME)
 	postgres_gorm.GetConnection().Logger.LogMode(1)
 
 	//folders.CreateAllFolders()

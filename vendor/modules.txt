@@ -1,7 +1,7 @@
 # github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792
 ## explicit; go 1.13
 github.com/ManyakRus/logrus
-# github.com/ManyakRus/starter v0.0.0-20231117100514-f4caf3891bce
+# github.com/ManyakRus/starter v0.0.0-20231128073137-db11116c6e48
 ## explicit; go 1.20
 github.com/ManyakRus/starter/config
 github.com/ManyakRus/starter/contextmain
@@ -70,10 +70,7 @@ github.com/otiai10/copy
 # github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e
 ## explicit
 github.com/serenize/snaker
-# gitlab.aescorp.ru/dsp_dev/claim/sync_service v1.2.26
-## explicit; go 1.20
-gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/constants
-# golang.org/x/crypto v0.15.0
+# golang.org/x/crypto v0.16.0
 ## explicit; go 1.18
 golang.org/x/crypto/pbkdf2
 # golang.org/x/mod v0.14.0
@@ -85,9 +82,8 @@ golang.org/x/mod/semver
 ## explicit; go 1.18
 golang.org/x/sync/errgroup
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.14.0
+# golang.org/x/sys v0.15.0
 ## explicit; go 1.18
-golang.org/x/sys/execabs
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # golang.org/x/text v0.14.0
@@ -105,7 +101,7 @@ golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
-# golang.org/x/tools v0.15.0
+# golang.org/x/tools v0.16.0
 ## explicit; go 1.18
 golang.org/x/tools/go/ast/astutil
 golang.org/x/tools/imports

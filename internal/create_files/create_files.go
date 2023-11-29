@@ -82,7 +82,7 @@ func DeleteFuncFromFuncName(Text, FuncName string) string {
 func DeleteFuncFromComment(Text, Comment string) string {
 	Otvet := Text
 
-	TextFind := Comment //"\n// Delete "
+	TextFind := "\n// " + Comment
 	pos1 := strings.Index(Otvet, TextFind)
 	if pos1 < 0 {
 		return Otvet

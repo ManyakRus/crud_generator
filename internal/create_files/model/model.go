@@ -191,10 +191,31 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 	//удаление пустого импорта
 	TextModel = create_files.DeleteEmptyImport(TextModel)
 
+	//удаление функций
+	TextModel = DeleteFunctions(TextModel, TableName, types.MapModelCrudDeleteFunctions)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
 
 	return err
+}
+
+// DeleteFunctions - удаляет функции из текста, по карте MapModelCrudDeleteFunctions
+func DeleteFunctions(Text, TableName string, MapModelCrudDeleteFunctions map[string]string) string {
+	Otvet := Text
+
+	TextDelete, ok := MapModelCrudDeleteFunctions[TableName]
+	if ok == false {
+		return Otvet
+	}
+
+	MassDelete := strings.Split(TextDelete, ",")
+	for _, FunctionName1 := range MassDelete {
+		Otvet = create_files.DeleteFuncFromComment(Otvet, FunctionName1)
+		Otvet = create_files.DeleteFuncFromFuncName(Otvet, FunctionName1)
+	}
+
+	return Otvet
 }
 
 // FindTextModelStruct - возвращает текст структуры и тегов gorm
