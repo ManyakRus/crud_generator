@@ -305,7 +305,7 @@ func (crud Crud_DB) Find_ByExtID_ctx(ctx context.Context, m *lawsuit_status_type
 	db := postgres_gorm.GetConnection()
 	db.WithContext(ctx)
 
-	tx := db.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).First(m)
+	tx := db.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).Order("is_deleted").Order("id").First(m)
 	err = tx.Error
 
 	return err
