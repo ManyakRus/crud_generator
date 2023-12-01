@@ -78,7 +78,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextDB, DirReadyTable)
+	TextDB = create_files.ReplacePackageName(TextDB, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -92,6 +92,16 @@ func CreateFiles(Table1 *types.Table) error {
 
 		CrudFunctionsURL := create_files.FindCrudFunctionsURL()
 		TextDB = create_files.AddImport(TextDB, CrudFunctionsURL)
+
+		//удалим лишние функции
+		TextDB = create_files.DeleteFuncDelete(TextDB, Table1)
+		TextDB = create_files.DeleteFuncRestore(TextDB, Table1)
+		TextDB = create_files.DeleteFuncFind_byExtID(TextDB, Table1)
+
+		//удалим лишние функции ctx
+		TextDB = create_files.DeleteFuncDeleteCtx(TextDB, Table1)
+		TextDB = create_files.DeleteFuncRestoreCtx(TextDB, Table1)
+		TextDB = create_files.DeleteFuncFind_byExtIDCtx(TextDB, Table1)
 	}
 
 	//создание текста
@@ -100,14 +110,8 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
-	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncDelete(TextDB, Table1)
-		TextDB = DeleteFuncDeleteCtx(TextDB, Table1)
-		TextDB = DeleteFuncRestore(TextDB, Table1)
-		TextDB = DeleteFuncRestoreCtx(TextDB, Table1)
-	}
-	TextDB = DeleteFuncFind_byExtID(TextDB, Table1)
-	TextDB = DeleteFuncFind_byExtIDCtx(TextDB, Table1)
+	//TextDB = create_files.DeleteFuncFind_byExtID(TextDB, Table1)
+	//TextDB = create_files.DeleteFuncFind_byExtIDCtx(TextDB, Table1)
 	TextDB = AddTextOmit(TextDB, Table1)
 	TextDB = ReplaceText_modified_at(TextDB, Table1)
 	TextDB = ReplaceText_is_deleted_deleted_at(TextDB, Table1)
@@ -152,7 +156,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextDB := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextDB, DirReadyTable)
+	TextDB = create_files.ReplacePackageName(TextDB, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -161,8 +165,10 @@ func CreateTestFiles(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextDB = create_files.AddImport(TextDB, ModelTableURL)
 
-		//ConstantsURL := create_files.FindGRPCConstantsURL()
-		//TextDB = create_files.AddImport(TextDB, ConstantsURL)
+		//удалим лишние функции
+		TextDB = create_files.DeleteFuncTestDelete(TextDB, Table1)
+		TextDB = create_files.DeleteFuncTestRestore(TextDB, Table1)
+		TextDB = create_files.DeleteFuncTestFind_byExtID(TextDB, Table1)
 	}
 
 	//создание текста
@@ -172,10 +178,10 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = DeleteFuncTestDelete(TextDB, Table1)
-		TextDB = DeleteFuncTestRestore(TextDB, Table1)
+		TextDB = create_files.DeleteFuncTestDelete(TextDB, Table1)
+		TextDB = create_files.DeleteFuncTestRestore(TextDB, Table1)
 	}
-	TextDB = DeleteFuncTestFind_byExtID(TextDB, Table1)
+	TextDB = create_files.DeleteFuncTestFind_byExtID(TextDB, Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
@@ -201,141 +207,93 @@ func CreateTestFiles(Table1 *types.Table) error {
 	return err
 }
 
-// DeleteFuncDelete - удаляет функцию Delete()
-func DeleteFuncDelete(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
-		return Otvet
-	}
-
-	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Delete ")
-
-	return Otvet
-}
-
-// DeleteFuncRestore - удаляет функцию Restore()
-func DeleteFuncRestore(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
-		return Otvet
-	}
-
-	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Restore ")
-
-	return Otvet
-}
-
-// DeleteFuncDeleteCtx - удаляет функцию Delete_ctx()
-func DeleteFuncDeleteCtx(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
-		return Otvet
-	}
-
-	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Delete_ctx ")
-
-	return Otvet
-}
-
-// DeleteFuncRestoreCtx - удаляет функцию Restore_ctx()
-func DeleteFuncRestoreCtx(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
-		return Otvet
-	}
-
-	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Restore_ctx ")
-
-	return Otvet
-}
-
-// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncFind_byExtID(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	//если есть обе колонки - ничего не делаем
-	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
-	if ok == true {
-		return Otvet
-	}
-
-	//
-	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Find_ByExtID ")
-
-	return Otvet
-}
-
-// DeleteFuncFind_byExtIDCtx - удаляет функцию Find_ByExtID_ctx()
-func DeleteFuncFind_byExtIDCtx(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	//если есть обе колонки - ничего не делаем
-	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
-	if ok == true {
-		return Otvet
-	}
-
-	//
-	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Find_ByExtID_ctx ")
-
-	return Otvet
-}
-
-// DeleteFuncTestDelete - удаляет функцию Delete()
-func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
-		return Otvet
-	}
-
-	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "TestDelete")
-
-	return Otvet
-}
-
-// DeleteFuncTestRestore - удаляет функцию Restore()
-func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
-		return Otvet
-	}
-
-	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "TestRestore")
-
-	return Otvet
-}
-
-// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	FuncName := "TestFind_ByExtID"
-
-	//если есть обе колонки - ничего не делаем
-	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
-	if ok == true {
-		Otvet = create_files.DeleteCommentFromFuncName(Otvet, FuncName)
-		return Otvet
-	}
-
-	//
-	Otvet = create_files.DeleteFuncFromFuncName(Otvet, FuncName)
-	//Otvet = create_files.DeleteLineWithComment(Otvet, FuncName)
-
-	return Otvet
-}
+//// DeleteFuncDelete - удаляет функцию Delete()
+//func DeleteFuncDelete(Text string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	_, ok := Table1.MapColumns["is_deleted"]
+//	if ok == true {
+//		return Otvet
+//	}
+//
+//	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Delete ")
+//
+//	return Otvet
+//}
+//
+//// DeleteFuncRestore - удаляет функцию Restore()
+//func DeleteFuncRestore(Text string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	_, ok := Table1.MapColumns["is_deleted"]
+//	if ok == true {
+//		return Otvet
+//	}
+//
+//	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Restore ")
+//
+//	return Otvet
+//}
+//
+//// DeleteFuncDeleteCtx - удаляет функцию Delete_ctx()
+//func DeleteFuncDeleteCtx(Text string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	_, ok := Table1.MapColumns["is_deleted"]
+//	if ok == true {
+//		return Otvet
+//	}
+//
+//	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Delete_ctx ")
+//
+//	return Otvet
+//}
+//
+//// DeleteFuncRestoreCtx - удаляет функцию Restore_ctx()
+//func DeleteFuncRestoreCtx(Text string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	_, ok := Table1.MapColumns["is_deleted"]
+//	if ok == true {
+//		return Otvet
+//	}
+//
+//	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Restore_ctx ")
+//
+//	return Otvet
+//}
+//
+//// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
+//func DeleteFuncFind_byExtID(Text string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	//если есть обе колонки - ничего не делаем
+//	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
+//	if ok == true {
+//		return Otvet
+//	}
+//
+//	//
+//	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Find_ByExtID ")
+//
+//	return Otvet
+//}
+//
+//// DeleteFuncFind_byExtIDCtx - удаляет функцию Find_ByExtID_ctx()
+//func DeleteFuncFind_byExtIDCtx(Text string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	//если есть обе колонки - ничего не делаем
+//	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
+//	if ok == true {
+//		return Otvet
+//	}
+//
+//	//
+//	Otvet = create_files.DeleteFuncFromComment(Text, "\n// Find_ByExtID_ctx ")
+//
+//	return Otvet
+//}
 
 // AddTextOmit - добавляет код для записи null в колонки Nullable
 func AddTextOmit(TextDB string, Table1 *types.Table) string {

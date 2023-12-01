@@ -70,7 +70,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
+	TextGRPCClient = create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -79,8 +79,10 @@ func CreateFiles(Table1 *types.Table) error {
 		ConstantsURL := create_files.FindGRPCConstantsURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ConstantsURL)
 
-		//ProtoURL := create_files.FindProtobufURL()
-		//TextGRPCClient = create_files.AddImport(TextGRPCClient, ProtoURL)
+		//удалим лишние функции
+		TextGRPCClient = create_files.DeleteFuncDelete(TextGRPCClient, Table1)
+		TextGRPCClient = create_files.DeleteFuncRestore(TextGRPCClient, Table1)
+		TextGRPCClient = create_files.DeleteFuncFind_byExtID(TextGRPCClient, Table1)
 	}
 
 	//создание текста
@@ -88,17 +90,6 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
-
-	if config.Settings.HAS_IS_DELETED == true {
-		TextGRPCClient = DeleteFuncDelete(TextGRPCClient, ModelName, Table1)
-		//TextGRPCClient = DeleteFuncDeleteCtx(TextGRPCClient, ModelName, Table1)
-		TextGRPCClient = DeleteFuncRestore(TextGRPCClient, ModelName, Table1)
-		//TextGRPCClient = DeleteFuncRestoreCtx(TextGRPCClient, ModelName, Table1)
-	}
-	TextGRPCClient = DeleteFuncFind_byExtID(TextGRPCClient, ModelName, Table1)
-
-	//замена импортов на новые URL
-	//TextGRPCClient = create_files.ReplaceServiceURLImports(TextGRPCClient)
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
@@ -156,7 +147,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextGRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
+	TextGRPCClient = create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {

@@ -69,7 +69,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextNRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
+	TextNRPCClient = create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -86,6 +86,11 @@ func CreateFiles(Table1 *types.Table) error {
 
 		TableURL := create_files.FindModelTableURL(TableName)
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, TableURL)
+
+		//удалим лишние функции
+		TextNRPCClient = create_files.DeleteFuncDelete(TextNRPCClient, Table1)
+		TextNRPCClient = create_files.DeleteFuncRestore(TextNRPCClient, Table1)
+		TextNRPCClient = create_files.DeleteFuncFind_byExtID(TextNRPCClient, Table1)
 	}
 
 	//создание текста
@@ -94,13 +99,11 @@ func CreateFiles(Table1 *types.Table) error {
 	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient
 
-	if config.Settings.HAS_IS_DELETED == true {
-		TextNRPCClient = DeleteFuncDelete(TextNRPCClient, ModelName, Table1)
-		//TextNRPCClient = DeleteFuncDeleteCtx(TextNRPCClient, ModelName, Table1)
-		TextNRPCClient = DeleteFuncRestore(TextNRPCClient, ModelName, Table1)
-		//TextNRPCClient = DeleteFuncRestoreCtx(TextNRPCClient, ModelName, Table1)
-	}
-	TextNRPCClient = DeleteFuncFind_byExtID(TextNRPCClient, ModelName, Table1)
+	//if config.Settings.HAS_IS_DELETED == true {
+	//	TextNRPCClient = DeleteFuncDelete(TextNRPCClient, ModelName, Table1)
+	//	TextNRPCClient = DeleteFuncRestore(TextNRPCClient, ModelName, Table1)
+	//}
+	//TextNRPCClient = DeleteFuncFind_byExtID(TextNRPCClient, ModelName, Table1)
 
 	//замена импортов на новые URL
 	TextNRPCClient = create_files.ReplaceServiceURLImports(TextNRPCClient)
@@ -140,7 +143,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextNRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
+	TextNRPCClient = create_files.ReplacePackageName(TextNRPCClient, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -151,6 +154,11 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 		TableURL := create_files.FindModelTableURL(TableName)
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, TableURL)
+
+		//удалим лишние функции
+		TextNRPCClient = create_files.DeleteFuncDelete(TextNRPCClient, Table1)
+		TextNRPCClient = create_files.DeleteFuncRestore(TextNRPCClient, Table1)
+		TextNRPCClient = create_files.DeleteFuncFind_byExtID(TextNRPCClient, Table1)
 	}
 
 	//создание текста
@@ -159,11 +167,11 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient
 
-	if config.Settings.HAS_IS_DELETED == true {
-		TextNRPCClient = DeleteFuncTestDelete(TextNRPCClient, ModelName, Table1)
-		TextNRPCClient = DeleteFuncTestRestore(TextNRPCClient, ModelName, Table1)
-	}
-	TextNRPCClient = DeleteFuncTestFind_byExtID(TextNRPCClient, ModelName, Table1)
+	//if config.Settings.HAS_IS_DELETED == true {
+	//	TextNRPCClient = DeleteFuncTestDelete(TextNRPCClient, ModelName, Table1)
+	//	TextNRPCClient = DeleteFuncTestRestore(TextNRPCClient, ModelName, Table1)
+	//}
+	//TextNRPCClient = DeleteFuncTestFind_byExtID(TextNRPCClient, ModelName, Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {

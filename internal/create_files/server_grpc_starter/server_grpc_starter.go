@@ -51,7 +51,7 @@ func CreateServerGRPCStarter() error {
 	TextGRPCStarter := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextGRPCStarter, DirReadyServerGRPC)
+	TextGRPCStarter = create_files.ReplacePackageName(TextGRPCStarter, DirReadyServerGRPC)
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {

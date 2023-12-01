@@ -1,0 +1,124 @@
+package crud_lawsuit_status_types
+
+import (
+	"github.com/ManyakRus/starter/config"
+	"github.com/ManyakRus/starter/postgres_gorm"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"testing"
+)
+
+const Postgres_ID_Test = 1
+
+func TestRead(t *testing.T) {
+	config.LoadEnv()
+
+	postgres_gorm.Connect()
+	defer postgres_gorm.CloseConnection()
+
+	crud := Crud_DB{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+	if err != nil {
+		t.Error("TestRead() error: ", err)
+	}
+
+	if Otvet.ID == 0 {
+		t.Error(TableName + "_test.TestRead() error ID=0 ")
+	} else {
+		t.Log(TableName+"_test.TestRead() Otvet: ", Otvet.ID)
+	}
+}
+
+func TestSave(t *testing.T) {
+	config.LoadEnv()
+
+	postgres_gorm.Connect()
+	defer postgres_gorm.CloseConnection()
+
+	crud := Crud_DB{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+	if err != nil {
+		t.Error("TestSave() error: ", err)
+	}
+
+	if Otvet.ID == 0 {
+		t.Error(TableName + "_test.TestSave() error ID=0 ")
+	}
+
+	err = crud.Save(&Otvet)
+	if err != nil {
+		t.Error("TestSave() error: ", err)
+	}
+	t.Log(TableName+"_test.TestSave() Otvet: ", Otvet.ID)
+
+}
+
+func TestDelete(t *testing.T) {
+	config.LoadEnv()
+
+	postgres_gorm.Connect()
+	defer postgres_gorm.CloseConnection()
+
+	crud := Crud_DB{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+	if err != nil {
+		t.Error("TestDelete() error: ", err)
+	}
+
+	if Otvet.IsDeleted == false {
+		err = crud.Delete(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+
+		err = crud.Restore(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+	} else {
+		err = crud.Restore(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+
+		err = crud.Delete(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+
+	}
+
+}
+
+
+func TestFind_ByExtID(t *testing.T) {
+	config.LoadEnv()
+	postgres_gorm.Connect()
+	defer postgres_gorm.CloseConnection()
+
+	crud := Crud_DB{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+	if err != nil {
+		t.Error("TestFind_ByExtID() error: ", err)
+	}
+
+	if Otvet.ExtID ==0 {
+		return
+	}
+
+	err = crud.Find_ByExtID(&Otvet)
+	if err != nil {
+		t.Error("TestFind_ByExtID() error: ", err)
+	}
+
+	if Otvet.ID == 0 {
+		t.Error("TestFind_ByExtID() error: ID =0")
+	}
+}

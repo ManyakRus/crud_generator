@@ -57,7 +57,7 @@ func CreateNRPCClient() error {
 	TextNRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextNRPCClient, DirReadyClientNRPC)
+	TextNRPCClient = create_files.ReplacePackageName(TextNRPCClient, DirReadyClientNRPC)
 
 	//добавим комментарий
 	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient
@@ -71,6 +71,7 @@ func CreateNRPCClient() error {
 
 		DBConstantsURL := create_files.FindDBConstantsURL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, DBConstantsURL)
+
 	}
 
 	//заменим имя сервиса на новое
@@ -117,7 +118,7 @@ func CreateNRPCClientTest() error {
 	TextNRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextNRPCClient, DirReadyClientNRPC)
+	TextNRPCClient = create_files.ReplacePackageName(TextNRPCClient, DirReadyClientNRPC)
 
 	//добавим комментарий
 	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient

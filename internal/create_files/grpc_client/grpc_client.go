@@ -57,7 +57,7 @@ func CreateGRPCClient() error {
 	TextGRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextGRPCClient, DirReadyClientGRPC)
+	TextGRPCClient = create_files.ReplacePackageName(TextGRPCClient, DirReadyClientGRPC)
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -74,6 +74,7 @@ func CreateGRPCClient() error {
 		ServiceName := config.Settings.SERVICE_NAME
 		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, ServiceNameTemplate, ServiceName)
 		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, strings.ToUpper(ServiceNameTemplate), strings.ToUpper(ServiceName))
+
 	}
 
 	//заменим имя сервиса на новое
@@ -120,7 +121,7 @@ func CreateGRPCClientTest() error {
 	TextGRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextGRPCClient, DirReadyClientGRPC)
+	TextGRPCClient = create_files.ReplacePackageName(TextGRPCClient, DirReadyClientGRPC)
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {

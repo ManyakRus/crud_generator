@@ -86,7 +86,7 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	TextModel := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextModel, DirReadyModel)
+	TextModel = create_files.ReplacePackageName(TextModel, DirReadyModel)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -96,27 +96,7 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 		TextModel = create_files.AddImport(TextModel, TableURL)
 	}
 
-	//создание текста
-	//TextModel, TextModelStruct, ModelName, err := FindTextModelStruct(TextModel, Table1)
-	//TextModel = ReplaceModelStruct(TextModel, TextModelStruct)
-	//
-	////
-	//TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	//TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	////TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
-	//
-	//if config.Settings.HAS_IS_DELETED == true {
-	//	TextModel = DeleteFuncDelete(TextModel, ModelName, Table1)
-	//	TextModel = DeleteFuncRestore(TextModel, ModelName, Table1)
-	//}
-	//TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
-
 	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
-	//TextModel = create_files.DeleteImportModel(TextModel)
-
-	//замена импортов на новые URL
-	//TextModel = create_files.ReplaceServiceURLImports(TextModel)
-
 	TextModel = create_files.ReplaceModelAndTableName(TextModel, Table1)
 
 	//замена импортов на новые URL
@@ -158,7 +138,7 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 	TextModel := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextModel, DirReadyModel)
+	TextModel = create_files.ReplacePackageName(TextModel, DirReadyModel)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -169,18 +149,22 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 
 		DBConstantsURL := create_files.FindDBConstantsURL()
 		TextModel = create_files.AddImport(TextModel, DBConstantsURL)
+
+		//удалим лишние функции
+		TextModel = create_files.DeleteFuncDelete(TextModel, Table1)
+		TextModel = create_files.DeleteFuncRestore(TextModel, Table1)
+		TextModel = create_files.DeleteFuncFind_byExtID(TextModel, Table1)
+
+		//удалим лишние функции из интерфейса
+		TextModel = DeleteFromInterfaceDelete(TextModel, Table1)
+		TextModel = DeleteFromInterfaceRestore(TextModel, Table1)
+		TextModel = DeleteFromInterfaceFind_ByExtID(TextModel, Table1)
 	}
 
 	//создание текста
 	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
-
-	if config.Settings.HAS_IS_DELETED == true {
-		TextModel = DeleteFuncDelete(TextModel, ModelName, Table1)
-		TextModel = DeleteFuncRestore(TextModel, ModelName, Table1)
-	}
-	TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
 
 	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
 	TextModel = create_files.DeleteImportModel(TextModel)
@@ -378,100 +362,6 @@ func ReplaceModelStruct(TextTemplateModel, TextModelStruct string) string {
 	return Otvet
 }
 
-// DeleteFuncDelete - удаляет функцию Delete()
-func DeleteFuncDelete(TextModel, ModelName string, Table1 *types.Table) string {
-	Otvet := TextModel
-
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
-		return Otvet
-	}
-
-	//FirstSymbol := strings.ToLower(ModelName)[:1]
-	TextFind := "Delete(*" + ModelName + ") error"
-	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
-
-	TextFind = "\n// Delete "
-	pos1 := strings.Index(Otvet, TextFind)
-	if pos1 < 0 {
-		return Otvet
-	}
-	s2 := Otvet[pos1+1:]
-
-	posEnd := strings.Index(s2, "\n}")
-	if posEnd < 0 {
-		return Otvet
-	}
-
-	Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+3:]
-
-	return Otvet
-}
-
-// DeleteFuncRestore - удаляет функцию Restore()
-func DeleteFuncRestore(TextModel, Modelname string, Table1 *types.Table) string {
-	Otvet := TextModel
-
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
-		return Otvet
-	}
-
-	//FirstSymbol := strings.ToLower(Modelname)[:1]
-	TextFind := "Restore(*" + Modelname + ") error"
-	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
-
-	TextFind = "\n// Restore "
-	pos1 := strings.Index(Otvet, TextFind)
-	if pos1 < 0 {
-		return Otvet
-	}
-	s2 := Otvet[pos1+1:]
-
-	posEnd := strings.Index(s2, "\n}")
-	if posEnd < 0 {
-		return Otvet
-	}
-
-	Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+3:]
-
-	return Otvet
-}
-
-// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) string {
-	Otvet := TextModel
-
-	//
-	_, ok1 := Table1.MapColumns["ext_id"]
-
-	//
-	_, ok2 := Table1.MapColumns["connection_id"]
-	if ok1 == true && ok2 == true {
-		return Otvet
-	}
-
-	//FirstSymbol := strings.ToLower(Modelname)[:1]
-	TextFind := "Find_ByExtID(*" + Modelname + ") error"
-	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
-
-	TextFind = "\n// Find_ByExtID "
-	pos1 := strings.Index(Otvet, TextFind)
-	if pos1 < 0 {
-		return Otvet
-	}
-	s2 := Otvet[pos1+1:]
-
-	posEnd := strings.Index(s2, "\n}")
-	if posEnd < 0 {
-		return Otvet
-	}
-
-	Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+3:]
-
-	return Otvet
-}
-
 // FindColumnTypeGoImport - заменяет ID на Alias
 func FindColumnTypeGoImport(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
 	Otvet := Column1.TypeGo
@@ -514,4 +404,52 @@ func FillColumnsNameGo(MapAll *map[string]*types.Table) error {
 	}
 
 	return err
+}
+
+// DeleteFromInterfaceDelete - удаляет функцию Delete() из интерфейса
+func DeleteFromInterfaceDelete(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверим есть ли колонка IsDeleted
+	if create_files.Has_Column_IsDeleted(Table1) == true {
+		return Otvet
+	}
+
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
+	TextFind := "\n\tDelete(*" + ModelName + ") error"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
+
+	return Otvet
+}
+
+// DeleteFromInterfaceRestore - удаляет функцию Restore() из интерфейса
+func DeleteFromInterfaceRestore(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверим есть ли колонка IsDeleted
+	if create_files.Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+		return Otvet
+	}
+
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
+	TextFind := "\n\tRestore(*" + ModelName + ") error"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
+
+	return Otvet
+}
+
+// DeleteFromInterfaceFind_ByExtID - удаляет функцию Find_ByExtID() из интерфейса
+func DeleteFromInterfaceFind_ByExtID(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверим есть ли колонки ExtID и ConnectionID
+	if create_files.Has_Column_ExtID_ConnectionID(Table1) == true {
+		return Otvet
+	}
+
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
+	TextFind := "\n\tFind_ByExtID(*" + ModelName + ") error"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
+
+	return Otvet
 }

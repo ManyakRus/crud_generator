@@ -107,19 +107,6 @@ func DeleteCommentFromFuncName(Text, FuncName string) string {
 	TextFind := "//" + FuncName + "()"
 	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
 
-	//pos1 := strings.Index(Otvet, TextFind)
-	//if pos1 < 0 {
-	//	return Otvet
-	//}
-	//s2 := Otvet[pos1+1:]
-	//
-	//posEnd := strings.Index(s2, "\n}")
-	//if posEnd < 0 {
-	//	return Otvet
-	//}
-	//
-	//Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+3:]
-
 	return Otvet
 }
 
@@ -639,7 +626,7 @@ func ReplacePackageName(Text, PackageName string) string {
 		return Otvet
 	}
 
-	Otvet = Otvet[:pos1] + "\t" + PackageName + Otvet[pos1+posEnd:]
+	Otvet = Otvet[:pos1+len(TextFind)] + PackageName + Otvet[pos1+posEnd:]
 
 	return Otvet
 }
@@ -652,6 +639,142 @@ func DeleteEmptyImport(Text string) string {
 )
 `
 	Otvet = strings.ReplaceAll(Otvet, sFind, "")
+
+	return Otvet
+}
+
+// DeleteFuncDelete - удаляет функцию Delete()
+func DeleteFuncDelete(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверим есть ли колонка IsDeleted
+	if Has_Column_IsDeleted(Table1) == true {
+		return Otvet
+	}
+
+	Otvet = DeleteFuncFromComment(Otvet, "\n// Delete ")
+	Otvet = DeleteFuncFromFuncName(Otvet, "Delete")
+
+	return Otvet
+}
+
+// DeleteFuncRestore - удаляет функцию Restore()
+func DeleteFuncRestore(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверим есть ли колонка IsDeleted
+	if Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+		return Otvet
+	}
+
+	Otvet = DeleteFuncFromComment(Otvet, "\n// Restore ")
+	Otvet = DeleteFuncFromFuncName(Otvet, "Restore")
+
+	return Otvet
+}
+
+// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
+func DeleteFuncFind_byExtID(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверка есть ли колонки ExtID и ConnectionID
+	if Has_Column_ExtID_ConnectionID(Table1) == true {
+		return Otvet
+	}
+
+	Otvet = DeleteFuncFromComment(Otvet, "\n// Find_ByExtID ")
+	Otvet = DeleteFuncFromFuncName(Otvet, "Find_ByExtID")
+
+	return Otvet
+}
+
+// DeleteFuncDeleteCtx - удаляет функцию Delete_ctx()
+func DeleteFuncDeleteCtx(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверим есть ли колонка IsDeleted
+	if Has_Column_IsDeleted(Table1) == true {
+		return Otvet
+	}
+
+	Otvet = DeleteFuncFromComment(Otvet, "\n// Delete_ctx ")
+	Otvet = DeleteFuncFromFuncName(Otvet, "Delete_ctx")
+
+	return Otvet
+}
+
+// DeleteFuncRestoreCtx - удаляет функцию Restore_ctx()
+func DeleteFuncRestoreCtx(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверим есть ли колонка IsDeleted
+	if Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+		return Otvet
+	}
+
+	Otvet = DeleteFuncFromComment(Otvet, "\n// Restore_ctx ")
+	Otvet = DeleteFuncFromFuncName(Otvet, "Restore_ctx")
+
+	return Otvet
+}
+
+// DeleteFuncFind_byExtIDCtx - удаляет функцию Find_ByExtID_ctx()
+func DeleteFuncFind_byExtIDCtx(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверка есть ли колонки ExtID и ConnectionID
+	if Has_Column_ExtID_ConnectionID(Table1) == true {
+		return Otvet
+	}
+
+	Otvet = DeleteFuncFromComment(Otvet, "\n// Find_ByExtID_ctx ")
+	Otvet = DeleteFuncFromFuncName(Otvet, "Find_ByExtID_ctx")
+
+	return Otvet
+}
+
+// DeleteFuncTestDelete - удаляет функцию Delete()
+func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	//проверим есть ли колонка IsDeleted
+	if Has_Column_IsDeleted(Table1) == true {
+		return Otvet
+	}
+
+	Otvet = DeleteFuncFromComment(Otvet, "\n// TestDelete ")
+	Otvet = DeleteFuncFromFuncName(Otvet, "TestDelete")
+
+	return Otvet
+}
+
+// DeleteFuncTestRestore - удаляет функцию Restore()
+func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	//проверим есть ли колонка IsDeleted
+	if Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+		return Otvet
+	}
+
+	Otvet = DeleteFuncFromComment(Otvet, "\n// TestRestore ")
+	Otvet = DeleteFuncFromFuncName(Otvet, "TestRestore")
+
+	return Otvet
+}
+
+// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
+func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	//проверка есть ли колонки ExtID и ConnectionID
+	if Has_Column_ExtID_ConnectionID(Table1) == true {
+		return Otvet
+	}
+
+	//
+	Otvet = DeleteFuncFromComment(Otvet, "\n// TestFind_ByExtID ")
+	Otvet = DeleteFuncFromFuncName(Otvet, "TestFind_ByExtID")
 
 	return Otvet
 }

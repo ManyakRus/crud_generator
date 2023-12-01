@@ -1,4 +1,4 @@
-package grpc_server
+package grpc_server_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
@@ -69,7 +69,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCServer := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -80,6 +80,11 @@ func CreateFiles(Table1 *types.Table) error {
 
 		ProtoURL := create_files.FindProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+
+		//удалим лишние функции
+		TextGRPCServer = DeleteFuncDelete(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFuncRestore(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFuncFind_byExtID(TextGRPCServer, Table1)
 	}
 
 	//создание текста
@@ -89,13 +94,6 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		if config.Settings.HAS_IS_DELETED == true {
-			TextGRPCServer = DeleteFuncDelete(TextGRPCServer, ModelName, Table1)
-			TextGRPCServer = DeleteFuncDeleteCtx(TextGRPCServer, ModelName, Table1)
-			TextGRPCServer = DeleteFuncRestore(TextGRPCServer, ModelName, Table1)
-			TextGRPCServer = DeleteFuncRestoreCtx(TextGRPCServer, ModelName, Table1)
-		}
-		TextGRPCServer = DeleteFuncFind_byExtID(TextGRPCServer, ModelName, Table1)
 		TextGRPCServer = ConvertID(TextGRPCServer, Table1)
 
 		//замена импортов на новые URL
@@ -146,7 +144,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextGRPCServer := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -160,6 +158,11 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 		CrudStarterURL := create_files.FindCrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
+
+		//удалим лишние функции
+		TextGRPCServer = DeleteFuncTestDelete(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFuncTestRestore(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFuncTestFind_byExtID(TextGRPCServer, Table1)
 	}
 
 	//создание текста
@@ -167,12 +170,6 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
-
-	if config.Settings.HAS_IS_DELETED == true {
-		TextGRPCServer = DeleteFuncTestDelete(TextGRPCServer, ModelName, Table1)
-		TextGRPCServer = DeleteFuncTestRestore(TextGRPCServer, ModelName, Table1)
-	}
-	TextGRPCServer = DeleteFuncTestFind_byExtID(TextGRPCServer, ModelName, Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
@@ -199,63 +196,65 @@ func CreateTestFiles(Table1 *types.Table) error {
 }
 
 // DeleteFuncDelete - удаляет функцию Delete()
-func DeleteFuncDelete(Text, ModelName string, Table1 *types.Table) string {
+func DeleteFuncDelete(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
+	//проверим есть ли колонка IsDeleted
+	if create_files.Has_Column_IsDeleted(Table1) == true {
 		return Otvet
 	}
 
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
 	Otvet = create_files.DeleteFuncFromComment(Otvet, "\n// "+ModelName+"_Delete ")
 
 	return Otvet
 }
 
 // DeleteFuncRestore - удаляет функцию Restore()
-func DeleteFuncRestore(Text, ModelName string, Table1 *types.Table) string {
+func DeleteFuncRestore(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
+	//проверим есть ли колонка IsDeleted
+	if create_files.Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
 		return Otvet
 	}
 
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
 	Otvet = create_files.DeleteFuncFromComment(Text, "\n// "+ModelName+"_Restore ")
 
 	return Otvet
 }
 
-// DeleteFuncDeleteCtx - удаляет функцию Delete_ctx()
-func DeleteFuncDeleteCtx(Text, ModelName string, Table1 *types.Table) string {
-	Otvet := Text
-
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
-		return Otvet
-	}
-
-	Otvet = create_files.DeleteFuncFromComment(Text, "\n// "+ModelName+"_Delete_ctx ")
-
-	return Otvet
-}
-
-// DeleteFuncRestoreCtx - удаляет функцию Restore_ctx()
-func DeleteFuncRestoreCtx(Text, ModelName string, Table1 *types.Table) string {
-	Otvet := Text
-
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
-		return Otvet
-	}
-
-	Otvet = create_files.DeleteFuncFromComment(Text, "\n// "+ModelName+"_Restore_ctx ")
-
-	return Otvet
-}
+//// DeleteFuncDeleteCtx - удаляет функцию Delete_ctx()
+//func DeleteFuncDeleteCtx(Text, ModelName string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	_, ok := Table1.MapColumns["is_deleted"]
+//	if ok == true {
+//		return Otvet
+//	}
+//
+//	Otvet = create_files.DeleteFuncFromComment(Text, "\n// "+ModelName+"_Delete_ctx ")
+//
+//	return Otvet
+//}
+//
+//// DeleteFuncRestoreCtx - удаляет функцию Restore_ctx()
+//func DeleteFuncRestoreCtx(Text, ModelName string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	_, ok := Table1.MapColumns["is_deleted"]
+//	if ok == true {
+//		return Otvet
+//	}
+//
+//	Otvet = create_files.DeleteFuncFromComment(Text, "\n// "+ModelName+"_Restore_ctx ")
+//
+//	return Otvet
+//}
 
 // DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncFind_byExtID(Text, ModelName string, Table1 *types.Table) string {
+func DeleteFuncFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//если есть обе колонки - ничего не делаем
@@ -265,41 +264,44 @@ func DeleteFuncFind_byExtID(Text, ModelName string, Table1 *types.Table) string 
 	}
 
 	//
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
 	Otvet = create_files.DeleteFuncFromComment(Text, "\n// "+ModelName+"_FindByExtID ")
 
 	return Otvet
 }
 
 // DeleteFuncTestDelete - удаляет функцию Delete()
-func DeleteFuncTestDelete(Text, ModelName string, Table1 *types.Table) string {
+func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
+	//проверим есть ли колонка IsDeleted
+	if create_files.Has_Column_IsDeleted(Table1) == true {
 		return Otvet
 	}
 
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
 	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "Test_server_"+ModelName+"_Delete")
 
 	return Otvet
 }
 
 // DeleteFuncTestRestore - удаляет функцию Restore()
-func DeleteFuncTestRestore(Text, ModelName string, Table1 *types.Table) string {
+func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == true {
+	//проверим есть ли колонка IsDeleted
+	if create_files.Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
 		return Otvet
 	}
 
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
 	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "Test_server_"+ModelName+"Restore")
 
 	return Otvet
 }
 
 // DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncTestFind_byExtID(Text, ModelName string, Table1 *types.Table) string {
+func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//если есть обе колонки - ничего не делаем
@@ -309,6 +311,7 @@ func DeleteFuncTestFind_byExtID(Text, ModelName string, Table1 *types.Table) str
 	}
 
 	//
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
 	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "Test_server_"+ModelName+"_FindByExtID")
 
 	return Otvet

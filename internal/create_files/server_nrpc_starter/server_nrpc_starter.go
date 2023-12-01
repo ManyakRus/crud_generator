@@ -51,7 +51,7 @@ func CreateServerGRPCStarter() error {
 	TextNRPCStarter := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextNRPCStarter, DirReadyServerNRPC)
+	TextNRPCStarter = create_files.ReplacePackageName(TextNRPCStarter, DirReadyServerNRPC)
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextNRPCStarter = create_files.DeleteTemplateRepositoryImports(TextNRPCStarter)

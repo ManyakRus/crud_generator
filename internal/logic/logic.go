@@ -9,7 +9,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/generation_code_sh"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client_tables"
-	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_server"
+	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_server_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/main_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/makefile"
 	"github.com/ManyakRus/crud_generator/internal/create_files/model"
@@ -65,7 +65,7 @@ func StartFillAll() error {
 	}
 
 	//grpc_server
-	err = grpc_server.CreateAllFiles(MapAll)
+	err = grpc_server_tables.CreateAllFiles(MapAll)
 	if err != nil {
 		//log.Error("grpc_server.CreateAllFiles() error: ", err)
 		return err

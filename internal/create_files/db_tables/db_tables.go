@@ -74,7 +74,7 @@ func CreateFilesTable_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTab
 	TextModel := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextModel, DirReadyTable)
+	TextModel = create_files.ReplacePackageName(TextModel, DirReadyTable)
 
 	//создание текста
 	TextModel, TextModelStruct, ModelName, err := FindTextModelStruct(TextModel, Table1)

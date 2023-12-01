@@ -50,7 +50,7 @@ func CreateServerGRPCFunc() error {
 	TextGRPCFunc := string(bytes)
 
 	//заменим имя пакета на новое
-	create_files.ReplacePackageName(TextGRPCFunc, DirReadyServerGRPC)
+	TextGRPCFunc = create_files.ReplacePackageName(TextGRPCFunc, DirReadyServerGRPC)
 
 	////заменим имя сервиса на новое
 	//ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME

@@ -1,0 +1,13 @@
+package nrpc_client
+
+import (
+	"github.com/ManyakRus/starter/config"
+	"testing"
+)
+
+func TestConnect(t *testing.T) {
+	config.LoadEnv()
+	FillSettings()
+	Connect()
+	CloseConnection()
+}

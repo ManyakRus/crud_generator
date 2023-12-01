@@ -131,9 +131,12 @@ func FindTextProtoTable1(TextProto string, Table1 *types.Table) string {
 		Otvet = Otvet + FindTextFindByExtId(TextProto, ModelName)
 	}
 
-	if create_files.Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+	if create_files.Has_Column_IsDeleted(Table1) == true {
 		Otvet = Otvet + FindTextDelete(TextProto, ModelName)
-		Otvet = Otvet + FindTextRestore(TextProto, ModelName)
+
+		if config.Settings.HAS_IS_DELETED == true {
+			Otvet = Otvet + FindTextRestore(TextProto, ModelName)
+		}
 	}
 
 	return Otvet
