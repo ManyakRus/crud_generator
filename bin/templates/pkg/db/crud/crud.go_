@@ -146,14 +146,12 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 	if is_create == true {
 		if int64(m.ID) != 0 {
 			TextError := fmt.Sprint("db.Save() ", TableName, " error: id !=0")
-			// log.Panic(sError)
 			err = errors.New(TextError)
 			return err
 		}
 	} else if int64(m.ID) == 0 {
 		TextError := fmt.Sprint("db.Save() ", TableName, " error: id =0")
 		err = errors.New(TextError)
-		// log.Panic(sError)
 		return err
 	}
 
@@ -164,6 +162,7 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 	// заполним даты
 	//Text_modified_at
 	//Text_is_deleted_deleted_at
+	//Text_created_at
 
 	//колонки с null
 	tx := db
@@ -209,7 +208,7 @@ func (crud Crud_DB) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	return err
 }
 
-// Delete_ctx - удаляет запись в БД
+// Delete_ctx - записывает is_deleted = true
 func (crud Crud_DB) Delete_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
@@ -218,11 +217,53 @@ func (crud Crud_DB) Delete_ctx(ctx context.Context, m *lawsuit_status_types.Laws
 		return err
 	}
 
-	db := postgres_gorm.GetConnection()
-	db.WithContext(ctx)
+	m2 := lawsuit_status_types.LawsuitStatusType{}
+	m2.ID = m.ID
+	err = crud.Read_ctx(ctx, &m2)
+	if err != nil {
+		return err
+	}
 
-	tx := db.Delete(m)
-	err = tx.Error
+	m2.IsDeleted = true
+	m.IsDeleted = true
+
+	err = crud.Save_ctx(ctx, &m2)
+
+	return err
+}
+
+// Restore - записывает is_deleted = true
+func (crud Crud_DB) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	ctxMain := contextmain.GetContext()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	err = crud.Restore_ctx(ctx, m)
+	return err
+}
+
+// Restore_ctx - записывает is_deleted = true
+func (crud Crud_DB) Restore_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
+
+	m2 := lawsuit_status_types.LawsuitStatusType{}
+	m2.ID = m.ID
+	err = crud.Read_ctx(ctx, &m2)
+	if err != nil {
+		return err
+	}
+
+	m2.IsDeleted = false
+	m.IsDeleted = false
+
+	err = crud.Save_ctx(ctx, &m2)
 
 	return err
 }
@@ -263,7 +304,7 @@ func (crud Crud_DB) Find_ByExtID_ctx(ctx context.Context, m *lawsuit_status_type
 	db := postgres_gorm.GetConnection()
 	db.WithContext(ctx)
 
-	tx := db.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).Order("is_deleted").Order("id").First(m)
+	tx := db.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).First(m)
 	err = tx.Error
 
 	return err

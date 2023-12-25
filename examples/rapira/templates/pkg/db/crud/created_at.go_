@@ -1,0 +1,5 @@
+
+	if m.CreatedAt.IsZero() == true || m.ID == 0 {
+		m.CreatedAt = time.Now()
+	}
+

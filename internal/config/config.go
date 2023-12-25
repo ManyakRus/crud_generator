@@ -49,6 +49,7 @@ type SettingsINI struct {
 	HAS_IS_DELETED                   bool
 	READY_FOLDERNAME                 string
 	TEXT_DB_MODIFIED_AT              string
+	TEXT_DB_CREATED_AT               string
 	TEXT_DB_IS_DELETED               string
 	USE_DEFAULT_TEMPLATE             bool
 	PREFIX_SERVER_GRPC               string

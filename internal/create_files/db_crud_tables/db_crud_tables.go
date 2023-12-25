@@ -114,6 +114,7 @@ func CreateFiles(Table1 *types.Table) error {
 	//TextDB = create_files.DeleteFuncFind_byExtIDCtx(TextDB, Table1)
 	TextDB = AddTextOmit(TextDB, Table1)
 	TextDB = ReplaceText_modified_at(TextDB, Table1)
+	TextDB = ReplaceText_created_at(TextDB, Table1)
 	TextDB = ReplaceText_is_deleted_deleted_at(TextDB, Table1)
 	TextDB = create_files.DeleteImportModel(TextDB)
 
@@ -374,7 +375,7 @@ func ReplaceText_modified_at(s string, Table1 *types.Table) string {
 		TextNew = ""
 	}
 
-	TextFind := "//Text_modified_at"
+	TextFind := "\t//Text_modified_at\n"
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 
 	return Otvet
@@ -395,7 +396,23 @@ func ReplaceText_is_deleted_deleted_at(s string, Table1 *types.Table) string {
 		TextNew = ""
 	}
 
-	TextFind := "//Text_is_deleted_deleted_at"
+	TextFind := "\t//Text_is_deleted_deleted_at\n"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	return Otvet
+}
+
+// ReplaceText_created_at - заменяет текст "Text_created_at" на текст из файла
+func ReplaceText_created_at(s string, Table1 *types.Table) string {
+	Otvet := s
+
+	TextNew := config.Settings.TEXT_DB_CREATED_AT
+	_, ok := Table1.MapColumns["created_at"]
+	if ok == false {
+		TextNew = ""
+	}
+
+	TextFind := "\t//Text_created_at\n"
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 
 	return Otvet

@@ -18,6 +18,7 @@ func LoadConfigsAll() {
 	LoadNameReplace()
 	LoadNullable()
 	Load_TEXT_DB_MODIFIED_AT()
+	Load_TEXT_DB_CREATED_AT()
 	Load_TEXT_DB_IS_DELETED()
 	LoadConvertID()
 	LoadMapModelCrudDeleteFunctions()
@@ -158,5 +159,23 @@ func LoadMapModelCrudDeleteFunctions() {
 	if err != nil {
 		log.Panic("Unmarshal() error: ", err)
 	}
+
+}
+
+// Load_TEXT_DB_CREATED_AT - загружает текст created_at.go_
+func Load_TEXT_DB_CREATED_AT() {
+	DirTemplatesDB := create_files.Find_Template_DB_Foldername()
+	FileName := DirTemplatesDB + "created_at.go_"
+
+	var err error
+
+	//чтение файла
+	bytes, err := os.ReadFile(FileName)
+	if err != nil {
+		TextError := fmt.Sprint("ReadFile() error: ", err)
+		log.Error(TextError)
+	}
+
+	config.Settings.TEXT_DB_CREATED_AT = string(bytes)
 
 }

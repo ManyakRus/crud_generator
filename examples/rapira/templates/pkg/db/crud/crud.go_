@@ -146,14 +146,12 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 	if is_create == true {
 		if int64(m.ID) != 0 {
 			TextError := fmt.Sprint("db.Save() ", TableName, " error: id !=0")
-			// log.Panic(sError)
 			err = errors.New(TextError)
 			return err
 		}
 	} else if int64(m.ID) == 0 {
 		TextError := fmt.Sprint("db.Save() ", TableName, " error: id =0")
 		err = errors.New(TextError)
-		// log.Panic(sError)
 		return err
 	}
 
@@ -164,6 +162,7 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 	// заполним даты
 	//Text_modified_at
 	//Text_is_deleted_deleted_at
+	//Text_created_at
 
 	//колонки с null
 	tx := db
