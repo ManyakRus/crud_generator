@@ -227,6 +227,7 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		if ColumnNameLowerCase == "created_at" {
 			TextAutoCreateTime = ";autoCreateTime"
+			TextDefaultValue = ""
 		}
 
 		if ColumnNameLowerCase == "modified_at" {
