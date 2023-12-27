@@ -2,7 +2,7 @@ package logic
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	ConfigMain "github.com/ManyakRus/starter/config"
+	ConfigMain "github.com/ManyakRus/starter/config_main"
 	"github.com/ManyakRus/starter/micro"
 	"testing"
 )

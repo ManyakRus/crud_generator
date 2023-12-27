@@ -5,8 +5,9 @@ package postgres_gorm
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/ManyakRus/starter/logger"
-	"github.com/ManyakRus/starter/ping"
+	"github.com/ManyakRus/starter/port_checker"
 	"strings"
 	"time"
 
@@ -60,7 +61,7 @@ func Connect() {
 		FillSettings()
 	}
 
-	ping.Ping(Settings.DB_HOST, Settings.DB_PORT)
+	port_checker.CheckPort(Settings.DB_HOST, Settings.DB_PORT)
 
 	err := Connect_err()
 	if err != nil {
@@ -97,8 +98,15 @@ func Connect_WithApplicationName_err(ApplicationName string) error {
 
 	//
 	conf := &gorm.Config{}
-	conn := postgres.Open(dsn)
-	Conn, err = gorm.Open(conn, conf)
+	//conn := postgres.Open(dsn)
+
+	dialect := postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true, //для запуска мультизапросов
+	})
+	Conn, err = gorm.Open(dialect, conf)
+
+	//Conn, err = gorm.Open(conn, conf)
 	Conn.Config.NamingStrategy = schema.NamingStrategy{TablePrefix: Settings.DB_SCHEMA + "."}
 	Conn.Config.Logger = gormlogger.Default.LogMode(gormlogger.Warn)
 
@@ -130,7 +138,7 @@ func IsClosed() bool {
 
 	err = DB.Ping()
 	if err != nil {
-		log.Error("DB.Ping() error: ", err)
+		log.Error("DB.CheckPort() error: ", err)
 		return true
 	}
 	return otvet
@@ -366,13 +374,13 @@ loop:
 			log.Warn("Context app is canceled. postgres_gorm.ping")
 			break loop
 		case <-ticker.C:
-			err := ping.Ping_err(Settings.DB_HOST, Settings.DB_PORT)
+			err := port_checker.CheckPort_err(Settings.DB_HOST, Settings.DB_PORT)
 			//log.Debug("ticker, ping err: ", err) //удалить
 			if err != nil {
 				NeedReconnect = true
-				log.Warn("postgres_gorm Ping(", addr, ") error: ", err)
+				log.Warn("postgres_gorm CheckPort(", addr, ") error: ", err)
 			} else if NeedReconnect == true {
-				log.Warn("postgres_gorm Ping(", addr, ") OK. Start Reconnect()")
+				log.Warn("postgres_gorm CheckPort(", addr, ") OK. Start Reconnect()")
 				NeedReconnect = false
 				Connect()
 			}
@@ -380,4 +388,35 @@ loop:
 	}
 
 	stopapp.GetWaitGroup_Main().Done()
+}
+
+// RawMultipleSQL - выполняет текст запроса, отдельно для каждого запроса
+func RawMultipleSQL(db *gorm.DB, TextSQL string) *gorm.DB {
+	var tx *gorm.DB
+	var err error
+	tx = db
+
+	// запустим все запросы отдельно
+	sqlSlice := strings.Split(TextSQL, ";")
+	len1 := len(sqlSlice)
+	for i, v := range sqlSlice {
+		if i == len1-1 {
+			tx = tx.Raw(v)
+			err = tx.Error
+		} else {
+			tx = tx.Exec(v)
+			err = tx.Error
+		}
+		if err != nil {
+			TextError := fmt.Sprint("db.Raw() error: ", err, ", TextSQL: \n", v)
+			err = errors.New(TextError)
+			break
+		}
+	}
+
+	if tx == nil {
+		log.Panic("db.Raw() error: rows =nil")
+	}
+
+	return tx
 }

@@ -1,7 +1,7 @@
 package grpc_lawsuit_status_types
 
 import (
-	config "github.com/ManyakRus/starter/config"
+	config "github.com/ManyakRus/starter/config_main"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"testing"
@@ -20,7 +20,7 @@ func TestGetVersionModel(t *testing.T) {
 }
 
 func TestRead(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
@@ -39,7 +39,7 @@ func TestRead(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
@@ -59,7 +59,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
@@ -79,7 +79,7 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestSave(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
@@ -104,7 +104,7 @@ func TestSave(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
@@ -152,7 +152,7 @@ func TestDelete(t *testing.T) {
 }
 
 func TestFindByExtID(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 

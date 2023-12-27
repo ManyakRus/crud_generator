@@ -2,7 +2,7 @@ package server_grpc
 
 import (
 	"context"
-	"github.com/ManyakRus/starter/config"
+	"github.com/ManyakRus/starter/config_main"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
@@ -13,7 +13,7 @@ import (
 const LawsuitStatusType_ID_Test = 1
 
 func Test_server_LawsuitStatusType_Read(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
 	ctx := context.Background()
@@ -32,7 +32,7 @@ func Test_server_LawsuitStatusType_Read(t *testing.T) {
 }
 
 func Test_server_LawsuitStatusType_Delete(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
 	ctx := context.Background()
@@ -52,7 +52,7 @@ func Test_server_LawsuitStatusType_Delete(t *testing.T) {
 }
 
 func Test_server_LawsuitStatusType_Create(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
 	var ModelString string
@@ -80,7 +80,7 @@ func Test_server_LawsuitStatusType_Create(t *testing.T) {
 }
 
 func Test_server_LawsuitStatusType_Update(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
 	ctx := context.Background()
@@ -116,7 +116,7 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 }
 
 func Test_server_LawsuitStatusType_Save(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
 	ctx := context.Background()
@@ -150,7 +150,7 @@ func Test_server_LawsuitStatusType_Save(t *testing.T) {
 }
 
 func Test_server_LawsuitStatusType_FindByExtID(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
 	ctx := context.Background()

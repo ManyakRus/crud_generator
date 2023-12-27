@@ -1,12 +1,12 @@
 package nrpc_client
 
 import (
-	"github.com/ManyakRus/starter/config"
+	"github.com/ManyakRus/starter/config_main"
 	"testing"
 )
 
 func TestConnect(t *testing.T) {
-	config.LoadEnv()
+	config_main.LoadEnv()
 	FillSettings()
 	Connect()
 	CloseConnection()

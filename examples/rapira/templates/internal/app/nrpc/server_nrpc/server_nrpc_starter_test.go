@@ -1,7 +1,7 @@
 package server_nrpc
 
 import (
-	config_main "github.com/ManyakRus/starter/config"
+	config_main "github.com/ManyakRus/starter/config_main"
 	"testing"
 )
 
