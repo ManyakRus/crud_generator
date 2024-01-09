@@ -21,15 +21,15 @@ DB_PASSWORD=
 INCLUDE_TABLES=""
 
 #INCLUDE_TABLES - table name ignore filter. Regular expression
-EXCLUDE_TABLES="ext_"
+EXCLUDE_TABLES=
 
 #---------------------Template settings---------------------
 
 #SERVICE_REPOSITORY_URL - URL of your new service repository (Github, gitlab, etc.)
-SERVICE_REPOSITORY_URL="gitlab.aescorp.ru/dsp_dev/claim/sync_service"
+SERVICE_REPOSITORY_URL="gitlab.aescorp.ru/dsp_dev/claim/crud_service"
 
 #SERVICE_NAME - service name for your new service
-SERVICE_NAME=sync_service
+SERVICE_NAME=crud_service
 
 #TEMPLATE_SERVICE_NAME - service name in your template files
 TEMPLATE_SERVICE_NAME=sync_service
@@ -96,7 +96,7 @@ TEXT_TEMPLATE_TABLENAME="lawsuit_status_types"
 USE_DEFAULT_TEMPLATE=true
 
 #HAS_IS_DELETED - fill "true" if you have "is_deleted" column, and want Delete() Restore() functions.
-HAS_IS_DELETED=true
+HAS_IS_DELETED=false
 
 #---------------------Create files settings---------------------
 
