@@ -98,6 +98,7 @@ import (
 	sort.Strings(keys)
 
 	//все таблицы
+	TextStarter := ""
 	TextModel := ""
 	TextDB := ""
 	TextGRPC := ""
@@ -115,15 +116,25 @@ import (
 			continue
 		}
 
-		TextModel = TextModel + FindTextImportModel1(Table1)
+		TextStarter = TextStarter + FindTextImportStarter1(Table1)
+		//TextModel = TextModel + FindTextImportModel1(Table1)
 		TextDB = TextDB + FindTextImportDB1(Table1)
 		TextGRPC = TextGRPC + FindTextImportGRPC1(Table1)
 		TextNRPC = TextNRPC + FindTextImportNRPC1(Table1)
 	}
 
-	Otvet = Otvet + TextModel + "\n" + TextDB + "\n" + TextGRPC + "\n" + TextNRPC
+	Otvet = Otvet + TextStarter + "\n" + TextModel + "\n" + TextDB + "\n" + TextGRPC + "\n" + TextNRPC
 
 	Otvet = Otvet + "\n)"
+
+	return Otvet
+}
+
+// FindTextImportStarter1 - возвращает текст импорта crud_starter_ для 1 таблицы
+func FindTextImportStarter1(Table1 *types.Table) string {
+	TableName := strings.ToLower(Table1.Name)
+	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + "/" + constants.STARTER_TABLES_PREFIX + TableName
+	Otvet := "\n\t\"" + DB_URL + `"`
 
 	return Otvet
 }
@@ -206,8 +217,7 @@ func InitCrudTransport_DB() {`
 // FindTextNRPC1 - возвращает текст всех функций .proto для таблицы
 func FindTextDB1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	ModelName := Table1.NameGo
-	Otvet := "\n\t" + TableName + "." + ModelName + "{}.SetCrudInterface(" + config.Settings.PREFIX_CRUD + TableName + ".Crud_DB{})"
+	Otvet := "\n\t" + constants.STARTER_TABLES_PREFIX + TableName + ".SetCrudInterface(" + config.Settings.PREFIX_CRUD + TableName + ".Crud_DB{})"
 
 	return Otvet
 }
@@ -255,8 +265,7 @@ func InitCrudTransport_GRPC() {`
 // FindTextNRPC1 - возвращает текст всех функций .proto для таблицы
 func FindTextGRPC1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	ModelName := Table1.NameGo
-	Otvet := "\n\t" + TableName + "." + ModelName + "{}.SetCrudInterface(grpc_" + TableName + ".Crud_GRPC{})"
+	Otvet := "\n\t" + constants.STARTER_TABLES_PREFIX + TableName + ".SetCrudInterface(grpc_" + TableName + ".Crud_GRPC{})"
 
 	return Otvet
 }
@@ -303,8 +312,7 @@ func InitCrudTransport_NRPC() {`
 // FindTextNRPC1 - возвращает текст всех функций .proto для таблицы
 func FindTextNRPC1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	ModelName := Table1.NameGo
-	Otvet := "\n\t" + TableName + "." + ModelName + "{}.SetCrudInterface(nrpc_" + TableName + ".Crud_NRPC{})"
+	Otvet := "\n\t" + constants.STARTER_TABLES_PREFIX + TableName + ".SetCrudInterface(nrpc_" + TableName + ".Crud_NRPC{})"
 
 	return Otvet
 }

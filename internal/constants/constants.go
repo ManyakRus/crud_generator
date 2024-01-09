@@ -35,3 +35,7 @@ const SERVER_GRPC_FUNC_FILENAME = "server_grpc_func.go"
 
 const MAKEFILE_FILENAME = "Makefile"
 const ENV_FILENAME = ".env"
+
+const STARTER_TABLES_FILENAME = "starter_tables.go_"
+const STARTER_TABLES_FILENAME_TEST = "starter_tables_test.go_"
+const STARTER_TABLES_PREFIX = "crud_starter_"

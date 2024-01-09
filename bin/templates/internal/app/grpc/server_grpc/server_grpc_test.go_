@@ -7,7 +7,6 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"testing"
-	"math"
 )
 
 // LawsuitStatusType_ID_Test - ID таблицы для тестирования
@@ -38,7 +37,7 @@ func Test_server_LawsuitStatusType_Delete(t *testing.T) {
 
 	ctx := context.Background()
 	Request := grpc_proto.RequestId{}
-	Request.Id = math.MinInt64
+	Request.Id = LawsuitStatusType_ID_Test
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}

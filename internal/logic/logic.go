@@ -3,6 +3,7 @@ package logic
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
+	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/db_crud_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/db_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/env_file"
@@ -157,6 +158,13 @@ func StartFillAll() error {
 
 	//tables
 	err = db_tables.CreateAllFiles(MapAll)
+	if err != nil {
+		//log.Error("db_tables.CreateAllFiles() error: ", err)
+		return err
+	}
+
+	//tables
+	err = crud_starter_tables.CreateAllFiles(MapAll)
 	if err != nil {
 		//log.Error("db_tables.CreateAllFiles() error: ", err)
 		return err
