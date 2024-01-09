@@ -24,6 +24,15 @@ type Table struct {
 	Comment     string `json:"table_comment"   gorm:"column:table_comment;default:''"`
 }
 
+type ReplaceStruct struct {
+	Old string `json:"old"`
+	New string `json:"new"`
+}
+
+//type FunctionsReplace struct {
+//	Functions []ReplaceStruct `json:"functions"`
+//}
+
 // MapReplaceName - карта замены имени поля на другое
 var MapReplaceName = make(map[string]string, 0)
 
@@ -35,3 +44,6 @@ var MapConvertID = make(map[string]string, 0)
 
 // MapModelCrudDeleteFunctions - карта функций которые будут удалены из файл model crud, ИмяТаблицыБД:ИмяФункцииГоу
 var MapModelCrudDeleteFunctions = make(map[string]string, 0)
+
+// MapRenameFunctions - карта функций которые будут переименованый в файлах crud
+var MapRenameFunctions = make(map[string][]ReplaceStruct, 0)

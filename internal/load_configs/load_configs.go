@@ -22,6 +22,7 @@ func LoadConfigsAll() {
 	Load_TEXT_DB_IS_DELETED()
 	LoadConvertID()
 	LoadMapModelCrudDeleteFunctions()
+	LoadCrudFunctionsRename()
 }
 
 // LoadMappings - загружает маппинг ТипБД = ТипGolang, из файла .json
@@ -177,5 +178,28 @@ func Load_TEXT_DB_CREATED_AT() {
 	}
 
 	config.Settings.TEXT_DB_CREATED_AT = string(bytes)
+
+}
+
+// LoadCrudFunctionsRename - загружает маппинг ИмяТаблицы:{old:"",new:""}
+func LoadCrudFunctionsRename() {
+	dir := micro.ProgramDir_bin()
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + "crud_functions_rename.json"
+
+	var err error
+
+	//чтение файла
+	bytes, err := os.ReadFile(FileName)
+	if err != nil {
+		TextError := fmt.Sprint("ReadFile() error: ", err)
+		log.Panic(TextError)
+	}
+
+	//json в map
+	//var MapServiceURL2 = make(map[string]string)
+	err = json.Unmarshal(bytes, &types.MapRenameFunctions)
+	if err != nil {
+		log.Panic("Unmarshal() error: ", err)
+	}
 
 }

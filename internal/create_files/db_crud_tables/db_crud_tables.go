@@ -124,6 +124,9 @@ func CreateFiles(Table1 *types.Table) error {
 	//удаление пустого импорта
 	TextDB = create_files.DeleteEmptyImport(TextDB)
 
+	//переименование функций
+	TextDB = RenameFunctions(TextDB, Table1)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
 
@@ -414,6 +417,22 @@ func ReplaceText_created_at(s string, Table1 *types.Table) string {
 
 	TextFind := "\t//Text_created_at\n"
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	return Otvet
+}
+
+func RenameFunctions(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
+
+	TableName := strings.ToLower(Table1.Name)
+	Rename1, ok := types.MapRenameFunctions[TableName]
+	if ok == false {
+		return Otvet
+	}
+
+	for _, v := range Rename1 {
+		Otvet = strings.ReplaceAll(Otvet, " "+v.Old+"(", " "+v.New+"(")
+	}
 
 	return Otvet
 }

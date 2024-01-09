@@ -45,3 +45,17 @@ example:
 {
       "lawsuits": "NewLawsuit,AsLawsuit"
 }
+
+
+
+crud_functions_rename.json 
+TableName:{old:"",new:""}
+example:
+{
+      "functions": [
+	{
+	"old": "create_update_ctx",
+	"new":"create_update_ctx_original"
+	}
+	]
+}
