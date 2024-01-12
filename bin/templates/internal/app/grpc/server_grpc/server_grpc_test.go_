@@ -18,7 +18,7 @@ func Test_server_LawsuitStatusType_Read(t *testing.T) {
 
 	ctx := context.Background()
 	Request := grpc_proto.RequestId{}
-	Request.Id = LawsuitStatusType_ID_Test
+	Request.ID = LawsuitStatusType_ID_Test
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
@@ -37,7 +37,7 @@ func Test_server_LawsuitStatusType_Delete(t *testing.T) {
 
 	ctx := context.Background()
 	Request := grpc_proto.RequestId{}
-	Request.Id = LawsuitStatusType_ID_Test
+	Request.ID = LawsuitStatusType_ID_Test
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
@@ -85,7 +85,7 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 
 	ctx := context.Background()
 	Request := grpc_proto.RequestId{}
-	Request.Id = LawsuitStatusType_ID_Test
+	Request.ID = LawsuitStatusType_ID_Test
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
@@ -121,7 +121,7 @@ func Test_server_LawsuitStatusType_Save(t *testing.T) {
 
 	ctx := context.Background()
 	Request := grpc_proto.RequestId{}
-	Request.Id = LawsuitStatusType_ID_Test
+	Request.ID = LawsuitStatusType_ID_Test
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
@@ -155,7 +155,7 @@ func Test_server_LawsuitStatusType_FindByExtID(t *testing.T) {
 
 	ctx := context.Background()
 	Request := grpc_proto.RequestId{}
-	Request.Id = LawsuitStatusType_ID_Test
+	Request.ID = LawsuitStatusType_ID_Test
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
