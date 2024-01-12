@@ -328,7 +328,7 @@ func ConvertID(Text string, Table1 *types.Table) string {
 		return Otvet
 	}
 
-	Otvet = strings.ReplaceAll(Otvet, "Request.Id", TextConvert+"(Request.Id)")
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", TextConvert+"(Request.ID)")
 	if TextConvert[:6] != "alias." {
 		return Otvet
 	}
