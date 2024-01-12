@@ -1,7 +1,7 @@
 package grpc_lawsuit_status_types
 
 import (
-	config "github.com/ManyakRus/starter/config_main"
+	"github.com/ManyakRus/starter/config_main"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"testing"
