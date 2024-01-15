@@ -199,8 +199,10 @@ func BoolFromString(s string) bool {
 func LoadSettingsTxt() {
 	var err error
 
+	Fill_TEMPLATES_FOLDER_NAME()
+
 	DirBin := micro.ProgramDir_bin()
-	Dir := DirBin + constants.SETTINGS_FOLDER_NAME + micro.SeparatorFile()
+	Dir := DirBin + constants.TEMPLATES_FOLDER_NAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile()
 	FilenameEnv := Dir + ".env"
 	err = ConfigMain.LoadEnv_from_file_err(FilenameEnv)
 	if err == nil {
@@ -213,4 +215,17 @@ func LoadSettingsTxt() {
 		log.Panic("LoadSettingsTxt() filename: ", FilenameSettings, " error: ", err)
 	}
 
+}
+
+// Fill_TEMPLATES_FOLDER_NAME - заполняет переменную TEMPLATES_FOLDER_NAME = "templates_main" или "templates"
+func Fill_TEMPLATES_FOLDER_NAME() {
+	DirBin := micro.ProgramDir_bin()
+	FileName := DirBin + "templates_main"
+	ok, err := micro.FileExists(FileName)
+	if err != nil {
+		log.Panic("FileExists() ", FileName, " error: ", err)
+	}
+	if ok == true {
+		constants.TEMPLATES_FOLDER_NAME = "templates_main"
+	}
 }

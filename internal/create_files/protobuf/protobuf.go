@@ -100,6 +100,9 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	//
 	TextProto = TextProto[:PosStart] + TextProtoNew + TextProto[PosStart:]
 
+	//
+	TextProto = create_files.DeleteEmptyLines(TextProto)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyProto, []byte(TextProto), constants.FILE_PERMISSIONS)
 
@@ -120,7 +123,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 
 // FindTextProtoTable1 - возвращает текст всех функций .proto для таблицы
 func FindTextProtoTable1(TextProto string, Table1 *types.Table) string {
-	Otvet := "\n\t//\n"
+	Otvet := "\n" //"\n\t//\n"
 
 	ModelName := Table1.NameGo
 	Otvet = Otvet + FindTextRead(TextProto, ModelName)
@@ -298,7 +301,7 @@ func TextRestore(ModelName string) string {
 
 // TextFindByExtId - возвращает текст .proto
 func TextFindByExtId(ModelName string) string {
-	Otvet := "rpc " + ModelName + "_FindByExtID(RequestExtId) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_FindByExtID(RequestExtID) returns (Response) {}"
 
 	return Otvet
 }

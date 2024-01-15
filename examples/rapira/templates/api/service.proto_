@@ -9,8 +9,537 @@ package grpc;
 
 option go_package = "./grpc_proto";
 
-// sync_service - сервис обмена с Базой данных
+// Sync_service - сервис обмена с Базой данных
 service Sync_service {
+	//
+	rpc AccountingArea_Read(RequestId) returns (Response) {}
+	rpc AccountingArea_Create(RequestModel) returns (Response) {}
+	rpc AccountingArea_Update(RequestModel) returns (Response) {}
+	rpc AccountingArea_Save(RequestModel) returns (Response) {}
+	rpc AccountingArea_FindByExtID(RequestExtId) returns (Response) {}
+	rpc AccountingArea_Delete(RequestId) returns (Response) {}
+	rpc AccountingArea_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc AccrualType_Read(RequestId) returns (Response) {}
+	rpc AccrualType_Create(RequestModel) returns (Response) {}
+	rpc AccrualType_Update(RequestModel) returns (Response) {}
+	rpc AccrualType_Save(RequestModel) returns (Response) {}
+	rpc AccrualType_Delete(RequestId) returns (Response) {}
+	rpc AccrualType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Balance_Read(RequestId) returns (Response) {}
+	rpc Balance_Create(RequestModel) returns (Response) {}
+	rpc Balance_Update(RequestModel) returns (Response) {}
+	rpc Balance_Save(RequestModel) returns (Response) {}
+	rpc Balance_FindByExtID(RequestExtId) returns (Response) {}
+	rpc Balance_Delete(RequestId) returns (Response) {}
+	rpc Balance_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc BankAccountOrganization_Read(RequestId) returns (Response) {}
+	rpc BankAccountOrganization_Create(RequestModel) returns (Response) {}
+	rpc BankAccountOrganization_Update(RequestModel) returns (Response) {}
+	rpc BankAccountOrganization_Save(RequestModel) returns (Response) {}
+	rpc BankAccountOrganization_FindByExtID(RequestExtId) returns (Response) {}
+	rpc BankAccountOrganization_Delete(RequestId) returns (Response) {}
+	rpc BankAccountOrganization_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Bank_Read(RequestId) returns (Response) {}
+	rpc Bank_Create(RequestModel) returns (Response) {}
+	rpc Bank_Update(RequestModel) returns (Response) {}
+	rpc Bank_Save(RequestModel) returns (Response) {}
+	rpc Bank_FindByExtID(RequestExtId) returns (Response) {}
+	rpc Bank_Delete(RequestId) returns (Response) {}
+	rpc Bank_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc BeforeTimeType_Read(RequestId) returns (Response) {}
+	rpc BeforeTimeType_Create(RequestModel) returns (Response) {}
+	rpc BeforeTimeType_Update(RequestModel) returns (Response) {}
+	rpc BeforeTimeType_Save(RequestModel) returns (Response) {}
+	rpc BeforeTimeType_Delete(RequestId) returns (Response) {}
+	rpc BeforeTimeType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc BillKindType_Read(RequestId) returns (Response) {}
+	rpc BillKindType_Create(RequestModel) returns (Response) {}
+	rpc BillKindType_Update(RequestModel) returns (Response) {}
+	rpc BillKindType_Save(RequestModel) returns (Response) {}
+	rpc BillKindType_Delete(RequestId) returns (Response) {}
+	rpc BillKindType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Branch_Read(RequestId) returns (Response) {}
+	rpc Branch_Create(RequestModel) returns (Response) {}
+	rpc Branch_Update(RequestModel) returns (Response) {}
+	rpc Branch_Save(RequestModel) returns (Response) {}
+	rpc Branch_Delete(RequestId) returns (Response) {}
+	rpc Branch_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Calendar_Read(RequestId) returns (Response) {}
+	rpc Calendar_Create(RequestModel) returns (Response) {}
+	rpc Calendar_Update(RequestModel) returns (Response) {}
+	rpc Calendar_Save(RequestModel) returns (Response) {}
+	rpc Calendar_Delete(RequestId) returns (Response) {}
+	rpc Calendar_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc ChangeItem_Read(RequestId) returns (Response) {}
+	rpc ChangeItem_Create(RequestModel) returns (Response) {}
+	rpc ChangeItem_Update(RequestModel) returns (Response) {}
+	rpc ChangeItem_Save(RequestModel) returns (Response) {}
+	rpc ChangeItem_Delete(RequestId) returns (Response) {}
+	rpc ChangeItem_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc ChannelType_Read(RequestId) returns (Response) {}
+	rpc ChannelType_Create(RequestModel) returns (Response) {}
+	rpc ChannelType_Update(RequestModel) returns (Response) {}
+	rpc ChannelType_Save(RequestModel) returns (Response) {}
+	rpc ChannelType_Delete(RequestId) returns (Response) {}
+	rpc ChannelType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc ClaimType_Read(RequestId) returns (Response) {}
+	rpc ClaimType_Create(RequestModel) returns (Response) {}
+	rpc ClaimType_Update(RequestModel) returns (Response) {}
+	rpc ClaimType_Save(RequestModel) returns (Response) {}
+	rpc ClaimType_Delete(RequestId) returns (Response) {}
+	rpc ClaimType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc ColorType_Read(RequestId) returns (Response) {}
+	rpc ColorType_Create(RequestModel) returns (Response) {}
+	rpc ColorType_Update(RequestModel) returns (Response) {}
+	rpc ColorType_Save(RequestModel) returns (Response) {}
+	rpc ColorType_Delete(RequestId) returns (Response) {}
+	rpc ColorType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Comment_Read(RequestId) returns (Response) {}
+	rpc Comment_Create(RequestModel) returns (Response) {}
+	rpc Comment_Update(RequestModel) returns (Response) {}
+	rpc Comment_Save(RequestModel) returns (Response) {}
+	rpc Comment_Delete(RequestId) returns (Response) {}
+	rpc Comment_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc CompletedMonth_Read(RequestId) returns (Response) {}
+	rpc CompletedMonth_Create(RequestModel) returns (Response) {}
+	rpc CompletedMonth_Update(RequestModel) returns (Response) {}
+	rpc CompletedMonth_Save(RequestModel) returns (Response) {}
+	rpc CompletedMonth_FindByExtID(RequestExtId) returns (Response) {}
+	rpc CompletedMonth_Delete(RequestId) returns (Response) {}
+	rpc CompletedMonth_Restore(RequestId) returns (Response) {}
+
+	//
+
+	//
+	rpc ContractBlackItem_Read(RequestId) returns (Response) {}
+	rpc ContractBlackItem_Create(RequestModel) returns (Response) {}
+	rpc ContractBlackItem_Update(RequestModel) returns (Response) {}
+	rpc ContractBlackItem_Save(RequestModel) returns (Response) {}
+	rpc ContractBlackItem_Delete(RequestId) returns (Response) {}
+	rpc ContractBlackItem_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc ContractCategoryType_Read(RequestId) returns (Response) {}
+	rpc ContractCategoryType_Create(RequestModel) returns (Response) {}
+	rpc ContractCategoryType_Update(RequestModel) returns (Response) {}
+	rpc ContractCategoryType_Save(RequestModel) returns (Response) {}
+	rpc ContractCategoryType_FindByExtID(RequestExtId) returns (Response) {}
+	rpc ContractCategoryType_Delete(RequestId) returns (Response) {}
+	rpc ContractCategoryType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc ContractWhiteItem_Read(RequestId) returns (Response) {}
+	rpc ContractWhiteItem_Create(RequestModel) returns (Response) {}
+	rpc ContractWhiteItem_Update(RequestModel) returns (Response) {}
+	rpc ContractWhiteItem_Save(RequestModel) returns (Response) {}
+	rpc ContractWhiteItem_Delete(RequestId) returns (Response) {}
+	rpc ContractWhiteItem_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Contract_Read(RequestId) returns (Response) {}
+	rpc Contract_Create(RequestModel) returns (Response) {}
+	rpc Contract_Update(RequestModel) returns (Response) {}
+	rpc Contract_Save(RequestModel) returns (Response) {}
+	rpc Contract_FindByExtID(RequestExtId) returns (Response) {}
+	rpc Contract_Delete(RequestId) returns (Response) {}
+	rpc Contract_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Court_Read(RequestId) returns (Response) {}
+	rpc Court_Create(RequestModel) returns (Response) {}
+	rpc Court_Update(RequestModel) returns (Response) {}
+	rpc Court_Save(RequestModel) returns (Response) {}
+	rpc Court_Delete(RequestId) returns (Response) {}
+	rpc Court_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc DayType_Read(RequestId) returns (Response) {}
+	rpc DayType_Create(RequestModel) returns (Response) {}
+	rpc DayType_Update(RequestModel) returns (Response) {}
+	rpc DayType_Save(RequestModel) returns (Response) {}
+	rpc DayType_Delete(RequestId) returns (Response) {}
+	rpc DayType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc DebtType_Read(RequestId) returns (Response) {}
+	rpc DebtType_Create(RequestModel) returns (Response) {}
+	rpc DebtType_Update(RequestModel) returns (Response) {}
+	rpc DebtType_Save(RequestModel) returns (Response) {}
+	rpc DebtType_FindByExtID(RequestExtId) returns (Response) {}
+	rpc DebtType_Delete(RequestId) returns (Response) {}
+	rpc DebtType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc DirectionType_Read(RequestId) returns (Response) {}
+	rpc DirectionType_Create(RequestModel) returns (Response) {}
+	rpc DirectionType_Update(RequestModel) returns (Response) {}
+	rpc DirectionType_Save(RequestModel) returns (Response) {}
+	rpc DirectionType_Delete(RequestId) returns (Response) {}
+	rpc DirectionType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc DocumentLinkType_Read(RequestId) returns (Response) {}
+	rpc DocumentLinkType_Create(RequestModel) returns (Response) {}
+	rpc DocumentLinkType_Update(RequestModel) returns (Response) {}
+	rpc DocumentLinkType_Save(RequestModel) returns (Response) {}
+	rpc DocumentLinkType_Delete(RequestId) returns (Response) {}
+	rpc DocumentLinkType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc DocumentLink_Read(RequestId) returns (Response) {}
+	rpc DocumentLink_Create(RequestModel) returns (Response) {}
+	rpc DocumentLink_Update(RequestModel) returns (Response) {}
+	rpc DocumentLink_Save(RequestModel) returns (Response) {}
+	rpc DocumentLink_FindByExtID(RequestExtId) returns (Response) {}
+	rpc DocumentLink_Delete(RequestId) returns (Response) {}
+	rpc DocumentLink_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc DocumentType_Read(RequestId) returns (Response) {}
+	rpc DocumentType_Create(RequestModel) returns (Response) {}
+	rpc DocumentType_Update(RequestModel) returns (Response) {}
+	rpc DocumentType_Save(RequestModel) returns (Response) {}
+	rpc DocumentType_FindByExtID(RequestExtId) returns (Response) {}
+	rpc DocumentType_Delete(RequestId) returns (Response) {}
+	rpc DocumentType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Document_Read(RequestId) returns (Response) {}
+	rpc Document_Create(RequestModel) returns (Response) {}
+	rpc Document_Update(RequestModel) returns (Response) {}
+	rpc Document_Save(RequestModel) returns (Response) {}
+	rpc Document_FindByExtID(RequestExtId) returns (Response) {}
+	rpc Document_Delete(RequestId) returns (Response) {}
+	rpc Document_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Employee_FindByExtID(RequestExtId) returns (Response) {}
+
+	//
+	rpc EventType_Read(RequestId) returns (Response) {}
+	rpc EventType_Create(RequestModel) returns (Response) {}
+	rpc EventType_Update(RequestModel) returns (Response) {}
+	rpc EventType_Save(RequestModel) returns (Response) {}
+	rpc EventType_Delete(RequestId) returns (Response) {}
+	rpc EventType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Event_Read(RequestId) returns (Response) {}
+	rpc Event_Create(RequestModel) returns (Response) {}
+	rpc Event_Update(RequestModel) returns (Response) {}
+	rpc Event_Save(RequestModel) returns (Response) {}
+	rpc Event_Delete(RequestId) returns (Response) {}
+	rpc Event_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Facsimile_Read(RequestId) returns (Response) {}
+	rpc Facsimile_Create(RequestModel) returns (Response) {}
+	rpc Facsimile_Update(RequestModel) returns (Response) {}
+	rpc Facsimile_Save(RequestModel) returns (Response) {}
+	rpc Facsimile_Delete(RequestId) returns (Response) {}
+	rpc Facsimile_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc FileChange_Read(RequestId) returns (Response) {}
+	rpc FileChange_Create(RequestModel) returns (Response) {}
+	rpc FileChange_Update(RequestModel) returns (Response) {}
+	rpc FileChange_Save(RequestModel) returns (Response) {}
+
+	//
+	rpc FileTemplate_Read(RequestId) returns (Response) {}
+	rpc FileTemplate_Create(RequestModel) returns (Response) {}
+	rpc FileTemplate_Update(RequestModel) returns (Response) {}
+	rpc FileTemplate_Save(RequestModel) returns (Response) {}
+	rpc FileTemplate_Delete(RequestId) returns (Response) {}
+	rpc FileTemplate_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc FileType_Read(RequestId) returns (Response) {}
+	rpc FileType_Create(RequestModel) returns (Response) {}
+	rpc FileType_Update(RequestModel) returns (Response) {}
+	rpc FileType_Save(RequestModel) returns (Response) {}
+	rpc FileType_Delete(RequestId) returns (Response) {}
+	rpc FileType_Restore(RequestId) returns (Response) {}
+
+	//
+
+	//
+	rpc GenderType_Read(RequestId) returns (Response) {}
+	rpc GenderType_Create(RequestModel) returns (Response) {}
+	rpc GenderType_Update(RequestModel) returns (Response) {}
+	rpc GenderType_Save(RequestModel) returns (Response) {}
+	rpc GenderType_Delete(RequestId) returns (Response) {}
+	rpc GenderType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc HashtagLink_Read(RequestId) returns (Response) {}
+	rpc HashtagLink_Create(RequestModel) returns (Response) {}
+	rpc HashtagLink_Update(RequestModel) returns (Response) {}
+	rpc HashtagLink_Save(RequestModel) returns (Response) {}
+	rpc HashtagLink_Delete(RequestId) returns (Response) {}
+	rpc HashtagLink_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Hashtag_Read(RequestId) returns (Response) {}
+	rpc Hashtag_Create(RequestModel) returns (Response) {}
+	rpc Hashtag_Update(RequestModel) returns (Response) {}
+	rpc Hashtag_Save(RequestModel) returns (Response) {}
+	rpc Hashtag_Delete(RequestId) returns (Response) {}
+	rpc Hashtag_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Individual_Read(RequestId) returns (Response) {}
+	rpc Individual_Create(RequestModel) returns (Response) {}
+	rpc Individual_Update(RequestModel) returns (Response) {}
+	rpc Individual_Save(RequestModel) returns (Response) {}
+	rpc Individual_FindByExtID(RequestExtId) returns (Response) {}
+	rpc Individual_Delete(RequestId) returns (Response) {}
+	rpc Individual_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc InvoiceDebtTypeStat_Read(RequestId) returns (Response) {}
+	rpc InvoiceDebtTypeStat_Create(RequestModel) returns (Response) {}
+	rpc InvoiceDebtTypeStat_Update(RequestModel) returns (Response) {}
+	rpc InvoiceDebtTypeStat_Save(RequestModel) returns (Response) {}
+	rpc InvoiceDebtTypeStat_Delete(RequestId) returns (Response) {}
+	rpc InvoiceDebtTypeStat_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc LawsuitInvoiceCorrection_Read(RequestId) returns (Response) {}
+	rpc LawsuitInvoiceCorrection_Create(RequestModel) returns (Response) {}
+	rpc LawsuitInvoiceCorrection_Update(RequestModel) returns (Response) {}
+	rpc LawsuitInvoiceCorrection_Save(RequestModel) returns (Response) {}
+	rpc LawsuitInvoiceCorrection_Delete(RequestId) returns (Response) {}
+	rpc LawsuitInvoiceCorrection_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc LawsuitInvoice_Read(RequestId) returns (Response) {}
+	rpc LawsuitInvoice_Create(RequestModel) returns (Response) {}
+	rpc LawsuitInvoice_Update(RequestModel) returns (Response) {}
+	rpc LawsuitInvoice_Save(RequestModel) returns (Response) {}
+	rpc LawsuitInvoice_Delete(RequestId) returns (Response) {}
+	rpc LawsuitInvoice_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc LawsuitPaymentCorrection_Read(RequestId) returns (Response) {}
+	rpc LawsuitPaymentCorrection_Create(RequestModel) returns (Response) {}
+	rpc LawsuitPaymentCorrection_Update(RequestModel) returns (Response) {}
+	rpc LawsuitPaymentCorrection_Save(RequestModel) returns (Response) {}
+	rpc LawsuitPaymentCorrection_Delete(RequestId) returns (Response) {}
+	rpc LawsuitPaymentCorrection_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc LawsuitPayment_Read(RequestId) returns (Response) {}
+	rpc LawsuitPayment_Create(RequestModel) returns (Response) {}
+	rpc LawsuitPayment_Update(RequestModel) returns (Response) {}
+	rpc LawsuitPayment_Save(RequestModel) returns (Response) {}
+	rpc LawsuitPayment_Delete(RequestId) returns (Response) {}
+	rpc LawsuitPayment_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc LawsuitReasonType_Read(RequestId) returns (Response) {}
+	rpc LawsuitReasonType_Create(RequestModel) returns (Response) {}
+	rpc LawsuitReasonType_Update(RequestModel) returns (Response) {}
+	rpc LawsuitReasonType_Save(RequestModel) returns (Response) {}
+	rpc LawsuitReasonType_Delete(RequestId) returns (Response) {}
+	rpc LawsuitReasonType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc LawsuitStageType_Read(RequestId) returns (Response) {}
+	rpc LawsuitStageType_Create(RequestModel) returns (Response) {}
+	rpc LawsuitStageType_Update(RequestModel) returns (Response) {}
+	rpc LawsuitStageType_Save(RequestModel) returns (Response) {}
+	rpc LawsuitStageType_Delete(RequestId) returns (Response) {}
+	rpc LawsuitStageType_Restore(RequestId) returns (Response) {}
+
+	//
+
+	//
+
+	//
+	rpc LawsuitType_Read(RequestId) returns (Response) {}
+	rpc LawsuitType_Create(RequestModel) returns (Response) {}
+	rpc LawsuitType_Update(RequestModel) returns (Response) {}
+	rpc LawsuitType_Save(RequestModel) returns (Response) {}
+	rpc LawsuitType_Delete(RequestId) returns (Response) {}
+	rpc LawsuitType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Lawsuit_FindByExtID(RequestExtId) returns (Response) {}
+
+	//
+	rpc LegalType_Read(RequestId) returns (Response) {}
+	rpc LegalType_Create(RequestModel) returns (Response) {}
+	rpc LegalType_Update(RequestModel) returns (Response) {}
+	rpc LegalType_Save(RequestModel) returns (Response) {}
+	rpc LegalType_Delete(RequestId) returns (Response) {}
+	rpc LegalType_Restore(RequestId) returns (Response) {}
+
+	//
+
+	//
+	rpc MessageSendStatus_Read(RequestId) returns (Response) {}
+	rpc MessageSendStatus_Create(RequestModel) returns (Response) {}
+	rpc MessageSendStatus_Update(RequestModel) returns (Response) {}
+	rpc MessageSendStatus_Save(RequestModel) returns (Response) {}
+	rpc MessageSendStatus_Delete(RequestId) returns (Response) {}
+	rpc MessageSendStatus_Restore(RequestId) returns (Response) {}
+
+	//
+
+	//
+
+	//
+	rpc NotificationType_Read(RequestId) returns (Response) {}
+	rpc NotificationType_Create(RequestModel) returns (Response) {}
+	rpc NotificationType_Update(RequestModel) returns (Response) {}
+	rpc NotificationType_Save(RequestModel) returns (Response) {}
+	rpc NotificationType_Delete(RequestId) returns (Response) {}
+	rpc NotificationType_Restore(RequestId) returns (Response) {}
+
+	//
+
+	//
+	rpc OrganizationCategoryType_Read(RequestId) returns (Response) {}
+	rpc OrganizationCategoryType_Create(RequestModel) returns (Response) {}
+	rpc OrganizationCategoryType_Update(RequestModel) returns (Response) {}
+	rpc OrganizationCategoryType_Save(RequestModel) returns (Response) {}
+	rpc OrganizationCategoryType_FindByExtID(RequestExtId) returns (Response) {}
+	rpc OrganizationCategoryType_Delete(RequestId) returns (Response) {}
+	rpc OrganizationCategoryType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc OrganizationStateType_Read(RequestId) returns (Response) {}
+	rpc OrganizationStateType_Create(RequestModel) returns (Response) {}
+	rpc OrganizationStateType_Update(RequestModel) returns (Response) {}
+	rpc OrganizationStateType_Save(RequestModel) returns (Response) {}
+	rpc OrganizationStateType_Delete(RequestId) returns (Response) {}
+	rpc OrganizationStateType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc Organization_FindByExtID(RequestExtId) returns (Response) {}
+
+	//
+	rpc PaymentDay_Read(RequestId) returns (Response) {}
+	rpc PaymentDay_Create(RequestModel) returns (Response) {}
+	rpc PaymentDay_Update(RequestModel) returns (Response) {}
+	rpc PaymentDay_Save(RequestModel) returns (Response) {}
+	rpc PaymentDay_FindByExtID(RequestExtId) returns (Response) {}
+	rpc PaymentDay_Delete(RequestId) returns (Response) {}
+	rpc PaymentDay_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc PaymentSchedule_Read(RequestId) returns (Response) {}
+	rpc PaymentSchedule_Create(RequestModel) returns (Response) {}
+	rpc PaymentSchedule_Update(RequestModel) returns (Response) {}
+	rpc PaymentSchedule_Save(RequestModel) returns (Response) {}
+	rpc PaymentSchedule_FindByExtID(RequestExtId) returns (Response) {}
+	rpc PaymentSchedule_Delete(RequestId) returns (Response) {}
+	rpc PaymentSchedule_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc PenaltyCalculationItem_Read(RequestId) returns (Response) {}
+	rpc PenaltyCalculationItem_Create(RequestModel) returns (Response) {}
+	rpc PenaltyCalculationItem_Update(RequestModel) returns (Response) {}
+	rpc PenaltyCalculationItem_Save(RequestModel) returns (Response) {}
+	rpc PenaltyCalculationItem_FindByExtID(RequestExtId) returns (Response) {}
+	rpc PenaltyCalculationItem_Delete(RequestId) returns (Response) {}
+	rpc PenaltyCalculationItem_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc PriorityType_Read(RequestId) returns (Response) {}
+	rpc PriorityType_Create(RequestModel) returns (Response) {}
+	rpc PriorityType_Update(RequestModel) returns (Response) {}
+	rpc PriorityType_Save(RequestModel) returns (Response) {}
+	rpc PriorityType_Delete(RequestId) returns (Response) {}
+	rpc PriorityType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc RepeatType_Read(RequestId) returns (Response) {}
+	rpc RepeatType_Create(RequestModel) returns (Response) {}
+	rpc RepeatType_Update(RequestModel) returns (Response) {}
+	rpc RepeatType_Save(RequestModel) returns (Response) {}
+	rpc RepeatType_Delete(RequestId) returns (Response) {}
+	rpc RepeatType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc ServiceProvider_Read(RequestId) returns (Response) {}
+	rpc ServiceProvider_Create(RequestModel) returns (Response) {}
+	rpc ServiceProvider_Update(RequestModel) returns (Response) {}
+	rpc ServiceProvider_Save(RequestModel) returns (Response) {}
+	rpc ServiceProvider_FindByExtID(RequestExtId) returns (Response) {}
+	rpc ServiceProvider_Delete(RequestId) returns (Response) {}
+	rpc ServiceProvider_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc ServiceType_Read(RequestId) returns (Response) {}
+	rpc ServiceType_Create(RequestModel) returns (Response) {}
+	rpc ServiceType_Update(RequestModel) returns (Response) {}
+	rpc ServiceType_Save(RequestModel) returns (Response) {}
+	rpc ServiceType_FindByExtID(RequestExtId) returns (Response) {}
+	rpc ServiceType_Delete(RequestId) returns (Response) {}
+	rpc ServiceType_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc StateDuty_Read(RequestId) returns (Response) {}
+	rpc StateDuty_Create(RequestModel) returns (Response) {}
+	rpc StateDuty_Update(RequestModel) returns (Response) {}
+	rpc StateDuty_Save(RequestModel) returns (Response) {}
+	rpc StateDuty_Delete(RequestId) returns (Response) {}
+	rpc StateDuty_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc TableName_Read(RequestId) returns (Response) {}
+	rpc TableName_Create(RequestModel) returns (Response) {}
+	rpc TableName_Update(RequestModel) returns (Response) {}
+	rpc TableName_Save(RequestModel) returns (Response) {}
+	rpc TableName_Delete(RequestId) returns (Response) {}
+	rpc TableName_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc UserRole_Read(RequestId) returns (Response) {}
+	rpc UserRole_Create(RequestModel) returns (Response) {}
+	rpc UserRole_Update(RequestModel) returns (Response) {}
+	rpc UserRole_Save(RequestModel) returns (Response) {}
+	rpc UserRole_Delete(RequestId) returns (Response) {}
+	rpc UserRole_Restore(RequestId) returns (Response) {}
+
+	//
+	rpc WhiteListReasonType_Read(RequestId) returns (Response) {}
+	rpc WhiteListReasonType_Create(RequestModel) returns (Response) {}
+	rpc WhiteListReasonType_Update(RequestModel) returns (Response) {}
+	rpc WhiteListReasonType_Save(RequestModel) returns (Response) {}
+	rpc WhiteListReasonType_Delete(RequestId) returns (Response) {}
+	rpc WhiteListReasonType_Restore(RequestId) returns (Response) {}
+
     // 
     rpc Organization_Read(RequestId) returns (Response) {}
     rpc Organization_Create(RequestModel) returns (Response) {}
@@ -30,6 +559,8 @@ service Sync_service {
     rpc File_Restore(RequestId) returns (Response) {}
     rpc File_FindByFileID(RequestString) returns (Response) {}
     rpc File_FindByFullName(RequestString) returns (Response) {}
+    rpc File_FindBy_TableNameID_TableRowID(RequestIdId) returns (ResponseMass) {}
+    rpc File_FindBy_TableNameID_TableRowID_FileTypeID(RequestIdIdId) returns (ResponseMass) {}
 
     // 
     rpc OrganizationCasebook_Read(RequestId) returns (Response) {}
@@ -124,7 +655,7 @@ service Sync_service {
 // RequestId - параметры запроса на сервер
 message RequestId {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 id   = 2; // id записи в БД
+    int64 ID   = 2; // id записи в БД
 }
 
 // RequestString - параметры запроса на сервер
@@ -164,8 +695,16 @@ message RequestInnKpp {
 // RequestId - параметры запроса на сервер
 message RequestIdId {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 id1   = 2; // id записи в БД
-    int64 id2   = 3; // id записи в БД
+    int64 ID1   = 2; // id записи в БД
+    int64 ID2   = 3; // id записи в БД
+}
+
+// RequestIdIdId - параметры запроса на сервер
+message RequestIdIdId {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 ID1   = 2; // id записи в БД
+    int64 ID2   = 3; // id записи в БД
+    int64 ID3   = 4; // id записи в БД
 }
 
 
@@ -182,5 +721,10 @@ message ResponseFloat64 {
 
 // Response - параметры ответа на клиент
 message ResponseEmpty {
+}
+
+// Response - параметры ответа на клиент
+message ResponseMass {
+    repeated string MassModelString 	= 1; //массив объект-модель в формате json
 }
 

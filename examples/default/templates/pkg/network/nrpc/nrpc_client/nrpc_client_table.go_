@@ -40,7 +40,7 @@ func (crud Crud_NRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.Id = int64(m.ID)
+	Request.ID = int64(m.ID)
 	Request.VersionModel = VersionModel
 
 	// запрос
@@ -196,7 +196,7 @@ func (crud Crud_NRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.Id = int64(m.ID)
+	Request.ID = int64(m.ID)
 	Request.VersionModel = VersionModel
 
 	// запрос
@@ -232,7 +232,7 @@ func (crud Crud_NRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.Id = int64(m.ID)
+	Request.ID = int64(m.ID)
 	Request.VersionModel = VersionModel
 
 	// запрос

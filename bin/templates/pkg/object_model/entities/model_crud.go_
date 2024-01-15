@@ -11,8 +11,8 @@ import (
 // versionLawsuitStatusType - версия структуры модели, с учётом имен и типов полей
 var versionLawsuitStatusType uint32
 
-// Crud_LawsuitStatusType - объект контроллер crud операций
-var Crud_LawsuitStatusType ICrud_LawsuitStatusType
+// crud_LawsuitStatusType - объект контроллер crud операций
+var crud_LawsuitStatusType ICrud_LawsuitStatusType
 
 // интерфейс стандартных CRUD операций, для использования в DB или GRPC или NRPC
 type ICrud_LawsuitStatusType interface {
@@ -92,84 +92,84 @@ func (m LawsuitStatusType) GetJSON() (string, error) {
 
 // Read - находит запись в БД по ID, и заполняет в объект
 func (m *LawsuitStatusType) Read() error {
-	if Crud_LawsuitStatusType == nil {
+	if crud_LawsuitStatusType == nil {
 		return constants.ErrorCrudIsNotInit
 	}
 	
-	err := Crud_LawsuitStatusType.Read(m)
+	err := crud_LawsuitStatusType.Read(m)
 
 	return err
 }
 
 // Save - записывает объект в БД по ID
 func (m *LawsuitStatusType) Save() error {
-	if Crud_LawsuitStatusType == nil {
+	if crud_LawsuitStatusType == nil {
 		return constants.ErrorCrudIsNotInit
 	}
 	
-	err := Crud_LawsuitStatusType.Save(m)
+	err := crud_LawsuitStatusType.Save(m)
 
 	return err
 }
 
 // Update - обновляет объект в БД по ID
 func (m *LawsuitStatusType) Update() error {
-	if Crud_LawsuitStatusType == nil {
+	if crud_LawsuitStatusType == nil {
 		return constants.ErrorCrudIsNotInit
 	}
 	
-	err := Crud_LawsuitStatusType.Update(m)
+	err := crud_LawsuitStatusType.Update(m)
 
 	return err
 }
 
 // Create - создаёт объект в БД с новым ID
 func (m *LawsuitStatusType) Create() error {
-	if Crud_LawsuitStatusType == nil {
+	if crud_LawsuitStatusType == nil {
 		return constants.ErrorCrudIsNotInit
 	}
 	
-	err := Crud_LawsuitStatusType.Create(m)
+	err := crud_LawsuitStatusType.Create(m)
 
 	return err
 }
 
 // Delete - устанавливает признак пометки удаления в БД
 func (m *LawsuitStatusType) Delete() error {
-	if Crud_LawsuitStatusType == nil {
+	if crud_LawsuitStatusType == nil {
 		return constants.ErrorCrudIsNotInit
 	}
 	
-	err := Crud_LawsuitStatusType.Delete(m)
+	err := crud_LawsuitStatusType.Delete(m)
 
 	return err
 }
 
 // Restore - снимает признак пометки удаления в БД
 func (m *LawsuitStatusType) Restore() error {
-	if Crud_LawsuitStatusType == nil {
+	if crud_LawsuitStatusType == nil {
 		return constants.ErrorCrudIsNotInit
 	}
 	
-	err := Crud_LawsuitStatusType.Restore(m)
+	err := crud_LawsuitStatusType.Restore(m)
 
 	return err
 }
 
 // Find_ByExtID - находит объект по ExtID
 func (m *LawsuitStatusType) Find_ByExtID() error {
-	if Crud_LawsuitStatusType == nil {
+	if crud_LawsuitStatusType == nil {
 		return constants.ErrorCrudIsNotInit
 	}
 	
-	err := Crud_LawsuitStatusType.Find_ByExtID(m)
+	err := crud_LawsuitStatusType.Find_ByExtID(m)
 
 	return err
 }
 
 // SetCrudInterface - заполняет интерфейс crud: DB, GRPC, NRPC
 func (m LawsuitStatusType) SetCrudInterface(crud ICrud_LawsuitStatusType) {
-	Crud_LawsuitStatusType = crud
+	crud_LawsuitStatusType = crud
 
 	return
 }

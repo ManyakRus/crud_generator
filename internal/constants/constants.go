@@ -12,12 +12,14 @@ Need fill settings in settings.txt file
 
 const FILE_PERMISSIONS = 0666
 
+var TEMPLATES_FOLDER_NAME = "templates"
+
 const CONFIG_FOLDER_NAME = "configs_"
 
 const TemplateFilenameCrudGo = "crud.go_"
 const TemplateFilenameCrudGoTest = "crud_test.go_"
 
-const SETTINGS_FOLDER_NAME = "templates/configs_"
+//const SETTINGS_FOLDER_NAME = "templates/configs_"
 
 const GENERATION_PROTO_FILENAME = "generation_code.sh"
 

@@ -291,8 +291,8 @@ func (crud Crud_GRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) er
 	//подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
-	Request := &grpc_proto.RequestExtId{}
-	Request.ExtId = m.ExtID
+	Request := &grpc_proto.RequestExtID{}
+	Request.ExtID = m.ExtID
 	Request.ConnectionId = m.ConnectionID
 	Request.VersionModel = VersionModel
 

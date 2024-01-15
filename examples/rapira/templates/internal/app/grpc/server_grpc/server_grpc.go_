@@ -28,7 +28,7 @@ func (s *ServerGRPC) LawsuitStatusType_Read(ctx context.Context, Request *grpc_p
 
 	//запрос в БД
 	Model := &lawsuit_status_types.LawsuitStatusType{}
-	Model.ID = Request.Id
+	Model.ID = Request.ID
 	err = Model.Read()
 	if err != nil {
 		return &Otvet, err
@@ -65,7 +65,7 @@ func (s *ServerGRPC) LawsuitStatusType_Delete(ctx context.Context, Request *grpc
 
 	//запрос в БД
 	Model := &lawsuit_status_types.LawsuitStatusType{}
-	Model.ID = Request.Id
+	Model.ID = Request.ID
 	err = Model.Delete()
 	if err != nil {
 		return &Otvet, err
@@ -102,7 +102,7 @@ func (s *ServerGRPC) LawsuitStatusType_Restore(ctx context.Context, Request *grp
 
 	//запрос в БД
 	Model := &lawsuit_status_types.LawsuitStatusType{}
-	Model.ID = Request.Id
+	Model.ID = Request.ID
 	err = Model.Restore()
 	if err != nil {
 		return &Otvet, err

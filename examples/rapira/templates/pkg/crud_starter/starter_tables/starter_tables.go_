@@ -1,0 +1,12 @@
+package crud_starter_lawsuit_status_types
+
+import (
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+)
+
+// SetCrudInterface - заполняет интерфейс crud: DB, GRPC, NRPC
+func SetCrudInterface(crud lawsuit_status_types.ICrud_LawsuitStatusType) {
+	lawsuit_status_types.Crud_LawsuitStatusType = crud
+
+	return
+}

@@ -778,3 +778,18 @@ func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
 
 	return Otvet
 }
+
+// DeleteEmptyLines - удаляет пустые строки
+func DeleteEmptyLines(Text string) string {
+	Otvet := Text
+	Otvet = strings.ReplaceAll(Otvet, "\n\n\n", "\n\n")
+	Otvet = strings.ReplaceAll(Otvet, "\n//\n\n", "\n\n")
+	Otvet = strings.ReplaceAll(Otvet, "\n\t//\n\n", "\n\n")
+	//Otvet = strings.ReplaceAll(Otvet, "\r\r", "\r")
+	//Otvet = strings.ReplaceAll(Otvet, "\r\n", "\n")
+	pos1 := strings.Index(Otvet, "\n\n\n")
+	if pos1 >= 0 {
+		Otvet = DeleteEmptyLines(Otvet)
+	}
+	return Otvet
+}

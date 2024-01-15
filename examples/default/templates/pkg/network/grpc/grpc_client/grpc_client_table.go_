@@ -42,7 +42,7 @@ func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.Id = int64(m.ID)
+	Request.ID = int64(m.ID)
 	Request.VersionModel = VersionModel
 
 	ctxMain := context.Background()
@@ -214,7 +214,7 @@ func (crud Crud_GRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.Id = int64(m.ID)
+	Request.ID = int64(m.ID)
 	Request.VersionModel = VersionModel
 
 	ctxMain := context.Background()
@@ -254,7 +254,7 @@ func (crud Crud_GRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	var VersionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.Id = int64(m.ID)
+	Request.ID = int64(m.ID)
 	Request.VersionModel = VersionModel
 
 	ctxMain := context.Background()
