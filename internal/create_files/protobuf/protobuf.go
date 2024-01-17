@@ -42,6 +42,9 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	folders.CreateFolder(DirReadyProto)
 
 	FilenameTemplateProto := DirTemplatesProto + "service.proto_"
+	if config.Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME != "" {
+		FilenameTemplateProto = config.Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME
+	}
 	bytes, err := os.ReadFile(FilenameTemplateProto)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateProto, " error: ", err)

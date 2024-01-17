@@ -32,6 +32,9 @@ type SettingsINI struct {
 	TEMPLATE_FOLDERNAME_CRUD_STARTER string
 	TEMPLATE_FOLDERNAME_ALIAS        string
 	TEMPLATE_FOLDER_CRUD_FUNCTIONS   string
+	TEMPLATE_FOLDERNAME_MAIN         string
+	TEMPLATE_REPOSITORY_URL          string
+	TEMPLATE_EXTERNAL_PROTO_FILENAME string
 	NEED_CREATE_MODEL_STRUCT         bool
 	NEED_CREATE_MODEL_CRUD           bool
 	NEED_CREATE_DB                   bool
@@ -58,8 +61,6 @@ type SettingsINI struct {
 	PREFIX_MODEL                     string
 	COMMENT_MODEL_STRUCT             string
 	TEXT_MODULE_GENERATED            string
-	TEMPLATE_FOLDERNAME_MAIN         string
-	TEMPLATE_REPOSITORY_URL          string
 	PREFIX_TABLE                     string
 }
 
@@ -163,6 +164,7 @@ func FillSettings() {
 	Settings.PREFIX_MODEL = os.Getenv("PREFIX_MODEL")
 	Settings.TEMPLATE_FOLDERNAME_DB = os.Getenv("TEMPLATE_FOLDERNAME_DB")
 	Settings.TEMPLATE_FOLDER_CRUD_FUNCTIONS = os.Getenv("TEMPLATE_FOLDER_CRUD_FUNCTIONS")
+	Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME = os.Getenv("TEMPLATE_EXTERNAL_PROTO_FILENAME")
 
 }
 
