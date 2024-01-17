@@ -29,7 +29,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 	return err
 }
 
-// CreateFiles - создаёт 1 файл в папке model
+// CreateFiles - создаёт 1 файл в папке db
 func CreateFiles(Table1 *types.Table) error {
 	var err error
 
@@ -46,7 +46,7 @@ func CreateFiles(Table1 *types.Table) error {
 	folders.CreateFolder(DirReadyTable)
 
 	// создание файла struct
-	if config.Settings.NEED_CREATE_MODEL_STRUCT == true {
+	if config.Settings.NEED_CREATE_DB == true {
 		err = CreateFilesTable_struct(Table1, DirTemplatesTable, DirReadyTable)
 		if err != nil {
 			log.Error("CreateFilesTable_struct() table: ", Table1.Name, " error: ", err)

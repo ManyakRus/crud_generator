@@ -3,8 +3,8 @@ package config
 import (
 	"github.com/ManyakRus/crud_generator/internal/constants"
 	ConfigMain "github.com/ManyakRus/starter/config_main"
+	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"log"
 	"os"
 	"strings"
 )
@@ -228,4 +228,5 @@ func Fill_TEMPLATES_FOLDER_NAME() {
 	if ok == true {
 		constants.TEMPLATES_FOLDER_NAME = "templates_main"
 	}
+	log.Info("TEMPLATES_FOLDER_NAME = ", constants.TEMPLATES_FOLDER_NAME)
 }
