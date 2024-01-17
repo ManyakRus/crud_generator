@@ -36,6 +36,7 @@ type SettingsINI struct {
 	NEED_CREATE_MODEL_CRUD           bool
 	NEED_CREATE_DB                   bool
 	NEED_CREATE_DB_TEST              bool
+	NEED_CREATE_DB_TABLES            bool
 	NEED_CREATE_GRPC                 bool
 	NEED_CREATE_GRPC_SERVER_TEST     bool
 	NEED_CREATE_GRPC_CLIENT_TEST     bool
@@ -93,6 +94,9 @@ func FillSettings() {
 
 	sNEED_CREATE_DB := os.Getenv("NEED_CREATE_DB")
 	Settings.NEED_CREATE_DB = BoolFromString(sNEED_CREATE_DB)
+
+	sNEED_CREATE_DB_TABLES := os.Getenv("NEED_CREATE_DB_TABLES")
+	Settings.NEED_CREATE_DB_TABLES = BoolFromString(sNEED_CREATE_DB_TABLES)
 
 	sNEED_GRPC := os.Getenv("NEED_CREATE_GRPC")
 	Settings.NEED_CREATE_GRPC = BoolFromString(sNEED_GRPC)

@@ -46,7 +46,7 @@ func CreateFiles(Table1 *types.Table) error {
 	folders.CreateFolder(DirReadyTable)
 
 	// создание файла struct
-	if config.Settings.NEED_CREATE_DB == true {
+	if config.Settings.NEED_CREATE_DB_TABLES == true {
 		err = CreateFilesTable_struct(Table1, DirTemplatesTable, DirReadyTable)
 		if err != nil {
 			log.Error("CreateFilesTable_struct() table: ", Table1.Name, " error: ", err)
