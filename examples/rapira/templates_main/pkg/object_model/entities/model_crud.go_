@@ -25,7 +25,7 @@ type ICrud_LawsuitStatusType interface {
 	Find_ByExtID(*LawsuitStatusType) error
 }
 
-// TableName - возвращает имя таблицы в БД, нужен для gorm
+// TableName - возвращает имя таблицы в БД
 func (m LawsuitStatusType) TableNameDB() string {
 	return "lawsuit_status_types"
 }

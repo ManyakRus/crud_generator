@@ -1,0 +1,193 @@
+package grpc_client
+
+import (
+	"context"
+	"github.com/ManyakRus/starter/contextmain"
+	"github.com/ManyakRus/starter/log"
+	"github.com/ManyakRus/starter/port_checker"
+	"github.com/ManyakRus/starter/stopapp"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	"os"
+	"strings"
+	"sync"
+	"time"
+)
+
+// SettingsINI - тип структуры для хранения настроек подключени
+type SettingsINI struct {
+	SYNC_SERVICE_HOST string
+	SYNC_SERVICE_PORT string
+}
+
+// SettingsINI - структура для хранения настроек подключени
+var Settings SettingsINI
+
+// Conn - подключение к серверу GRPC
+var Conn *grpc.ClientConn
+
+// Client - подключение к клиенту GRPC
+var Client grpc_proto.SyncServiceClient
+
+// mutexReconnect - защита от многопоточности Reconnect()
+var mutexReconnect = &sync.Mutex{}
+
+// NeedReconnect - флаг необходимости переподключения
+var NeedReconnect bool
+
+// Connect - подключается к серверу GRPC, при ошибке вызывает панику
+func Connect() {
+	var err error
+
+	err = Connect_err()
+
+	if err != nil {
+		log.Fatalf("GRPC Connect() error: %v", err)
+	} else {
+		addr := Settings.SYNC_SERVICE_HOST + ":" + Settings.SYNC_SERVICE_PORT
+		log.Info("GRPC client connected. Address: ", addr)
+	}
+
+}
+
+// Connect_err - подключается к серверу GRPC, возвращает ошибку
+func Connect_err() error {
+	var err error
+
+	if Settings.SYNC_SERVICE_HOST == "" {
+		FillSettings()
+	}
+
+	addr := Settings.SYNC_SERVICE_HOST + ":" + Settings.SYNC_SERVICE_PORT
+	Conn, err = grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	Client = grpc_proto.NewSyncServiceClient(Conn)
+	return err
+}
+
+func FillSettings() {
+	Settings = SettingsINI{}
+	Settings.SYNC_SERVICE_HOST = os.Getenv("SYNC_SERVICE_HOST")
+	Settings.SYNC_SERVICE_PORT = os.Getenv("SYNC_SERVICE_PORT")
+
+	if Settings.SYNC_SERVICE_HOST == "" {
+		log.Panic("Need fill SYNC_SERVICE_HOST ! in OS Environment ")
+	}
+
+	if Settings.SYNC_SERVICE_PORT == "" {
+		log.Panic("Need fill SYNC_SERVICE_PORT ! in OS Environment ")
+	}
+}
+
+// WaitStop - ожидает отмену глобального контекста
+func WaitStop() {
+
+	select {
+	case <-contextmain.GetContext().Done():
+		log.Warn("Context app is canceled. grpc_connect")
+	}
+
+	// ждём пока отправляемых сейчас сообщений будет =0
+	stopapp.WaitTotalMessagesSendingNow("sync_service_client")
+
+	// закрываем соединение
+	CloseConnection()
+	stopapp.GetWaitGroup_Main().Done()
+}
+
+// Start - необходимые процедуры для запуска сервера GRPC
+// если контекст хранится в contextmain.GetContext()
+func Start() {
+	contextmain.GetContext()
+	ctx := contextmain.Ctx
+	wg := stopapp.GetWaitGroup_Main()
+	Start_ctx(ctx, wg)
+}
+
+// Start_ctx - необходимые процедуры для запуска сервера GRPC
+// ctx - глобальный контекст приложения
+// wg - глобальный WaitGroup приложения
+func Start_ctx(ctx *context.Context, wg *sync.WaitGroup) {
+	contextmain.Ctx = ctx
+	stopapp.SetWaitGroup_Main(wg)
+
+	Connect()
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go WaitStop()
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go ping_go()
+
+}
+
+// CloseConnection - закрывает подключение к GRPC, и пишет лог
+func CloseConnection() {
+	err := CloseConnection_err()
+	if err != nil {
+		log.Error("GRPC client CloseConnection() error: ", err)
+	} else {
+		log.Info("GRPC client connection closed")
+	}
+}
+
+// CloseConnection - закрывает подключение к GRPC, и возвращает ошибку
+func CloseConnection_err() error {
+	err := Conn.Close()
+	return err
+}
+
+// IsRecordNotFound - возвращает true если ошибка = "record not found"
+func IsRecordNotFound(err error) bool {
+	Otvet := false
+
+	if err == nil {
+		return Otvet
+	}
+
+	TextErr := err.Error()
+	pos1 := strings.Index(TextErr, constants.TEXT_RECORD_NOT_FOUND)
+	if pos1 >= 0 {
+		Otvet = true
+	}
+
+	return Otvet
+}
+
+// ping_go - делает пинг каждые 60 секунд, и реконнект
+func ping_go() {
+
+	ticker := time.NewTicker(60 * time.Second)
+	defer ticker.Stop()
+
+	addr := Settings.SYNC_SERVICE_HOST + ":" + Settings.SYNC_SERVICE_PORT
+
+	//бесконечный цикл
+loop:
+	for {
+		select {
+		case <-contextmain.GetContext().Done():
+			log.Warn("Context app is canceled. grpc_client.ping")
+			break loop
+		case <-ticker.C:
+			err := port_checker.CheckPort_err(Settings.SYNC_SERVICE_HOST, Settings.SYNC_SERVICE_PORT)
+			//log.Debug("ticker, ping err: ", err) //удалить
+			if err != nil {
+				NeedReconnect = true
+				log.Warn("grpc_client CheckPort(", addr, ") error: ", err)
+			} else if NeedReconnect == true {
+				log.Warn("grpc_client CheckPort(", addr, ") OK. Start Reconnect()")
+				NeedReconnect = false
+				err = Connect_err()
+				if err != nil {
+					NeedReconnect = true
+					log.Error("grpc_client Connect() error: ", err)
+				}
+			}
+		}
+	}
+
+	stopapp.GetWaitGroup_Main().Done()
+}

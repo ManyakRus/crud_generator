@@ -177,16 +177,16 @@ func Test_server_LawsuitStatusType_FindByExtID(t *testing.T) {
 
 
 	ctx = context.Background()
-	RequestExtId:= grpc_proto.RequestExtId{}
-	RequestExtId.ExtId = Model.ExtID
-	RequestExtId.ConnectionId = Model.ConnectionID
-	RequestExtId.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+	RequestExtID:= grpc_proto.RequestExtID{}
+	RequestExtID.ExtID = Model.ExtID
+	RequestExtID.ConnectionId = Model.ConnectionID
+	RequestExtID.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 
-	Otvet, err := server1.LawsuitStatusType_FindByExtID(ctx, &RequestExtId)
+	Otvet, err := server1.LawsuitStatusType_FindByExtID(ctx, &RequestExtID)
 	if err != nil {
-		t.Error("Test_server_LawsuitStatusType_FindByExtId() error: ", err)
+		t.Error("Test_server_LawsuitStatusType_FindByExtID() error: ", err)
 	}
 	if Otvet.ModelString == "" {
-		t.Error("Test_server_LawsuitStatusType_FindByExtId() error: ModelString=''")
+		t.Error("Test_server_LawsuitStatusType_FindByExtID() error: ModelString=''")
 	}
 }
