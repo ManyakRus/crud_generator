@@ -167,11 +167,11 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient
 
-	//if config.Settings.HAS_IS_DELETED == true {
-	//	TextNRPCClient = DeleteFuncTestDelete(TextNRPCClient, ModelName, Table1)
-	//	TextNRPCClient = DeleteFuncTestRestore(TextNRPCClient, ModelName, Table1)
-	//}
-	//TextNRPCClient = DeleteFuncTestFind_byExtID(TextNRPCClient, ModelName, Table1)
+	if config.Settings.HAS_IS_DELETED == true {
+		TextNRPCClient = DeleteFuncTestDelete(TextNRPCClient, ModelName, Table1)
+		TextNRPCClient = DeleteFuncTestRestore(TextNRPCClient, ModelName, Table1)
+	}
+	TextNRPCClient = DeleteFuncTestFind_byExtID(TextNRPCClient, ModelName, Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
