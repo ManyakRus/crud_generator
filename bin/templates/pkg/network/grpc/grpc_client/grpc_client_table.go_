@@ -8,6 +8,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -21,9 +22,14 @@ const TableName string = "lawsuit_status_types"
 type Crud_GRPC struct {
 }
 
+// mutex_GetVersionModel - защита от многопоточности GetVersionModel()
+var mutex_GetVersionModel = sync.Mutex{}
+
 // GetVersionModel - возвращает хэш версии структуры модели
 func (crud Crud_GRPC) GetVersionModel() uint32 {
 	if VersionModel == 0 {
+		mutex_GetVersionModel.Lock()
+		defer mutex_GetVersionModel.Unlock()
 		VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	}
 	return VersionModel

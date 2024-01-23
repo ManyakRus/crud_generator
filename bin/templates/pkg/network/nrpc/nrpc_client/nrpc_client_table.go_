@@ -7,6 +7,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/grpc_client/constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"log"
+	"sync"
 )
 
 // VersionModel - хранит версию структуры модели
@@ -19,9 +20,14 @@ const TableName string = "lawsuit_status_types"
 type Crud_NRPC struct {
 }
 
+// mutex_GetVersionModel - защита от многопоточности GetVersionModel()
+var mutex_GetVersionModel = sync.Mutex{}
+
 // GetVersionModel - возвращает хэш версии структуры модели
 func (crud Crud_NRPC) GetVersionModel() uint32 {
 	if VersionModel == 0 {
+		mutex_GetVersionModel.Lock()
+		defer mutex_GetVersionModel.Unlock()
 		VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	}
 	return VersionModel
