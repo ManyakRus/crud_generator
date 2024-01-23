@@ -44,11 +44,11 @@ func (crud Crud_NRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	}
 
 	// подготовка запроса
-	var VersionModel = crud.GetVersionModel()
+	var versionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
 	Request.ID = int64(m.ID)
-	Request.VersionModel = VersionModel
+	Request.VersionModel = versionModel
 
 	// запрос
 	Response, err := nrpc_client.Client.LawsuitStatusType_Read(Request)

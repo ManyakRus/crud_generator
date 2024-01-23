@@ -46,11 +46,11 @@ func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	}
 
 	// подготовка запроса
-	var VersionModel = crud.GetVersionModel()
+	var versionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
 	Request.ID = int64(m.ID)
-	Request.VersionModel = VersionModel
+	Request.VersionModel = versionModel
 
 	ctxMain := context.Background()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
