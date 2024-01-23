@@ -4,6 +4,7 @@
 package nrpc_client
 
 import (
+	"context"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/port_checker"
@@ -18,11 +19,13 @@ import (
 	"time"
 )
 
+// SettingsINI - тип структуры для хранения настроек подключени
 type SettingsINI struct {
 	NATS_HOST string
 	NATS_PORT string
 }
 
+// SettingsINI - структура для хранения настроек подключени
 var Settings SettingsINI
 
 // Conn - подключение к NATS
@@ -37,8 +40,23 @@ var mutexReconnect = &sync.Mutex{}
 // NeedReconnect - флаг необходимости переподключения
 var NeedReconnect bool
 
-// Connect - подключается к NATS
+// Connect - подключается к серверу NRPC, при ошибке вызывает панику
 func Connect() {
+	var err error
+
+	err = Connect_err()
+
+	if err != nil {
+		log.Fatalf("NRPC Connect() error: %v", err)
+	} else {
+		NatsURL := "nats://" + Settings.NATS_HOST + ":" + Settings.NATS_PORT
+		log.Info("GRPC client connected. Address: ", NatsURL)
+	}
+
+}
+
+// Connect_err - подключается к серверу NRPC, возвращает ошибку
+func Connect_err() error {
 	var err error
 
 	if Settings.NATS_HOST == "" {
@@ -56,7 +74,7 @@ func Connect() {
 	// This is our generated client.
 	Client = grpc_proto.NewSync_serviceClient(Conn)
 
-	log.Info("Client NRPC connected: ", NatsURL)
+	return err
 }
 
 // FillSettings - заполняет настройки из переменных окружения
@@ -100,7 +118,21 @@ func WaitStop() {
 }
 
 // Start - необходимые процедуры для запуска сервера NRPC
+// если контекст хранится в contextmain.GetContext()
 func Start() {
+	contextmain.GetContext()
+	ctx := contextmain.Ctx
+	wg := stopapp.GetWaitGroup_Main()
+	Start_ctx(ctx, wg)
+}
+
+// Start_ctx - необходимые процедуры для запуска сервера NRPC
+// ctx - глобальный контекст приложения
+// wg - глобальный WaitGroup приложения
+func Start_ctx(ctx *context.Context, wg *sync.WaitGroup) {
+	contextmain.Ctx = ctx
+	stopapp.SetWaitGroup_Main(wg)
+
 	Connect()
 
 	stopapp.GetWaitGroup_Main().Add(1)
@@ -160,7 +192,11 @@ loop:
 			} else if NeedReconnect == true {
 				log.Warn("nrpc_client CheckPort(", addr, ") OK. Start Reconnect()")
 				NeedReconnect = false
-				Connect()
+				err = Connect_err()
+				if err != nil {
+					NeedReconnect = true
+					log.Error("nrpc_client Connect() error: ", err)
+				}
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package grpc_client
 
 import (
+	"context"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/port_checker"
@@ -15,15 +16,19 @@ import (
 	"time"
 )
 
+// SettingsINI - тип структуры для хранения настроек подключени
 type SettingsINI struct {
 	SYNC_SERVICE_HOST string
 	SYNC_SERVICE_PORT string
 }
 
+// SettingsINI - структура для хранения настроек подключени
 var Settings SettingsINI
 
+// Conn - подключение к серверу GRPC
 var Conn *grpc.ClientConn
 
+// Client - подключение к клиенту GRPC
 var Client grpc_proto.SyncServiceClient
 
 // mutexReconnect - защита от многопоточности Reconnect()
@@ -32,7 +37,23 @@ var mutexReconnect = &sync.Mutex{}
 // NeedReconnect - флаг необходимости переподключения
 var NeedReconnect bool
 
+// Connect - подключается к серверу GRPC, при ошибке вызывает панику
 func Connect() {
+	var err error
+
+	err = Connect_err()
+
+	if err != nil {
+		log.Fatalf("GRPC Connect() error: %v", err)
+	} else {
+		addr := Settings.SYNC_SERVICE_HOST + ":" + Settings.SYNC_SERVICE_PORT
+		log.Info("GRPC client connected. Address: ", addr)
+	}
+
+}
+
+// Connect_err - подключается к серверу GRPC, возвращает ошибку
+func Connect_err() error {
 	var err error
 
 	if Settings.SYNC_SERVICE_HOST == "" {
@@ -41,13 +62,9 @@ func Connect() {
 
 	addr := Settings.SYNC_SERVICE_HOST + ":" + Settings.SYNC_SERVICE_PORT
 	Conn, err = grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-
-	log.Info("GRPC client connected. Address: ", addr)
 
 	Client = grpc_proto.NewSyncServiceClient(Conn)
+	return err
 }
 
 func FillSettings() {
@@ -81,7 +98,21 @@ func WaitStop() {
 }
 
 // Start - необходимые процедуры для запуска сервера GRPC
+// если контекст хранится в contextmain.GetContext()
 func Start() {
+	contextmain.GetContext()
+	ctx := contextmain.Ctx
+	wg := stopapp.GetWaitGroup_Main()
+	Start_ctx(ctx, wg)
+}
+
+// Start_ctx - необходимые процедуры для запуска сервера GRPC
+// ctx - глобальный контекст приложения
+// wg - глобальный WaitGroup приложения
+func Start_ctx(ctx *context.Context, wg *sync.WaitGroup) {
+	contextmain.Ctx = ctx
+	stopapp.SetWaitGroup_Main(wg)
+
 	Connect()
 
 	stopapp.GetWaitGroup_Main().Add(1)
@@ -92,13 +123,20 @@ func Start() {
 
 }
 
+// CloseConnection - закрывает подключение к GRPC, и пишет лог
 func CloseConnection() {
-	err := Conn.Close()
+	err := CloseConnection_err()
 	if err != nil {
-		log.Panic("GRPC client CloseConnection() error: ", err)
+		log.Error("GRPC client CloseConnection() error: ", err)
 	} else {
 		log.Info("GRPC client connection closed")
 	}
+}
+
+// CloseConnection - закрывает подключение к GRPC, и возвращает ошибку
+func CloseConnection_err() error {
+	err := Conn.Close()
+	return err
 }
 
 // IsRecordNotFound - возвращает true если ошибка = "record not found"
@@ -142,7 +180,11 @@ loop:
 			} else if NeedReconnect == true {
 				log.Warn("grpc_client CheckPort(", addr, ") OK. Start Reconnect()")
 				NeedReconnect = false
-				Connect()
+				err = Connect_err()
+				if err != nil {
+					NeedReconnect = true
+					log.Error("grpc_client Connect() error: ", err)
+				}
 			}
 		}
 	}
