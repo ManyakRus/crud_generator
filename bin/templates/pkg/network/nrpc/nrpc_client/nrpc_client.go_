@@ -47,7 +47,7 @@ func Connect() {
 	err = Connect_err()
 
 	if err != nil {
-		log.Fatalf("NRPC Connect() error: %v", err)
+		log.Panicf("NRPC Connect() error: %v", err)
 	} else {
 		NatsURL := "nats://" + Settings.NATS_HOST + ":" + Settings.NATS_PORT
 		log.Info("GRPC client connected. Address: ", NatsURL)

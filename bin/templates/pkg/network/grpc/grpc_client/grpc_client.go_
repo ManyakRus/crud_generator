@@ -44,7 +44,7 @@ func Connect() {
 	err = Connect_err()
 
 	if err != nil {
-		log.Fatalf("GRPC Connect() error: %v", err)
+		log.Panicf("GRPC Connect() error: %v", err)
 	} else {
 		addr := Settings.SYNC_SERVICE_HOST + ":" + Settings.SYNC_SERVICE_PORT
 		log.Info("GRPC client connected. Address: ", addr)
