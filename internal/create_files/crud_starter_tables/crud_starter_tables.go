@@ -139,8 +139,8 @@ func CreateTestFiles(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextDB = create_files.DeleteTemplateRepositoryImports(TextDB)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
-		TextDB = create_files.AddImport(TextDB, ModelTableURL)
+		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		TextDB = create_files.AddImport(TextDB, CrudTableURL)
 
 	}
 

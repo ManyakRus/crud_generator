@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ManyakRus/crud_generator/internal/config"
+	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
@@ -326,6 +327,24 @@ func FindModelTableURL(TableName string) string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_MODEL + "/" + TableName
+
+	return Otvet
+}
+
+// FindCrudStarterTableURL - возвращает URL репозитория crud_starter для таблицы TableName
+func FindCrudStarterTableURL(TableName string) string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + "/" + constants.STARTER_TABLES_PREFIX + TableName
+
+	return Otvet
+}
+
+// FindCrudTableURL - возвращает URL репозитория crud для таблицы TableName
+func FindCrudTableURL(TableName string) string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD + "/" + constants.CRUD_TABLES_FREFIX + TableName
 
 	return Otvet
 }
