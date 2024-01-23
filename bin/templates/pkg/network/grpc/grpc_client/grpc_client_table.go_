@@ -27,9 +27,10 @@ var mutex_GetVersionModel = sync.Mutex{}
 
 // GetVersionModel - возвращает хэш версии структуры модели
 func (crud Crud_GRPC) GetVersionModel() uint32 {
+	mutex_GetVersionModel.Lock()
+	defer mutex_GetVersionModel.Unlock()
+
 	if VersionModel == 0 {
-		mutex_GetVersionModel.Lock()
-		defer mutex_GetVersionModel.Unlock()
 		VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	}
 	return VersionModel
