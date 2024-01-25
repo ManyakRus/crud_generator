@@ -16,6 +16,7 @@ import (
 	"github.com/nats-io/nats.go"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	nrpc_constants "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/constants"
 	"sync"
 
 	"os"
@@ -72,12 +73,12 @@ func Connect_err() error {
 	}
 
 	NatsURL := "nats://" + Settings.NATS_HOST + ":" + Settings.NATS_PORT
+
 	// Connect to the NATS server.
 	Conn, err = nats.Connect(NatsURL, nats.Timeout(5*time.Second))
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
-	// defer Conn.Close()
 
 	// This is our generated client.
 	Client = grpc_proto.NewSync_serviceClient(Conn)
@@ -229,4 +230,16 @@ loop:
 	}
 
 	stopapp.GetWaitGroup_Main().Done()
+}
+
+// GetTimeoutSeconds - возвращает время ожидания ответа
+func GetTimeoutSeconds() int {
+	Otvet := nrpc_constants.GetTimeoutSeconds()
+
+	return Otvet
+}
+
+// SetTimeoutSeconds - устанавливает время ожидания ответа
+func SetTimeoutSeconds(seconds int) {
+	nrpc_constants.SetTimeoutSeconds(seconds)
 }
