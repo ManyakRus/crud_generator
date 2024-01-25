@@ -53,7 +53,7 @@ func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	Request.VersionModel = versionModel
 
 	ctxMain := context.Background()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.GetTimeoutSeconds()))
 	defer ctxCancelFunc()
 
 	// запрос
@@ -97,7 +97,7 @@ func (crud Crud_GRPC) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 	Request.VersionModel = VersionModel
 
 	ctxMain := context.Background()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.GetTimeoutSeconds()))
 	defer ctxCancelFunc()
 
 	// запрос
@@ -141,7 +141,7 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	Request.VersionModel = VersionModel
 
 	ctxMain := context.Background()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.GetTimeoutSeconds()))
 	defer ctxCancelFunc()
 
 	// запрос
@@ -185,7 +185,7 @@ func (crud Crud_GRPC) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 	Request.VersionModel = VersionModel
 
 	ctxMain := context.Background()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.GetTimeoutSeconds()))
 	defer ctxCancelFunc()
 
 	// запрос
@@ -225,7 +225,7 @@ func (crud Crud_GRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	Request.VersionModel = VersionModel
 
 	ctxMain := context.Background()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.GetTimeoutSeconds()))
 	defer ctxCancelFunc()
 
 	// запрос
@@ -265,7 +265,7 @@ func (crud Crud_GRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	Request.VersionModel = VersionModel
 
 	ctxMain := context.Background()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.GetTimeoutSeconds()))
 	defer ctxCancelFunc()
 
 	// запрос
@@ -304,7 +304,7 @@ func (crud Crud_GRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) er
 	Request.VersionModel = VersionModel
 
 	ctxMain := context.Background()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_SECONDS))
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.GetTimeoutSeconds()))
 	defer ctxCancelFunc()
 
 	//запрос
