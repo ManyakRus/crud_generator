@@ -2,12 +2,14 @@ package grpc_client
 
 import (
 	"context"
+	"errors"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/port_checker"
 	"github.com/ManyakRus/starter/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	grpc_constants "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/constants"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"
@@ -31,8 +33,8 @@ var Conn *grpc.ClientConn
 // Client - подключение к клиенту GRPC
 var Client grpc_proto.SyncServiceClient
 
-// mutexReconnect - защита от многопоточности Reconnect()
-var mutexReconnect = &sync.Mutex{}
+// mutex_Connect - защита от многопоточности Reconnect()
+var mutex_Connect = &sync.Mutex{}
 
 // NeedReconnect - флаг необходимости переподключения
 var NeedReconnect bool
@@ -44,7 +46,7 @@ func Connect() {
 	err = Connect_err()
 
 	if err != nil {
-		log.Fatalf("GRPC Connect() error: %v", err)
+		log.Panicf("GRPC Connect() error: %v", err)
 	} else {
 		addr := Settings.SYNC_SERVICE_HOST + ":" + Settings.SYNC_SERVICE_PORT
 		log.Info("GRPC client connected. Address: ", addr)
@@ -56,29 +58,48 @@ func Connect() {
 func Connect_err() error {
 	var err error
 
+	//
+	mutex_Connect.Lock()
+	defer mutex_Connect.Unlock()
+
+	//
 	if Settings.SYNC_SERVICE_HOST == "" {
-		FillSettings()
+		err = FillSettings()
+		if err != nil {
+			return err
+		}
 	}
 
 	addr := Settings.SYNC_SERVICE_HOST + ":" + Settings.SYNC_SERVICE_PORT
 	Conn, err = grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return err
+	}
 
 	Client = grpc_proto.NewSyncServiceClient(Conn)
 	return err
 }
 
-func FillSettings() {
+func FillSettings() error {
+	var err error
+
 	Settings = SettingsINI{}
 	Settings.SYNC_SERVICE_HOST = os.Getenv("SYNC_SERVICE_HOST")
 	Settings.SYNC_SERVICE_PORT = os.Getenv("SYNC_SERVICE_PORT")
 
 	if Settings.SYNC_SERVICE_HOST == "" {
-		log.Panic("Need fill SYNC_SERVICE_HOST ! in OS Environment ")
+		TextError := "Need fill SYNC_SERVICE_HOST ! in OS Environment "
+		err = errors.New(TextError)
+		return err
 	}
 
 	if Settings.SYNC_SERVICE_PORT == "" {
-		log.Panic("Need fill SYNC_SERVICE_PORT ! in OS Environment ")
+		TextError := "Need fill SYNC_SERVICE_PORT ! in OS Environment "
+		err = errors.New(TextError)
+		return err
 	}
+
+	return err
 }
 
 // WaitStop - ожидает отмену глобального контекста
@@ -99,20 +120,9 @@ func WaitStop() {
 
 // Start - необходимые процедуры для запуска сервера GRPC
 // если контекст хранится в contextmain.GetContext()
+// и есть stopapp.GetWaitGroup_Main()
+// при ошибке вызывает панику
 func Start() {
-	contextmain.GetContext()
-	ctx := contextmain.Ctx
-	wg := stopapp.GetWaitGroup_Main()
-	Start_ctx(ctx, wg)
-}
-
-// Start_ctx - необходимые процедуры для запуска сервера GRPC
-// ctx - глобальный контекст приложения
-// wg - глобальный WaitGroup приложения
-func Start_ctx(ctx *context.Context, wg *sync.WaitGroup) {
-	contextmain.Ctx = ctx
-	stopapp.SetWaitGroup_Main(wg)
-
 	Connect()
 
 	stopapp.GetWaitGroup_Main().Add(1)
@@ -121,6 +131,28 @@ func Start_ctx(ctx *context.Context, wg *sync.WaitGroup) {
 	stopapp.GetWaitGroup_Main().Add(1)
 	go ping_go()
 
+}
+
+// Start_ctx - необходимые процедуры для запуска сервера GRPC
+// ctx - глобальный контекст приложения
+// wg - глобальный WaitGroup приложения
+func Start_ctx(ctx *context.Context, wg *sync.WaitGroup) error {
+	var err error
+	contextmain.Ctx = ctx
+	stopapp.SetWaitGroup_Main(wg)
+
+	err = Connect_err()
+	if err != nil {
+		return err
+	}
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go WaitStop()
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go ping_go()
+
+	return err
 }
 
 // CloseConnection - закрывает подключение к GRPC, и пишет лог
@@ -190,4 +222,16 @@ loop:
 	}
 
 	stopapp.GetWaitGroup_Main().Done()
+}
+
+// GetTimeoutSeconds - возвращает время ожидания ответа
+func GetTimeoutSeconds() int {
+	Otvet := grpc_constants.GetTimeoutSeconds()
+
+	return Otvet
+}
+
+// SetTimeoutSeconds - устанавливает время ожидания ответа
+func SetTimeoutSeconds(seconds int) {
+	grpc_constants.SetTimeoutSeconds(seconds)
 }

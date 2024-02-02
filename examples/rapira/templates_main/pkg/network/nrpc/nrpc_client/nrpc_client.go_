@@ -1,10 +1,14 @@
 //Файл создан автоматически кодогенератором crud_generator
 //Не изменяйте ничего здесь.
 
+//Файл создан автоматически кодогенератором crud_generator
+//Не изменяйте ничего здесь.
+
 package nrpc_client
 
 import (
 	"context"
+	"errors"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/port_checker"
@@ -12,6 +16,7 @@ import (
 	"github.com/nats-io/nats.go"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	nrpc_constants "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/constants"
 	"sync"
 
 	"os"
@@ -34,8 +39,8 @@ var Conn *nats.Conn
 // Client - подключение к клиенту NRPC
 var Client *grpc_proto.Sync_serviceClient
 
-// mutexReconnect - защита от многопоточности Reconnect()
-var mutexReconnect = &sync.Mutex{}
+// mutex_Connect - защита от многопоточности Reconnect()
+var mutex_Connect = &sync.Mutex{}
 
 // NeedReconnect - флаг необходимости переподключения
 var NeedReconnect bool
@@ -47,7 +52,7 @@ func Connect() {
 	err = Connect_err()
 
 	if err != nil {
-		log.Fatalf("NRPC Connect() error: %v", err)
+		log.Panicf("NRPC Connect() error: %v", err)
 	} else {
 		NatsURL := "nats://" + Settings.NATS_HOST + ":" + Settings.NATS_PORT
 		log.Info("GRPC client connected. Address: ", NatsURL)
@@ -59,17 +64,21 @@ func Connect() {
 func Connect_err() error {
 	var err error
 
+	//
+	mutex_Connect.Lock()
+	defer mutex_Connect.Unlock()
+
 	if Settings.NATS_HOST == "" {
 		FillSettings()
 	}
 
 	NatsURL := "nats://" + Settings.NATS_HOST + ":" + Settings.NATS_PORT
+
 	// Connect to the NATS server.
 	Conn, err = nats.Connect(NatsURL, nats.Timeout(5*time.Second))
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
-	// defer Conn.Close()
 
 	// This is our generated client.
 	Client = grpc_proto.NewSync_serviceClient(Conn)
@@ -78,7 +87,9 @@ func Connect_err() error {
 }
 
 // FillSettings - заполняет настройки из переменных окружения
-func FillSettings() {
+func FillSettings() error {
+	var err error
+
 	Settings = SettingsINI{}
 	Settings.NATS_HOST = os.Getenv("NATS_HOST")
 	Settings.NATS_PORT = os.Getenv("NATS_PORT")
@@ -93,12 +104,18 @@ func FillSettings() {
 	}
 
 	if Settings.NATS_HOST == "" {
-		log.Panic("Need fill BUS_LOCAL_HOST ! in OS Environment ")
+		TextError := "Need fill BUS_LOCAL_HOST ! in OS Environment "
+		err = errors.New(TextError)
+		return err
 	}
 
 	if Settings.NATS_PORT == "" {
-		log.Panic("Need fill BUS_LOCAL_PORT ! in OS Environment ")
+		TextError := "Need fill BUS_LOCAL_PORT ! in OS Environment "
+		err = errors.New(TextError)
+		return err
 	}
+
+	return err
 }
 
 // WaitStop - ожидает отмену глобального контекста
@@ -119,20 +136,9 @@ func WaitStop() {
 
 // Start - необходимые процедуры для запуска сервера NRPC
 // если контекст хранится в contextmain.GetContext()
+// и есть stopapp.GetWaitGroup_Main()
+// при ошибке вызывает панику
 func Start() {
-	contextmain.GetContext()
-	ctx := contextmain.Ctx
-	wg := stopapp.GetWaitGroup_Main()
-	Start_ctx(ctx, wg)
-}
-
-// Start_ctx - необходимые процедуры для запуска сервера NRPC
-// ctx - глобальный контекст приложения
-// wg - глобальный WaitGroup приложения
-func Start_ctx(ctx *context.Context, wg *sync.WaitGroup) {
-	contextmain.Ctx = ctx
-	stopapp.SetWaitGroup_Main(wg)
-
 	Connect()
 
 	stopapp.GetWaitGroup_Main().Add(1)
@@ -141,6 +147,28 @@ func Start_ctx(ctx *context.Context, wg *sync.WaitGroup) {
 	stopapp.GetWaitGroup_Main().Add(1)
 	go ping_go()
 
+}
+
+// Start_ctx - необходимые процедуры для запуска сервера NRPC
+// ctx - глобальный контекст приложения
+// wg - глобальный WaitGroup приложения
+func Start_ctx(ctx *context.Context, wg *sync.WaitGroup) error {
+	var err error
+	contextmain.Ctx = ctx
+	stopapp.SetWaitGroup_Main(wg)
+
+	err = Connect_err()
+	if err != nil {
+		return err
+	}
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go WaitStop()
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go ping_go()
+
+	return err
 }
 
 // CloseConnection - закрывает подключение к NATS
@@ -202,4 +230,16 @@ loop:
 	}
 
 	stopapp.GetWaitGroup_Main().Done()
+}
+
+// GetTimeoutSeconds - возвращает время ожидания ответа
+func GetTimeoutSeconds() int {
+	Otvet := nrpc_constants.GetTimeoutSeconds()
+
+	return Otvet
+}
+
+// SetTimeoutSeconds - устанавливает время ожидания ответа
+func SetTimeoutSeconds(seconds int) {
+	nrpc_constants.SetTimeoutSeconds(seconds)
 }

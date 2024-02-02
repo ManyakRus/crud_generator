@@ -48,6 +48,9 @@ func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.Lawsui
 
 	tx := db.First(m, id)
 	err = tx.Error
+	if err != nil {
+		err = fmt.Errorf("Read() id: %v, error: %v", id, err)
+	}
 
 	return err
 }
@@ -192,6 +195,9 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 		err = errors.New(TextError)
 		return err
 	}
+	if err != nil {
+		err = fmt.Errorf("Create_Update() id: %v, error: %v", m.id, err)
+	}
 
 	return err
 }
@@ -228,6 +234,9 @@ func (crud Crud_DB) Delete_ctx(ctx context.Context, m *lawsuit_status_types.Laws
 	m.IsDeleted = true
 
 	err = crud.Save_ctx(ctx, &m2)
+	if err != nil {
+		err = fmt.Errorf("Delete() id: %v, error: %v", m.id, err)
+	}
 
 	return err
 }
@@ -264,6 +273,9 @@ func (crud Crud_DB) Restore_ctx(ctx context.Context, m *lawsuit_status_types.Law
 	m.IsDeleted = false
 
 	err = crud.Save_ctx(ctx, &m2)
+	if err != nil {
+		err = fmt.Errorf("Restore() id: %v, error: %v", m.id, err)
+	}
 
 	return err
 }
@@ -306,6 +318,9 @@ func (crud Crud_DB) Find_ByExtID_ctx(ctx context.Context, m *lawsuit_status_type
 
 	tx := db.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).First(m)
 	err = tx.Error
+	if err != nil {
+		err = fmt.Errorf("Find_ByExtID() id: %v, error: %v", m.id, err)
+	}
 
 	return err
 }
