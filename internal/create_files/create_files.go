@@ -312,12 +312,22 @@ func FindTableNameURL(TableName string) string {
 	return Otvet
 }
 
-// FindProtoURL - возвращает URL репозитория с пакетом "grpc_proto"
-func FindProtoURL() string {
+// FindGRPCProtoURL - возвращает URL репозитория с пакетом "grpc_proto"
+func FindGRPCProtoURL() string {
 	Otvet := ""
 
 	TEMPLATE_FOLDERNAME_GRPC_PROTO := strings.ToLower(config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO)
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + TEMPLATE_FOLDERNAME_GRPC_PROTO + "/" + "grpc_proto"
+
+	return Otvet
+}
+
+// FindNRPCProtoURL - возвращает URL репозитория с пакетом "grpc_proto"
+func FindNRPCProtoURL() string {
+	Otvet := ""
+
+	TEMPLATE_FOLDERNAME_NRPC_PROTO := strings.ToLower(config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO)
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + TEMPLATE_FOLDERNAME_NRPC_PROTO + "/nrpc/" + "grpc_proto"
 
 	return Otvet
 }

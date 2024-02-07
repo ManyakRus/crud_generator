@@ -30,9 +30,6 @@ var Settings SettingsINI
 // Conn - подключение к серверу GRPC
 var Conn *grpc.ClientConn
 
-// Client - подключение к клиенту GRPC
-var Client grpc_proto.SyncServiceClient
-
 // mutex_Connect - защита от многопоточности Reconnect()
 var mutex_Connect = &sync.Mutex{}
 
@@ -76,7 +73,8 @@ func Connect_err() error {
 		return err
 	}
 
-	Client = grpc_proto.NewSyncServiceClient(Conn)
+	FillClients()
+
 	return err
 }
 

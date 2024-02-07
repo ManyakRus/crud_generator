@@ -78,7 +78,7 @@ func CreateFiles(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.FindGRPCProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
 		//удалим лишние функции
@@ -101,7 +101,7 @@ func CreateFiles(Table1 *types.Table) error {
 		//TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
 
 		////proto
-		//RepositoryGRPCProtoURL := create_files.FindProtoURL()
+		//RepositoryGRPCProtoURL := create_files.FindGRPCProtoURL()
 		//TextGRPCServer = create_files.AddImport(TextGRPCServer, RepositoryGRPCProtoURL)
 		//
 		////model
@@ -153,7 +153,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.FindGRPCProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
 		CrudStarterURL := create_files.FindCrudStarterURL()

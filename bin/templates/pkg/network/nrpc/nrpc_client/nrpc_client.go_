@@ -36,9 +36,6 @@ var Settings SettingsINI
 // Conn - подключение к NATS
 var Conn *nats.Conn
 
-// Client - подключение к клиенту NRPC
-var Client *grpc_proto.Sync_serviceClient
-
 // mutex_Connect - защита от многопоточности Reconnect()
 var mutex_Connect = &sync.Mutex{}
 
@@ -80,8 +77,7 @@ func Connect_err() error {
 		return err
 	}
 
-	// This is our generated client.
-	Client = grpc_proto.NewSync_serviceClient(Conn)
+	FillClients()
 
 	return err
 }

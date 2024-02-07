@@ -96,7 +96,7 @@ func CreateFiles(Table1 *types.Table) error {
 		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
 
 		//proto
-		RepositoryGRPCProtoURL := create_files.FindProtoURL()
+		RepositoryGRPCProtoURL := create_files.FindGRPCProtoURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCProtoURL)
 
 		//model

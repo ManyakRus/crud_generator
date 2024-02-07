@@ -75,7 +75,7 @@ func CreateFiles(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextNRPCClient = create_files.DeleteTemplateRepositoryImports(TextNRPCClient)
 
-		GRPCProtoURL := create_files.FindProtoURL()
+		GRPCProtoURL := create_files.FindGRPCProtoURL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPCProtoURL)
 
 		NRPCClientURL := create_files.FindNRPCClientURL()

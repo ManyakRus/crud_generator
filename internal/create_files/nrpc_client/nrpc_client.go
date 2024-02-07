@@ -66,7 +66,7 @@ func CreateNRPCClient() error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextNRPCClient = create_files.DeleteTemplateRepositoryImports(TextNRPCClient)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.FindGRPCProtoURL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, ProtoURL)
 
 		DBConstantsURL := create_files.FindDBConstantsURL()

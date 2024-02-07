@@ -42,3 +42,7 @@ const STARTER_TABLES_FILENAME = "starter_tables.go_"
 const STARTER_TABLES_FILENAME_TEST = "starter_tables_test.go_"
 const STARTER_TABLES_PREFIX = "crud_starter_"
 const CRUD_TABLES_FREFIX = "crud_"
+
+const GRPC_CLIENT_VARS_FILENAME = "grpc_client_vars.go"
+
+const NRPC_CLIENT_VARS_FILENAME = "nrpc_client_vars.go"

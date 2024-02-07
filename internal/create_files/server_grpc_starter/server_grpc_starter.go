@@ -57,7 +57,7 @@ func CreateServerGRPCStarter() error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPCStarter = create_files.DeleteTemplateRepositoryImports(TextGRPCStarter)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.FindGRPCProtoURL()
 		TextGRPCStarter = create_files.AddImport(TextGRPCStarter, ProtoURL)
 	}
 
