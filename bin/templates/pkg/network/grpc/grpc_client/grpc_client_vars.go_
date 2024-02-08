@@ -1,6 +1,0 @@
-package grpc_client
-
-import (
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
-)
-

@@ -68,8 +68,8 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	sort.Strings(keys)
 
 	//найдём новый текст для каждой таблицы
+	TextProtoNew := ""
 	for _, key1 := range keys {
-		TextProtoNew := ""
 		Table1, ok := MapAll[key1]
 		if ok == false {
 			log.Panic("MapAll[key1] not found")
@@ -82,33 +82,26 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 			continue
 		}
 
-		Comments1 := create_files.FindModelComment(Table1)
-		TextFuncStart := `
-` + Comments1 + `
-service ` + Table1.NameGo + ` {`
-		TextFunctions := FindTextProtoTable1(TextProto, Table1)
-		TextProtoNew = TextProtoNew + TextFuncStart + TextFunctions + "}\n\n"
-
-		//найдём куда вставить текст
-		PosStart := 0
-		sFind := "\nservice " + Table1.NameGo + " "
-		pos1 := strings.Index(TextProto, sFind)
-		if pos1 < 0 {
-			PosStart = len(TextProto) - 1 //в конец
-		} else {
-			s2 := TextProto[pos1+1:]
-			sFind = "\n"
-			posEnd := strings.Index(s2, sFind)
-			if posEnd < 0 {
-				log.Panic("Not found text ", sFind)
-			}
-			PosStart = pos1 + posEnd + 1
-		}
-
-		//
-		TextProto = TextProto[:PosStart] + TextProtoNew + TextProto[PosStart:]
-
+		TextProtoNew = TextProtoNew + FindTextProtoTable1(TextProto, Table1)
 	}
+
+	//найдём куда вставить текст
+	sFind := "\nservice "
+	pos1 := strings.Index(TextProto, sFind)
+	if pos1 < 0 {
+		log.Panic("Not found text ", sFind)
+	}
+
+	s2 := TextProto[pos1+1:]
+	sFind = "\n"
+	posEnd := strings.Index(s2, sFind)
+	if posEnd < 0 {
+		log.Panic("Not found text ", sFind)
+	}
+	PosStart := pos1 + posEnd + 1
+
+	//
+	TextProto = TextProto[:PosStart] + TextProtoNew + TextProto[PosStart:]
 
 	//
 	TextProto = create_files.DeleteEmptyLines(TextProto)
@@ -155,26 +148,13 @@ func FindTextProtoTable1(TextProto string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// FindTextService - возвращает текст одного сервиса
-func FindTextService(TextProto string, ModelName string) string {
-	Otvet := ""
-
-	TextFind1 := "\nservice " + ModelName + " "
-	TextFind2 := "\n}"
-
-	Otvet = micro.StringBetween(TextProto, TextFind1, TextFind2)
-
-	return Otvet
-}
-
 // FindTextRead - возвращает текст .proto
 func FindTextRead(TextProto string, ModelName string) string {
 	Otvet := ""
 	Otvet2 := TextRead(ModelName)
 
 	//проверка такой текст уже есть
-	TextService := FindTextService(TextProto, ModelName)
-	pos1 := strings.Index(TextService, Otvet2)
+	pos1 := strings.Index(TextProto, Otvet2)
 	if pos1 >= 0 {
 		return Otvet
 	}
@@ -190,8 +170,7 @@ func FindTextCreate(TextProto string, ModelName string) string {
 	Otvet2 := TextCreate(ModelName)
 
 	//проверка такой текст уже есть
-	TextService := FindTextService(TextProto, ModelName)
-	pos1 := strings.Index(TextService, Otvet2)
+	pos1 := strings.Index(TextProto, Otvet2)
 	if pos1 >= 0 {
 		return Otvet
 	}
@@ -207,8 +186,7 @@ func FindTextUpdate(TextProto string, ModelName string) string {
 	Otvet2 := TextUpdate(ModelName)
 
 	//проверка такой текст уже есть
-	TextService := FindTextService(TextProto, ModelName)
-	pos1 := strings.Index(TextService, Otvet2)
+	pos1 := strings.Index(TextProto, Otvet2)
 	if pos1 >= 0 {
 		return Otvet
 	}
@@ -224,8 +202,7 @@ func FindTextSave(TextProto string, ModelName string) string {
 	Otvet2 := TextSave(ModelName)
 
 	//проверка такой текст уже есть
-	TextService := FindTextService(TextProto, ModelName)
-	pos1 := strings.Index(TextService, Otvet2)
+	pos1 := strings.Index(TextProto, Otvet2)
 	if pos1 >= 0 {
 		return Otvet
 	}
@@ -241,8 +218,7 @@ func FindTextDelete(TextProto string, ModelName string) string {
 	Otvet2 := TextDelete(ModelName)
 
 	//проверка такой текст уже есть
-	TextService := FindTextService(TextProto, ModelName)
-	pos1 := strings.Index(TextService, Otvet2)
+	pos1 := strings.Index(TextProto, Otvet2)
 	if pos1 >= 0 {
 		return Otvet
 	}
@@ -258,8 +234,7 @@ func FindTextRestore(TextProto string, ModelName string) string {
 	Otvet2 := TextRestore(ModelName)
 
 	//проверка такой текст уже есть
-	TextService := FindTextService(TextProto, ModelName)
-	pos1 := strings.Index(TextService, Otvet2)
+	pos1 := strings.Index(TextProto, Otvet2)
 	if pos1 >= 0 {
 		return Otvet
 	}
@@ -275,8 +250,7 @@ func FindTextFindByExtId(TextProto string, ModelName string) string {
 	Otvet2 := TextFindByExtId(ModelName)
 
 	//проверка такой текст уже есть
-	TextService := FindTextService(TextProto, ModelName)
-	pos1 := strings.Index(TextService, Otvet2)
+	pos1 := strings.Index(TextProto, Otvet2)
 	if pos1 >= 0 {
 		return Otvet
 	}
@@ -288,49 +262,49 @@ func FindTextFindByExtId(TextProto string, ModelName string) string {
 
 // TextRead - возвращает текст .proto
 func TextRead(ModelName string) string {
-	Otvet := "rpc Read(RequestId) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_Read(RequestId) returns (Response) {}"
 
 	return Otvet
 }
 
 // TextCreate - возвращает текст .proto
 func TextCreate(ModelName string) string {
-	Otvet := "rpc Create(RequestModel) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_Create(RequestModel) returns (Response) {}"
 
 	return Otvet
 }
 
 // TextUpdate - возвращает текст .proto
 func TextUpdate(ModelName string) string {
-	Otvet := "rpc Update(RequestModel) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_Update(RequestModel) returns (Response) {}"
 
 	return Otvet
 }
 
 // TextSave - возвращает текст .proto
 func TextSave(ModelName string) string {
-	Otvet := "rpc Save(RequestModel) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_Save(RequestModel) returns (Response) {}"
 
 	return Otvet
 }
 
 // TextDelete - возвращает текст .proto
 func TextDelete(ModelName string) string {
-	Otvet := "rpc Delete(RequestId) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_Delete(RequestId) returns (Response) {}"
 
 	return Otvet
 }
 
 // TextRestore - возвращает текст .proto
 func TextRestore(ModelName string) string {
-	Otvet := "rpc Restore(RequestId) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_Restore(RequestId) returns (Response) {}"
 
 	return Otvet
 }
 
 // TextFindByExtId - возвращает текст .proto
 func TextFindByExtId(ModelName string) string {
-	Otvet := "rpc FindByExtID(RequestExtID) returns (Response) {}"
+	Otvet := "rpc " + ModelName + "_FindByExtID(RequestExtID) returns (Response) {}"
 
 	return Otvet
 }

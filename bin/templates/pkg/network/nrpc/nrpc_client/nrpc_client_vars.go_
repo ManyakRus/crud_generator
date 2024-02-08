@@ -1,7 +1,0 @@
-package nrpc_client
-
-import (
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/nrpc/grpc_proto"
-)
-
-

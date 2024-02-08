@@ -63,7 +63,7 @@ func CreateGRPCClient() error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
 
-		ProtoURL := create_files.FindGRPCProtoURL()
+		ProtoURL := create_files.FindProtoURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ProtoURL)
 
 		DBConstantsURL := create_files.FindDBConstantsURL()

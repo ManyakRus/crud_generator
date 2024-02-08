@@ -41,7 +41,7 @@ func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
-	if grpc_client.LawsuitStatusTypeClient == nil {
+	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
@@ -57,7 +57,7 @@ func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	defer ctxCancelFunc()
 
 	// запрос
-	Response, err := grpc_client.LawsuitStatusTypeClient.Read(ctx, Request)
+	Response, err := grpc_client.Client.LawsuitStatusType_Read(ctx, Request)
 	if err != nil {
 		sError := err.Error()
 		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
@@ -81,7 +81,7 @@ func (crud Crud_GRPC) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
-	if grpc_client.LawsuitStatusTypeClient == nil {
+	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
@@ -101,7 +101,7 @@ func (crud Crud_GRPC) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 	defer ctxCancelFunc()
 
 	// запрос
-	Response, err := grpc_client.LawsuitStatusTypeClient.Create(ctx, Request)
+	Response, err := grpc_client.Client.LawsuitStatusType_Create(ctx, Request)
 	if err != nil {
 		sError := err.Error()
 		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
@@ -125,7 +125,7 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
-	if grpc_client.LawsuitStatusTypeClient == nil {
+	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
@@ -145,7 +145,7 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	defer ctxCancelFunc()
 
 	// запрос
-	Response, err := grpc_client.LawsuitStatusTypeClient.Update(ctx, Request)
+	Response, err := grpc_client.Client.LawsuitStatusType_Update(ctx, Request)
 	if err != nil {
 		sError := err.Error()
 		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
@@ -169,7 +169,7 @@ func (crud Crud_GRPC) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
-	if grpc_client.LawsuitStatusTypeClient == nil {
+	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
@@ -189,7 +189,7 @@ func (crud Crud_GRPC) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 	defer ctxCancelFunc()
 
 	// запрос
-	Response, err := grpc_client.LawsuitStatusTypeClient.Save(ctx, Request)
+	Response, err := grpc_client.Client.LawsuitStatusType_Save(ctx, Request)
 	if err != nil {
 		sError := err.Error()
 		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
@@ -213,7 +213,7 @@ func (crud Crud_GRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
-	if grpc_client.LawsuitStatusTypeClient == nil {
+	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
@@ -229,7 +229,7 @@ func (crud Crud_GRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	defer ctxCancelFunc()
 
 	// запрос
-	Response, err := grpc_client.LawsuitStatusTypeClient.Delete(ctx, Request)
+	Response, err := grpc_client.Client.LawsuitStatusType_Delete(ctx, Request)
 	if err != nil {
 		sError := err.Error()
 		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
@@ -253,7 +253,7 @@ func (crud Crud_GRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	// var Otvet lawsuit_status_types.LawsuitStatusType
 
 	// подключение
-	if grpc_client.LawsuitStatusTypeClient == nil {
+	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
@@ -269,7 +269,7 @@ func (crud Crud_GRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	defer ctxCancelFunc()
 
 	// запрос
-	Response, err := grpc_client.LawsuitStatusTypeClient.Restore(ctx, Request)
+	Response, err := grpc_client.Client.LawsuitStatusType_Restore(ctx, Request)
 	if err != nil {
 		sError := err.Error()
 		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
@@ -291,7 +291,7 @@ func (crud Crud_GRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 // Find_ByExtID - находит модель в БД по ext_id и connection_id
 func (crud Crud_GRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) error {
 	//подключение
-	if grpc_client.LawsuitStatusTypeClient == nil {
+	if grpc_client.Client == nil {
 		grpc_client.Connect()
 	}
 
@@ -308,7 +308,7 @@ func (crud Crud_GRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) er
 	defer ctxCancelFunc()
 
 	//запрос
-	Response, err := grpc_client.LawsuitStatusTypeClient.FindByExtID(ctx, Request)
+	Response, err := grpc_client.Client.LawsuitStatusType_FindByExtID(ctx, Request)
 	if err != nil {
 		sError := err.Error()
 		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
