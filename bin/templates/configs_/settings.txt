@@ -77,6 +77,9 @@ TEMPLATE_FOLDERNAME_NRPC="pkg/network/nrpc"
 #TEMPLATE_FOLDERNAME_NRPC_CLIENT - foldr name for create nrpc client files
 TEMPLATE_FOLDERNAME_NRPC_CLIENT="pkg/network/nrpc/nrpc_client"
 
+#TEMPLATE_FOLDERNAME_GRPC_NRPC - folder name for create grpc_nrpc.go file
+TEMPLATE_FOLDERNAME_GRPC_NRPC="pkg/network/grpc_nrpc"
+
 #TEMPLATE_FOLDERNAME_CRUD_STARTER - folder name for create crud_starter.go file
 TEMPLATE_FOLDERNAME_CRUD_STARTER="pkg/crud_starter"
 

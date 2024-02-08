@@ -389,7 +389,7 @@ func FindCrudStarterURL() string {
 func Find_GRPC_NRPC_URL() string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/pkg/network/grpc_nrpc"
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + config.Settings.TEMPLATE_FOLDERNAME_GRPC_NRPC
 
 	return Otvet
 }
