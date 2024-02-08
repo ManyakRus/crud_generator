@@ -1,4 +1,4 @@
-package model
+package model_tables
 
 import (
 	"errors"
@@ -18,6 +18,7 @@ import (
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
+	//для каждой таблицы
 	for _, table1 := range MapAll {
 		err = CreateFiles(table1)
 		if err != nil {
@@ -58,10 +59,20 @@ func CreateFiles(Table1 *types.Table) error {
 	if config.Settings.NEED_CREATE_MODEL_CRUD == true {
 		err = CreateFilesModel_crud(Table1, DirTemplatesModel, DirReadyModel)
 		if err != nil {
-			log.Error("CreateFilesModel_struct() table: ", Table1.Name, " error: ", err)
+			log.Error("CreateFilesModel_crud() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 	}
+
+	// создание файла manual
+	if config.Settings.NEED_CREATE_MANUAL_FILES == true {
+		err = CreateFilesModel_manual(Table1, DirTemplatesModel, DirReadyModel)
+		if err != nil {
+			log.Error("CreateFilesModel_manual() table: ", Table1.Name, " error: ", err)
+			return err
+		}
+	}
+
 	return err
 }
 
@@ -452,4 +463,47 @@ func DeleteFromInterfaceFind_ByExtID(TextModel string, Table1 *types.Table) stri
 	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
 
 	return Otvet
+}
+
+// CreateFilesModel_manual - создаёт 1 файл с _manual.go
+func CreateFilesModel_manual(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
+	var err error
+
+	//
+	ModelName := Table1.NameGo
+
+	TableName := strings.ToLower(Table1.Name)
+	FilenameTemplateModel := DirTemplatesModel + constants.MODEL_TABLE_MANUAL_FILENAME
+	FilenameReadyModel := DirReadyModel + TableName + "_manual.go"
+
+	//чтение файла шаблона
+	bytes, err := os.ReadFile(FilenameTemplateModel)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
+	}
+	TextModel := string(bytes)
+
+	//заменим имя пакета на новое
+	TextModel = create_files.ReplacePackageName(TextModel, DirReadyModel)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		//TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+	}
+
+	//создание текста
+	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
+
+	//замена импортов на новые URL
+	TextModel = create_files.ReplaceServiceURLImports(TextModel)
+
+	//удаление пустого импорта
+	TextModel = create_files.DeleteEmptyImport(TextModel)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
+
+	return err
 }

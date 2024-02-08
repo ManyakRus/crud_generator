@@ -1,0 +1,19 @@
+package crud_starter_lawsuit_status_types
+
+import (
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud/crud_starter_lawsuit_status_types"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"testing"
+)
+
+func TestSetCrudManualInterface(t *testing.T) {
+
+	crud := crud_lawsuit_status_types.Crud_DB{}
+
+	SetCrudManualInterface(crud)
+
+	// Test that the crud variable is set correctly
+	if employees.Crud_manual_LawsuitStatusType != crud {
+		t.Errorf("Expected lawsuit_status_types.Crud_manual_LawsuitStatusType to be set to crud, but got %+v", lawsuit_status_types.Crud_manual_LawsuitStatusType)
+	}
+}

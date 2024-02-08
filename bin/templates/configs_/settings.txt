@@ -136,6 +136,9 @@ NEED_CREATE_NRPC_SERVER_TEST=true
 #NEED_CREATE_NRPC_CLIENT_TEST - fill "true" if you want create NRPC client _test.go files
 NEED_CREATE_NRPC_CLIENT_TEST=true
 
+#NEED_CREATE_MANUAL_FILES - fill "true" if you want create "_manual.go" files, intended for user manual changes
+NEED_CREATE_MANUAL_FILES=true
+
 #PREFIX_SERVER_GRPC - filename prefix for grpc server files
 PREFIX_SERVER_GRPC="server_grpc_"
 

@@ -32,11 +32,26 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 				return err
 			}
 		}
+
 		//тестовые файлы starter
 		if config.Settings.NEED_CREATE_DB_TEST == true {
 			err = CreateTestFiles(Table1)
 			if err != nil {
 				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+		}
+
+		// создание файла manual
+		if config.Settings.NEED_CREATE_MANUAL_FILES == true {
+			err = CreateFiles_manual(Table1)
+			if err != nil {
+				log.Error("CreateFilesModel_manual() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+			err = CreateFiles_manual_test(Table1)
+			if err != nil {
+				log.Error("CreateFiles_manual_test() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 		}
@@ -119,7 +134,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile() + "starter_tables" + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + constants.STARTER_TABLES_FILENAME_TEST
+	FilenameTemplateDB := DirTemplatesDB + constants.STARTER_TABLES_TEST_FILENAME
 	DirReadyTable := DirReadyDB + constants.STARTER_TABLES_PREFIX + TableName
 	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + constants.STARTER_TABLES_PREFIX + TableName + "_test.go"
 
@@ -158,6 +173,133 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// CreateFiles_manual - создаёт 1 файл в папке crud_starter
+func CreateFiles_manual(Table1 *types.Table) error {
+	var err error
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile() + "starter_tables" + micro.SeparatorFile()
+	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
+
+	FilenameTemplateDB := DirTemplatesDB + constants.STARTER_TABLES_MANUAL_FILENAME
+	TableName := strings.ToLower(Table1.Name)
+	DirReadyTable := DirReadyDB + constants.STARTER_TABLES_PREFIX + TableName
+	FilenameReadyManual := DirReadyTable + micro.SeparatorFile() + constants.STARTER_TABLES_PREFIX + TableName + "_manual.go"
+
+	//создадим каталог
+	ok, err := micro.FileExists(DirReadyTable)
+	if ok == false {
+		err = os.MkdirAll(DirReadyTable, 0777)
+		if err != nil {
+			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
+		}
+	}
+
+	bytes, err := os.ReadFile(FilenameTemplateDB)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
+	}
+	TextManual := string(bytes)
+
+	//заменим имя пакета на новое
+	TextManual = create_files.ReplacePackageName(TextManual, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextManual = create_files.DeleteTemplateRepositoryImports(TextManual)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextManual = create_files.AddImport(TextManual, ModelTableURL)
+
+	}
+
+	//создание текста
+	ModelName := Table1.NameGo
+	TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextManual = TextManual
+
+	//замена импортов на новые URL
+	TextManual = create_files.ReplaceServiceURLImports(TextManual)
+
+	//удаление пустого импорта
+	TextManual = create_files.DeleteEmptyImport(TextManual)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// CreateFiles_manual_test - создаёт 1 файл в папке crud_starter
+func CreateFiles_manual_test(Table1 *types.Table) error {
+	var err error
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile() + "starter_tables" + micro.SeparatorFile()
+	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
+
+	FilenameTemplateDB := DirTemplatesDB + constants.STARTER_TABLES_TEST_MANUAL_FILENAME
+	TableName := strings.ToLower(Table1.Name)
+	DirReadyTable := DirReadyDB + constants.STARTER_TABLES_PREFIX + TableName
+	FilenameReadyManual := DirReadyTable + micro.SeparatorFile() + constants.STARTER_TABLES_PREFIX + TableName + "_manual_test.go"
+
+	//создадим каталог
+	ok, err := micro.FileExists(DirReadyTable)
+	if ok == false {
+		err = os.MkdirAll(DirReadyTable, 0777)
+		if err != nil {
+			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
+		}
+	}
+
+	bytes, err := os.ReadFile(FilenameTemplateDB)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
+	}
+	TextManual := string(bytes)
+
+	//заменим имя пакета на новое
+	TextManual = create_files.ReplacePackageName(TextManual, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextManual = create_files.DeleteTemplateRepositoryImports(TextManual)
+
+		//
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextManual = create_files.AddImport(TextManual, ModelTableURL)
+
+		//
+		CrudStarterTableURL := create_files.FindCrudStarterTableURL(TableName)
+		TextManual = create_files.AddImport(TextManual, CrudStarterTableURL)
+
+	}
+
+	//создание текста
+	ModelName := Table1.NameGo
+	TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextManual = TextManual
+
+	//замена импортов на новые URL
+	TextManual = create_files.ReplaceServiceURLImports(TextManual)
+
+	//удаление пустого импорта
+	TextManual = create_files.DeleteEmptyImport(TextManual)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), constants.FILE_PERMISSIONS)
 
 	return err
 }

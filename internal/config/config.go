@@ -47,6 +47,7 @@ type SettingsINI struct {
 	NEED_CREATE_NRPC                 bool
 	NEED_CREATE_NRPC_SERVER_TEST     bool
 	NEED_CREATE_NRPC_CLIENT_TEST     bool
+	NEED_CREATE_MANUAL_FILES         bool
 	SERVICE_NAME                     string
 	SERVICE_REPOSITORY_URL           string
 	TEXT_TEMPLATE_MODEL              string
@@ -167,6 +168,7 @@ func FillSettings() {
 	Settings.TEMPLATE_FOLDER_CRUD_FUNCTIONS = os.Getenv("TEMPLATE_FOLDER_CRUD_FUNCTIONS")
 	Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME = os.Getenv("TEMPLATE_EXTERNAL_PROTO_FILENAME")
 	Settings.TEMPLATE_FOLDERNAME_GRPC_NRPC = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_NRPC")
+	Settings.NEED_CREATE_MANUAL_FILES = BoolFromString(os.Getenv("NEED_CREATE_MANUAL_FILES"))
 
 }
 
