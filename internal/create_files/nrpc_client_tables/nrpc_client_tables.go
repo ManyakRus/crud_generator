@@ -78,7 +78,7 @@ func CreateFiles(Table1 *types.Table) error {
 		GRPCProtoURL := create_files.FindProtoURL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPCProtoURL)
 
-		NRPCClientURL := create_files.FindNRPCClientURL()
+		NRPCClientURL := create_files.FindNRPC_Client_URL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, NRPCClientURL)
 
 		GRPCConstantsURL := create_files.FindGRPCConstantsURL()
@@ -149,7 +149,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextNRPCClient = create_files.DeleteTemplateRepositoryImports(TextNRPCClient)
 
-		NRPCClientURL := create_files.FindNRPCClientURL()
+		NRPCClientURL := create_files.FindNRPC_Client_URL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, NRPCClientURL)
 
 		TableURL := create_files.FindModelTableURL(TableName)

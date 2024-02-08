@@ -267,11 +267,20 @@ func FindGRPClientURL() string {
 	return Otvet
 }
 
+// FindNRPClientURL - возвращает URL репозитория с пакетом "client_nrpc"
+func FindNRPClientURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT
+
+	return Otvet
+}
+
 // FindGRPCConstantsURL - возвращает URL репозитория с пакетом "client_grpc"
 func FindGRPCConstantsURL() string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC + "/" + "constants"
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC + "/" + "grpc_constants"
 
 	return Otvet
 }
@@ -349,8 +358,8 @@ func FindCrudTableURL(TableName string) string {
 	return Otvet
 }
 
-// FindNRPCClientURL - возвращает URL репозитория с пакетом "nrpc_client"
-func FindNRPCClientURL() string {
+// FindNRPC_Client_URL - возвращает URL репозитория с пакетом "nrpc_client"
+func FindNRPC_Client_URL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT
@@ -372,6 +381,15 @@ func FindCrudStarterURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER
+
+	return Otvet
+}
+
+// Find_GRPC_NRPC_URL - возвращает URL репозитория с пакетом "crud_starter"
+func Find_GRPC_NRPC_URL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/pkg/network/grpc_nrpc"
 
 	return Otvet
 }

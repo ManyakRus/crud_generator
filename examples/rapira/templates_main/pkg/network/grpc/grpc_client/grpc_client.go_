@@ -9,13 +9,15 @@ import (
 	"github.com/ManyakRus/starter/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
-	grpc_constants "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"
 	"strings"
 	"sync"
 	"time"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
 )
 
 // SettingsINI - тип структуры для хранения настроек подключени
@@ -77,6 +79,9 @@ func Connect_err() error {
 	}
 
 	Client = grpc_proto.NewSyncServiceClient(Conn)
+
+	grpc_nrpc.NeedNRPC = false
+
 	return err
 }
 
@@ -234,4 +239,17 @@ func GetTimeoutSeconds() int {
 // SetTimeoutSeconds - устанавливает время ожидания ответа
 func SetTimeoutSeconds(seconds int) {
 	grpc_constants.SetTimeoutSeconds(seconds)
+}
+
+// Connect_GRPC_NRPC - подключается к серверу GRPC или NRPC, при ошибке вызывает панику
+func Connect_GRPC_NRPC() {
+	if grpc_nrpc.NeedNRPC == true {
+		if nrpc_client.Client == nil {
+			nrpc_client.Connect()
+		}
+	} else {
+		if Client == nil {
+			Connect()
+		}
+	}
 }

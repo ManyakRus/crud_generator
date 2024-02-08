@@ -72,18 +72,24 @@ func CreateFiles(Table1 *types.Table) error {
 	//заменим имя пакета на новое
 	TextGRPCClient = create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
 
-	//заменим импорты
-	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
-
-		ConstantsURL := create_files.FindGRPCConstantsURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, ConstantsURL)
-
-		//удалим лишние функции
-		TextGRPCClient = create_files.DeleteFuncDelete(TextGRPCClient, Table1)
-		TextGRPCClient = create_files.DeleteFuncRestore(TextGRPCClient, Table1)
-		TextGRPCClient = create_files.DeleteFuncFind_byExtID(TextGRPCClient, Table1)
-	}
+	////заменим импорты
+	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
+	//	TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
+	//
+	//	ConstantsURL := create_files.FindGRPCConstantsURL()
+	//	TextGRPCClient = create_files.AddImport(TextGRPCClient, ConstantsURL)
+	//
+	//	GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
+	//	TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
+	//
+	//	DBConstantsURL := create_files.FindDBConstantsURL()
+	//	TextGRPCClient = create_files.AddImport(TextGRPCClient, DBConstantsURL)
+	//
+	//	//удалим лишние функции
+	//	TextGRPCClient = create_files.DeleteFuncDelete(TextGRPCClient, Table1)
+	//	TextGRPCClient = create_files.DeleteFuncRestore(TextGRPCClient, Table1)
+	//	TextGRPCClient = create_files.DeleteFuncFind_byExtID(TextGRPCClient, Table1)
+	//}
 
 	//создание текста
 	ModelName := Table1.NameGo
@@ -107,10 +113,26 @@ func CreateFiles(Table1 *types.Table) error {
 		RepositoryGRPCClientlURL := create_files.FindGRPClientURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCClientlURL)
 
-		//constants
+		//nrpc client
+		RepositoryNRPCClientlURL := create_files.FindNRPClientURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryNRPCClientlURL)
+
+		//constants GRPC
 		RepositoryGRPCConstantsURL := create_files.FindGRPCConstantsURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCConstantsURL)
+
+		//DBConstantsURL := create_files.FindDBConstantsURL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, DBConstantsURL)
+
+		//grpc_nrpc
+		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
 	}
+
+	//удалим лишние функции
+	TextGRPCClient = create_files.DeleteFuncDelete(TextGRPCClient, Table1)
+	TextGRPCClient = create_files.DeleteFuncRestore(TextGRPCClient, Table1)
+	TextGRPCClient = create_files.DeleteFuncFind_byExtID(TextGRPCClient, Table1)
 
 	//удаление пустого импорта
 	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)

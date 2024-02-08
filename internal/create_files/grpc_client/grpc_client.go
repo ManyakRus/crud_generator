@@ -63,11 +63,25 @@ func CreateGRPCClient() error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
 
+		//grpc_proto
 		ProtoURL := create_files.FindProtoURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ProtoURL)
 
+		//constants db
 		DBConstantsURL := create_files.FindDBConstantsURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, DBConstantsURL)
+
+		//grpc_nrpc
+		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
+
+		//nrpc_client
+		NRPC_CLIENT_URL := create_files.FindNRPC_Client_URL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_CLIENT_URL)
+
+		//constants GRPC
+		RepositoryGRPCConstantsURL := create_files.FindGRPCConstantsURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCConstantsURL)
 
 		//заменим имя сервиса на новое
 		ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME

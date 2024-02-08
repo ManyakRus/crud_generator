@@ -301,7 +301,8 @@ func InitCrudTransport_NRPC() {`
 			continue
 		}
 
-		Otvet = Otvet + FindTextNRPC1(Table1)
+		Otvet = Otvet + FindTextGRPC1(Table1) //GRPC будет делать функции NRPC
+		//Otvet = Otvet + FindTextNRPC1(Table1)
 	}
 
 	Otvet = Otvet + "\n}"

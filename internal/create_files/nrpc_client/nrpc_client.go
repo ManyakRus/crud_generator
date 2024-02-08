@@ -69,6 +69,9 @@ func CreateNRPCClient() error {
 		ProtoURL := create_files.FindProtoURL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, ProtoURL)
 
+		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPC_NRPC_URL)
+
 		DBConstantsURL := create_files.FindDBConstantsURL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, DBConstantsURL)
 

@@ -1,4 +1,4 @@
-package constants
+package grpc_constants
 
 import "sync"
 

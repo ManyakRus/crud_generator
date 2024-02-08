@@ -1,4 +1,4 @@
-package constants
+package nrpc_constants
 
 import "sync"
 
