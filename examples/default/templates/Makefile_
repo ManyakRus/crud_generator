@@ -52,6 +52,7 @@ conn:
 	image_connections ./internal docs/connections.graphml $(SERVICENAME)
 init:
 	clear
+	rm ./go.mod
 	go mod init gitlab.aescorp.ru/dsp_dev/claim/sync_service
 	$(GENERATION_PROTO)
 	go mod tidy

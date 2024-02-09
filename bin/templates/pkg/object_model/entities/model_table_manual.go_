@@ -1,0 +1,15 @@
+package lawsuit_status_types
+
+// Crud_manual_LawsuitStatusType - объект контроллер crud операций
+var Crud_manual_LawsuitStatusType ICrud_manual_LawsuitStatusType
+
+// интерфейс CRUD операций сделанных вручную, для использования в DB или GRPC или NRPC
+type ICrud_manual_LawsuitStatusType interface {
+}
+
+// SetCrudManualInterface - заполняет интерфейс crud: DB, GRPC, NRPC
+func (m LawsuitStatusType) SetCrudManualInterface(crud ICrud_manual_LawsuitStatusType) {
+	Crud_manual_LawsuitStatusType = crud
+
+	return
+}

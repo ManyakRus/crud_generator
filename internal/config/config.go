@@ -36,6 +36,9 @@ type SettingsINI struct {
 	TEMPLATE_FOLDERNAME_MAIN         string
 	TEMPLATE_REPOSITORY_URL          string
 	TEMPLATE_EXTERNAL_PROTO_FILENAME string
+	TEMPLATES_CRUD_FILENAME          string
+	TEMPLATES_CRUD_TEST_FILENAME     string
+	TEMPLATES_ALIAS_FILENAME         string
 	NEED_CREATE_MODEL_STRUCT         bool
 	NEED_CREATE_MODEL_CRUD           bool
 	NEED_CREATE_DB                   bool
@@ -64,6 +67,7 @@ type SettingsINI struct {
 	COMMENT_MODEL_STRUCT             string
 	TEXT_MODULE_GENERATED            string
 	PREFIX_TABLE                     string
+	READY_ALIAS_FILENAME             string
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -169,6 +173,10 @@ func FillSettings() {
 	Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME = os.Getenv("TEMPLATE_EXTERNAL_PROTO_FILENAME")
 	Settings.TEMPLATE_FOLDERNAME_GRPC_NRPC = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_NRPC")
 	Settings.NEED_CREATE_MANUAL_FILES = BoolFromString(os.Getenv("NEED_CREATE_MANUAL_FILES"))
+	Settings.TEMPLATES_CRUD_FILENAME = os.Getenv("TEMPLATES_CRUD_FILENAME")
+	Settings.TEMPLATES_CRUD_TEST_FILENAME = os.Getenv("TEMPLATES_CRUD_TEST_FILENAME")
+	Settings.TEMPLATES_ALIAS_FILENAME = os.Getenv("TEMPLATES_ALIAS_FILENAME")
+	Settings.READY_ALIAS_FILENAME = os.Getenv("READY_ALIAS_FILENAME")
 
 }
 

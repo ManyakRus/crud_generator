@@ -1,11 +1,10 @@
 package nrpc_lawsuit_status_types
 
 import (
-	config "github.com/ManyakRus/starter/config_main"
+	"github.com/ManyakRus/starter/config_main"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"testing"
-	"math"
 )
 
 // Postgres_ID_Test - ID таблицы для тестирования
@@ -111,10 +110,44 @@ func TestDelete(t *testing.T) {
 
 	crud := Crud_NRPC{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
-	Otvet.ID = math.MinInt64
-	err := crud.Delete(&Otvet)
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
 	if err != nil {
-		t.Error("TestDelete() error: ", err)
+		t.Error("TestRead() error: ", err)
+	}
+
+	if Otvet.IsDeleted == false {
+		err = crud.Delete(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+
+		err = crud.Restore(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+	} else {
+		err = crud.Restore(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
+
+		err = crud.Delete(&Otvet)
+		if err != nil {
+			t.Error("TestDelete() error: ", err)
+		}
+		if Otvet.ID == 0 {
+			t.Error("TestDelete() error: ID =0")
+		}
 	}
 }
 
@@ -142,10 +175,10 @@ func TestFindByExtID(t *testing.T) {
 	err = crud.Find_ByExtID(&Otvet)
 
 	if err != nil {
-		t.Error("TestFindByExtId() error: ", err)
+		t.Error("TestFindByExtID() error: ", err)
 	}
 
 	if Otvet.ID == 0 {
-		t.Error("TestFindByExtId() error: ID =0")
+		t.Error("TestFindByExtID() error: ID =0")
 	}
 }

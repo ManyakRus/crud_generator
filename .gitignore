@@ -19,3 +19,5 @@
 /bin/sync_service_test/
 /bin/crud_service/
 /bin/templates_main/
+/bin/templates/configs_/.env_rapira
+/bin/templates/configs_/.env_test

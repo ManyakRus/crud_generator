@@ -389,7 +389,7 @@ func FindCrudStarterURL() string {
 func Find_GRPC_NRPC_URL() string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + config.Settings.TEMPLATE_FOLDERNAME_GRPC_NRPC
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_NRPC
 
 	return Otvet
 }
@@ -828,5 +828,17 @@ func DeleteEmptyLines(Text string) string {
 	if pos1 >= 0 {
 		Otvet = DeleteEmptyLines(Otvet)
 	}
+	return Otvet
+}
+
+// DeleteLastUnderline - удаляет последний символ подчёркивания
+func DeleteLastUnderline(s string) string {
+	Otvet := s
+	if s == "" {
+		return Otvet
+	}
+
+	Otvet = strings.TrimSuffix(Otvet, "_")
+
 	return Otvet
 }

@@ -1,23 +1,36 @@
+//Файл создан автоматически кодогенератором crud_generator
+//Не изменяйте ничего здесь.
+
+//Файл создан автоматически кодогенератором crud_generator
+//Не изменяйте ничего здесь.
+
 package nrpc_client
 
 import (
+	"context"
+	"errors"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
+	"github.com/ManyakRus/starter/port_checker"
 	"github.com/ManyakRus/starter/stopapp"
 	"github.com/nats-io/nats.go"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
+	nrpc_constants "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/constants"
+	"sync"
 
 	"os"
 	"strings"
 	"time"
 )
 
+// SettingsINI - тип структуры для хранения настроек подключени
 type SettingsINI struct {
 	NATS_HOST string
 	NATS_PORT string
 }
 
+// SettingsINI - структура для хранения настроек подключени
 var Settings SettingsINI
 
 // Conn - подключение к NATS
@@ -26,30 +39,57 @@ var Conn *nats.Conn
 // Client - подключение к клиенту NRPC
 var Client *grpc_proto.Sync_serviceClient
 
-// Connect - подключается к NATS
+// mutex_Connect - защита от многопоточности Reconnect()
+var mutex_Connect = &sync.Mutex{}
+
+// NeedReconnect - флаг необходимости переподключения
+var NeedReconnect bool
+
+// Connect - подключается к серверу NRPC, при ошибке вызывает панику
 func Connect() {
 	var err error
+
+	err = Connect_err()
+
+	if err != nil {
+		log.Panicf("NRPC Connect() error: %v", err)
+	} else {
+		NatsURL := "nats://" + Settings.NATS_HOST + ":" + Settings.NATS_PORT
+		log.Info("GRPC client connected. Address: ", NatsURL)
+	}
+
+}
+
+// Connect_err - подключается к серверу NRPC, возвращает ошибку
+func Connect_err() error {
+	var err error
+
+	//
+	mutex_Connect.Lock()
+	defer mutex_Connect.Unlock()
 
 	if Settings.NATS_HOST == "" {
 		FillSettings()
 	}
 
 	NatsURL := "nats://" + Settings.NATS_HOST + ":" + Settings.NATS_PORT
+
 	// Connect to the NATS server.
 	Conn, err = nats.Connect(NatsURL, nats.Timeout(5*time.Second))
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
-	// defer Conn.Close()
 
 	// This is our generated client.
 	Client = grpc_proto.NewSync_serviceClient(Conn)
 
-	log.Info("Client NRPC connected: ", NatsURL)
+	return err
 }
 
 // FillSettings - заполняет настройки из переменных окружения
-func FillSettings() {
+func FillSettings() error {
+	var err error
+
 	Settings = SettingsINI{}
 	Settings.NATS_HOST = os.Getenv("NATS_HOST")
 	Settings.NATS_PORT = os.Getenv("NATS_PORT")
@@ -63,14 +103,19 @@ func FillSettings() {
 		Settings.NATS_PORT = os.Getenv("BUS_LOCAL_PORT")
 	}
 
-
 	if Settings.NATS_HOST == "" {
-		log.Panic("Need fill BUS_LOCAL_HOST ! in OS Environment ")
+		TextError := "Need fill BUS_LOCAL_HOST ! in OS Environment "
+		err = errors.New(TextError)
+		return err
 	}
 
 	if Settings.NATS_PORT == "" {
-		log.Panic("Need fill BUS_LOCAL_PORT ! in OS Environment ")
+		TextError := "Need fill BUS_LOCAL_PORT ! in OS Environment "
+		err = errors.New(TextError)
+		return err
 	}
+
+	return err
 }
 
 // WaitStop - ожидает отмену глобального контекста
@@ -90,12 +135,40 @@ func WaitStop() {
 }
 
 // Start - необходимые процедуры для запуска сервера NRPC
+// если контекст хранится в contextmain.GetContext()
+// и есть stopapp.GetWaitGroup_Main()
+// при ошибке вызывает панику
 func Start() {
 	Connect()
 
 	stopapp.GetWaitGroup_Main().Add(1)
 	go WaitStop()
 
+	stopapp.GetWaitGroup_Main().Add(1)
+	go ping_go()
+
+}
+
+// Start_ctx - необходимые процедуры для запуска сервера NRPC
+// ctx - глобальный контекст приложения
+// wg - глобальный WaitGroup приложения
+func Start_ctx(ctx *context.Context, wg *sync.WaitGroup) error {
+	var err error
+	contextmain.Ctx = ctx
+	stopapp.SetWaitGroup_Main(wg)
+
+	err = Connect_err()
+	if err != nil {
+		return err
+	}
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go WaitStop()
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go ping_go()
+
+	return err
 }
 
 // CloseConnection - закрывает подключение к NATS
@@ -121,4 +194,52 @@ func IsRecordNotFound(err error) bool {
 	}
 
 	return Otvet
+}
+
+// ping_go - делает пинг каждые 60 секунд, и реконнект
+func ping_go() {
+
+	ticker := time.NewTicker(60 * time.Second)
+	defer ticker.Stop()
+
+	addr := Settings.NATS_HOST + ":" + Settings.NATS_PORT
+
+	//бесконечный цикл
+loop:
+	for {
+		select {
+		case <-contextmain.GetContext().Done():
+			log.Warn("Context app is canceled. nrpc_client.ping")
+			break loop
+		case <-ticker.C:
+			err := port_checker.CheckPort_err(Settings.NATS_HOST, Settings.NATS_PORT)
+			//log.Debug("ticker, ping err: ", err) //удалить
+			if err != nil {
+				NeedReconnect = true
+				log.Warn("nrpc_client CheckPort(", addr, ") error: ", err)
+			} else if NeedReconnect == true {
+				log.Warn("nrpc_client CheckPort(", addr, ") OK. Start Reconnect()")
+				NeedReconnect = false
+				err = Connect_err()
+				if err != nil {
+					NeedReconnect = true
+					log.Error("nrpc_client Connect() error: ", err)
+				}
+			}
+		}
+	}
+
+	stopapp.GetWaitGroup_Main().Done()
+}
+
+// GetTimeoutSeconds - возвращает время ожидания ответа
+func GetTimeoutSeconds() int {
+	Otvet := nrpc_constants.GetTimeoutSeconds()
+
+	return Otvet
+}
+
+// SetTimeoutSeconds - устанавливает время ожидания ответа
+func SetTimeoutSeconds(seconds int) {
+	nrpc_constants.SetTimeoutSeconds(seconds)
 }

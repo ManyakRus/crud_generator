@@ -57,7 +57,7 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + constants.TemplateFilenameCrudGo
+	FilenameTemplateDB := DirTemplatesDB + config.Settings.TEMPLATES_CRUD_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
 	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + ".go"
@@ -146,7 +146,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + constants.TemplateFilenameCrudGoTest
+	FilenameTemplateDB := DirTemplatesDB + config.Settings.TEMPLATES_CRUD_TEST_FILENAME
 	DirReadyTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
 	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_test.go"
 

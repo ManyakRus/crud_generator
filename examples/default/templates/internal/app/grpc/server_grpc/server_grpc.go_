@@ -245,7 +245,7 @@ func (s *ServerGRPC) LawsuitStatusType_Save(ctx context.Context, Request *grpc_p
 }
 
 // LawsuitStatusType_FindByExtID - возвращает запись из БД по ext_id и connection_id
-func (s *ServerGRPC) LawsuitStatusType_FindByExtID(ctx context.Context, Request *grpc_proto.RequestExtId) (*grpc_proto.Response, error) {
+func (s *ServerGRPC) LawsuitStatusType_FindByExtID(ctx context.Context, Request *grpc_proto.RequestExtID) (*grpc_proto.Response, error) {
 	var Otvet grpc_proto.Response
 	var err error
 
@@ -265,7 +265,7 @@ func (s *ServerGRPC) LawsuitStatusType_FindByExtID(ctx context.Context, Request 
 
 	//запрос в БД
 	Model := &lawsuit_status_types.LawsuitStatusType{}
-	Model.ExtID = Request.ExtId
+	Model.ExtID = Request.ExtID
 	Model.ConnectionID = Request.ConnectionId
 	err = Model.Find_ByExtID()
 	if err != nil {

@@ -49,7 +49,7 @@ func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.Lawsui
 	tx := db.First(m, id)
 	err = tx.Error
 	if err != nil {
-		err = fmt.Errorf("Read() id: %v, error: %v", m.ID, err)
+		err = fmt.Errorf("Read() id: %v, error: %v", id, err)
 	}
 
 	return err
@@ -196,7 +196,7 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 		return err
 	}
 	if err != nil {
-		err = fmt.Errorf("Create_update() id: %v, error: %v", m.ID, err)
+		err = fmt.Errorf("Create_Update() id: %v, error: %v", m.ID, err)
 	}
 
 	return err

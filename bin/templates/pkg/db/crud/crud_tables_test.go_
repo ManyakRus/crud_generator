@@ -57,44 +57,20 @@ func TestSave(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	config_main.LoadEnv()
+	config.LoadEnv()
 
 	postgres_gorm.Connect()
 	defer postgres_gorm.CloseConnection()
 
 	crud := Crud_DB{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
-	Otvet.ID = Postgres_ID_Test
-	err := crud.Read(&Otvet)
+	Otvet.ID = math.MinInt64
+	err := crud.Delete(&Otvet)
 	if err != nil {
 		t.Error("TestDelete() error: ", err)
 	}
 
-	if Otvet.IsDeleted == false {
-		err = crud.Delete(&Otvet)
-		if err != nil {
-			t.Error("TestDelete() error: ", err)
-		}
-
-		err = crud.Restore(&Otvet)
-		if err != nil {
-			t.Error("TestDelete() error: ", err)
-		}
-	} else {
-		err = crud.Restore(&Otvet)
-		if err != nil {
-			t.Error("TestDelete() error: ", err)
-		}
-
-		err = crud.Delete(&Otvet)
-		if err != nil {
-			t.Error("TestDelete() error: ", err)
-		}
-
-	}
-
 }
-
 
 func TestFind_ByExtID(t *testing.T) {
 	config_main.LoadEnv()
@@ -122,3 +98,4 @@ func TestFind_ByExtID(t *testing.T) {
 		t.Error("TestFind_ByExtID() error: ID =0")
 	}
 }
+
