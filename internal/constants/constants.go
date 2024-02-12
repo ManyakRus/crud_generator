@@ -46,3 +46,4 @@ const STARTER_TABLES_PREFIX = "crud_starter_"
 const CRUD_TABLES_FREFIX = "crud_"
 
 const MODEL_TABLE_MANUAL_FILENAME = "model_table_manual.go_"
+const MODEL_TABLE_UPDATE_FILENAME = "model_table_update.go_"

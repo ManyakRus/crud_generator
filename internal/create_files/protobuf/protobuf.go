@@ -83,6 +83,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		}
 
 		TextProtoNew = TextProtoNew + FindTextProtoTable1(TextProto, Table1)
+		TextProtoNew = TextProtoNew + FindTextProtoTable1_UpdateEveryColumn(TextProto, Table1)
 	}
 
 	//найдём куда вставить текст
@@ -305,6 +306,103 @@ func TextRestore(ModelName string) string {
 // TextFindByExtId - возвращает текст .proto
 func TextFindByExtId(ModelName string) string {
 	Otvet := "rpc " + ModelName + "_FindByExtID(RequestExtID) returns (Response) {}"
+
+	return Otvet
+}
+
+// FindTextProtoTable1_UpdateEveryColumn - возвращает текст всех функций .proto для таблицы, обновления каждого поля таблицы
+func FindTextProtoTable1_UpdateEveryColumn(TextProto string, Table1 *types.Table) string {
+	Otvet := "\n" //"\n\t//\n"
+
+	//ModelName := Table1.NameGo
+
+	//сортировка по названию таблиц
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	//найдём новый текст для каждой таблицы
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
+		}
+		if create_files.Is_Common_Сolumn(Column1) == true {
+			continue
+		}
+
+		Otvet1 := FindTextUpdateEveryColumn(TextProto, Table1, Column1)
+		//TextFind := "rpc " + Table1.NameGo + "_"
+		//pos1 := FindLastGoodPos(TextProto, TextFind)
+		//if pos1 > 0 {
+		//	Otvet = Otvet[:pos1] + Otvet1 + Otvet[pos1:]
+		//} else {
+		//	Otvet = Otvet + Otvet1
+		//}
+		Otvet = Otvet + Otvet1
+	}
+
+	return Otvet
+}
+
+// FindTextUpdateEveryColumn - возвращает текст .proto функции Update_ColumnName()
+func FindTextUpdateEveryColumn(TextProto string, Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := ""
+	Otvet2 := TextUpdateEveryColumn(Table1, Column1)
+
+	//проверка такой текст уже есть
+	pos1 := strings.Index(TextProto, Otvet2)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	Otvet = "\t" + Otvet2 + "\n"
+
+	return Otvet
+}
+
+// FindTextRequest - возвращает имя message из .proto, в зависимости от типа
+func FindTextRequest(TypeGo string) string {
+	Otvet := "RequestID"
+
+	switch TypeGo {
+	case "int", "int64":
+
+		Otvet = "RequestId"
+	case "int32":
+		Otvet = "RequestInt32"
+	case "string":
+
+		Otvet = "RequestString"
+	case "time.Time":
+
+		Otvet = "RequestDate"
+	case "float32":
+		Otvet = "RequestFloat32"
+	case "float64":
+		Otvet = "RequestFloat64"
+	case "bool":
+		Otvet = "RequestBool"
+	}
+
+	return Otvet
+}
+
+// TextUpdateEveryColumn - возвращает текст .proto функции Update_ColumnName()
+func TextUpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := ""
+
+	ModelName := Table1.NameGo
+
+	TextRequest := "RequestID"
+	TypeGo := Column1.TypeGo
+	TextRequest = FindTextRequest(TypeGo)
+	ColumnName := Column1.NameGo
+
+	Otvet = "rpc " + ModelName + "_Update_" + ColumnName + "(" + TextRequest + ") returns (ResponseEmpty) {}"
+	//Otvet = Otvet + "\n"
 
 	return Otvet
 }

@@ -9,6 +9,8 @@ package grpc;
 
 option go_package = "./grpc_proto";
 
+import "google/protobuf/timestamp.proto";
+
 // sync_service - сервис обмена с Базой данных
 service Sync_service {
 }
@@ -74,5 +76,29 @@ message ResponseFloat64 {
 
 // Response - параметры ответа на клиент
 message ResponseEmpty {
+}
+
+// RequestDate - параметры запроса на сервер
+message RequestDate {
+    uint32 VersionModel= 1; //версия структуры модели
+    google.protobuf.Timestamp Date   = 2; // строка поиска
+}
+
+// RequestFloat64 - параметры запроса на сервер, передаётся float64
+message RequestFloat64 {
+    uint32 VersionModel= 1; //версия структуры модели
+    double Float64   = 2; // строка поиска
+}
+
+// RequestFloat32 - параметры запроса на сервер, передаётся float32
+message RequestFloat32 {
+    uint32 VersionModel= 1; //версия структуры модели
+    float Float32   = 2; // строка поиска
+}
+
+// RequestInt32 - параметры запроса на сервер, передаётся int32
+message RequestInt32 {
+    uint32 VersionModel= 1; //версия структуры модели
+    int32 Int32   = 2; // строка поиска
 }
 

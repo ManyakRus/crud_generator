@@ -68,6 +68,7 @@ type SettingsINI struct {
 	TEXT_MODULE_GENERATED            string
 	PREFIX_TABLE                     string
 	READY_ALIAS_FILENAME             string
+	NEED_CREATE_UPDATE_EVERY_COLUMN  bool
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -177,6 +178,7 @@ func FillSettings() {
 	Settings.TEMPLATES_CRUD_TEST_FILENAME = os.Getenv("TEMPLATES_CRUD_TEST_FILENAME")
 	Settings.TEMPLATES_ALIAS_FILENAME = os.Getenv("TEMPLATES_ALIAS_FILENAME")
 	Settings.READY_ALIAS_FILENAME = os.Getenv("READY_ALIAS_FILENAME")
+	Settings.NEED_CREATE_UPDATE_EVERY_COLUMN = BoolFromString(os.Getenv("NEED_CREATE_UPDATE_EVERY_COLUMN"))
 
 }
 

@@ -842,3 +842,50 @@ func DeleteLastUnderline(s string) string {
 
 	return Otvet
 }
+
+// FindLastGoodPos - возвращает позицию последнего нахождения, с новой строки
+func FindLastGoodPos(s, TextFind string) int {
+	Otvet := -1
+	pos1 := strings.LastIndex(s, TextFind)
+	if pos1 < 0 {
+		return Otvet
+	}
+	pos2 := strings.Index(s[pos1:], "\n")
+	if pos2 < 0 {
+		return Otvet
+	}
+	Otvet = pos1 + pos2 + 1
+
+	return Otvet
+}
+
+// AddInterfaceFunction - добавляет функцию в интерфейс
+func AddInterfaceFunction(s, TextAdd string) string {
+	Otvet := s
+
+	//Проверим такая функция уже есть
+	pos1 := strings.Index(Otvet, TextAdd)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	//найдём начало интефейса
+	sFind := " interface {"
+	pos1 = FindLastGoodPos(Otvet, sFind)
+	if pos1 < 0 {
+		log.Error("FindLastGoodPos() error: not found: ", sFind)
+		return Otvet
+	}
+
+	s2 := Otvet[pos1:]
+	pos2 := strings.Index(s2, "\n}")
+	if pos2 < 0 {
+		log.Error("FindLastGoodPos() error: not found: \\n")
+		return Otvet
+	}
+	PosStart := pos1 + pos2
+
+	Otvet = Otvet[:PosStart] + TextAdd + Otvet[PosStart:]
+
+	return Otvet
+}
