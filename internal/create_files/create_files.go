@@ -824,6 +824,7 @@ func DeleteEmptyLines(Text string) string {
 	Otvet = strings.ReplaceAll(Otvet, "\n\t//\n\n", "\n\n")
 	//Otvet = strings.ReplaceAll(Otvet, "\r\r", "\r")
 	//Otvet = strings.ReplaceAll(Otvet, "\r\n", "\n")
+	Otvet = strings.ReplaceAll(Otvet, "}\n\n", "}\n")
 	pos1 := strings.Index(Otvet, "\n\n\n")
 	if pos1 >= 0 {
 		Otvet = DeleteEmptyLines(Otvet)
@@ -888,4 +889,51 @@ func AddInterfaceFunction(s, TextAdd string) string {
 	Otvet = Otvet[:PosStart] + TextAdd + Otvet[PosStart:]
 
 	return Otvet
+}
+
+// FindTextProtobufRequest - возвращает имя message из .proto, в зависимости от типа, а также название поля
+func FindTextProtobufRequest(TypeGo string) (string, string) {
+	Otvet := "RequestID"
+	TextRequestFieldName := "ID"
+
+	switch TypeGo {
+	case "int", "int64":
+		{
+			Otvet = "RequestId"
+			TextRequestFieldName = "ID"
+		}
+
+	case "int32":
+		{
+			Otvet = "RequestInt32"
+			TextRequestFieldName = "Int32"
+		}
+	case "string":
+		{
+			Otvet = "RequestString"
+			TextRequestFieldName = "StringFind"
+		}
+	case "time.Time":
+		{
+			Otvet = "RequestDate"
+			TextRequestFieldName = "Date"
+		}
+	case "float32":
+		{
+			Otvet = "RequestFloat32"
+			TextRequestFieldName = "Float32"
+		}
+	case "float64":
+		{
+			Otvet = "RequestFloat64"
+			TextRequestFieldName = "Float64"
+		}
+	case "bool":
+		{
+			Otvet = "RequestBool"
+			TextRequestFieldName = "Bool"
+		}
+	}
+
+	return Otvet, TextRequestFieldName
 }

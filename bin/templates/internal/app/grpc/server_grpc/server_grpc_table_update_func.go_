@@ -1,0 +1,29 @@
+// LawsuitStatusType_Read - изменяет колонку ColumnName в базе данных
+func (s *ServerGRPC) LawsuitStatusType_Read(ctx context.Context, Request *grpc_proto.RequestId) (*grpc_proto.ResponseEmpty, error) {
+	var Otvet grpc_proto.ResponseEmpty
+	var err error
+
+	//проверим контекст уже отменён
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return &Otvet, err
+	}
+
+	//проверим совпадения версии модели
+	VersionServer := lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+	VersionClient := Request.VersionModel
+	if VersionServer != VersionClient {
+		err = ErrorModelVersion(lawsuit_status_types.LawsuitStatusType{})
+		return &Otvet, err
+	}
+
+	//запрос в БД
+	Model := &lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = Request.ID
+	err = Model.Read()
+	if err != nil {
+		return &Otvet, err
+	}
+
+	return &Otvet, err
+}

@@ -47,3 +47,6 @@ const CRUD_TABLES_FREFIX = "crud_"
 
 const MODEL_TABLE_MANUAL_FILENAME = "model_table_manual.go_"
 const MODEL_TABLE_UPDATE_FILENAME = "model_table_update.go_"
+
+const SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME = "server_grpc_table_update_func.go_"
+const SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME = "server_grpc_table_update_func_test.go_"

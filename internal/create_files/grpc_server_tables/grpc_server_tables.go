@@ -9,6 +9,7 @@ import (
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -38,6 +39,26 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
 				return err
 			}
+		}
+
+		//
+		if config.Settings.NEED_CREATE_UPDATE_EVERY_COLUMN == true {
+			//файлы grpc_server update
+			err = CreateFilesUpdateEveryColumn(Table1)
+			if err != nil {
+				log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			//тестовые файлы grpc_server update
+			if config.Settings.NEED_CREATE_GRPC_SERVER_TEST == true {
+				err = CreateFilesUpdateEveryColumnTest(Table1)
+				if err != nil {
+					log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+					return err
+				}
+			}
+
 		}
 	}
 	return err
@@ -339,6 +360,239 @@ func ConvertID(Text string, Table1 *types.Table) string {
 	}
 
 	Otvet = create_files.AddImport(Otvet, URL)
+
+	return Otvet
+}
+
+// CreateFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_server
+func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
+	var err error
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+
+	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME
+	TableName := strings.ToLower(Table1.Name)
+	DirReadyTable := DirReadyGRPCServer
+	FilenameReadyGRPCServerUpdate := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_update.go"
+
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
+	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateGRPCServer, " error: ", err)
+	}
+	TextGRPCServerUpdateFunc := string(bytes)
+
+	TextGRPCServer := "package " + config.Settings.TEMPLATE_FOLDERNAME_GRPC + "\n\n"
+	TextGRPCServer = TextGRPCServer + `import (
+	"context"
+	"github.com/ManyakRus/starter/micro"
+	)
+
+`
+
+	//заменим импорты
+	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
+	ModelTableURL := create_files.FindModelTableURL(TableName)
+	TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
+
+	ProtoURL := create_files.FindProtoURL()
+	TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+
+	ModelURL := create_files.FindModelURL()
+	TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
+
+	TextGRPCServer = ConvertID(TextGRPCServer, Table1)
+	//}
+
+	//создание текста
+	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc, Table1)
+	//ModelName := Table1.NameGo
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
+
+	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+
+	//удаление пустого импорта
+	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+	TextGRPCServer = create_files.DeleteEmptyLines(TextGRPCServer)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyGRPCServerUpdate, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// FindTextUpdateEveryColumn - возвращает текст для всех таблиц
+func FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc string, Table1 *types.Table) string {
+	Otvet := ""
+
+	//сортировка по названию таблиц
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	//найдём новый текст для каждой таблицы
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
+		}
+		if create_files.Is_Common_Сolumn(Column1) == true {
+			continue
+		}
+
+		TextColumn1 := FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc, Table1, Column1)
+		Otvet = Otvet + TextColumn1 + "\n\n"
+
+	}
+
+	return Otvet
+}
+
+// FindTextUpdateEveryColumn1 - возвращает текст для одной таблицы
+func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := TextGRPCServerUpdateFunc
+
+	ModelName := Table1.NameGo
+	ColumnName := Column1.NameGo
+	FuncName := "Update_" + ColumnName
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
+
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Read", ModelName+"_"+FuncName)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
+
+	return Otvet
+}
+
+// CreateFilesUpdateEveryColumnTest - создаёт 1 файл в папке grpc_server
+func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
+	var err error
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+
+	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME
+	TableName := strings.ToLower(Table1.Name)
+	DirReadyTable := DirReadyGRPCServer
+	FilenameReadyGRPCServerUpdate := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_update_test.go"
+
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
+	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateGRPCServer, " error: ", err)
+	}
+	TextGRPCServerUpdateFunc := string(bytes)
+
+	TextGRPCServer := "package " + config.Settings.TEMPLATE_FOLDERNAME_GRPC + "\n\n"
+	TextGRPCServer = TextGRPCServer + `import (
+	"context"
+	"github.com/ManyakRus/starter/config_main"
+	)
+
+`
+
+	//заменим импорты
+	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
+	ModelTableURL := create_files.FindModelTableURL(TableName)
+	TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
+
+	ProtoURL := create_files.FindProtoURL()
+	TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+
+	ModelURL := create_files.FindModelURL()
+	TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
+
+	CrudStarterURL := create_files.FindCrudStarterURL()
+	TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
+
+	TextGRPCServer = ConvertID(TextGRPCServer, Table1)
+	//}
+
+	//создание текста
+	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc, Table1)
+	//ModelName := Table1.NameGo
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
+
+	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+
+	//удаление пустого импорта
+	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+	TextGRPCServer = create_files.DeleteEmptyLines(TextGRPCServer)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyGRPCServerUpdate, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// FindTextUpdateEveryColumnTest - возвращает текст для всех таблиц
+func FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc string, Table1 *types.Table) string {
+	Otvet := ""
+
+	//сортировка по названию таблиц
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	//найдём новый текст для каждой таблицы
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
+		}
+		if create_files.Is_Common_Сolumn(Column1) == true {
+			continue
+		}
+
+		TextColumn1 := FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc, Table1, Column1)
+		Otvet = Otvet + TextColumn1 + "\n\n"
+
+	}
+
+	return Otvet
+}
+
+// FindTextUpdateEveryColumnTest1 - возвращает текст для одной таблицы
+func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := TextGRPCServerUpdateFunc
+
+	ModelName := Table1.NameGo
+	ColumnName := Column1.NameGo
+	FuncName := "Update_" + ColumnName
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
+
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Read", ModelName+"_"+FuncName)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
 
 	return Otvet
 }

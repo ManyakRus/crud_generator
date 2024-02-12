@@ -363,33 +363,6 @@ func FindTextUpdateEveryColumn(TextProto string, Table1 *types.Table, Column1 *t
 	return Otvet
 }
 
-// FindTextRequest - возвращает имя message из .proto, в зависимости от типа
-func FindTextRequest(TypeGo string) string {
-	Otvet := "RequestID"
-
-	switch TypeGo {
-	case "int", "int64":
-
-		Otvet = "RequestId"
-	case "int32":
-		Otvet = "RequestInt32"
-	case "string":
-
-		Otvet = "RequestString"
-	case "time.Time":
-
-		Otvet = "RequestDate"
-	case "float32":
-		Otvet = "RequestFloat32"
-	case "float64":
-		Otvet = "RequestFloat64"
-	case "bool":
-		Otvet = "RequestBool"
-	}
-
-	return Otvet
-}
-
 // TextUpdateEveryColumn - возвращает текст .proto функции Update_ColumnName()
 func TextUpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := ""
@@ -398,7 +371,7 @@ func TextUpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
 
 	TextRequest := "RequestID"
 	TypeGo := Column1.TypeGo
-	TextRequest = FindTextRequest(TypeGo)
+	TextRequest, _ = create_files.FindTextProtobufRequest(TypeGo)
 	ColumnName := Column1.NameGo
 
 	Otvet = "rpc " + ModelName + "_Update_" + ColumnName + "(" + TextRequest + ") returns (ResponseEmpty) {}"
