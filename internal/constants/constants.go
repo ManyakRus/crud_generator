@@ -50,3 +50,6 @@ const MODEL_TABLE_UPDATE_FILENAME = "model_table_update.go_"
 
 const SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME = "server_grpc_table_update_func.go_"
 const SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME = "server_grpc_table_update_func_test.go_"
+
+const GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME = "grpc_client_table_update_func.go_"
+const GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME = "grpc_client_table_update_func_test.go_"

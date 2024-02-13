@@ -1,0 +1,34 @@
+// Read - изменяет 1 поле Name в базе данных
+func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	// подключение
+	grpc_client.Connect_GRPC_NRPC()
+
+	// подготовка запроса
+	var versionModel = crud.GetVersionModel()
+
+	Request := &grpc_proto.RequestId{}
+	Request.ID = m.ID
+	Request.VersionModel = versionModel
+
+	ctxMain := context.Background()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(grpc_constants.GetTimeoutSeconds()))
+	defer ctxCancelFunc()
+
+	// запрос
+	if grpc_nrpc.NeedNRPC == true {
+		_, err = nrpc_client.Client.LawsuitStatusType_Read(Request)
+	} else {
+		_, err = grpc_client.Client.LawsuitStatusType_Read(ctx, Request)
+	}
+	if err != nil {
+		sError := err.Error()
+		if len(sError) >= len(grpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(grpc_constants.TEXT_ERROR_MODEL_VERSION)] == grpc_constants.TEXT_ERROR_MODEL_VERSION {
+			log.Panic("table: ", TableName, " error: ", err)
+		}
+		return err
+	}
+
+	return err
+}

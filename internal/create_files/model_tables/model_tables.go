@@ -316,7 +316,7 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	//Column1.TypeGo = Type_go
 	TextDefaultValue := ""
 	if Column1.IsIdentity == false {
-		TextDefaultValue = create_files.FindTextDefaultValue(Column1)
+		TextDefaultValue = create_files.FindTextDefaultGORMValue(Column1)
 	}
 	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)
 	Description := Column1.Description

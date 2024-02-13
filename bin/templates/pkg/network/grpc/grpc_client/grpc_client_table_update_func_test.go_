@@ -1,0 +1,14 @@
+func TestCrud_GRPC_Read(t *testing.T) {
+	config_main.LoadEnv()
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	crud := Crud_GRPC{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	err := crud.Read(&Otvet)
+
+	if err != nil {
+		t.Error("TestRead() error: ", err)
+	}
+}

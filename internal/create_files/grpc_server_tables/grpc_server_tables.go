@@ -52,7 +52,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 			//тестовые файлы grpc_server update
 			if config.Settings.NEED_CREATE_GRPC_SERVER_TEST == true {
-				err = CreateFilesUpdateEveryColumnTest(Table1)
+				err = CreateTestFilesUpdateEveryColumn(Table1)
 				if err != nil {
 					log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
 					return err
@@ -115,7 +115,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = ConvertID(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
 
 		//замена импортов на новые URL
 		//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
@@ -338,32 +338,6 @@ func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// ConvertID - заменяет ID на Alias
-func ConvertID(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	TableName := Table1.Name
-	IDName, _ := create_files.FindPrimaryKeyNameType(Table1)
-	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
-	if ok == false {
-		return Otvet
-	}
-
-	Otvet = strings.ReplaceAll(Otvet, "Request.ID", TextConvert+"(Request.ID)")
-	if TextConvert[:6] != "alias." {
-		return Otvet
-	}
-
-	URL := create_files.FindURL_Alias()
-	if URL == "" {
-		return Otvet
-	}
-
-	Otvet = create_files.AddImport(Otvet, URL)
-
-	return Otvet
-}
-
 // CreateFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_server
 func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	var err error
@@ -408,11 +382,16 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	ModelURL := create_files.FindModelURL()
 	TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
 
-	TextGRPCServer = ConvertID(TextGRPCServer, Table1)
+	TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
 	//}
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc, Table1)
+	// пустой файл не нужен
+	if TextUpdateEveryColumn == "" {
+		return err
+	}
+
 	//ModelName := Table1.NameGo
 	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
@@ -479,8 +458,8 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	return Otvet
 }
 
-// CreateFilesUpdateEveryColumnTest - создаёт 1 файл в папке grpc_server
-func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
+// CreateTestFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_server
+func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов
@@ -526,11 +505,15 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	CrudStarterURL := create_files.FindCrudStarterURL()
 	TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
-	TextGRPCServer = ConvertID(TextGRPCServer, Table1)
+	TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
 	//}
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc, Table1)
+	// пустой файл не нужен
+	if TextUpdateEveryColumn == "" {
+		return err
+	}
 	//ModelName := Table1.NameGo
 	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)

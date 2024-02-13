@@ -151,6 +151,9 @@ PREFIX_TABLE="table_"
 #PREFIX_MODEL - filename prefix for view model files
 PREFIX_MODEL=""
 
+#PREFIX_CLIENT_GRPC - filename prefix for grpc client files
+PREFIX_CLIENT_GRPC="grpc_"
+
 #COMMENT_MODEL_STRUCT - fill comments to every model structure
 COMMENT_MODEL_STRUCT="модель для таблицы "
 

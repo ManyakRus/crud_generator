@@ -13,7 +13,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
-	"log"
+	"github.com/ManyakRus/starter/log"
 	"sync"
 	"time"
 )

@@ -412,7 +412,8 @@ func FindCrudFunctionsURL() string {
 	return Otvet
 }
 
-func FindTextDefaultValue(Column1 *types.Column) string {
+// FindTextDefaultGORMValue - возвращает значение по умолчанию для столбца Column1 для тегов в GORM
+func FindTextDefaultGORMValue(Column1 *types.Column) string {
 	var Otvet string
 
 	ColumnName := Column1.Name
@@ -439,6 +440,22 @@ func FindTextDefaultValue(Column1 *types.Column) string {
 
 	if sValue != "" {
 		Otvet = ";default:" + sValue
+	}
+
+	return Otvet
+}
+
+// FindTextDefaultValue - возвращает значение по умолчанию для типа
+func FindTextDefaultValue(Type_go string) string {
+	var Otvet string
+
+	switch Type_go {
+	case "string":
+		Otvet = `""`
+	case "int", "int32", "int64", "float32", "float64", "uint", "uint32", "uint64":
+		Otvet = "0"
+	case "time.Time":
+		Otvet = "time.Time{}"
 	}
 
 	return Otvet
@@ -936,4 +953,30 @@ func FindTextProtobufRequest(TypeGo string) (string, string) {
 	}
 
 	return Otvet, TextRequestFieldName
+}
+
+// ConvertIdToAlias - заменяет ID на Alias
+func ConvertIdToAlias(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TableName := Table1.Name
+	IDName, _ := FindPrimaryKeyNameType(Table1)
+	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+	if ok == false {
+		return Otvet
+	}
+
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", TextConvert+"(Request.ID)")
+	if TextConvert[:6] != "alias." {
+		return Otvet
+	}
+
+	URL := FindURL_Alias()
+	if URL == "" {
+		return Otvet
+	}
+
+	Otvet = AddImport(Otvet, URL)
+
+	return Otvet
 }

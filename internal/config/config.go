@@ -62,11 +62,12 @@ type SettingsINI struct {
 	TEXT_DB_IS_DELETED               string
 	USE_DEFAULT_TEMPLATE             bool
 	PREFIX_SERVER_GRPC               string
+	PREFIX_CLIENT_GRPC               string
 	PREFIX_CRUD                      string
 	PREFIX_MODEL                     string
+	PREFIX_TABLE                     string
 	COMMENT_MODEL_STRUCT             string
 	TEXT_MODULE_GENERATED            string
-	PREFIX_TABLE                     string
 	READY_ALIAS_FILENAME             string
 	NEED_CREATE_UPDATE_EVERY_COLUMN  bool
 }
@@ -179,6 +180,7 @@ func FillSettings() {
 	Settings.TEMPLATES_ALIAS_FILENAME = os.Getenv("TEMPLATES_ALIAS_FILENAME")
 	Settings.READY_ALIAS_FILENAME = os.Getenv("READY_ALIAS_FILENAME")
 	Settings.NEED_CREATE_UPDATE_EVERY_COLUMN = BoolFromString(os.Getenv("NEED_CREATE_UPDATE_EVERY_COLUMN"))
+	Settings.PREFIX_CLIENT_GRPC = os.Getenv("PREFIX_CLIENT_GRPC")
 
 }
 
