@@ -1,0 +1,16 @@
+func TestRead(t *testing.T) {
+	config_main.LoadEnv()
+
+	postgres_gorm.Connect()
+	defer postgres_gorm.CloseConnection()
+
+	crud := Crud_DB{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	Otvet.ColumnName = DefaultValue
+	err := crud.Read(&Otvet)
+	if err != nil {
+		t.Error("TestRead() error: ", err)
+	}
+
+}

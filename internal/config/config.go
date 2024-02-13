@@ -14,62 +14,64 @@ var Settings SettingsINI
 
 // SettingsINI - структура для хранения всех нужных переменных окружения
 type SettingsINI struct {
-	INCLUDE_TABLES                   string
-	EXCLUDE_TABLES                   string
-	TEMPLATE_FOLDERNAME              string
-	TEMPLATE_FOLDERNAME_MODEL        string
-	TEMPLATE_FOLDERNAME_DB           string
-	TEMPLATE_FOLDERNAME_CRUD         string
-	TEMPLATE_FOLDERNAME_TABLES       string
-	TEMPLATE_FOLDERNAME_GRPC         string
-	TEMPLATE_FOLDERNAME_GRPC_PROTO   string
-	TEMPLATE_FOLDERNAME_GRPC_SERVER  string
-	TEMPLATE_FOLDERNAME_GRPC_CLIENT  string
-	TEMPLATE_FOLDERNAME_NRPC         string
-	TEMPLATE_FOLDERNAME_NRPC_SERVER  string
-	TEMPLATE_FOLDERNAME_NRPC_CLIENT  string
-	TEMPLATE_FOLDERNAME_GRPC_NRPC    string
-	TEMPLATE_SERVICE_NAME            string
-	TEMPLATE_FOLDERNAME_CRUD_STARTER string
-	TEMPLATE_FOLDERNAME_ALIAS        string
-	TEMPLATE_FOLDER_CRUD_FUNCTIONS   string
-	TEMPLATE_FOLDERNAME_MAIN         string
-	TEMPLATE_REPOSITORY_URL          string
-	TEMPLATE_EXTERNAL_PROTO_FILENAME string
-	TEMPLATES_CRUD_FILENAME          string
-	TEMPLATES_CRUD_TEST_FILENAME     string
-	TEMPLATES_ALIAS_FILENAME         string
-	NEED_CREATE_MODEL_STRUCT         bool
-	NEED_CREATE_MODEL_CRUD           bool
-	NEED_CREATE_DB                   bool
-	NEED_CREATE_DB_TEST              bool
-	NEED_CREATE_DB_TABLES            bool
-	NEED_CREATE_GRPC                 bool
-	NEED_CREATE_GRPC_SERVER_TEST     bool
-	NEED_CREATE_GRPC_CLIENT_TEST     bool
-	NEED_CREATE_NRPC                 bool
-	NEED_CREATE_NRPC_SERVER_TEST     bool
-	NEED_CREATE_NRPC_CLIENT_TEST     bool
-	NEED_CREATE_MANUAL_FILES         bool
-	SERVICE_NAME                     string
-	SERVICE_REPOSITORY_URL           string
-	TEXT_TEMPLATE_MODEL              string
-	TEXT_TEMPLATE_TABLENAME          string
-	HAS_IS_DELETED                   bool
-	READY_FOLDERNAME                 string
-	TEXT_DB_MODIFIED_AT              string
-	TEXT_DB_CREATED_AT               string
-	TEXT_DB_IS_DELETED               string
-	USE_DEFAULT_TEMPLATE             bool
-	PREFIX_SERVER_GRPC               string
-	PREFIX_CLIENT_GRPC               string
-	PREFIX_CRUD                      string
-	PREFIX_MODEL                     string
-	PREFIX_TABLE                     string
-	COMMENT_MODEL_STRUCT             string
-	TEXT_MODULE_GENERATED            string
-	READY_ALIAS_FILENAME             string
-	NEED_CREATE_UPDATE_EVERY_COLUMN  bool
+	INCLUDE_TABLES                                 string
+	EXCLUDE_TABLES                                 string
+	TEMPLATE_FOLDERNAME                            string
+	TEMPLATE_FOLDERNAME_MODEL                      string
+	TEMPLATE_FOLDERNAME_DB                         string
+	TEMPLATE_FOLDERNAME_CRUD                       string
+	TEMPLATE_FOLDERNAME_TABLES                     string
+	TEMPLATE_FOLDERNAME_GRPC                       string
+	TEMPLATE_FOLDERNAME_GRPC_PROTO                 string
+	TEMPLATE_FOLDERNAME_GRPC_SERVER                string
+	TEMPLATE_FOLDERNAME_GRPC_CLIENT                string
+	TEMPLATE_FOLDERNAME_NRPC                       string
+	TEMPLATE_FOLDERNAME_NRPC_SERVER                string
+	TEMPLATE_FOLDERNAME_NRPC_CLIENT                string
+	TEMPLATE_FOLDERNAME_GRPC_NRPC                  string
+	TEMPLATE_SERVICE_NAME                          string
+	TEMPLATE_FOLDERNAME_CRUD_STARTER               string
+	TEMPLATE_FOLDERNAME_ALIAS                      string
+	TEMPLATE_FOLDER_CRUD_FUNCTIONS                 string
+	TEMPLATE_FOLDERNAME_MAIN                       string
+	TEMPLATE_REPOSITORY_URL                        string
+	TEMPLATE_EXTERNAL_PROTO_FILENAME               string
+	TEMPLATES_CRUD_FILENAME                        string
+	TEMPLATES_CRUD_TEST_FILENAME                   string
+	TEMPLATES_ALIAS_FILENAME                       string
+	TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME      string
+	TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME string
+	NEED_CREATE_MODEL_STRUCT                       bool
+	NEED_CREATE_MODEL_CRUD                         bool
+	NEED_CREATE_DB                                 bool
+	NEED_CREATE_DB_TEST                            bool
+	NEED_CREATE_DB_TABLES                          bool
+	NEED_CREATE_GRPC                               bool
+	NEED_CREATE_GRPC_SERVER_TEST                   bool
+	NEED_CREATE_GRPC_CLIENT_TEST                   bool
+	NEED_CREATE_NRPC                               bool
+	NEED_CREATE_NRPC_SERVER_TEST                   bool
+	NEED_CREATE_NRPC_CLIENT_TEST                   bool
+	NEED_CREATE_MANUAL_FILES                       bool
+	SERVICE_NAME                                   string
+	SERVICE_REPOSITORY_URL                         string
+	TEXT_TEMPLATE_MODEL                            string
+	TEXT_TEMPLATE_TABLENAME                        string
+	HAS_IS_DELETED                                 bool
+	READY_FOLDERNAME                               string
+	TEXT_DB_MODIFIED_AT                            string
+	TEXT_DB_CREATED_AT                             string
+	TEXT_DB_IS_DELETED                             string
+	USE_DEFAULT_TEMPLATE                           bool
+	PREFIX_SERVER_GRPC                             string
+	PREFIX_CLIENT_GRPC                             string
+	PREFIX_CRUD                                    string
+	PREFIX_MODEL                                   string
+	PREFIX_TABLE                                   string
+	COMMENT_MODEL_STRUCT                           string
+	TEXT_MODULE_GENERATED                          string
+	READY_ALIAS_FILENAME                           string
+	NEED_CREATE_UPDATE_EVERY_COLUMN                bool
 }
 
 // FillSettings загружает переменные окружения в структуру из переменных окружения
@@ -181,6 +183,8 @@ func FillSettings() {
 	Settings.READY_ALIAS_FILENAME = os.Getenv("READY_ALIAS_FILENAME")
 	Settings.NEED_CREATE_UPDATE_EVERY_COLUMN = BoolFromString(os.Getenv("NEED_CREATE_UPDATE_EVERY_COLUMN"))
 	Settings.PREFIX_CLIENT_GRPC = os.Getenv("PREFIX_CLIENT_GRPC")
+	Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME = os.Getenv("TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME")
+	Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME = os.Getenv("TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME")
 
 }
 

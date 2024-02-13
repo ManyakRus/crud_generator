@@ -10,6 +10,7 @@ import (
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -33,9 +34,26 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 				return err
 			}
 		}
+
 		//тестовые файлы db
 		if config.Settings.NEED_CREATE_DB_TEST == true {
 			err = CreateTestFiles(Table1)
+			if err != nil {
+				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+		}
+
+		if config.Settings.NEED_CREATE_UPDATE_EVERY_COLUMN == true {
+			//файлы db update
+			err = CreateFilesUpdateEveryColumn(Table1)
+			if err != nil {
+				log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			//тестовые файлы db update
+			err = CreateTestFilesUpdateEveryColumn(Table1)
 			if err != nil {
 				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
 				return err
@@ -433,6 +451,262 @@ func RenameFunctions(TextDB string, Table1 *types.Table) string {
 	for _, v := range Rename1 {
 		Otvet = strings.ReplaceAll(Otvet, " "+v.Old+"(", " "+v.New+"(")
 	}
+
+	return Otvet
+}
+
+// CreateFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_client
+func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
+	var err error
+
+	TableName := strings.ToLower(Table1.Name)
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
+	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + micro.SeparatorFile()
+
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME
+	DirReadyTable := DirReadyCrud
+	FilenameReadyCrudUpdate := DirReadyTable + config.Settings.PREFIX_CRUD + TableName + "_update.go"
+
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
+	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
+	}
+	TextCrudUpdateFunc := string(bytes)
+
+	TextCrud := "package " + config.Settings.PREFIX_CRUD + TableName + "\n\n"
+	TextCrud = TextCrud + `import (
+	"context"
+	"fmt"
+	"time"
+	"github.com/ManyakRus/starter/contextmain"
+	"github.com/ManyakRus/starter/micro"
+	"github.com/ManyakRus/starter/postgres_gorm"
+	)
+
+`
+
+	//заменим импорты
+	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
+	DBConstantsURL := create_files.FindDBConstantsURL()
+	TextCrud = create_files.AddImport(TextCrud, DBConstantsURL)
+
+	ModelTableURL := create_files.FindModelTableURL(TableName)
+	TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+
+	TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
+	//}
+
+	//создание текста
+	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextCrudUpdateFunc, Table1)
+	// пустой файл не нужен
+	if TextUpdateEveryColumn == "" {
+		return err
+	}
+
+	//ModelName := Table1.NameGo
+	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextCrud = TextCrud + TextUpdateEveryColumn
+
+	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
+
+	//удаление пустого импорта
+	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+	TextCrud = create_files.DeleteEmptyLines(TextCrud)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyCrudUpdate, []byte(TextCrud), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// FindTextUpdateEveryColumn - возвращает текст для всех таблиц
+func FindTextUpdateEveryColumn(TextCrudUpdateFunc string, Table1 *types.Table) string {
+	Otvet := ""
+
+	//сортировка по названию таблиц
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	//найдём новый текст для каждой таблицы
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("FindTextUpdateEveryColumn() Table1.MapColumns[key1] = false")
+		}
+		if create_files.Is_Common_Сolumn(Column1) == true {
+			continue
+		}
+
+		TextColumn1 := FindTextUpdateEveryColumn1(TextCrudUpdateFunc, Table1, Column1)
+		Otvet = Otvet + TextColumn1 + "\n\n"
+
+	}
+
+	return Otvet
+}
+
+// FindTextUpdateEveryColumn1 - возвращает текст для одной таблицы
+func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := TextCrudUpdateFunc
+
+	ModelName := Table1.NameGo
+	ColumnName := Column1.NameGo
+	FuncName := "Update_" + ColumnName
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
+
+	//заменяем Read_ctx()
+	Otvet = strings.ReplaceAll(Otvet, " Read_ctx ", " "+FuncName+"_ctx ")
+	Otvet = strings.ReplaceAll(Otvet, " Read_ctx(", " "+FuncName+"_ctx(")
+	Otvet = strings.ReplaceAll(Otvet, ".Read_ctx(", "."+FuncName+"_ctx(")
+
+	//заменяем Read()
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Read", ModelName+"_"+FuncName)
+	Otvet = strings.ReplaceAll(Otvet, " Read ", " "+FuncName+" ")
+	Otvet = strings.ReplaceAll(Otvet, " Read(", " "+FuncName+"(")
+	Otvet = strings.ReplaceAll(Otvet, `"Read()`, `"`+FuncName+"()")
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
+	Otvet = strings.ReplaceAll(Otvet, " Name ", " "+ColumnName+" ")
+	Otvet = strings.ReplaceAll(Otvet, `"Name"`, `"`+ColumnName+`"`)
+	//Otvet = strings.ReplaceAll(Otvet, "m.ID", "m."+ColumnName)
+
+	return Otvet
+}
+
+// CreateTestFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_client
+func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
+	var err error
+
+	TableName := strings.ToLower(Table1.Name)
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
+	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + micro.SeparatorFile()
+
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME
+	DirReadyTable := DirReadyCrud
+	FilenameReadyCrudUpdate := DirReadyTable + config.Settings.PREFIX_CRUD + TableName + "_update_test.go"
+
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
+	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
+	}
+	TextCrudUpdateFunc := string(bytes)
+
+	TextCrud := "package " + config.Settings.PREFIX_CRUD + TableName + "\n\n"
+	TextCrud = TextCrud + `import (
+	"testing"
+	"errors"
+	"github.com/ManyakRus/starter/config_main"
+	"github.com/ManyakRus/starter/postgres_gorm"
+	)
+
+`
+
+	//заменим импорты
+	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
+	ModelTableURL := create_files.FindModelTableURL(TableName)
+	TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+
+	TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
+	//}
+
+	//создание текста
+	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextCrudUpdateFunc, Table1)
+	// пустой файл не нужен
+	if TextUpdateEveryColumn == "" {
+		return err
+	}
+	//ModelName := Table1.NameGo
+	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextCrud = TextCrud + TextUpdateEveryColumn
+
+	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
+
+	//удаление пустого импорта
+	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+	TextCrud = create_files.DeleteEmptyLines(TextCrud)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyCrudUpdate, []byte(TextCrud), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// FindTextUpdateEveryColumnTest - возвращает текст для всех таблиц
+func FindTextUpdateEveryColumnTest(TextCrudUpdateFunc string, Table1 *types.Table) string {
+	Otvet := ""
+
+	//сортировка по названию таблиц
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	//найдём новый текст для каждой таблицы
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("FindTextUpdateEveryColumnTest() Table1.MapColumns[key1] = false")
+		}
+		if create_files.Is_Common_Сolumn(Column1) == true {
+			continue
+		}
+
+		TextColumn1 := FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc, Table1, Column1)
+		Otvet = Otvet + TextColumn1 + "\n\n"
+
+	}
+
+	return Otvet
+}
+
+// FindTextUpdateEveryColumnTest1 - возвращает текст для одной таблицы
+func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := TextCrudUpdateFunc
+
+	ModelName := Table1.NameGo
+	ColumnName := Column1.NameGo
+	FuncName := "Update_" + ColumnName
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
+	DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
+
+	Otvet = strings.ReplaceAll(Otvet, " TestCrud_GRPC_Read(", " TestCrud_GRPC_"+FuncName+"(")
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
+	Otvet = strings.ReplaceAll(Otvet, "Otvet.Name", "Otvet."+ColumnName)
+	//Otvet = strings.ReplaceAll(Otvet, "Postgres_ID_Test", DefaultValue)
+	Otvet = strings.ReplaceAll(Otvet, "TestRead(", "Test"+FuncName+"(")
+	Otvet = strings.ReplaceAll(Otvet, ".Read(", "."+FuncName+"(")
+	Otvet = strings.ReplaceAll(Otvet, " DefaultValue", " "+DefaultValue)
 
 	return Otvet
 }

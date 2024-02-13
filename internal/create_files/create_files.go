@@ -456,6 +456,8 @@ func FindTextDefaultValue(Type_go string) string {
 		Otvet = "0"
 	case "time.Time":
 		Otvet = "time.Time{}"
+	case "bool":
+		Otvet = "false"
 	}
 
 	return Otvet
@@ -841,7 +843,7 @@ func DeleteEmptyLines(Text string) string {
 	Otvet = strings.ReplaceAll(Otvet, "\n\t//\n\n", "\n\n")
 	//Otvet = strings.ReplaceAll(Otvet, "\r\r", "\r")
 	//Otvet = strings.ReplaceAll(Otvet, "\r\n", "\n")
-	Otvet = strings.ReplaceAll(Otvet, "}\n\n", "}\n")
+	//Otvet = strings.ReplaceAll(Otvet, "}\n\n", "}\n")
 	pos1 := strings.Index(Otvet, "\n\n\n")
 	if pos1 >= 0 {
 		Otvet = DeleteEmptyLines(Otvet)

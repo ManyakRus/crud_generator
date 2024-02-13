@@ -117,7 +117,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
+		//TextGRPCClient = create_files.ReplaceServiceURLImports(TextGRPCClient)
 		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
 
 		//proto
@@ -353,7 +353,7 @@ func DeleteFuncTestFind_byExtID(Text, ModelName string, Table1 *types.Table) str
 	return Otvet
 }
 
-// CreateFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_server
+// CreateFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_client
 func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	var err error
 
@@ -377,9 +377,9 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPC_Client, " error: ", err)
 	}
-	TextGRPCServerUpdateFunc := string(bytes)
+	TextGRPC_ClientUpdateFunc := string(bytes)
 
-	TextGRPC_Client := "package " + config.Settings.TEMPLATE_FOLDERNAME_GRPC + "\n\n"
+	TextGRPC_Client := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
 	TextGRPC_Client = TextGRPC_Client + `import (
 	"context"
 	"time"
@@ -412,7 +412,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//}
 
 	//создание текста
-	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc, Table1)
+	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPC_ClientUpdateFunc, Table1)
 	// пустой файл не нужен
 	if TextUpdateEveryColumn == "" {
 		return err
@@ -436,7 +436,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 }
 
 // FindTextUpdateEveryColumn - возвращает текст для всех таблиц
-func FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc string, Table1 *types.Table) string {
+func FindTextUpdateEveryColumn(TextGRPC_ClientUpdateFunc string, Table1 *types.Table) string {
 	Otvet := ""
 
 	//сортировка по названию таблиц
@@ -456,7 +456,7 @@ func FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc string, Table1 *types.Ta
 			continue
 		}
 
-		TextColumn1 := FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc, Table1, Column1)
+		TextColumn1 := FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc, Table1, Column1)
 		Otvet = Otvet + TextColumn1 + "\n\n"
 
 	}
@@ -465,8 +465,8 @@ func FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc string, Table1 *types.Ta
 }
 
 // FindTextUpdateEveryColumn1 - возвращает текст для одной таблицы
-func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
-	Otvet := TextGRPCServerUpdateFunc
+func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := TextGRPC_ClientUpdateFunc
 
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
@@ -488,7 +488,7 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	return Otvet
 }
 
-// CreateTestFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_server
+// CreateTestFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_client
 func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	var err error
 
@@ -512,10 +512,10 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPC_Client, " error: ", err)
 	}
-	TextGRPCServerUpdateFunc := string(bytes)
+	TextGRPC_ClientUpdateFunc := string(bytes)
 
-	TextGRPCClient := "package " + config.Settings.TEMPLATE_FOLDERNAME_GRPC + "\n\n"
-	TextGRPCClient = TextGRPCClient + `import (
+	TextGRPC_Client := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
+	TextGRPC_Client = TextGRPC_Client + `import (
 	"testing"
 	"github.com/ManyakRus/starter/config_main"
 	)
@@ -525,39 +525,39 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//заменим импорты
 	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
 	GRPCClientURL := create_files.FindGRPClientURL()
-	TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPCClientURL)
+	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCClientURL)
 
 	ModelTableURL := create_files.FindModelTableURL(TableName)
-	TextGRPCClient = create_files.AddImport(TextGRPCClient, ModelTableURL)
+	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
 
-	TextGRPCClient = create_files.ConvertIdToAlias(TextGRPCClient, Table1)
+	TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
 	//}
 
 	//создание текста
-	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc, Table1)
+	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPC_ClientUpdateFunc, Table1)
 	// пустой файл не нужен
 	if TextUpdateEveryColumn == "" {
 		return err
 	}
 	//ModelName := Table1.NameGo
-	//TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	//TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextGRPCClient = TextGRPCClient + TextUpdateEveryColumn
+	//TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPC_Client = TextGRPC_Client + TextUpdateEveryColumn
 
-	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
+	TextGRPC_Client = config.Settings.TEXT_MODULE_GENERATED + TextGRPC_Client
 
 	//удаление пустого импорта
-	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
-	TextGRPCClient = create_files.DeleteEmptyLines(TextGRPCClient)
+	TextGRPC_Client = create_files.DeleteEmptyImport(TextGRPC_Client)
+	TextGRPC_Client = create_files.DeleteEmptyLines(TextGRPC_Client)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPC_ClientUpdate, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPC_ClientUpdate, []byte(TextGRPC_Client), constants.FILE_PERMISSIONS)
 
 	return err
 }
 
 // FindTextUpdateEveryColumnTest - возвращает текст для всех таблиц
-func FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc string, Table1 *types.Table) string {
+func FindTextUpdateEveryColumnTest(TextGRPC_ClientUpdateFunc string, Table1 *types.Table) string {
 	Otvet := ""
 
 	//сортировка по названию таблиц
@@ -577,7 +577,7 @@ func FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc string, Table1 *type
 			continue
 		}
 
-		TextColumn1 := FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc, Table1, Column1)
+		TextColumn1 := FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc, Table1, Column1)
 		Otvet = Otvet + TextColumn1 + "\n\n"
 
 	}
@@ -586,8 +586,8 @@ func FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc string, Table1 *type
 }
 
 // FindTextUpdateEveryColumnTest1 - возвращает текст для одной таблицы
-func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
-	Otvet := TextGRPCServerUpdateFunc
+func FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := TextGRPC_ClientUpdateFunc
 
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo

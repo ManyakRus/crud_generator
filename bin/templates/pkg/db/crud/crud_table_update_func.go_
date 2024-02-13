@@ -1,0 +1,40 @@
+// Read - изменяет 1 поле Name в базе данных
+func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	ctxMain := contextmain.GetContext()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	err = crud.Read_ctx(ctx, m)
+	return err
+}
+
+// Read_ctx - изменяет 1 поле Name в базе данных
+func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
+
+	//ID не должен быть =0
+	if m.ID == 0 {
+		err = errors.New("Read() error: ID=0")
+		return err
+	}
+
+	//
+	db := postgres_gorm.GetConnection()
+	db.WithContext(ctx)
+
+	//
+	tx := db.Model(&m).Update("Name", m.ID)
+	err = tx.Error
+	if err != nil {
+		err = fmt.Errorf("Read() id: %v, error: %v", m.ID, err)
+	}
+
+	return err
+}

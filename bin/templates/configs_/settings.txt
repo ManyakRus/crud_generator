@@ -174,3 +174,9 @@ TEMPLATES_CRUD_TEST_FILENAME="crud_tables_rapira_test.go_"
 
 #NEED_CREATE_UPDATE_EVERY_COLUMN - fill true if you want create Update_ColumnName() function for every column
 NEED_CREATE_UPDATE_EVERY_COLUMN=true
+
+#TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME - short filename of "crud_table_update_func.go_" file
+TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME="crud_table_update_func.go_"
+
+#TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME - short filename of "crud_table_update_func_test.go_" file
+TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME="crud_table_update_func_test.go_"
