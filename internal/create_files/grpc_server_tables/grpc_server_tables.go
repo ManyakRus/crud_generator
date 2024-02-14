@@ -373,17 +373,17 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 `
 
 	//заменим импорты
-	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
-	ModelTableURL := create_files.FindModelTableURL(TableName)
-	TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-	ProtoURL := create_files.FindProtoURL()
-	TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-	//ModelURL := create_files.FindModelURL()
-	//TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
+		//ModelURL := create_files.FindModelURL()
+		//TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
 
-	//}
+	}
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc, Table1)
@@ -397,10 +397,11 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
 
-	TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
-	TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
-
-	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
+		TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+	}
 
 	//удаление пустого импорта
 	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)

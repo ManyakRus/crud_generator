@@ -495,15 +495,15 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 `
 
 	//заменим импорты
-	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
-	DBConstantsURL := create_files.FindDBConstantsURL()
-	TextCrud = create_files.AddImport(TextCrud, DBConstantsURL)
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		DBConstantsURL := create_files.FindDBConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, DBConstantsURL)
 
-	ModelTableURL := create_files.FindModelTableURL(TableName)
-	TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-	//TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
-	//}
+		//TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
+	}
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextCrudUpdateFunc, Table1)

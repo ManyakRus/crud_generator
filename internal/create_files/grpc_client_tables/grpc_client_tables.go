@@ -389,27 +389,27 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 `
 
 	//заменим импорты
-	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
-	ProtoURL := create_files.FindProtoURL()
-	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ProtoURL)
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ProtoURL)
 
-	GRPCClientURL := create_files.FindGRPClientURL()
-	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCClientURL)
+		GRPCClientURL := create_files.FindGRPClientURL()
+		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCClientURL)
 
-	GRPCConstantsURL := create_files.FindGRPCConstantsURL()
-	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCConstantsURL)
+		GRPCConstantsURL := create_files.FindGRPCConstantsURL()
+		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCConstantsURL)
 
-	GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
-	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPC_NRPC_URL)
+		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
+		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPC_NRPC_URL)
 
-	NRPCClientURL := create_files.FindNRPClientURL()
-	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, NRPCClientURL)
+		NRPCClientURL := create_files.FindNRPClientURL()
+		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, NRPCClientURL)
 
-	ModelTableURL := create_files.FindModelTableURL(TableName)
-	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
 
-	//TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
-	//}
+		//TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
+	}
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPC_ClientUpdateFunc, Table1)
@@ -428,9 +428,11 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//удаление пустого импорта
 	TextGRPC_Client = create_files.DeleteEmptyImport(TextGRPC_Client)
 	TextGRPC_Client = create_files.DeleteEmptyLines(TextGRPC_Client)
-	TextGRPC_Client = create_files.CheckAndAddImportTime_FromText(TextGRPC_Client)
-	TextGRPC_Client = create_files.CheckAndAddImportTimestamp_FromText(TextGRPC_Client)
-	TextGRPC_Client = create_files.CheckAndAddImportAlias(TextGRPC_Client)
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPC_Client = create_files.CheckAndAddImportTime_FromText(TextGRPC_Client)
+		TextGRPC_Client = create_files.CheckAndAddImportTimestamp_FromText(TextGRPC_Client)
+		TextGRPC_Client = create_files.CheckAndAddImportAlias(TextGRPC_Client)
+	}
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPC_ClientUpdate, []byte(TextGRPC_Client), constants.FILE_PERMISSIONS)
