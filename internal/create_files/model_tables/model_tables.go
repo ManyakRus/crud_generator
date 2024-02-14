@@ -581,13 +581,19 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		if ok == false {
 			log.Panic("CreateFilesUpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_Common_Сolumn(Column1) == true {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 		TextNew1 := FindTextUpdateEveryColumn(Table1, Column1)
 		TextNew = TextNew + TextNew1
 	}
 
+	// пустой файл не нужен
+	if TextNew == "" {
+		return err
+	}
+
+	//
 	TextModel = TextModel + TextNew
 
 	//запись файла
@@ -635,7 +641,7 @@ func AddInterfaceUpdateEveryColumn(TextModel string, Table1 *types.Table) string
 		if ok == false {
 			log.Panic("CreateFilesUpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_Common_Сolumn(Column1) == true {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 		TextNew1 := FindTextInterfaceUpdateEveryColumn(Table1, Column1)

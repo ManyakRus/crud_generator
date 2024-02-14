@@ -483,6 +483,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	TextCrud := "package " + config.Settings.PREFIX_CRUD + TableName + "\n\n"
 	TextCrud = TextCrud + `import (
+	"errors"
 	"context"
 	"fmt"
 	"time"
@@ -501,7 +502,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	ModelTableURL := create_files.FindModelTableURL(TableName)
 	TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-	TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
+	//TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
 	//}
 
 	//создание текста
@@ -545,7 +546,7 @@ func FindTextUpdateEveryColumn(TextCrudUpdateFunc string, Table1 *types.Table) s
 		if ok == false {
 			log.Panic("FindTextUpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_Common_Сolumn(Column1) == true {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 
@@ -673,7 +674,7 @@ func FindTextUpdateEveryColumnTest(TextCrudUpdateFunc string, Table1 *types.Tabl
 		if ok == false {
 			log.Panic("FindTextUpdateEveryColumnTest() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_Common_Сolumn(Column1) == true {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 

@@ -160,6 +160,20 @@ func FindPrimaryKeyNameType(Table1 *types.Table) (string, string) {
 	return Otvet, Type
 }
 
+//// FindPrimaryKeyNameTypeGo - возвращает наименование и тип golang колонки PrimaryKey
+//func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
+//	Otvet := ""
+//	Type := ""
+//
+//	for _, Column1 := range Table1.MapColumns {
+//		if Column1.IsIdentity == true {
+//			return Column1.NameGo, Column1.TypeGo
+//		}
+//	}
+//
+//	return Otvet, Type
+//}
+
 // ReplacePrimaryKeyID - заменяет "ID" на название колонки PrimaryKey
 func ReplacePrimaryKeyID(Text string, Table1 *types.Table) string {
 	Otvet := Text
@@ -376,6 +390,15 @@ func FindDBConstantsURL() string {
 	return Otvet
 }
 
+// FindNRPCConstantsURL - возвращает URL репозитория с пакетом db "constants"
+func FindNRPCConstantsURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC + "/" + "nrpc_constants"
+
+	return Otvet
+}
+
 // FindCrudStarterURL - возвращает URL репозитория с пакетом "crud_starter"
 func FindCrudStarterURL() string {
 	Otvet := ""
@@ -530,6 +553,57 @@ func AddImportTime(TextModel string) string {
 	return Otvet
 }
 
+// AddImportTimestamp - добавляет покет в секцию Import, если его там нет
+func AddImportTimestamp(TextModel string) string {
+	Otvet := TextModel
+
+	//если уже есть импорт
+	pos1 := strings.Index(Otvet, `"google.golang.org/protobuf/types/known/timestamppb"`)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	//
+	pos1 = strings.Index(Otvet, "import (")
+	if pos1 < 0 {
+		log.Error("not found word: import (")
+		return TextModel
+	}
+
+	Otvet = Otvet[:pos1+8] + "\n\t" + `"google.golang.org/protobuf/types/known/timestamppb"` + Otvet[pos1+8:]
+
+	return Otvet
+}
+
+// CheckAndAddImportAlias - добавляет покет в секцию Alias, если его там нет
+func CheckAndAddImportAlias(TextModel string) string {
+	Otvet := TextModel
+
+	//если уже есть импорт
+	pos1 := strings.Index(Otvet, `/alias`)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	//если нету alias
+	pos1 = strings.Index(Otvet, `alias.`)
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	//
+	pos1 = strings.Index(Otvet, "import (")
+	if pos1 < 0 {
+		log.Error("not found word: import (")
+		return TextModel
+	}
+
+	AliasURL := FindURL_Alias()
+	Otvet = Otvet[:pos1+8] + "\n\t" + `"` + AliasURL + `"` + Otvet[pos1+8:]
+
+	return Otvet
+}
+
 // CheckAndAddImportTime_FromTable - добавляет пакет "time" в секцию Import, если его там нет
 func CheckAndAddImportTime_FromTable(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
@@ -554,6 +628,20 @@ func CheckAndAddImportTime_FromText(Text string) string {
 	}
 
 	Otvet = AddImportTime(Otvet)
+
+	return Otvet
+}
+
+// CheckAndAddImportTimestamp_FromText - добавляет пакет "time" в секцию Import, если его там нет
+func CheckAndAddImportTimestamp_FromText(Text string) string {
+	Otvet := Text
+
+	pos1 := strings.Index(Text, " timestamppb.")
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	Otvet = AddImportTimestamp(Otvet)
 
 	return Otvet
 }
@@ -958,50 +1046,71 @@ func FindTextProtobufRequest(TypeGo string) (string, string) {
 }
 
 // FindTextProtobufRequest_ID_Type - возвращает имя message из .proto для двух параметров ID + Type,в зависимости от типа, а также название поля
-func FindTextProtobufRequest_ID_Type(TypeGo string) (string, string) {
+// возвращает:
+// Otvet - имя message из .proto
+// TextRequestFieldName - название поля в Request
+// TextRequestFieldGolang - название поля в Request с преобразованием в тип гоу
+func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column, VariableName string) (string, string, string) {
 	Otvet := "RequestID"
 	TextRequestFieldName := "ID"
+	TextRequestFieldGolang := "ID"
+
+	TypeGo := Column1.TypeGo
+	TableName := Table1.Name
+	ColumnName := Column1.Name
 
 	switch TypeGo {
 	case "int", "int64":
 		{
 			Otvet = "Request_ID_Int64"
 			TextRequestFieldName = "Int64"
+			TextRequestFieldGolang = VariableName + "Int64"
 		}
 
 	case "int32":
 		{
 			Otvet = "Request_ID_Int32"
 			TextRequestFieldName = "Int32"
+			TextRequestFieldGolang = VariableName + "Int32"
 		}
 	case "string":
 		{
 			Otvet = "Request_ID_String"
 			TextRequestFieldName = "StringFind"
+			TextRequestFieldGolang = VariableName + "StringFind"
 		}
 	case "time.Time":
 		{
 			Otvet = "Request_ID_Date"
 			TextRequestFieldName = "Date"
+			TextRequestFieldGolang = VariableName + "Date.AsTime()"
 		}
 	case "float32":
 		{
 			Otvet = "Request_ID_Float32"
 			TextRequestFieldName = "Float32"
+			TextRequestFieldGolang = VariableName + "Float32"
 		}
 	case "float64":
 		{
 			Otvet = "Request_ID_Float64"
 			TextRequestFieldName = "Float64"
+			TextRequestFieldGolang = VariableName + "Float64"
 		}
 	case "bool":
 		{
 			Otvet = "Request_ID_Bool"
 			TextRequestFieldName = "Bool"
+			TextRequestFieldGolang = VariableName + "Bool"
 		}
 	}
 
-	return Otvet, TextRequestFieldName
+	TextConvert, ok := types.MapConvertID[TableName+"."+ColumnName]
+	if ok == true {
+		TextRequestFieldGolang = TextConvert + "(" + VariableName + TextRequestFieldName + ")"
+	}
+
+	return Otvet, TextRequestFieldName, TextRequestFieldGolang
 }
 
 // ConvertIdToAlias - заменяет ID на Alias
@@ -1026,6 +1135,86 @@ func ConvertIdToAlias(Text string, Table1 *types.Table) string {
 	}
 
 	Otvet = AddImport(Otvet, URL)
+
+	return Otvet
+}
+
+// FindTextConvertGolangTypeToProtobufType - возвращает имя переменной +  имя колонки, преобразованное в тип protobuf
+func FindTextConvertGolangTypeToProtobufType(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+	Otvet := VariableName + Column1.NameGo
+
+	//TableName := Table1.Name
+	//IDName := Column1.Name
+
+	////alias в Int64
+	//TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+	//if ok == true {
+	//	Otvet = TextConvert + "(" + VariableName + Column1.NameGo + ")"
+	//}
+
+	//time.Time в timestamppb
+	//if Column1.TypeGo == "time.Time" {
+	//	Otvet = "timestamppb.New(" + VariableName + Column1.NameGo + ")"
+	//}
+
+	//преобразуем alias в обычный тип, и дату в timestamp
+	switch Column1.TypeGo {
+	case "time.Time":
+		Otvet = "timestamppb.New(" + VariableName + Column1.NameGo + ")"
+	case "string":
+		Otvet = "string(" + VariableName + Column1.NameGo + ")"
+	case "int64":
+		Otvet = "int64(" + VariableName + Column1.NameGo + ")"
+	case "int32":
+		Otvet = "int32(" + VariableName + Column1.NameGo + ")"
+	case "bool":
+		Otvet = "bool(" + VariableName + Column1.NameGo + ")"
+	case "float32":
+		Otvet = "float32(" + VariableName + Column1.NameGo + ")"
+	case "float64":
+		Otvet = "float64(" + VariableName + Column1.NameGo + ")"
+	}
+
+	return Otvet
+}
+
+// FindTextConvertProtobufTypeToGolangType - возвращает имя переменной +  имя колонки, преобразованное в тип golang из protobuf
+func FindTextConvertProtobufTypeToGolangType(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+	Otvet := VariableName + Column1.NameGo
+
+	TableName := Table1.Name
+	IDName := Column1.Name
+
+	//alias в Int64
+	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+	if ok == true {
+		Otvet = TextConvert + "(" + VariableName + Column1.NameGo + ")"
+		return Otvet
+	}
+
+	//time.Time в timestamppb
+	if Column1.TypeGo == "time.Time" {
+		Otvet = VariableName + Column1.NameGo + ".AsTime()"
+		return Otvet
+	}
+
+	////преобразуем alias в обычный тип, и дату в timestamp
+	//switch Column1.TypeGo {
+	//case "time.Time":
+	//	Otvet = "timestamppb.New(" + VariableName + Column1.NameGo + ")"
+	//case "string":
+	//	Otvet = "string(" + VariableName + Column1.NameGo + ")"
+	//case "int64":
+	//	Otvet = "int64(" + VariableName + Column1.NameGo + ")"
+	//case "int32":
+	//	Otvet = "int32(" + VariableName + Column1.NameGo + ")"
+	//case "bool":
+	//	Otvet = "bool(" + VariableName + Column1.NameGo + ")"
+	//case "float32":
+	//	Otvet = "float32(" + VariableName + Column1.NameGo + ")"
+	//case "float64":
+	//	Otvet = "float64(" + VariableName + Column1.NameGo + ")"
+	//}
 
 	return Otvet
 }

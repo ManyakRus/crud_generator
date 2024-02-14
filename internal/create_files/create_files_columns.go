@@ -307,11 +307,20 @@ func Is_Column_ExtLinksStruct(Column1 *types.Column) bool {
 	return Otvet
 }
 
-// Is_Common_Сolumn - возвращает true если это общая колонка: table_name_id, table_row_idб is_group, parent_id, name или description, ext_id, created_at, modified_at, deleted_at, id
+// Is_Common_Сolumn - возвращает true если это общая колонка: table_name_id, table_row_id, is_group, parent_id, name или description, ext_id, created_at, modified_at, deleted_at, id
 func Is_Common_Сolumn(Column1 *types.Column) bool {
 	Otvet := false
 
 	Otvet = Is_Column_CommonStruct(Column1) || Is_Column_NameStruct(Column1) || Is_Column_GroupsStruct(Column1) || Is_Column_ExtLinksStruct(Column1)
+
+	return Otvet
+}
+
+// Is_NotNeedUpdate_Сolumn - возвращает true если это общая колонка: table_name_id, table_row_id, is_group, parent_id, ext_id, created_at, modified_at, deleted_at, id
+func Is_NotNeedUpdate_Сolumn(Column1 *types.Column) bool {
+	Otvet := false
+
+	Otvet = Is_Column_CommonStruct(Column1) || Is_Column_GroupsStruct(Column1) || Is_Column_ExtLinksStruct(Column1)
 
 	return Otvet
 }

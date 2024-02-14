@@ -329,7 +329,7 @@ func FindTextProtoTable1_UpdateEveryColumn(TextProto string, Table1 *types.Table
 		if ok == false {
 			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_Common_Сolumn(Column1) == true {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 
@@ -369,9 +369,9 @@ func TextUpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
 
 	ModelName := Table1.NameGo
 
-	TextRequest := "RequestID"
-	TypeGo := Column1.TypeGo
-	TextRequest, _ = create_files.FindTextProtobufRequest(TypeGo)
+	TextRequest := ""
+	//TypeGo := Column1.TypeGo
+	TextRequest, _, _ = create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "")
 	ColumnName := Column1.NameGo
 
 	Otvet = "rpc " + ModelName + "_Update_" + ColumnName + "(" + TextRequest + ") returns (ResponseEmpty) {}"

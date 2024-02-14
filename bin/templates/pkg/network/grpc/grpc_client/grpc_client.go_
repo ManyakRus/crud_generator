@@ -253,3 +253,15 @@ func Connect_GRPC_NRPC() {
 		}
 	}
 }
+
+// IsErrorModelVersion - возвращает true если ошибка TEXT_ERROR_MODEL_VERSION
+func IsErrorModelVersion(err error) bool {
+	Otvet := false
+
+	sError := err.Error()
+	if strings.Contains(sError, grpc_constants.TEXT_ERROR_MODEL_VERSION) == true {
+		Otvet = true
+	}
+
+	return Otvet
+}

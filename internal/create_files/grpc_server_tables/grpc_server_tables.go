@@ -363,7 +363,8 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	}
 	TextGRPCServerUpdateFunc := string(bytes)
 
-	TextGRPCServer := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
+	PackageName := micro.LastWord(config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER)
+	TextGRPCServer := "package " + PackageName + "\n\n"
 	TextGRPCServer = TextGRPCServer + `import (
 	"context"
 	"github.com/ManyakRus/starter/micro"
@@ -379,10 +380,9 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	ProtoURL := create_files.FindProtoURL()
 	TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-	ModelURL := create_files.FindModelURL()
-	TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
+	//ModelURL := create_files.FindModelURL()
+	//TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
 
-	TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
 	//}
 
 	//создание текста
@@ -396,6 +396,9 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
+
+	TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
+	TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
 
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
@@ -426,7 +429,7 @@ func FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc string, Table1 *types.Ta
 		if ok == false {
 			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_Common_Сolumn(Column1) == true {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 
@@ -445,13 +448,15 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest_ID_Type(Column1.TypeGo)
+	TextRequest, _, TextRequestFieldGolang := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
+
+	//ColumnNameGolang := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m.")
 
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update", ModelName+"_"+FuncName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
-	Otvet = strings.ReplaceAll(Otvet, "Request.FieldName", "Request."+TextRequestFieldName)
+	Otvet = strings.ReplaceAll(Otvet, "Request.FieldName", TextRequestFieldGolang)
 	Otvet = strings.ReplaceAll(Otvet, "Model.ColumnName", "Model."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Model.Update()", "Model."+FuncName+"()")
@@ -484,7 +489,8 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	}
 	TextGRPCServerUpdateFunc := string(bytes)
 
-	TextGRPCServer := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
+	PackageName := micro.LastWord(config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER)
+	TextGRPCServer := "package " + PackageName + "\n\n"
 	TextGRPCServer = TextGRPCServer + `import (
 	"context"
 	"github.com/ManyakRus/starter/config_main"
@@ -500,8 +506,8 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	ProtoURL := create_files.FindProtoURL()
 	TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-	ModelURL := create_files.FindModelURL()
-	TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
+	//ModelURL := create_files.FindModelURL()
+	//TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
 
 	CrudStarterURL := create_files.FindCrudStarterURL()
 	TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
@@ -549,7 +555,7 @@ func FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc string, Table1 *type
 		if ok == false {
 			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_Common_Сolumn(Column1) == true {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 
@@ -568,13 +574,13 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest_ID_Type(Column1.TypeGo)
+	TextRequest, TextRequestFieldName, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Model.")
 
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update(", ModelName+"_"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", "grpc_proto."+TextRequest)
-	Otvet = strings.ReplaceAll(Otvet, "Model.ColumnName", "Model."+TextRequestFieldName)
+	Otvet = strings.ReplaceAll(Otvet, "Model.ColumnName", TextRequestFieldName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 

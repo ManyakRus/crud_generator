@@ -12,7 +12,7 @@ func ErrorModelVersion(Model interface{}) error {
 
 	TypeName := micro.GetType(Model)
 
-	s := constants.TEXT_ERROR_MODEL_VERSION + " " + TypeName
+	s := grpc_constants.TEXT_ERROR_MODEL_VERSION + " " + TypeName
 	err = errors.New(s)
 	return err
 }

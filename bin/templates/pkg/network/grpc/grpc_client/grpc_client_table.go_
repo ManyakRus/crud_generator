@@ -68,9 +68,8 @@ func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 		Response, err = grpc_client.Client.LawsuitStatusType_Read(ctx, Request)
 	}
 	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(grpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(grpc_constants.TEXT_ERROR_MODEL_VERSION)] == grpc_constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
+		if grpc_client.IsErrorModelVersion(err) == true {
+			log.Panic(err)
 		}
 		return err
 	}
@@ -115,9 +114,8 @@ func (crud Crud_GRPC) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 		Response, err = grpc_client.Client.LawsuitStatusType_Create(ctx, Request)
 	}
 	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(grpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(grpc_constants.TEXT_ERROR_MODEL_VERSION)] == grpc_constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
+		if grpc_client.IsErrorModelVersion(err) == true {
+			log.Panic(err)
 		}
 		return err
 	}
@@ -162,9 +160,8 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 		Response, err = grpc_client.Client.LawsuitStatusType_Update(ctx, Request)
 	}
 	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(grpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(grpc_constants.TEXT_ERROR_MODEL_VERSION)] == grpc_constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
+		if grpc_client.IsErrorModelVersion(err) == true {
+			log.Panic(err)
 		}
 		return err
 	}
@@ -209,9 +206,8 @@ func (crud Crud_GRPC) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 		Response, err = grpc_client.Client.LawsuitStatusType_Save(ctx, Request)
 	}
 	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(grpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(grpc_constants.TEXT_ERROR_MODEL_VERSION)] == grpc_constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
+		if grpc_client.IsErrorModelVersion(err) == true {
+			log.Panic(err)
 		}
 		return err
 	}
@@ -252,9 +248,8 @@ func (crud Crud_GRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 		Response, err = grpc_client.Client.LawsuitStatusType_Delete(ctx, Request)
 	}
 	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(grpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(grpc_constants.TEXT_ERROR_MODEL_VERSION)] == grpc_constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
+		if grpc_client.IsErrorModelVersion(err) == true {
+			log.Panic(err)
 		}
 		return err
 	}
@@ -295,9 +290,8 @@ func (crud Crud_GRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 		Response, err = grpc_client.Client.LawsuitStatusType_Restore(ctx, Request)
 	}
 	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(grpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(grpc_constants.TEXT_ERROR_MODEL_VERSION)] == grpc_constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
+		if grpc_client.IsErrorModelVersion(err) == true {
+			log.Panic(err)
 		}
 		return err
 	}
@@ -339,9 +333,8 @@ func (crud Crud_GRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) er
 		Response, err = grpc_client.Client.LawsuitStatusType_FindByExtID(ctx, Request)
 	}
 	if err != nil {
-		sError := err.Error()
-		if sError[0:len(grpc_constants.TEXT_ERROR_MODEL_VERSION)] == grpc_constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
+		if grpc_client.IsErrorModelVersion(err) == true {
+			log.Panic(err)
 		}
 		return err
 	}

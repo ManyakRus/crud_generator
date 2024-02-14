@@ -408,7 +408,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	ModelTableURL := create_files.FindModelTableURL(TableName)
 	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
 
-	TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
+	//TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
 	//}
 
 	//создание текста
@@ -428,6 +428,9 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//удаление пустого импорта
 	TextGRPC_Client = create_files.DeleteEmptyImport(TextGRPC_Client)
 	TextGRPC_Client = create_files.DeleteEmptyLines(TextGRPC_Client)
+	TextGRPC_Client = create_files.CheckAndAddImportTime_FromText(TextGRPC_Client)
+	TextGRPC_Client = create_files.CheckAndAddImportTimestamp_FromText(TextGRPC_Client)
+	TextGRPC_Client = create_files.CheckAndAddImportAlias(TextGRPC_Client)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPC_ClientUpdate, []byte(TextGRPC_Client), constants.FILE_PERMISSIONS)
@@ -452,7 +455,7 @@ func FindTextUpdateEveryColumn(TextGRPC_ClientUpdateFunc string, Table1 *types.T
 		if ok == false {
 			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_Common_Сolumn(Column1) == true {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 
@@ -471,7 +474,11 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest_ID_Type(Column1.TypeGo)
+	TextRequest, TextRequestFieldName, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
+
+	ColumnNameGolang := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m.")
+
+	_, IDTypeGo := create_files.FindPrimaryKeyNameTypeGo(Table1)
 
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update", ModelName+"_"+FuncName)
 	Otvet = strings.ReplaceAll(Otvet, " Update ", " "+FuncName+" ")
@@ -479,8 +486,9 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", ColumnNameGolang)
+	Otvet = strings.ReplaceAll(Otvet, " m.ID", " "+IDTypeGo+"(m.ID)")
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", "m."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.FieldName", "Request."+TextRequestFieldName)
 
 	return Otvet
@@ -571,7 +579,7 @@ func FindTextUpdateEveryColumnTest(TextGRPC_ClientUpdateFunc string, Table1 *typ
 		if ok == false {
 			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_Common_Сolumn(Column1) == true {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 
@@ -590,7 +598,7 @@ func FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc string, Table1 *ty
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest_ID_Type(Column1.TypeGo)
+	TextRequest, TextRequestFieldName, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
 	DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
 
 	Otvet = strings.ReplaceAll(Otvet, "TestCrud_GRPC_Update(", "TestCrud_GRPC_"+FuncName+"(")

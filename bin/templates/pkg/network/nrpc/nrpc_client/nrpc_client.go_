@@ -16,7 +16,7 @@ import (
 	"github.com/nats-io/nats.go"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
-	nrpc_constants "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_constants"
 	"sync"
 
 	"os"

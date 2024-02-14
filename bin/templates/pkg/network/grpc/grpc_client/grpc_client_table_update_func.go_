@@ -24,9 +24,8 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 		_, err = grpc_client.Client.LawsuitStatusType_Update(ctx, Request)
 	}
 	if err != nil {
-		sError := err.Error()
-		if len(sError) >= len(grpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(grpc_constants.TEXT_ERROR_MODEL_VERSION)] == grpc_constants.TEXT_ERROR_MODEL_VERSION {
-			log.Panic("table: ", TableName, " error: ", err)
+		if grpc_client.IsErrorModelVersion(err) == true {
+			log.Panic(err)
 		}
 		return err
 	}

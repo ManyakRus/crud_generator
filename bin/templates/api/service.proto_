@@ -15,6 +15,8 @@ import "google/protobuf/timestamp.proto";
 service Sync_service {
 }
 
+// -------------------------- Request ----------------------------------------------
+
 // RequestId - параметры запроса на сервер
 message RequestId {
     uint32 VersionModel= 1; //версия структуры модели
@@ -34,7 +36,6 @@ message RequestString3 {
     string StringFind2   = 3; // строка поиска
     string StringFind3   = 4; // строка поиска
 }
-
 // RequestId - параметры запроса на сервер
 message RequestExtID {
     uint32 VersionModel= 1; //версия структуры модели
@@ -55,30 +56,22 @@ message RequestInnKpp {
     string Kpp	=3; // КПП
 }
 
-// RequestId - параметры запроса на сервер
+// RequestIdId - параметры запроса на сервер
 message RequestIdId {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 ID1   = 2; // id записи в БД
-    int64 ID2   = 3; // id записи в БД
+    int64 iD1   = 2; // id записи в БД
+    int64 iD2   = 3; // id записи в БД
 }
 
-
-
-// Response - параметры ответа на клиент
-message Response {
-    string ModelString 	= 1; //объект-модель в формате json
+// RequestIdIdId - параметры запроса на сервер
+message RequestIdIdId {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 iD1   = 2; // id записи в БД
+    int64 iD2   = 3; // id записи в БД
+    int64 iD3   = 4; // id записи в БД
 }
 
-// ResponseFloat64 - параметры ответа на клиент
-message ResponseFloat64 {
-    double Otvet 	= 1; //Ответ - число
-}
-
-// Response - параметры ответа на клиент
-message ResponseEmpty {
-}
-
-// RequestDate - параметры запроса на сервер
+// RequestDate - параметры запроса на сервер, передаётся Дата time.Time
 message RequestDate {
     uint32 VersionModel= 1; //версия структуры модели
     google.protobuf.Timestamp Date   = 2; // строка поиска
@@ -102,3 +95,80 @@ message RequestInt32 {
     int32 Int32   = 2; // строка поиска
 }
 
+// RequestBool - параметры запроса на сервер, передаётся bool
+message RequestBool {
+    uint32 VersionModel= 1; //версия структуры модели
+    bool Bool   = 2; // строка поиска
+}
+
+
+// Request_ID_Date - параметры запроса на сервер, передаётся ID + Дата time.Time
+message Request_ID_Date {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 iD = 2; 	// id записи в БД
+    google.protobuf.Timestamp Date = 3; // значение поиска
+}
+
+// Request_ID_Float64 - параметры запроса на сервер, передаётся ID + float64
+message Request_ID_Float64 {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 iD = 2; 	// id записи в БД
+    double Float64 = 3; // значение поиска
+}
+
+// Request_ID_Float32 - параметры запроса на сервер, передаётся ID + float32
+message Request_ID_Float32 {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 iD = 2; 	// id записи в БД
+    float Float32 = 3; // значение поиска
+}
+
+// Request_ID_Int32 - параметры запроса на сервер, передаётся ID + int32
+message Request_ID_Int32 {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 iD = 2; 	// id записи в БД
+    int32 Int32 = 3; // значение поиска
+}
+
+// Request_ID_Int64 - параметры запроса на сервер, передаётся ID + int64
+message Request_ID_Int64 {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 iD = 2; 	// id записи в БД
+    int64 Int64 = 3; // значение поиска
+}
+
+// Request_ID_Bool - параметры запроса на сервер, передаётся ID + bool
+message Request_ID_Bool {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 iD = 2; 	// id записи в БД
+    bool Bool = 3; // значение поиска
+}
+
+// Request_ID_String - параметры запроса на сервер, передаётся ID + string
+message Request_ID_String {
+    uint32 VersionModel= 1; //версия структуры модели
+    int64 iD = 2; 	// id записи в БД
+    string StringFind = 3; // строка поиска
+}
+
+// -------------------------- Response ----------------------------------------------
+
+// Response - возвращает строка json Модель
+message Response {
+    string ModelString 	= 1; //объект-модель в формате json
+}
+// ResponseFloat64 - возвращает float64
+message ResponseFloat64 {
+    double Otvet 	= 1; //Ответ - число
+}
+// ResponseInt64 - возвращает int64
+message ResponseInt64 {
+    int64 Otvet 	= 1; //Ответ - число
+}
+// Response - параметры ответа на клиент
+message ResponseEmpty {
+}
+// Response - параметры ответа на клиент
+message ResponseMass {
+    repeated string MassModelString 	= 1; //массив объект-модель в формате json
+}
