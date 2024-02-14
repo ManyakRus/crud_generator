@@ -1,14 +1,26 @@
-func TestCrud_GRPC_Read(t *testing.T) {
+func TestCrud_GRPC_Update(t *testing.T) {
 	config_main.LoadEnv()
+
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
 	crud := Crud_GRPC{}
-	Otvet := lawsuit_status_types.LawsuitStatusType{}
-	Otvet.ID = Postgres_ID_Test
-	err := crud.Read(&Otvet)
+
+	//прочитаем из БД
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = Postgres_ID_Test
+	err := crud.LawsuitStatusType_Read(&Model)
 
 	if err != nil {
-		t.Error("TestRead() error: ", err)
+		t.Error("TestCrud_GRPC_Update() Read() error: ", err)
+	}
+
+	//запишем в БД это же значение
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Model.ID
+	Otvet.ColumnName = Model.ColumnName
+	err = crud.LawsuitStatusType_Update(&Otvet)
+	if err != nil {
+		t.Error("TestCrud_GRPC_Update() Update() error: ", err)
 	}
 }

@@ -1,18 +1,29 @@
-func Test_server_LawsuitStatusType_Read(t *testing.T) {
+func Test_server_LawsuitStatusType_Update(t *testing.T) {
 	config_main.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
 
+	server1 := &ServerGRPC{}
 	ctx := context.Background()
+
+	//прочитаем из БД
 	Request := grpc_proto.RequestId{}
 	Request.ID = LawsuitStatusType_ID_Test
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
-
-	server1 := &ServerGRPC{}
-	Otvet, err := server1.LawsuitStatusType_Read(ctx, &Request)
+	Model, err := server1.LawsuitStatusType_Read(ctx, &Request)
 	if err != nil {
-		t.Error("Test_server_LawsuitStatusType_Read() error: ", err)
+		t.Error("Test_server_LawsuitStatusType_Update() Read() error: ", err)
 	}
 	if Otvet.ModelString == "" {
-		t.Error("Test_server_LawsuitStatusType_Read() error: ModelString=''")
+		t.Error("Test_server_LawsuitStatusType_Update() Read() error: ModelString=''")
+	}
+
+	//запишем в БД это же значение
+	Request := grpc_proto.RequestString{}
+	Request.ID = LawsuitStatusType_ID_Test
+	Request.ColumnName = Model.ColumnName
+	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+	_, err := server1.LawsuitStatusType_Update(ctx, &Request)
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_Update() Update() error: ", err)
 	}
 }

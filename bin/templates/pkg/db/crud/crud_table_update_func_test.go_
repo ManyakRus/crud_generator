@@ -1,16 +1,24 @@
-func TestRead(t *testing.T) {
+func TestUpdate(t *testing.T) {
 	config_main.LoadEnv()
 
 	postgres_gorm.Connect()
 	defer postgres_gorm.CloseConnection()
 
+	//прочитаем из БД
 	crud := Crud_DB{}
-	Otvet := lawsuit_status_types.LawsuitStatusType{}
-	Otvet.ID = Postgres_ID_Test
-	Otvet.ColumnName = DefaultValue
-	err := crud.Read(&Otvet)
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = Postgres_ID_Test
+	err := crud.Read(&Model)
 	if err != nil {
-		t.Error("TestRead() error: ", err)
+		t.Error("TestUpdate() Read() error: ", err)
 	}
 
+	//запишем в БД это же значение
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Postgres_ID_Test
+	Otvet.ColumnName = Model.ColumnName
+	err = crud.Update(&Otvet)
+	if err != nil {
+		t.Error("TestUpdate() Update() error: ", err)
+	}
 }

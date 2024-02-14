@@ -957,6 +957,53 @@ func FindTextProtobufRequest(TypeGo string) (string, string) {
 	return Otvet, TextRequestFieldName
 }
 
+// FindTextProtobufRequest_ID_Type - возвращает имя message из .proto для двух параметров ID + Type,в зависимости от типа, а также название поля
+func FindTextProtobufRequest_ID_Type(TypeGo string) (string, string) {
+	Otvet := "RequestID"
+	TextRequestFieldName := "ID"
+
+	switch TypeGo {
+	case "int", "int64":
+		{
+			Otvet = "Request_ID_Int64"
+			TextRequestFieldName = "Int64"
+		}
+
+	case "int32":
+		{
+			Otvet = "Request_ID_Int32"
+			TextRequestFieldName = "Int32"
+		}
+	case "string":
+		{
+			Otvet = "Request_ID_String"
+			TextRequestFieldName = "StringFind"
+		}
+	case "time.Time":
+		{
+			Otvet = "Request_ID_Date"
+			TextRequestFieldName = "Date"
+		}
+	case "float32":
+		{
+			Otvet = "Request_ID_Float32"
+			TextRequestFieldName = "Float32"
+		}
+	case "float64":
+		{
+			Otvet = "Request_ID_Float64"
+			TextRequestFieldName = "Float64"
+		}
+	case "bool":
+		{
+			Otvet = "Request_ID_Bool"
+			TextRequestFieldName = "Bool"
+		}
+	}
+
+	return Otvet, TextRequestFieldName
+}
+
 // ConvertIdToAlias - заменяет ID на Alias
 func ConvertIdToAlias(Text string, Table1 *types.Table) string {
 	Otvet := Text

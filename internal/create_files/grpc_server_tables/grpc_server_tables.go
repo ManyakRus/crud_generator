@@ -363,7 +363,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	}
 	TextGRPCServerUpdateFunc := string(bytes)
 
-	TextGRPCServer := "package " + config.Settings.TEMPLATE_FOLDERNAME_GRPC + "\n\n"
+	TextGRPCServer := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
 	TextGRPCServer = TextGRPCServer + `import (
 	"context"
 	"github.com/ManyakRus/starter/micro"
@@ -445,15 +445,16 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest_ID_Type(Column1.TypeGo)
 
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Read", ModelName+"_"+FuncName)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update", ModelName+"_"+FuncName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	Otvet = strings.ReplaceAll(Otvet, "Request.FieldName", "Request."+TextRequestFieldName)
+	Otvet = strings.ReplaceAll(Otvet, "Model.ColumnName", "Model."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
+	Otvet = strings.ReplaceAll(Otvet, "Model.Update()", "Model."+FuncName+"()")
 
 	return Otvet
 }
@@ -483,7 +484,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	}
 	TextGRPCServerUpdateFunc := string(bytes)
 
-	TextGRPCServer := "package " + config.Settings.TEMPLATE_FOLDERNAME_GRPC + "\n\n"
+	TextGRPCServer := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
 	TextGRPCServer = TextGRPCServer + `import (
 	"context"
 	"github.com/ManyakRus/starter/config_main"
@@ -567,15 +568,15 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest_ID_Type(Column1.TypeGo)
 
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Read", ModelName+"_"+FuncName)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update(", ModelName+"_"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", "grpc_proto."+TextRequest)
+	Otvet = strings.ReplaceAll(Otvet, "Model.ColumnName", "Model."+TextRequestFieldName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 
 	return Otvet
 }

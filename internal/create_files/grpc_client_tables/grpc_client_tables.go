@@ -471,19 +471,17 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest_ID_Type(Column1.TypeGo)
 
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Read", ModelName+"_"+FuncName)
-	Otvet = strings.ReplaceAll(Otvet, " Read ", " "+FuncName+" ")
-	Otvet = strings.ReplaceAll(Otvet, " Read(", " "+FuncName+"(")
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update", ModelName+"_"+FuncName)
+	Otvet = strings.ReplaceAll(Otvet, " Update ", " "+FuncName+" ")
+	Otvet = strings.ReplaceAll(Otvet, " Update(", " "+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
-	Otvet = strings.ReplaceAll(Otvet, " Name ", " "+ColumnName+" ")
-	Otvet = strings.ReplaceAll(Otvet, "m.ID", "m."+ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", "m."+ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Request.FieldName", "Request."+TextRequestFieldName)
 
 	return Otvet
 }
@@ -592,21 +590,18 @@ func FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc string, Table1 *ty
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest_ID_Type(Column1.TypeGo)
 	DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
 
-	Otvet = strings.ReplaceAll(Otvet, " TestCrud_GRPC_Read(", " TestCrud_GRPC_"+FuncName+"(")
+	Otvet = strings.ReplaceAll(Otvet, "TestCrud_GRPC_Update(", "TestCrud_GRPC_"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
-	Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", "Otvet."+ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Postgres_ID_Test", DefaultValue)
 	Otvet = strings.ReplaceAll(Otvet, "TestRead(", "Test"+FuncName+"(")
-	Otvet = strings.ReplaceAll(Otvet, "Otvet.ID == 0", "Otvet."+ColumnName+" == "+DefaultValue)
 	Otvet = strings.ReplaceAll(Otvet, "error: ID =0", "error: "+ColumnName+" ="+DefaultValue)
+	Otvet = strings.ReplaceAll(Otvet, "_Update(", "_"+FuncName+"(")
 
 	return Otvet
 }

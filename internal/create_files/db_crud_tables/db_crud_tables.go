@@ -695,17 +695,15 @@ func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Tab
 	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
 	DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
 
-	Otvet = strings.ReplaceAll(Otvet, " TestCrud_GRPC_Read(", " TestCrud_GRPC_"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
 	Otvet = strings.ReplaceAll(Otvet, "Otvet.Name", "Otvet."+ColumnName)
 	//Otvet = strings.ReplaceAll(Otvet, "Postgres_ID_Test", DefaultValue)
-	Otvet = strings.ReplaceAll(Otvet, "TestRead(", "Test"+FuncName+"(")
-	Otvet = strings.ReplaceAll(Otvet, ".Read(", "."+FuncName+"(")
+	Otvet = strings.ReplaceAll(Otvet, "TestUpdate(", "Test"+FuncName+"(")
+	Otvet = strings.ReplaceAll(Otvet, ".Update(", "."+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, " DefaultValue", " "+DefaultValue)
 
 	return Otvet

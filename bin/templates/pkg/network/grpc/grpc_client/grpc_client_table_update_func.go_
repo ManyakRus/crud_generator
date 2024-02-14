@@ -1,5 +1,5 @@
-// Read - изменяет 1 поле Name в базе данных
-func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
+// Update - изменяет 1 поле Name в базе данных
+func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	// подключение
@@ -10,6 +10,7 @@ func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 
 	Request := &grpc_proto.RequestId{}
 	Request.ID = m.ID
+	Request.FieldName = m.ColumnName
 	Request.VersionModel = versionModel
 
 	ctxMain := context.Background()
@@ -18,9 +19,9 @@ func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 
 	// запрос
 	if grpc_nrpc.NeedNRPC == true {
-		_, err = nrpc_client.Client.LawsuitStatusType_Read(Request)
+		_, err = nrpc_client.Client.LawsuitStatusType_Update(Request)
 	} else {
-		_, err = grpc_client.Client.LawsuitStatusType_Read(ctx, Request)
+		_, err = grpc_client.Client.LawsuitStatusType_Update(ctx, Request)
 	}
 	if err != nil {
 		sError := err.Error()
