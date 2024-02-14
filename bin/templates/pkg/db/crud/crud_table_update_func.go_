@@ -30,7 +30,7 @@ func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.Lawsui
 	db.WithContext(ctx)
 
 	//
-	tx := db.Model(&m).Update("Name", m.ID)
+	tx := db.Model(&m).Update("ColumnName", m.ColumnName)
 	err = tx.Error
 	if err != nil {
 		err = fmt.Errorf("Read() id: %v, error: %v", m.ID, err)

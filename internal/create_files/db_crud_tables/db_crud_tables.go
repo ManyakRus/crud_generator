@@ -583,8 +583,7 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
-	Otvet = strings.ReplaceAll(Otvet, " Name ", " "+ColumnName+" ")
-	Otvet = strings.ReplaceAll(Otvet, `"Name"`, `"`+ColumnName+`"`)
+	//Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	//Otvet = strings.ReplaceAll(Otvet, "m.ID", "m."+ColumnName)
 
 	return Otvet
@@ -619,7 +618,6 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextCrud := "package " + config.Settings.PREFIX_CRUD + TableName + "\n\n"
 	TextCrud = TextCrud + `import (
 	"testing"
-	"errors"
 	"github.com/ManyakRus/starter/config_main"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	)
