@@ -30,7 +30,14 @@ func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.Lawsui
 	db.WithContext(ctx)
 
 	//
-	tx := db.Model(&m).Update("ColumnName", m.ColumnName)
+	var tx *gorm.DB
+	Value := m.ColumnName
+	if 0==1 && Value == 0 {
+		tx = db.Model(&m).Update("ColumnName", gorm.Expr("NULL"))
+	} else {
+		tx = db.Model(&m).Update("ColumnName", Value)
+	}
+
 	err = tx.Error
 	if err != nil {
 		err = fmt.Errorf("Read() id: %v, error: %v", m.ID, err)

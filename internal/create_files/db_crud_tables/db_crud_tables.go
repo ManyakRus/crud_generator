@@ -487,6 +487,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	"context"
 	"fmt"
 	"time"
+	"gorm.io/gorm"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_gorm"
@@ -585,6 +586,13 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
 	//Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	//Otvet = strings.ReplaceAll(Otvet, "m.ID", "m."+ColumnName)
+
+	//внешние ключи заменяем 0 на null
+	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time{}") {
+		Otvet = strings.ReplaceAll(Otvet, "0==1", "1==1")
+		TextEqualEmpty := create_files.FindTextEqualEmpty(Column1, "Value")
+		Otvet = strings.ReplaceAll(Otvet, "Value == 0", TextEqualEmpty)
+	}
 
 	return Otvet
 }

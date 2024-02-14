@@ -1218,3 +1218,17 @@ func FindTextConvertProtobufTypeToGolangType(Table1 *types.Table, Column1 *types
 
 	return Otvet
 }
+
+// FindTextEqualEmpty - находит текст сравнение с пустым значением
+func FindTextEqualEmpty(Column1 *types.Column, VariableName string) string {
+	Otvet := ""
+
+	DefaultValue := FindTextDefaultValue(Column1.TypeGo)
+	Otvet = VariableName + "." + Column1.NameGo + " == " + DefaultValue
+
+	if DefaultValue == "time.Time{}" {
+		Otvet = VariableName + "." + Column1.NameGo + ".IsZero() == true"
+	}
+
+	return Otvet
+}
