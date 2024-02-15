@@ -494,6 +494,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPCServer := "package " + PackageName + "\n\n"
 	TextGRPCServer = TextGRPCServer + `import (
 	"context"
+	"testing"
 	"github.com/ManyakRus/starter/config_main"
 	)
 
@@ -513,7 +514,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	CrudStarterURL := create_files.FindCrudStarterURL()
 	TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
-	TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
+	//TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
 	//}
 
 	//создание текста
@@ -528,6 +529,12 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
 
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+
+	//Import Timestamp
+	TextGRPCServer = create_files.CheckAndAddImportTimestamp_FromText(TextGRPCServer)
+
+	//SkipNow() если нет строк в БД
+	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)
 
 	//удаление пустого импорта
 	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
@@ -575,14 +582,16 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Model.")
+	TextRequest2, TextRequestField, TextRequestFieldGolang := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request2.")
+	TextModelColumnName := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "Model.")
 
+	Otvet = strings.ReplaceAll(Otvet, "Request2.ColumnName", "Request2."+TextRequestField)
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", "grpc_proto."+TextRequest2)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update(", ModelName+"_"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", "grpc_proto."+TextRequest)
-	Otvet = strings.ReplaceAll(Otvet, "Model.ColumnName", TextRequestFieldName)
-	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Request.ColumnName", TextRequestFieldGolang)
+	Otvet = strings.ReplaceAll(Otvet, "Model.ColumnName", TextModelColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 
 	return Otvet

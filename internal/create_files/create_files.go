@@ -486,6 +486,24 @@ func FindTextDefaultValue(Type_go string) string {
 	return Otvet
 }
 
+// FindTextDefaultValueSQL - возвращает значение по умолчанию для типа
+func FindTextDefaultValueSQL(Type_go string) string {
+	var Otvet string
+
+	switch Type_go {
+	case "string":
+		Otvet = `''`
+	case "int", "int32", "int64", "float32", "float64", "uint", "uint32", "uint64":
+		Otvet = "0"
+	case "time.Time":
+		Otvet = "null"
+	case "bool":
+		Otvet = "false"
+	}
+
+	return Otvet
+}
+
 // FindURL_Alias - возвращает URL репозитория с пакетом "alias"
 func FindURL_Alias() string {
 	Otvet := ""

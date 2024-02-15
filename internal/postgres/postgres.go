@@ -285,7 +285,8 @@ func FillIDMinimum(MapTable map[string]*types.Table) {
 		if NameID == "" {
 			continue
 		}
-		TextSQL := "SELECT Min(" + NameID + ") from \"" + postgres_gorm.Settings.DB_SCHEMA + "\".\"" + TableName + "\""
+		DefaultValueSQL := create_files.FindTextDefaultValueSQL(TypeGo)
+		TextSQL := "SELECT Min(" + NameID + ") from \"" + postgres_gorm.Settings.DB_SCHEMA + "\".\"" + TableName + "\" WHERE " + NameID + " <> " + DefaultValueSQL
 		ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*60)
 		defer ctxCancelFunc()
 		db.WithContext(ctx)
