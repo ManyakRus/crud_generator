@@ -9,7 +9,7 @@ func TestCrud_GRPC_Update(t *testing.T) {
 	//прочитаем из БД
 	Model := lawsuit_status_types.LawsuitStatusType{}
 	Model.ID = Postgres_ID_Test
-	err := crud.LawsuitStatusType_Read(&Model)
+	err := crud.Read(&Model)
 
 	if err != nil {
 		t.Error("TestCrud_GRPC_Update() Read() error: ", err)
@@ -19,7 +19,7 @@ func TestCrud_GRPC_Update(t *testing.T) {
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Model.ID
 	Otvet.ColumnName = Model.ColumnName
-	err = crud.LawsuitStatusType_Update(&Otvet)
+	err = crud.Update_ColumnName(&Otvet)
 	if err != nil {
 		t.Error("TestCrud_GRPC_Update() Update() error: ", err)
 	}

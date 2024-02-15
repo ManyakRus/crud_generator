@@ -538,7 +538,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	ModelTableURL := create_files.FindModelTableURL(TableName)
 	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
 
-	TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
+	//TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
 	//}
 
 	//создание текста
@@ -553,6 +553,9 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPC_Client = TextGRPC_Client + TextUpdateEveryColumn
 
 	TextGRPC_Client = config.Settings.TEXT_MODULE_GENERATED + TextGRPC_Client
+
+	//SkipNow() если нет строк в БД
+	TextGRPC_Client = create_files.AddSkipNow(TextGRPC_Client, Table1)
 
 	//удаление пустого импорта
 	TextGRPC_Client = create_files.DeleteEmptyImport(TextGRPC_Client)
