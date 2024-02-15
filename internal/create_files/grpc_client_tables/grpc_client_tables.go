@@ -216,7 +216,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
 		TextFind := "const Postgres_ID_Test = "
-		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, TextFind+"1", TextFind+Table1.IDMinimum)
+		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, TextFind+"0", TextFind+Table1.IDMinimum)
 	}
 
 	// замена ID на PrimaryKey

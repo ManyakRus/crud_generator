@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-const Postgres_ID_Test = 1
+const Postgres_ID_Test = 0
 
 func TestRead(t *testing.T) {
 	config_main.LoadEnv()
@@ -23,8 +23,8 @@ func TestRead(t *testing.T) {
 		t.Error("TestRead() error: ", err)
 	}
 
-	if Otvet.ID == 0 {
-		t.Error(TableName + "_test.TestRead() error ID=0 ")
+	if Otvet.ID != Postgres_ID_Test {
+		t.Error(TableName + "_test.TestRead() error ID != ", Postgres_ID_Test)
 	} else {
 		t.Log(TableName+"_test.TestRead() Otvet: ", Otvet.ID)
 	}
@@ -44,8 +44,8 @@ func TestSave(t *testing.T) {
 		t.Error("TestSave() error: ", err)
 	}
 
-	if Otvet.ID == 0 {
-		t.Error(TableName + "_test.TestSave() error ID=0 ")
+	if Otvet.ID != Postgres_ID_Test {
+		t.Error(TableName + "_test.TestSave() error ID != ", Postgres_ID_Test)
 	}
 
 	err = crud.Save(&Otvet)
@@ -94,8 +94,8 @@ func TestFind_ByExtID(t *testing.T) {
 		t.Error("TestFind_ByExtID() error: ", err)
 	}
 
-	if Otvet.ID == 0 {
-		t.Error("TestFind_ByExtID() error: ID =0")
+	if Otvet.ID != Postgres_ID_Test {
+		t.Error("TestFind_ByExtID() error: ID != ", Postgres_ID_Test)
 	}
 }
 

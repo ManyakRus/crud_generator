@@ -1224,11 +1224,36 @@ func FindTextEqualEmpty(Column1 *types.Column, VariableName string) string {
 	Otvet := ""
 
 	DefaultValue := FindTextDefaultValue(Column1.TypeGo)
-	Otvet = VariableName + "." + Column1.NameGo + " == " + DefaultValue
+	Otvet = VariableName + " == " + DefaultValue
 
 	if DefaultValue == "time.Time{}" {
-		Otvet = VariableName + "." + Column1.NameGo + ".IsZero() == true"
+		Otvet = VariableName + ".IsZero() == true"
 	}
 
 	return Otvet
 }
+
+//// AddSkipNowEveryFunc - добавляет функцию SkipNow() для каждой тестовой функции
+//func AddSkipNowEveryFunc(Text string) string {
+//	Otvet := ""
+//
+//	sFind := "\nfunc "
+//	Mass := make([]string, 0)
+//	Mass = strings.Split(Text, sFind)
+//	for _, v := range Mass {
+//		pos1 := strings.Index(v, sFind)
+//		if pos1 < 0 {
+//			continue
+//		}
+//
+//		s2 := Text[pos1:]
+//		pos2 := strings.Index(s2, "\n")
+//		if pos2 < 0 {
+//			continue
+//		}
+//		v = v[:pos1+pos2] + "\n\tt.SkipNow() //нет строк в БД \n" + v[pos1+pos2:]
+//		Otvet = Otvet + v
+//	}
+//
+//	return Otvet
+//}

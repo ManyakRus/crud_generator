@@ -4,6 +4,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
+	"strings"
 )
 
 // Has_Column_ExtID_ConnectionID - возвращает true если есть поля ExtId и ConnectionID
@@ -316,11 +317,15 @@ func Is_Common_Сolumn(Column1 *types.Column) bool {
 	return Otvet
 }
 
-// Is_NotNeedUpdate_Сolumn - возвращает true если это общая колонка: table_name_id, table_row_id, is_group, parent_id, ext_id, created_at, modified_at, deleted_at, id
+// Is_NotNeedUpdate_Сolumn - возвращает true если не нужна функция UpdateColumnNAme(), например если это общая колонка: table_name_id, table_row_id, is_group, parent_id, ext_id, created_at, modified_at, deleted_at, id
 func Is_NotNeedUpdate_Сolumn(Column1 *types.Column) bool {
 	Otvet := false
 
 	Otvet = Is_Column_CommonStruct(Column1) || Is_Column_GroupsStruct(Column1) || Is_Column_ExtLinksStruct(Column1)
+
+	if strings.HasPrefix(Column1.Name, "DELETED_") == true {
+		Otvet = true
+	}
 
 	return Otvet
 }

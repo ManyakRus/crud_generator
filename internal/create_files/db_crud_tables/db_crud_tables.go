@@ -208,13 +208,13 @@ func CreateTestFiles(Table1 *types.Table) error {
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
 		TextFind := "const Postgres_ID_Test = "
-		TextDB = strings.ReplaceAll(TextDB, TextFind+"1", TextFind+Table1.IDMinimum)
+		TextDB = strings.ReplaceAll(TextDB, TextFind+"0", TextFind+Table1.IDMinimum)
 	}
 
-	//SkipNow()
+	//SkipNow() если нет строк в БД
 	TextDB = create_files.AddSkipNow(TextDB, Table1)
 
-	// замена ID на PrimaryKey
+	//замена ID на PrimaryKey
 	TextDB = create_files.ReplacePrimaryKeyID(TextDB, Table1)
 
 	//замена импортов на новые URL
@@ -588,10 +588,10 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	//Otvet = strings.ReplaceAll(Otvet, "m.ID", "m."+ColumnName)
 
 	//внешние ключи заменяем 0 на null
-	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time{}") {
-		Otvet = strings.ReplaceAll(Otvet, "0==1", "1==1")
-		TextEqualEmpty := create_files.FindTextEqualEmpty(Column1, "Value")
-		Otvet = strings.ReplaceAll(Otvet, "Value == 0", TextEqualEmpty)
+	TextEqualEmpty := create_files.FindTextEqualEmpty(Column1, "Value")
+	Otvet = strings.ReplaceAll(Otvet, "Value == 0", TextEqualEmpty)
+	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
+		Otvet = strings.ReplaceAll(Otvet, "0==1 && ", "")
 	}
 
 	return Otvet
@@ -637,7 +637,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	ModelTableURL := create_files.FindModelTableURL(TableName)
 	TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-	TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
+	//TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
 	//}
 
 	//создание текста
@@ -652,6 +652,9 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextCrud = TextCrud + TextUpdateEveryColumn
 
 	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
+
+	//SkipNow() если нет строк в БД
+	TextCrud = create_files.AddSkipNow(TextCrud, Table1)
 
 	//удаление пустого импорта
 	TextCrud = create_files.DeleteEmptyImport(TextCrud)

@@ -10,7 +10,7 @@ import (
 )
 
 // LawsuitStatusType_ID_Test - ID таблицы для тестирования
-const LawsuitStatusType_ID_Test = 1
+const LawsuitStatusType_ID_Test = 0
 
 func Test_server_LawsuitStatusType_Read(t *testing.T) {
 	config_main.LoadEnv()
