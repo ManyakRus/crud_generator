@@ -38,7 +38,7 @@ func LoadMappings() {
 // LoadNameReplace - загружает маппинг ТипБД = ТипGolang, из файла .json
 func LoadNameReplace() {
 	dir := micro.ProgramDir_bin()
-	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + "name_replace.json"
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + config.Settings.TEMPLATES_NAME_REPLACE_FILENAME
 
 	var err error
 
@@ -61,7 +61,7 @@ func LoadNameReplace() {
 // LoadNullable - загружает список полей которые могут быть null
 func LoadNullable() {
 	dir := micro.ProgramDir_bin()
-	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + "nullable.json"
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + config.Settings.TEMPLATES_NULLABLE_FILENAME
 
 	var err error
 
@@ -120,7 +120,7 @@ func Load_TEXT_DB_IS_DELETED() {
 // LoadConvertID - загружает map: ИмяТаблицы:Тип
 func LoadConvertID() {
 	dir := micro.ProgramDir_bin()
-	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + "convert_id.json"
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + config.Settings.TEMPLATES_CONVERT_ID_FILENAME
 
 	var err error
 
@@ -143,7 +143,7 @@ func LoadConvertID() {
 // LoadMapModelCrudDeleteFunctions - загружает map ИмяТаблицыPostgres:ИмяФункцииGolang
 func LoadMapModelCrudDeleteFunctions() {
 	dir := micro.ProgramDir_bin()
-	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + "model_crud_delete_functions.json"
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + config.Settings.TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME
 
 	var err error
 
@@ -184,7 +184,7 @@ func Load_TEXT_DB_CREATED_AT() {
 // LoadCrudFunctionsRename - загружает маппинг ИмяТаблицы:{old:"",new:""}
 func LoadCrudFunctionsRename() {
 	dir := micro.ProgramDir_bin()
-	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + "crud_functions_rename.json"
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + config.Settings.TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME
 
 	var err error
 

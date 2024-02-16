@@ -180,3 +180,18 @@ TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME="crud_table_update_func.go_"
 
 #TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME - short filename of "crud_table_update_func_test.go_" file
 TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME="crud_table_update_func_test.go_"
+
+#TEMPLATES_CONVERT_ID_FILENAME - short filename of "convert_id.json" file
+TEMPLATES_CONVERT_ID_FILENAME="convert_id.json"
+
+#TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME - short filename of "crud_functions_rename.json" file
+TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME="crud_functions_rename.json"
+
+#TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME - short filename of "model_crud_delete_functions.json" file
+TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME="model_crud_delete_functions.json"
+
+#TEMPLATES_NAME_REPLACE_FILENAME - short filename of "name_replace.json" file
+TEMPLATES_NAME_REPLACE_FILENAME="name_replace.json"
+
+#TEMPLATES_NULLABLE_FILENAME - short filename of "nullable.json" file
+TEMPLATES_NULLABLE_FILENAME="nullable.json"
