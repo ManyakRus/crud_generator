@@ -76,7 +76,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		}
 
 		//проверка что таблица нормальная
-		err1 := create_files.CheckGoodTable(Table1)
+		err1 := create_files.IsGoodTable(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue

@@ -201,13 +201,19 @@ func AddSkipNow(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// CheckGoodTable - возвращает ошибку если таблица неправильная
-func CheckGoodTable(Table1 *types.Table) error {
+// IsGoodTable - возвращает ошибку если таблица неправильная
+func IsGoodTable(Table1 *types.Table) error {
 	var err error
 
+	TableName := Table1.Name
 	ColumnName, _ := FindPrimaryKeyNameTypeGo(Table1)
 	if ColumnName == "" {
 		TextError := fmt.Sprint("Wrong table ", Table1.Name, " error: not found Primary key")
+		err = errors.New(TextError)
+	}
+
+	if strings.HasPrefix(TableName, "DELETED_") == true {
+		TextError := fmt.Sprint("Wrong table ", Table1.Name, " error: name = DELETED_")
 		err = errors.New(TextError)
 	}
 

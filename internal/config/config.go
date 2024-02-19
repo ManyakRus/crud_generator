@@ -79,54 +79,157 @@ type SettingsINI struct {
 	NEED_CREATE_UPDATE_EVERY_COLUMN                bool
 }
 
+func Getenv(Name string, IsRequired bool) string {
+	TextError := "Need fill OS environment variable: "
+	Otvet := os.Getenv(Name)
+	if IsRequired == true && Otvet == "" {
+		log.Error(TextError + Name)
+	}
+
+	return Otvet
+}
+
 // FillSettings загружает переменные окружения в структуру из переменных окружения
 func FillSettings() {
 	//dir := micro.ProgramDir_bin()
 
 	Settings = SettingsINI{}
-	Settings.INCLUDE_TABLES = os.Getenv("INCLUDE_TABLES")
-	Settings.EXCLUDE_TABLES = os.Getenv("EXCLUDE_TABLES")
-	Settings.TEMPLATE_FOLDERNAME = os.Getenv("TEMPLATE_FOLDERNAME")
-	Settings.TEMPLATE_FOLDERNAME_MODEL = os.Getenv("TEMPLATE_FOLDERNAME_MODEL")
-	Settings.TEMPLATE_FOLDERNAME_CRUD = os.Getenv("TEMPLATE_FOLDERNAME_CRUD")
-	Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_PROTO")
-	Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_SERVER")
-	Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_CLIENT")
-	Settings.TEMPLATE_FOLDERNAME_NRPC = os.Getenv("TEMPLATE_FOLDERNAME_NRPC")
-	Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER = os.Getenv("TEMPLATE_FOLDERNAME_NRPC_SERVER")
-	Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT = os.Getenv("TEMPLATE_FOLDERNAME_NRPC_CLIENT")
-	Settings.TEXT_TEMPLATE_MODEL = os.Getenv("TEXT_TEMPLATE_MODEL")
-	Settings.TEXT_TEMPLATE_TABLENAME = os.Getenv("TEXT_TEMPLATE_TABLENAME")
-	Settings.TEMPLATE_SERVICE_NAME = os.Getenv("TEMPLATE_SERVICE_NAME")
-	Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER = os.Getenv("TEMPLATE_FOLDERNAME_CRUD_STARTER")
 
-	SERVICE_REPOSITORY_URL := strings.ToLower(os.Getenv("SERVICE_REPOSITORY_URL"))
-	Settings.SERVICE_REPOSITORY_URL = SERVICE_REPOSITORY_URL
+	//Заполнение переменных окружения
+	Name := ""
+	s := ""
+	//
+	Name = "INCLUDE_TABLES"
+	s = Getenv(Name, false)
+	Settings.INCLUDE_TABLES = s
 
-	Settings.TEMPLATE_FOLDERNAME_ALIAS = os.Getenv("TEMPLATE_FOLDERNAME_ALIAS")
-	Settings.PREFIX_SERVER_GRPC = os.Getenv("PREFIX_SERVER_GRPC")
+	//
+	Name = "EXCLUDE_TABLES"
+	s = Getenv(Name, true)
+	Settings.EXCLUDE_TABLES = s
 
-	sHAS_IS_DELETED := os.Getenv("HAS_IS_DELETED")
+	//
+	Name = "TEMPLATE_FOLDERNAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME = s
 
-	sNEED_CREATE_DB := os.Getenv("NEED_CREATE_DB")
-	Settings.NEED_CREATE_DB = BoolFromString(sNEED_CREATE_DB)
+	//
+	Name = "TEMPLATE_FOLDERNAME_MODEL"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_MODEL = s
 
-	sNEED_CREATE_DB_TABLES := os.Getenv("NEED_CREATE_DB_TABLES")
-	Settings.NEED_CREATE_DB_TABLES = BoolFromString(sNEED_CREATE_DB_TABLES)
+	//
+	Name = "TEMPLATE_FOLDERNAME_CRUD"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_CRUD = s
 
-	sNEED_GRPC := os.Getenv("NEED_CREATE_GRPC")
-	Settings.NEED_CREATE_GRPC = BoolFromString(sNEED_GRPC)
+	//
+	Name = "TEMPLATE_FOLDERNAME_GRPC_PROTO"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO = s
 
-	sNEED_NRPC := os.Getenv("NEED_CREATE_NRPC")
-	Settings.NEED_CREATE_NRPC = BoolFromString(sNEED_NRPC)
+	//
+	Name = "TEMPLATE_FOLDERNAME_GRPC_SERVER"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER = s
 
-	sNEED_CREATE_MODEL_STRUCT := os.Getenv("NEED_CREATE_MODEL_STRUCT")
-	Settings.NEED_CREATE_MODEL_STRUCT = BoolFromString(sNEED_CREATE_MODEL_STRUCT)
+	//
+	Name = "TEMPLATE_FOLDERNAME_GRPC_CLIENT"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT = s
 
-	sNEED_CREATE_MODEL_CRUD := os.Getenv("NEED_CREATE_MODEL_CRUD")
-	Settings.NEED_CREATE_MODEL_CRUD = BoolFromString(sNEED_CREATE_MODEL_CRUD)
+	//
+	Name = "TEMPLATE_FOLDERNAME_NRPC"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_NRPC = s
 
-	Settings.SERVICE_NAME = os.Getenv("SERVICE_NAME")
+	//
+	Name = "TEMPLATE_FOLDERNAME_NRPC_SERVER"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER = s
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_NRPC_CLIENT"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT = s
+
+	//
+	Name = "TEXT_TEMPLATE_MODEL"
+	s = Getenv(Name, true)
+	Settings.TEXT_TEMPLATE_MODEL = s
+
+	//
+	Name = "TEXT_TEMPLATE_TABLENAME"
+	s = Getenv(Name, true)
+	Settings.TEXT_TEMPLATE_TABLENAME = s
+
+	//
+	Name = "TEMPLATE_SERVICE_NAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_SERVICE_NAME = s
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_CRUD_STARTER"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER = s
+
+	//
+	Name = "SERVICE_REPOSITORY_URL"
+	s = Getenv(Name, true)
+	s = strings.ToLower(s)
+	Settings.SERVICE_REPOSITORY_URL = s
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_ALIAS"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_ALIAS = s
+
+	//
+	Name = "PREFIX_SERVER_GRPC"
+	s = Getenv(Name, true)
+	Settings.PREFIX_SERVER_GRPC = s
+
+	//
+	Name = "HAS_IS_DELETED"
+	s = Getenv(Name, true)
+	Settings.HAS_IS_DELETED = BoolFromString(s)
+
+	//
+	Name = "NEED_CREATE_DB"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_DB = BoolFromString(s)
+
+	//
+	Name = "NEED_CREATE_DB_TABLES"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_DB_TABLES = BoolFromString(s)
+
+	//
+	Name = "NEED_CREATE_GRPC"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_GRPC = BoolFromString(s)
+
+	//
+	Name = "NEED_CREATE_NRPC"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_NRPC = BoolFromString(s)
+
+	//
+	Name = "NEED_CREATE_MODEL_STRUCT"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_MODEL_STRUCT = BoolFromString(s)
+
+	//
+	Name = "NEED_CREATE_MODEL_CRUD"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_MODEL_CRUD = BoolFromString(s)
+
+	//
+	Name = "SERVICE_NAME"
+	s = Getenv(Name, true)
+	Settings.SERVICE_NAME = s
+
+	//
 	Settings.READY_FOLDERNAME = strings.ToLower(Settings.SERVICE_NAME)
 
 	if Settings.TEMPLATE_FOLDERNAME == "" {
@@ -141,60 +244,175 @@ func FillSettings() {
 		Settings.TEXT_TEMPLATE_TABLENAME = "lawsuit_status_types"
 	}
 
-	sUSE_DEFAULT_TEMPLATE := os.Getenv("USE_DEFAULT_TEMPLATE")
-	Settings.USE_DEFAULT_TEMPLATE = BoolFromString(sUSE_DEFAULT_TEMPLATE)
+	//
+	Name = "USE_DEFAULT_TEMPLATE"
+	s = Getenv(Name, true)
+	Settings.USE_DEFAULT_TEMPLATE = BoolFromString(s)
 
-	HAS_IS_DELETED := BoolFromString(sHAS_IS_DELETED)
-	Settings.HAS_IS_DELETED = HAS_IS_DELETED
-	Settings.COMMENT_MODEL_STRUCT = os.Getenv("COMMENT_MODEL_STRUCT")
+	//
+	Name = "HAS_IS_DELETED"
+	s = Getenv(Name, true)
+	Settings.HAS_IS_DELETED = BoolFromString(s)
 
-	Settings.TEXT_MODULE_GENERATED = os.Getenv("TEXT_MODULE_GENERATED")
+	//
+	Name = "COMMENT_MODEL_STRUCT"
+	s = Getenv(Name, true)
+	Settings.COMMENT_MODEL_STRUCT = s
 
-	sNEED_CREATE_DB_TEST := os.Getenv("NEED_CREATE_DB_TEST")
-	NEED_CREATE_DB_TEST := BoolFromString(sNEED_CREATE_DB_TEST)
-	Settings.NEED_CREATE_DB_TEST = NEED_CREATE_DB_TEST
+	//
+	Name = "TEXT_MODULE_GENERATED"
+	s = Getenv(Name, true)
+	Settings.TEXT_MODULE_GENERATED = s
 
-	sNEED_CREATE_GRPC_SERVER_TEST := os.Getenv("NEED_CREATE_GRPC_SERVER_TEST")
-	NEED_CREATE_GRPC_SERVER_TEST := BoolFromString(sNEED_CREATE_GRPC_SERVER_TEST)
-	Settings.NEED_CREATE_GRPC_SERVER_TEST = NEED_CREATE_GRPC_SERVER_TEST
+	//
+	Name = "NEED_CREATE_DB_TEST"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_DB_TEST = BoolFromString(s)
 
-	sNEED_CREATE_GRPC_CLIENT_TEST := os.Getenv("NEED_CREATE_GRPC_CLIENT_TEST")
-	NEED_CREATE_GRPC_CLIENT_TEST := BoolFromString(sNEED_CREATE_GRPC_CLIENT_TEST)
-	Settings.NEED_CREATE_GRPC_CLIENT_TEST = NEED_CREATE_GRPC_CLIENT_TEST
+	//
+	Name = "NEED_CREATE_GRPC_SERVER_TEST"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_GRPC_SERVER_TEST = BoolFromString(s)
 
-	sNEED_CREATE_NRPC_SERVER_TEST := os.Getenv("NEED_CREATE_NRPC_SERVER_TEST")
-	NEED_CREATE_NRPC_TEST := BoolFromString(sNEED_CREATE_NRPC_SERVER_TEST)
-	Settings.NEED_CREATE_NRPC_SERVER_TEST = NEED_CREATE_NRPC_TEST
+	//
+	Name = "NEED_CREATE_GRPC_CLIENT_TEST"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_GRPC_CLIENT_TEST = BoolFromString(s)
 
-	sNEED_CREATE_NRPC_CLIENT_TEST := os.Getenv("NEED_CREATE_NRPC_CLIENT_TEST")
-	NEED_CREATE_NRPC_CLIENT_TEST := BoolFromString(sNEED_CREATE_NRPC_CLIENT_TEST)
-	Settings.NEED_CREATE_NRPC_CLIENT_TEST = NEED_CREATE_NRPC_CLIENT_TEST
+	//
+	Name = "NEED_CREATE_NRPC_SERVER_TEST"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_NRPC_SERVER_TEST = BoolFromString(s)
 
-	Settings.TEMPLATE_FOLDERNAME_MAIN = os.Getenv("TEMPLATE_FOLDERNAME_MAIN")
-	Settings.TEMPLATE_REPOSITORY_URL = os.Getenv("TEMPLATE_REPOSITORY_URL")
-	Settings.TEMPLATE_FOLDERNAME_GRPC = os.Getenv("TEMPLATE_FOLDERNAME_GRPC")
-	Settings.PREFIX_CRUD = os.Getenv("PREFIX_CRUD")
-	Settings.PREFIX_TABLE = os.Getenv("PREFIX_TABLE")
-	Settings.TEMPLATE_FOLDERNAME_TABLES = os.Getenv("TEMPLATE_FOLDERNAME_TABLES")
-	Settings.PREFIX_MODEL = os.Getenv("PREFIX_MODEL")
-	Settings.TEMPLATE_FOLDERNAME_DB = os.Getenv("TEMPLATE_FOLDERNAME_DB")
-	Settings.TEMPLATE_FOLDER_CRUD_FUNCTIONS = os.Getenv("TEMPLATE_FOLDER_CRUD_FUNCTIONS")
-	Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME = os.Getenv("TEMPLATE_EXTERNAL_PROTO_FILENAME")
-	Settings.TEMPLATE_FOLDERNAME_GRPC_NRPC = os.Getenv("TEMPLATE_FOLDERNAME_GRPC_NRPC")
-	Settings.NEED_CREATE_MANUAL_FILES = BoolFromString(os.Getenv("NEED_CREATE_MANUAL_FILES"))
-	Settings.TEMPLATES_CRUD_FILENAME = os.Getenv("TEMPLATES_CRUD_FILENAME")
-	Settings.TEMPLATES_CRUD_TEST_FILENAME = os.Getenv("TEMPLATES_CRUD_TEST_FILENAME")
-	Settings.TEMPLATES_ALIAS_FILENAME = os.Getenv("TEMPLATES_ALIAS_FILENAME")
-	Settings.READY_ALIAS_FILENAME = os.Getenv("READY_ALIAS_FILENAME")
-	Settings.NEED_CREATE_UPDATE_EVERY_COLUMN = BoolFromString(os.Getenv("NEED_CREATE_UPDATE_EVERY_COLUMN"))
-	Settings.PREFIX_CLIENT_GRPC = os.Getenv("PREFIX_CLIENT_GRPC")
-	Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME = os.Getenv("TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME")
-	Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME = os.Getenv("TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME")
-	Settings.TEMPLATES_CONVERT_ID_FILENAME = os.Getenv("TEMPLATES_CONVERT_ID_FILENAME")
-	Settings.TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME = os.Getenv("TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME")
-	Settings.TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME = os.Getenv("TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME")
-	Settings.TEMPLATES_NAME_REPLACE_FILENAME = os.Getenv("TEMPLATES_NAME_REPLACE_FILENAME")
-	Settings.TEMPLATES_NULLABLE_FILENAME = os.Getenv("TEMPLATES_NULLABLE_FILENAME")
+	//
+	Name = "NEED_CREATE_NRPC_CLIENT_TEST"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_NRPC_CLIENT_TEST = BoolFromString(s)
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_MAIN"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_MAIN = s
+
+	//
+	Name = "TEMPLATE_REPOSITORY_URL"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_REPOSITORY_URL = s
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_GRPC"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_GRPC = s
+
+	//
+	Name = "PREFIX_CRUD"
+	s = Getenv(Name, true)
+	Settings.PREFIX_CRUD = s
+
+	//
+	Name = "PREFIX_TABLE"
+	s = Getenv(Name, true)
+	Settings.PREFIX_TABLE = s
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_TABLES"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_TABLES = s
+
+	//
+	Name = "PREFIX_MODEL"
+	s = Getenv(Name, false)
+	Settings.PREFIX_MODEL = s
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_DB"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_DB = s
+
+	//
+	Name = "TEMPLATE_FOLDER_CRUD_FUNCTIONS"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDER_CRUD_FUNCTIONS = s
+
+	//
+	Name = "TEMPLATE_EXTERNAL_PROTO_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME = s
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_GRPC_NRPC"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_GRPC_NRPC = s
+
+	//
+	Name = "NEED_CREATE_MANUAL_FILES"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_MANUAL_FILES = BoolFromString(s)
+
+	//
+	Name = "TEMPLATES_CRUD_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_FILENAME = s
+
+	//
+	Name = "TEMPLATES_CRUD_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_ALIAS_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_ALIAS_FILENAME = s
+
+	//
+	Name = "READY_ALIAS_FILENAME"
+	s = Getenv(Name, true)
+	Settings.READY_ALIAS_FILENAME = s
+
+	//
+	Name = "NEED_CREATE_UPDATE_EVERY_COLUMN"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_UPDATE_EVERY_COLUMN = BoolFromString(s)
+
+	//
+	Name = "PREFIX_CLIENT_GRPC"
+	s = Getenv(Name, true)
+	Settings.PREFIX_CLIENT_GRPC = s
+
+	//
+	Name = "TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME = s
+
+	//
+	Name = "TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_CONVERT_ID_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CONVERT_ID_FILENAME = s
+
+	//
+	Name = "TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME = s
+
+	//
+	Name = "TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME = s
+
+	//
+	Name = "TEMPLATES_NAME_REPLACE_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_NAME_REPLACE_FILENAME = s
+
+	//
+	Name = "TEMPLATES_NULLABLE_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_NULLABLE_FILENAME = s
 }
 
 // CurrentDirectory - возвращает текущую директорию ОС

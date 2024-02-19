@@ -18,7 +18,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 	for _, Table1 := range MapAll {
 		//проверка что таблица нормальная
-		err1 := create_files.CheckGoodTable(Table1)
+		err1 := create_files.IsGoodTable(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue
