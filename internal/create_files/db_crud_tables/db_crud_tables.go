@@ -145,6 +145,9 @@ func CreateFiles(Table1 *types.Table) error {
 	//переименование функций
 	TextDB = RenameFunctions(TextDB, Table1)
 
+	//удаление пустых строк
+	TextDB = create_files.DeleteEmptyLines(TextDB)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
 
@@ -222,6 +225,9 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//удаление пустого импорта
 	TextDB = create_files.DeleteEmptyImport(TextDB)
+
+	//удаление пустых строк
+	TextDB = create_files.DeleteEmptyLines(TextDB)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -491,7 +497,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_gorm"
-	)
+)
 
 `
 
@@ -522,6 +528,8 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//удаление пустого импорта
 	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+
+	//удаление пустых строк
 	TextCrud = create_files.DeleteEmptyLines(TextCrud)
 
 	//запись файла
@@ -628,7 +636,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	"testing"
 	"github.com/ManyakRus/starter/config_main"
 	"github.com/ManyakRus/starter/postgres_gorm"
-	)
+)
 
 `
 
@@ -658,6 +666,8 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//удаление пустого импорта
 	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+
+	//удаление пустых строк
 	TextCrud = create_files.DeleteEmptyLines(TextCrud)
 
 	//запись файла

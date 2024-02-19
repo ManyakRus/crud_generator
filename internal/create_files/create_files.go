@@ -954,6 +954,13 @@ func DeleteEmptyLines(Text string) string {
 	if pos1 >= 0 {
 		Otvet = DeleteEmptyLines(Otvet)
 	}
+
+	//удалим последние 2 пустые строки
+	HasSuffix := strings.HasSuffix(Otvet, "\n\n")
+	if HasSuffix == true {
+		Otvet = Otvet[:len(Otvet)-1]
+	}
+
 	return Otvet
 }
 

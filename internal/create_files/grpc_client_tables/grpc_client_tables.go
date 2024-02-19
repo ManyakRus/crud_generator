@@ -156,6 +156,9 @@ func CreateFiles(Table1 *types.Table) error {
 	//удаление пустого импорта
 	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
 
+	//удаление пустых строк
+	TextGRPCClient = create_files.DeleteEmptyLines(TextGRPCClient)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
 
@@ -230,6 +233,9 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//удаление пустого импорта
 	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
+
+	//удаление пустых строк
+	TextGRPCClient = create_files.DeleteEmptyLines(TextGRPCClient)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
@@ -384,7 +390,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	"context"
 	"time"
 	"github.com/ManyakRus/starter/log"
-	)
+)
 
 `
 
@@ -427,12 +433,14 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//удаление пустого импорта
 	TextGRPC_Client = create_files.DeleteEmptyImport(TextGRPC_Client)
-	TextGRPC_Client = create_files.DeleteEmptyLines(TextGRPC_Client)
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPC_Client = create_files.CheckAndAddImportTime_FromText(TextGRPC_Client)
 		TextGRPC_Client = create_files.CheckAndAddImportTimestamp_FromText(TextGRPC_Client)
 		TextGRPC_Client = create_files.CheckAndAddImportAlias(TextGRPC_Client)
 	}
+
+	//удаление пустых строк
+	TextGRPC_Client = create_files.DeleteEmptyLines(TextGRPC_Client)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPC_ClientUpdate, []byte(TextGRPC_Client), constants.FILE_PERMISSIONS)
@@ -526,7 +534,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPC_Client = TextGRPC_Client + `import (
 	"testing"
 	"github.com/ManyakRus/starter/config_main"
-	)
+)
 
 `
 
@@ -559,6 +567,8 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//удаление пустого импорта
 	TextGRPC_Client = create_files.DeleteEmptyImport(TextGRPC_Client)
+
+	//удаление пустых строк
 	TextGRPC_Client = create_files.DeleteEmptyLines(TextGRPC_Client)
 
 	//запись файла

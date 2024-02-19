@@ -368,7 +368,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPCServer = TextGRPCServer + `import (
 	"context"
 	"github.com/ManyakRus/starter/micro"
-	)
+)
 
 `
 
@@ -405,6 +405,8 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//удаление пустого импорта
 	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+
+	//удаление пустых строк
 	TextGRPCServer = create_files.DeleteEmptyLines(TextGRPCServer)
 
 	//запись файла
@@ -496,7 +498,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	"context"
 	"testing"
 	"github.com/ManyakRus/starter/config_main"
-	)
+)
 
 `
 
@@ -538,6 +540,8 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//удаление пустого импорта
 	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+
+	//удаление пустых строк
 	TextGRPCServer = create_files.DeleteEmptyLines(TextGRPCServer)
 
 	//запись файла
