@@ -474,32 +474,45 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + micro.SeparatorFile()
 
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME
+	FilenameTemplateCrudFunc := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME
 	DirReadyTable := DirReadyCrud
-	FilenameReadyCrudUpdate := DirReadyTable + config.Settings.PREFIX_CRUD + TableName + "_update.go"
+	FilenameReadyCrudUpdateFunc := DirReadyTable + config.Settings.PREFIX_CRUD + TableName + "_update.go"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
-	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	//читаем шаблон файла, только функции
+	bytes, err := os.ReadFile(FilenameTemplateCrudFunc)
 	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
+		log.Panic("ReadFile() ", FilenameTemplateCrudFunc, " error: ", err)
 	}
 	TextCrudUpdateFunc := string(bytes)
 
-	TextCrud := "package " + config.Settings.PREFIX_CRUD + TableName + "\n\n"
-	TextCrud = TextCrud + `import (
-	"errors"
-	"context"
-	"fmt"
-	"time"
-	"gorm.io/gorm"
-	"github.com/ManyakRus/starter/contextmain"
-	"github.com/ManyakRus/starter/micro"
-	"github.com/ManyakRus/starter/postgres_gorm"
-)
+	//читаем шаблон файла, без функций
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_FILENAME
+	bytes, err = os.ReadFile(FilenameTemplateCrud)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
+	}
+	TextCrud := string(bytes)
+	TextCrud = TextCrud + "\n"
 
-`
+	//заменим имя пакета на новое
+	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
+
+	//	TextCrud := "package " + config.Settings.PREFIX_CRUD + TableName + "\n\n"
+	//	TextCrud = TextCrud + `import (
+	//	"errors"
+	//	"context"
+	//	"fmt"
+	//	"time"
+	//	"gorm.io/gorm"
+	//	"github.com/ManyakRus/starter/contextmain"
+	//	"github.com/ManyakRus/starter/micro"
+	//	"github.com/ManyakRus/starter/postgres_gorm"
+	//)
+	//
+	//`
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -533,7 +546,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextCrud = create_files.DeleteEmptyLines(TextCrud)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCrudUpdate, []byte(TextCrud), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyCrudUpdateFunc, []byte(TextCrud), constants.FILE_PERMISSIONS)
 
 	return err
 }
@@ -618,27 +631,40 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + micro.SeparatorFile()
 
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME
+	FilenameTemplateCrudFunc := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME
 	DirReadyTable := DirReadyCrud
 	FilenameReadyCrudUpdate := DirReadyTable + config.Settings.PREFIX_CRUD + TableName + "_update_test.go"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
-	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	//читаем шаблон файла, только функции
+	bytes, err := os.ReadFile(FilenameTemplateCrudFunc)
 	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
+		log.Panic("ReadFile() ", FilenameTemplateCrudFunc, " error: ", err)
 	}
 	TextCrudUpdateFunc := string(bytes)
 
-	TextCrud := "package " + config.Settings.PREFIX_CRUD + TableName + "\n\n"
-	TextCrud = TextCrud + `import (
-	"testing"
-	"github.com/ManyakRus/starter/config_main"
-	"github.com/ManyakRus/starter/postgres_gorm"
-)
+	//читаем шаблон файла, без функций
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME
+	bytes, err = os.ReadFile(FilenameTemplateCrud)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
+	}
+	TextCrud := string(bytes)
+	TextCrud = TextCrud + "\n"
 
-`
+	//заменим имя пакета на новое
+	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
+
+	//	TextCrud := "package " + config.Settings.PREFIX_CRUD + TableName + "\n\n"
+	//	TextCrud = TextCrud + `import (
+	//	"testing"
+	//	"github.com/ManyakRus/starter/config_main"
+	//	"github.com/ManyakRus/starter/postgres_gorm"
+	//)
+	//
+	//`
 
 	//заменим импорты
 	//if config.Settings.USE_DEFAULT_TEMPLATE == true {

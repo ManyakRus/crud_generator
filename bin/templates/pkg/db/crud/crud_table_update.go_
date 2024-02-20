@@ -1,0 +1,14 @@
+package crud_lawsuit_status_types
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"github.com/ManyakRus/starter/contextmain"
+	"github.com/ManyakRus/starter/micro"
+	"github.com/ManyakRus/starter/postgres_gorm"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"gorm.io/gorm"
+	"time"
+)

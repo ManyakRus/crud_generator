@@ -46,6 +46,8 @@ type SettingsINI struct {
 	TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME string
 	TEMPLATES_NAME_REPLACE_FILENAME                string
 	TEMPLATES_NULLABLE_FILENAME                    string
+	TEMPLATES_CRUD_TABLE_UPDATE_FILENAME           string
+	TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME      string
 	NEED_CREATE_MODEL_STRUCT                       bool
 	NEED_CREATE_MODEL_CRUD                         bool
 	NEED_CREATE_DB                                 bool
@@ -413,6 +415,17 @@ func FillSettings() {
 	Name = "TEMPLATES_NULLABLE_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_NULLABLE_FILENAME = s
+
+	//
+	Name = "TEMPLATES_CRUD_TABLE_UPDATE_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_TABLE_UPDATE_FILENAME = s
+
+	//
+	Name = "TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME = s
+
 }
 
 // CurrentDirectory - возвращает текущую директорию ОС

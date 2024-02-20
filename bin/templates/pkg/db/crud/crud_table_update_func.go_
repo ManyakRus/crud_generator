@@ -1,4 +1,4 @@
-// Read - изменяет 1 поле Name в базе данных
+// Read - изменяет 1 поле ColumnName в базе данных
 func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
@@ -10,7 +10,7 @@ func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	return err
 }
 
-// Read_ctx - изменяет 1 поле Name в базе данных
+// Read_ctx - изменяет 1 поле ColumnName в базе данных
 func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 

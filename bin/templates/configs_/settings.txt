@@ -195,3 +195,10 @@ TEMPLATES_NAME_REPLACE_FILENAME="name_replace.json"
 
 #TEMPLATES_NULLABLE_FILENAME - short filename of "nullable.json" file
 TEMPLATES_NULLABLE_FILENAME="nullable.json"
+
+#TEMPLATES_CRUD_TABLE_UPDATE_FILENAME - short filename of "crud_table_update.go_" file
+TEMPLATES_CRUD_TABLE_UPDATE_FILENAME="crud_table_update.go_"
+
+#TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME - short filename of "crud_table_update_test.go_" file
+TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME="crud_table_update_test.go_"
+
