@@ -372,27 +372,40 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	DirTemplatesGRPC_Client := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyGRPC_Client := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + micro.SeparatorFile()
 
-	FilenameTemplateGRPC_Client := DirTemplatesGRPC_Client + constants.GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME
+	FilenameTemplateGRPC_ClientFunc := DirTemplatesGRPC_Client + constants.GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME
 	DirReadyTable := DirReadyGRPC_Client
 	FilenameReadyGRPC_ClientUpdate := DirReadyTable + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_update.go"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
-	bytes, err := os.ReadFile(FilenameTemplateGRPC_Client)
+	//читаем шаблон файла, только функции
+	bytes, err := os.ReadFile(FilenameTemplateGRPC_ClientFunc)
 	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateGRPC_Client, " error: ", err)
+		log.Panic("ReadFile() ", FilenameTemplateGRPC_ClientFunc, " error: ", err)
 	}
-	TextGRPC_ClientUpdateFunc := string(bytes)
+	TextGRPC_Client_UpdateFunc := string(bytes)
 
-	TextGRPC_Client := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
-	TextGRPC_Client = TextGRPC_Client + `import (
-	"context"
-	"time"
-	"github.com/ManyakRus/starter/log"
-)
+	//читаем шаблон файла, без функций
+	FilenameTemplateCrud := DirTemplatesGRPC_Client + config.Settings.TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_FILENAME
+	bytes, err = os.ReadFile(FilenameTemplateCrud)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
+	}
+	TextGRPC_Client := string(bytes)
+	TextGRPC_Client = TextGRPC_Client + "\n"
 
-`
+	//заменим имя пакета на новое
+	TextGRPC_Client = create_files.ReplacePackageName(TextGRPC_Client, DirReadyTable)
+
+	//	TextGRPC_Client := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
+	//	TextGRPC_Client = TextGRPC_Client + `import (
+	//	"context"
+	//	"time"
+	//	"github.com/ManyakRus/starter/log"
+	//)
+	//
+	//`
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -418,7 +431,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	}
 
 	//создание текста
-	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPC_ClientUpdateFunc, Table1)
+	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPC_Client_UpdateFunc, Table1)
 	// пустой файл не нужен
 	if TextUpdateEveryColumn == "" {
 		return err
@@ -517,26 +530,39 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	DirTemplatesGRPC_Client := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyGRPC_Client := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + micro.SeparatorFile()
 
-	FilenameTemplateGRPC_Client := DirTemplatesGRPC_Client + constants.GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME
+	FilenameTemplateGRPC_ClientFunc := DirTemplatesGRPC_Client + constants.GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME
 	DirReadyTable := DirReadyGRPC_Client
 	FilenameReadyGRPC_ClientUpdate := DirReadyTable + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_update_test.go"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
-	bytes, err := os.ReadFile(FilenameTemplateGRPC_Client)
+	//читаем шаблон файла, только функции
+	bytes, err := os.ReadFile(FilenameTemplateGRPC_ClientFunc)
 	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateGRPC_Client, " error: ", err)
+		log.Panic("ReadFile() ", FilenameTemplateGRPC_ClientFunc, " error: ", err)
 	}
-	TextGRPC_ClientUpdateFunc := string(bytes)
+	TextGRPC_Client_UpdateFunc := string(bytes)
 
-	TextGRPC_Client := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
-	TextGRPC_Client = TextGRPC_Client + `import (
-	"testing"
-	"github.com/ManyakRus/starter/config_main"
-)
+	//читаем шаблон файла, без функций
+	FilenameTemplateCrud := DirTemplatesGRPC_Client + config.Settings.TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME
+	bytes, err = os.ReadFile(FilenameTemplateCrud)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
+	}
+	TextGRPC_Client := string(bytes)
+	TextGRPC_Client = TextGRPC_Client + "\n"
 
-`
+	//заменим имя пакета на новое
+	TextGRPC_Client = create_files.ReplacePackageName(TextGRPC_Client, DirReadyTable)
+
+	//	TextGRPC_Client := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
+	//	TextGRPC_Client = TextGRPC_Client + `import (
+	//	"testing"
+	//	"github.com/ManyakRus/starter/config_main"
+	//)
+	//
+	//`
 
 	//заменим импорты
 	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -550,7 +576,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//}
 
 	//создание текста
-	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPC_ClientUpdateFunc, Table1)
+	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPC_Client_UpdateFunc, Table1)
 	// пустой файл не нужен
 	if TextUpdateEveryColumn == "" {
 		return err

@@ -1,0 +1,116 @@
+package grpc_lawsuit_status_types
+
+import (
+	"github.com/ManyakRus/starter/config_main"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"testing"
+)
+
+func TestCrud_GRPC_Update_Code(t *testing.T) {
+	config_main.LoadEnv()
+
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	crud := Crud_GRPC{}
+
+	//прочитаем из БД
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = Postgres_ID_Test
+	err := crud.Read(&Model)
+
+	if err != nil {
+		t.Error("TestCrud_GRPC_Update_Code() Read() error: ", err)
+	}
+
+	//запишем в БД это же значение
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Model.ID
+	Otvet.Code = Model.Code
+	err = crud.Update_Code(&Otvet)
+	if err != nil {
+		t.Error("TestCrud_GRPC_Update_Code() Update() error: ", err)
+	}
+}
+
+func TestCrud_GRPC_Update_Description(t *testing.T) {
+	config_main.LoadEnv()
+
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	crud := Crud_GRPC{}
+
+	//прочитаем из БД
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = Postgres_ID_Test
+	err := crud.Read(&Model)
+
+	if err != nil {
+		t.Error("TestCrud_GRPC_Update_Description() Read() error: ", err)
+	}
+
+	//запишем в БД это же значение
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Model.ID
+	Otvet.Description = Model.Description
+	err = crud.Update_Description(&Otvet)
+	if err != nil {
+		t.Error("TestCrud_GRPC_Update_Description() Update() error: ", err)
+	}
+}
+
+func TestCrud_GRPC_Update_IsClosed(t *testing.T) {
+	config_main.LoadEnv()
+
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	crud := Crud_GRPC{}
+
+	//прочитаем из БД
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = Postgres_ID_Test
+	err := crud.Read(&Model)
+
+	if err != nil {
+		t.Error("TestCrud_GRPC_Update_IsClosed() Read() error: ", err)
+	}
+
+	//запишем в БД это же значение
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Model.ID
+	Otvet.IsClosed = Model.IsClosed
+	err = crud.Update_IsClosed(&Otvet)
+	if err != nil {
+		t.Error("TestCrud_GRPC_Update_IsClosed() Update() error: ", err)
+	}
+}
+
+func TestCrud_GRPC_Update_Name(t *testing.T) {
+	config_main.LoadEnv()
+
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	crud := Crud_GRPC{}
+
+	//прочитаем из БД
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = Postgres_ID_Test
+	err := crud.Read(&Model)
+
+	if err != nil {
+		t.Error("TestCrud_GRPC_Update_Name() Read() error: ", err)
+	}
+
+	//запишем в БД это же значение
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = Model.ID
+	Otvet.Name = Model.Name
+	err = crud.Update_Name(&Otvet)
+	if err != nil {
+		t.Error("TestCrud_GRPC_Update_Name() Update() error: ", err)
+	}
+}
