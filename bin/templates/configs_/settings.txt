@@ -207,3 +207,10 @@ TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_FILENAME="grpc_client_table_update.go_"
 
 #TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME - short filename of "grpc_client_table_update_test.go_" file
 TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME="grpc_client_table_update_test.go_"
+
+#TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME - short filename of "server_grpc_table_update.go_" file
+TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME="server_grpc_table_update.go_"
+
+#TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME - short filename of "server_grpc_table_update_test.go_" file
+TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME="server_grpc_table_update_test.go_"
+

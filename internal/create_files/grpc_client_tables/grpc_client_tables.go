@@ -409,6 +409,8 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPC_Client = create_files.DeleteTemplateRepositoryImports(TextGRPC_Client)
+
 		ProtoURL := create_files.FindProtoURL()
 		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ProtoURL)
 
@@ -565,15 +567,17 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//`
 
 	//заменим импорты
-	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
-	GRPCClientURL := create_files.FindGRPClientURL()
-	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCClientURL)
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPC_Client = create_files.DeleteTemplateRepositoryImports(TextGRPC_Client)
 
-	ModelTableURL := create_files.FindModelTableURL(TableName)
-	TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
+		GRPCClientURL := create_files.FindGRPClientURL()
+		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCClientURL)
 
-	//TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
-	//}
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
+
+		//TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
+	}
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPC_Client_UpdateFunc, Table1)

@@ -50,6 +50,8 @@ type SettingsINI struct {
 	TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME        string
 	TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_FILENAME      string
 	TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME string
+	TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME      string
+	TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME string
 	NEED_CREATE_MODEL_STRUCT                         bool
 	NEED_CREATE_MODEL_CRUD                           bool
 	NEED_CREATE_DB                                   bool
@@ -438,6 +440,15 @@ func FillSettings() {
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME = s
 
+	//
+	Name = "TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME = s
 }
 
 // CurrentDirectory - возвращает текущую директорию ОС

@@ -349,31 +349,46 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 
-	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME
+	FilenameTemplateGRPCServerFunc := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCServer
-	FilenameReadyGRPCServerUpdate := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_update.go"
+	FilenameReadyGRPCServerUpdateFunc := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_update.go"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
-	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)
+	//читаем шаблон файла, только функции
+	bytes, err := os.ReadFile(FilenameTemplateGRPCServerFunc)
 	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateGRPCServer, " error: ", err)
+		log.Panic("ReadFile() ", FilenameTemplateGRPCServerFunc, " error: ", err)
 	}
 	TextGRPCServerUpdateFunc := string(bytes)
 
-	PackageName := micro.LastWord(config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER)
-	TextGRPCServer := "package " + PackageName + "\n\n"
-	TextGRPCServer = TextGRPCServer + `import (
-	"context"
-	"github.com/ManyakRus/starter/micro"
-)
+	//читаем шаблон файла, без функций
+	FilenameTemplateGRPCServerUpdate := DirTemplatesGRPCServer + config.Settings.TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME
+	bytes, err = os.ReadFile(FilenameTemplateGRPCServerUpdate)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateGRPCServerUpdate, " error: ", err)
+	}
+	TextGRPCServer := string(bytes)
+	TextGRPCServer = TextGRPCServer + "\n"
 
-`
+	//заменим имя пакета на новое
+	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+
+	//	PackageName := micro.LastWord(config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER)
+	//	TextGRPCServer := "package " + PackageName + "\n\n"
+	//	TextGRPCServer = TextGRPCServer + `import (
+	//	"context"
+	//	"github.com/ManyakRus/starter/micro"
+	//)
+	//
+	//`
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
@@ -410,7 +425,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPCServer = create_files.DeleteEmptyLines(TextGRPCServer)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCServerUpdate, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCServerUpdateFunc, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
 
 	return err
 }
@@ -478,7 +493,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 
-	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME
+	FilenameTemplateGRPCServerFunc := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCServer
 	FilenameReadyGRPCServerUpdate := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_update_test.go"
@@ -486,38 +501,53 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
-	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)
+	//читаем шаблон файла, только функции
+	bytes, err := os.ReadFile(FilenameTemplateGRPCServerFunc)
 	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateGRPCServer, " error: ", err)
+		log.Panic("ReadFile() ", FilenameTemplateGRPCServerFunc, " error: ", err)
 	}
 	TextGRPCServerUpdateFunc := string(bytes)
 
-	PackageName := micro.LastWord(config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER)
-	TextGRPCServer := "package " + PackageName + "\n\n"
-	TextGRPCServer = TextGRPCServer + `import (
-	"context"
-	"testing"
-	"github.com/ManyakRus/starter/config_main"
-)
+	//читаем шаблон файла, без функций
+	FilenameTemplateGRPCServerUpdate := DirTemplatesGRPCServer + config.Settings.TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME
+	bytes, err = os.ReadFile(FilenameTemplateGRPCServerUpdate)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateGRPCServerUpdate, " error: ", err)
+	}
+	TextGRPCServer := string(bytes)
+	TextGRPCServer = TextGRPCServer + "\n"
 
-`
+	//заменим имя пакета на новое
+	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+
+	//	PackageName := micro.LastWord(config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER)
+	//	TextGRPCServer := "package " + PackageName + "\n\n"
+	//	TextGRPCServer = TextGRPCServer + `import (
+	//	"context"
+	//	"testing"
+	//	"github.com/ManyakRus/starter/config_main"
+	//)
+	//
+	//`
 
 	//заменим импорты
-	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
-	ModelTableURL := create_files.FindModelTableURL(TableName)
-	TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
 
-	ProtoURL := create_files.FindProtoURL()
-	TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-	//ModelURL := create_files.FindModelURL()
-	//TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-	CrudStarterURL := create_files.FindCrudStarterURL()
-	TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
+		//ModelURL := create_files.FindModelURL()
+		//TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
 
-	//TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
-	//}
+		CrudStarterURL := create_files.FindCrudStarterURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
+
+		//TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
+	}
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc, Table1)
