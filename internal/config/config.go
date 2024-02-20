@@ -105,7 +105,7 @@ func FillSettings() {
 
 	//
 	Name = "EXCLUDE_TABLES"
-	s = Getenv(Name, true)
+	s = Getenv(Name, false)
 	Settings.EXCLUDE_TABLES = s
 
 	//
