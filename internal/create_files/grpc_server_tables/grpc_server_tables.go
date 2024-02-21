@@ -169,6 +169,12 @@ func CreateTestFiles(Table1 *types.Table) error {
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		//удалим лишние функции
+		TextGRPCServer = DeleteFuncTestDelete(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFuncTestRestore(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFuncTestFind_byExtID(TextGRPCServer, Table1)
+
+		//добавим импорты
 		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
 
 		ModelTableURL := create_files.FindModelTableURL(TableName)
@@ -180,10 +186,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 		CrudStarterURL := create_files.FindCrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
-		//удалим лишние функции
-		TextGRPCServer = DeleteFuncTestDelete(TextGRPCServer, Table1)
-		TextGRPCServer = DeleteFuncTestRestore(TextGRPCServer, Table1)
-		TextGRPCServer = DeleteFuncTestFind_byExtID(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.CheckAndAddImport(TextGRPCServer, "encoding/json")
 	}
 
 	//создание текста

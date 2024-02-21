@@ -555,6 +555,22 @@ func AddImport(Text, URL string) string {
 	return Otvet
 }
 
+// CheckAndAddImport - добавляет URL в секцию Import, если его там нет, если он нужен
+func CheckAndAddImport(Text, URL string) string {
+	Otvet := Text
+
+	//проверим используется или нет
+	ModuleName := micro.LastWord(URL)
+	pos1 := strings.Index(Otvet, ModuleName+".")
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	Otvet = AddImport(Text, URL)
+
+	return Otvet
+}
+
 // AddImportTime - добавляет покет в секцию Import, если его там нет
 func AddImportTime(TextModel string) string {
 	Otvet := TextModel
