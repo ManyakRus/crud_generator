@@ -13,7 +13,7 @@ func TestSetCrudManualInterface(t *testing.T) {
 	SetCrudManualInterface(crud)
 
 	// Test that the crud variable is set correctly
-	if employees.Crud_manual_LawsuitStatusType != crud {
+	if lawsuit_status_types.Crud_manual_LawsuitStatusType != crud {
 		t.Errorf("Expected lawsuit_status_types.Crud_manual_LawsuitStatusType to be set to crud, but got %+v", lawsuit_status_types.Crud_manual_LawsuitStatusType)
 	}
 }
