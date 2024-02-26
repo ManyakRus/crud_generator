@@ -1,7 +1,7 @@
 package crud_starter_lawsuit_status_types
 
 import (
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud/crud_starter_lawsuit_status_types"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud/crud_white_list_reason_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"testing"
 )

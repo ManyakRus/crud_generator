@@ -281,8 +281,8 @@ func CreateFiles_manual_test(Table1 *types.Table) error {
 		TextManual = create_files.AddImport(TextManual, ModelTableURL)
 
 		//
-		CrudStarterTableURL := create_files.FindCrudStarterTableURL(TableName)
-		TextManual = create_files.AddImport(TextManual, CrudStarterTableURL)
+		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		TextManual = create_files.AddImport(TextManual, CrudTableURL)
 
 	}
 
