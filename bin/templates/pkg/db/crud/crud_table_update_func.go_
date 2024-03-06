@@ -41,7 +41,11 @@ func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.Lawsui
 	err = tx.Error
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Read() id: %v, error: %v", m.ID, err)
+		return err
 	}
+
+	//удалим из кэша
+	//cache.Remove(m.ID)
 
 	return err
 }

@@ -1304,3 +1304,14 @@ func FindTextEqualEmpty(Column1 *types.Column, VariableName string) string {
 //
 //	return Otvet
 //}
+
+// FilenameWithoutLastUnderline - удаляет последний символ, если он = "_"
+func FilenameWithoutLastUnderline(Filename string) string {
+	Otvet := Filename
+
+	if strings.HasSuffix(Filename, "_") == true {
+		Otvet = Filename[:len(Filename)-1]
+	}
+
+	return Otvet
+}

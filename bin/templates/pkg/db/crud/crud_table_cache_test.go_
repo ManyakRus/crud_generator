@@ -1,0 +1,34 @@
+package crud_lawsuit_status_types
+
+import (
+	"github.com/ManyakRus/starter/config_main"
+	"github.com/ManyakRus/starter/postgres_gorm"
+	"reflect"
+	"testing"
+)
+
+func TestReadFromCache(t *testing.T) {
+	var err error
+
+	config_main.LoadEnv()
+	postgres_gorm.Connect()
+	defer postgres_gorm.CloseConnection()
+
+	//читаем из БД
+	m1, err := Crud_DB{}.ReadFromCache(Postgres_ID_Test)
+	if err != nil {
+		t.Errorf("TestReadFromCache() error:t %v", err)
+	}
+
+	//читаем из БД
+	m2, err := Crud_DB{}.ReadFromCache(Postgres_ID_Test)
+	if err != nil {
+		t.Errorf("TestReadFromCache() error:t %v", err)
+	}
+
+	//сравниваем
+	if reflect.DeepEqual(m1, m2) != true {
+		t.Errorf("TestReadFromCache() error: m1 != m2")
+	}
+
+}

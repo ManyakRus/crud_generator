@@ -1,0 +1,49 @@
+package crud_lawsuit_status_types
+
+import (
+	"context"
+	"github.com/ManyakRus/starter/contextmain"
+	"github.com/hashicorp/golang-lru/v2/expirable"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"time"
+)
+
+// cache - кэш с данными
+var cache *expirable.LRU[int64, lawsuit_status_types.LawsuitStatusType]
+
+// CACHE_SIZE - количество элементо в кэше
+const CACHE_SIZE = 100
+
+// CACHE_EXPIRE_MINUTES - время жизни элемента в кэше
+const CACHE_EXPIRE_MINUTES = 86400
+
+// init - инициализация кэша
+func init() {
+	cache = expirable.NewLRU[int64, lawsuit_status_types.LawsuitStatusType](CACHE_SIZE, nil, time.Minute*CACHE_EXPIRE_MINUTES)
+}
+
+// ReadFromCache - находит запись в кеше или в БД по ID
+func (crud Crud_DB) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatusType, error) {
+	var Otvet lawsuit_status_types.LawsuitStatusType
+	var err error
+
+	// поищем сначала в кэше
+	Otvet, ok := cache.Get(ID)
+	if ok {
+		return Otvet, nil
+	}
+
+	// поищем в БД
+	ctxMain := contextmain.GetContext()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	Otvet.ID = ID
+	err = crud.Read_ctx(ctx, &Otvet)
+	if err == nil {
+		cache.Add(ID, Otvet)
+	}
+
+	return Otvet, err
+}

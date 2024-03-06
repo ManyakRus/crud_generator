@@ -53,3 +53,7 @@ const SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME = "server_grpc_table_update_fu
 
 const GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME = "grpc_client_table_update_func.go_"
 const GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME = "grpc_client_table_update_func_test.go_"
+
+const CRUD_TABLES_CACHE_FILENAME = "crud_table_cache.go_"
+const CRUD_TABLES_CACHE_TEST_FILENAME = "crud_table_cache_test.go_"
+const TEXT_CACHE_REMOVE = "cache.Remove(m.ID)"

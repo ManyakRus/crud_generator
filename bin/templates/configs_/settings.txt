@@ -214,3 +214,11 @@ TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME="server_grpc_table_update.go_"
 #TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME - short filename of "server_grpc_table_update_test.go_" file
 TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME="server_grpc_table_update_test.go_"
 
+#NEED_CREATE_CACHE_FUNCTIONS - need create ReadFromCache() .proto API
+NEED_CREATE_CACHE_API=true
+
+#NEED_CREATE_CACHE_FILES - need create "*_cache.go" files
+NEED_CREATE_CACHE_FILES=true
+
+#NEED_CREATE_CACHE_TEST_FILES - need create "*_cache_test.go" files
+NEED_CREATE_CACHE_TEST_FILES=true

@@ -26,7 +26,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			continue
 		}
 
-		//файлы db
+		//файлы crud
 		if config.Settings.NEED_CREATE_DB == true {
 			err = CreateFiles(Table1)
 			if err != nil {
@@ -35,7 +35,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			}
 		}
 
-		//тестовые файлы db
+		//тестовые файлы crud
 		if config.Settings.NEED_CREATE_DB_TEST == true {
 			err = CreateTestFiles(Table1)
 			if err != nil {
@@ -44,6 +44,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			}
 		}
 
+		//файлы UpdateEveryColumn
 		if config.Settings.NEED_CREATE_UPDATE_EVERY_COLUMN == true {
 			//файлы db update
 			err = CreateFilesUpdateEveryColumn(Table1)
@@ -57,6 +58,27 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			if err != nil {
 				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
 				return err
+			}
+		}
+
+		//файлы Cache
+		if config.Settings.NEED_CREATE_CACHE_API == true {
+			//файлы cache
+			if config.Settings.NEED_CREATE_CACHE_FILES == true {
+				err = CreateFilesCache(Table1)
+				if err != nil {
+					log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
+					return err
+				}
+			}
+
+			//тестовые файлы cache
+			if config.Settings.NEED_CREATE_CACHE_TEST_FILES == true {
+				err = CreateFilesCacheTest(Table1)
+				if err != nil {
+					log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+					return err
+				}
 			}
 		}
 	}
@@ -127,6 +149,11 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+
+	//кэш
+	if config.Settings.NEED_CREATE_CACHE_API == true {
+		TextDB = strings.ReplaceAll(TextDB, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
+	}
 
 	//TextDB = create_files.DeleteFuncFind_byExtID(TextDB, Table1)
 	//TextDB = create_files.DeleteFuncFind_byExtIDCtx(TextDB, Table1)
@@ -461,7 +488,7 @@ func RenameFunctions(TextDB string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// CreateFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_client
+// CreateFilesUpdateEveryColumn - создаёт 1 файл в папке crud
 func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	var err error
 
@@ -500,20 +527,6 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//заменим имя пакета на новое
 	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
 
-	//	TextCrud := "package " + config.Settings.PREFIX_CRUD + TableName + "\n\n"
-	//	TextCrud = TextCrud + `import (
-	//	"errors"
-	//	"context"
-	//	"fmt"
-	//	"time"
-	//	"gorm.io/gorm"
-	//	"github.com/ManyakRus/starter/contextmain"
-	//	"github.com/ManyakRus/starter/micro"
-	//	"github.com/ManyakRus/starter/postgres_gorm"
-	//)
-	//
-	//`
-
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
@@ -529,17 +542,19 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextCrudUpdateFunc, Table1)
+
 	// пустой файл не нужен
 	if TextUpdateEveryColumn == "" {
 		return err
 	}
 
-	//ModelName := Table1.NameGo
-	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextCrud = TextCrud + TextUpdateEveryColumn
-
 	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
+
+	//кэш
+	if config.Settings.NEED_CREATE_CACHE_API == true {
+		TextCrud = strings.ReplaceAll(TextCrud, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
+	}
 
 	//удаление пустого импорта
 	TextCrud = create_files.DeleteEmptyImport(TextCrud)
@@ -757,4 +772,126 @@ func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Tab
 	Otvet = strings.ReplaceAll(Otvet, " DefaultValue", " "+DefaultValue)
 
 	return Otvet
+}
+
+// CreateFilesCache - создаёт 1 файл "*_cache.go" в папке crud
+func CreateFilesCache(Table1 *types.Table) error {
+	var err error
+
+	TableName := strings.ToLower(Table1.Name)
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
+	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + micro.SeparatorFile()
+
+	FilenameTemplateCache := DirTemplatesCrud + constants.CRUD_TABLES_CACHE_FILENAME
+	DirReadyTable := DirReadyCrud
+	FilenameReadyCache := DirReadyTable + create_files.FilenameWithoutLastUnderline(constants.CRUD_TABLES_CACHE_FILENAME)
+
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
+	//читаем шаблон файла
+	bytes, err := os.ReadFile(FilenameTemplateCache)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCache, " error: ", err)
+	}
+	TextCache := string(bytes)
+
+	//заменим имя пакета на новое
+	TextCache = create_files.ReplacePackageName(TextCache, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextCache = create_files.DeleteTemplateRepositoryImports(TextCache)
+
+		DBConstantsURL := create_files.FindDBConstantsURL()
+		TextCache = create_files.AddImport(TextCache, DBConstantsURL)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextCache = create_files.AddImport(TextCache, ModelTableURL)
+
+		//TextCache = create_files.ConvertIdToAlias(TextCache, Table1)
+	}
+
+	//замена слов
+	ModelName := Table1.NameGo
+	TextCache = strings.ReplaceAll(TextCache, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextCache = strings.ReplaceAll(TextCache, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextCache = config.Settings.TEXT_MODULE_GENERATED + TextCache
+
+	//удаление пустого импорта
+	TextCache = create_files.DeleteEmptyImport(TextCache)
+
+	//удаление пустых строк
+	TextCache = create_files.DeleteEmptyLines(TextCache)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyCache, []byte(TextCache), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// CreateFilesCacheTest - создаёт 1 файл "*_cache_test.go" в папке crud
+func CreateFilesCacheTest(Table1 *types.Table) error {
+	var err error
+
+	TableName := strings.ToLower(Table1.Name)
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
+	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + micro.SeparatorFile()
+
+	FilenameTemplateCache := DirTemplatesCrud + constants.CRUD_TABLES_CACHE_TEST_FILENAME
+	DirReadyTable := DirReadyCrud
+	FilenameReadyCache := DirReadyTable + create_files.FilenameWithoutLastUnderline(constants.CRUD_TABLES_CACHE_TEST_FILENAME)
+
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
+	//читаем шаблон файла
+	bytes, err := os.ReadFile(FilenameTemplateCache)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCache, " error: ", err)
+	}
+	TextCache := string(bytes)
+
+	//заменим имя пакета на новое
+	TextCache = create_files.ReplacePackageName(TextCache, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextCache = create_files.DeleteTemplateRepositoryImports(TextCache)
+
+		DBConstantsURL := create_files.FindDBConstantsURL()
+		TextCache = create_files.AddImport(TextCache, DBConstantsURL)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextCache = create_files.AddImport(TextCache, ModelTableURL)
+
+		//TextCache = create_files.ConvertIdToAlias(TextCache, Table1)
+	}
+
+	//замена слов
+	ModelName := Table1.NameGo
+	TextCache = strings.ReplaceAll(TextCache, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextCache = strings.ReplaceAll(TextCache, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextCache = config.Settings.TEXT_MODULE_GENERATED + TextCache
+
+	//удаление пустого импорта
+	TextCache = create_files.DeleteEmptyImport(TextCache)
+
+	//удаление пустых строк
+	TextCache = create_files.DeleteEmptyLines(TextCache)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyCache, []byte(TextCache), constants.FILE_PERMISSIONS)
+
+	return err
 }

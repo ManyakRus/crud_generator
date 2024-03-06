@@ -64,6 +64,9 @@ type SettingsINI struct {
 	NEED_CREATE_NRPC_SERVER_TEST                     bool
 	NEED_CREATE_NRPC_CLIENT_TEST                     bool
 	NEED_CREATE_MANUAL_FILES                         bool
+	NEED_CREATE_CACHE_API                            bool
+	NEED_CREATE_CACHE_FILES                          bool
+	NEED_CREATE_CACHE_TEST_FILES                     bool
 	SERVICE_NAME                                     string
 	SERVICE_REPOSITORY_URL                           string
 	TEXT_TEMPLATE_MODEL                              string
@@ -449,6 +452,22 @@ func FillSettings() {
 	Name = "TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME = s
+
+	//
+	Name = "NEED_CREATE_CACHE_API"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_CACHE_API = BoolFromString(s)
+
+	//
+	Name = "NEED_CREATE_CACHE_FILES"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_CACHE_FILES = BoolFromString(s)
+
+	//
+	Name = "NEED_CREATE_CACHE_TEST_FILES"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_CACHE_TEST_FILES = BoolFromString(s)
+
 }
 
 // CurrentDirectory - возвращает текущую директорию ОС
