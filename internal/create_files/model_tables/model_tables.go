@@ -178,6 +178,12 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 		TextModel = DeleteFromInterfaceDelete(TextModel, Table1)
 		TextModel = DeleteFromInterfaceRestore(TextModel, Table1)
 		TextModel = DeleteFromInterfaceFind_ByExtID(TextModel, Table1)
+		//кэш
+		if config.Settings.NEED_CREATE_CACHE_API == false {
+			//исправление Save()
+			TextModel = DeleteFromInterfaceReadFromCache(TextModel, Table1)
+			TextModel = create_files.DeleteFuncReadFromCache(TextModel, Table1)
+		}
 	}
 
 	//
@@ -663,6 +669,17 @@ func FindTextInterfaceUpdateEveryColumn(Table1 *types.Table, Column1 *types.Colu
 
 	Otvet = `
 	Update_` + ColumnName + `(*` + ModelName + `) error`
+
+	return Otvet
+}
+
+// DeleteFromInterfaceReadFromCache - удаляет функцию ReadFromCache() из интерфейса
+func DeleteFromInterfaceReadFromCache(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
+	TextFind := "\n\tReadFromCache(*" + ModelName + ") error"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
 
 	return Otvet
 }

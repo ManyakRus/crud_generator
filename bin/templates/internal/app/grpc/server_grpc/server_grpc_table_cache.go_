@@ -1,0 +1,45 @@
+package server_grpc
+
+import (
+	"context"
+	"github.com/ManyakRus/starter/micro"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+)
+
+// LawsuitStatusType_ReadFromCache - читает и возвращает модель из кеша или БД
+func (s *ServerGRPC) LawsuitStatusType_ReadFromCache(ctx context.Context, Request *grpc_proto.RequestId) (*grpc_proto.Response, error) {
+	var Otvet grpc_proto.Response
+	var err error
+
+	//проверим контекст уже отменён
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return &Otvet, err
+	}
+
+	//проверим совпадения версии модели
+	VersionServer := lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+	VersionClient := Request.VersionModel
+	if VersionServer != VersionClient {
+		err = ErrorModelVersion(lawsuit_status_types.LawsuitStatusType{})
+		return &Otvet, err
+	}
+
+	//запрос в БД
+	Model := &lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = Request.ID
+	err = Model.ReadFromCache()
+	if err != nil {
+		return &Otvet, err
+	}
+
+	//заполяем ответ
+	ModelString, err := Model.GetJSON()
+	if err != nil {
+		return &Otvet, err
+	}
+	Otvet.ModelString = ModelString
+
+	return &Otvet, err
+}

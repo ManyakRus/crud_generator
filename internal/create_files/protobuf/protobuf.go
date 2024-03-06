@@ -84,6 +84,10 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 
 		TextProtoNew = TextProtoNew + FindTextProtoTable1(TextProto, Table1)
 		TextProtoNew = TextProtoNew + FindTextProtoTable1_UpdateEveryColumn(TextProto, Table1)
+
+		if config.Settings.NEED_CREATE_CACHE_API == true {
+			TextProtoNew = TextProtoNew + FindTextProtoTable1_Cache(TextProto, Table1)
+		}
 	}
 
 	//найдём куда вставить текст
@@ -376,6 +380,39 @@ func TextUpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
 
 	Otvet = "rpc " + ModelName + "_Update_" + ColumnName + "(" + TextRequest + ") returns (ResponseEmpty) {}"
 	//Otvet = Otvet + "\n"
+
+	return Otvet
+}
+
+// FindTextProtoTable1_Cache - возвращает текст функции ReadFromCache() .proto для таблицы
+func FindTextProtoTable1_Cache(TextProto string, Table1 *types.Table) string {
+	Otvet := "\n" //"\n\t//\n"
+
+	ModelName := Table1.NameGo
+	Otvet = Otvet + FindTextReadFromCache(TextProto, ModelName)
+
+	return Otvet
+}
+
+// FindTextReadFromCache - возвращает текст .proto
+func FindTextReadFromCache(TextProto string, ModelName string) string {
+	Otvet := ""
+	Otvet2 := TextReadFromCache(ModelName)
+
+	//проверка такой текст уже есть
+	pos1 := strings.Index(TextProto, Otvet2)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	Otvet = "\t" + Otvet2 + "\n"
+
+	return Otvet
+}
+
+// TextReadFromCache - возвращает текст .proto
+func TextReadFromCache(ModelName string) string {
+	Otvet := "rpc " + ModelName + "_ReadFromCache(RequestId) returns (Response) {}"
 
 	return Otvet
 }

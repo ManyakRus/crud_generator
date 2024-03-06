@@ -1,0 +1,29 @@
+package server_grpc
+
+import (
+	"context"
+	"github.com/ManyakRus/starter/config_main"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"testing"
+)
+
+func Test_server_LawsuitStatusType_ReadFromCache(t *testing.T) {
+	config_main.LoadEnv()
+	crud_starter.InitCrudTransport_DB()
+
+	ctx := context.Background()
+	Request := grpc_proto.RequestId{}
+	Request.ID = LawsuitStatusType_ID_Test
+	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+
+	server1 := &ServerGRPC{}
+	Otvet, err := server1.LawsuitStatusType_ReadFromCache(ctx, &Request)
+	if err != nil {
+		t.Error("Test_server_LawsuitStatusType_ReadFromCache() error: ", err)
+	}
+	if Otvet.ModelString == "" {
+		t.Error("Test_server_LawsuitStatusType_ReadFromCache() error: ModelString=''")
+	}
+}

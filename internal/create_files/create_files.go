@@ -932,6 +932,21 @@ func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
+// DeleteFuncReadFromCache - удаляет функцию ReadFromCache()
+func DeleteFuncReadFromCache(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверим есть ли колонка IsDeleted
+	if Has_Column_IsDeleted(Table1) == true {
+		return Otvet
+	}
+
+	Otvet = DeleteFuncFromComment(Otvet, "\n// ReadFromCache ")
+	Otvet = DeleteFuncFromFuncName(Otvet, "ReadFromCache")
+
+	return Otvet
+}
+
 // DeleteFuncTestRestore - удаляет функцию Restore()
 func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
 	Otvet := Text

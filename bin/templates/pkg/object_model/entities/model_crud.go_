@@ -23,6 +23,7 @@ type ICrud_LawsuitStatusType interface {
 	Delete(*LawsuitStatusType) error
 	Restore(*LawsuitStatusType) error
 	Find_ByExtID(*LawsuitStatusType) error
+	ReadFromCache(*LawsuitStatusType) error
 }
 
 // TableName - возвращает имя таблицы в БД
@@ -163,6 +164,17 @@ func (m *LawsuitStatusType) Find_ByExtID() error {
 	}
 	
 	err := Crud_LawsuitStatusType.Find_ByExtID(m)
+
+	return err
+}
+
+// ReadFromCache - находит запись в кэше или в БД по ID, и заполняет в объект
+func (m *LawsuitStatusType) ReadFromCache() error {
+	if Crud_LawsuitStatusType == nil {
+		return constants.ErrorCrudIsNotInit
+	}
+
+	err := Crud_LawsuitStatusType.ReadFromCache(m)
 
 	return err
 }

@@ -41,7 +41,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			}
 		}
 
-		//
+		//UPDATE_EVERY_COLUMN
 		if config.Settings.NEED_CREATE_UPDATE_EVERY_COLUMN == true {
 			//файлы grpc_server update
 			err = CreateFilesUpdateEveryColumn(Table1)
@@ -53,6 +53,28 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			//тестовые файлы grpc_server update
 			if config.Settings.NEED_CREATE_GRPC_SERVER_TEST == true {
 				err = CreateTestFilesUpdateEveryColumn(Table1)
+				if err != nil {
+					log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+					return err
+				}
+			}
+
+		}
+
+		//UPDATE_EVERY_COLUMN
+		if config.Settings.NEED_CREATE_CACHE_API == true {
+			//файлы grpc_server cache
+			if config.Settings.NEED_CREATE_CACHE_FILES == true {
+				err = CreateFilesCache(Table1)
+				if err != nil {
+					log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
+					return err
+				}
+			}
+
+			//тестовые файлы grpc_server cache
+			if config.Settings.NEED_CREATE_CACHE_TEST_FILES == true {
+				err = CreateFilesCacheTest(Table1)
 				if err != nil {
 					log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
 					return err
@@ -116,18 +138,6 @@ func CreateFiles(Table1 *types.Table) error {
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
-
-		//замена импортов на новые URL
-		//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
-		//TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
-
-		////proto
-		//RepositoryGRPCProtoURL := create_files.FindProtoURL()
-		//TextGRPCServer = create_files.AddImport(TextGRPCServer, RepositoryGRPCProtoURL)
-		//
-		////model
-		//RepositoryModelURL := create_files.FindModelTableURL(TableName)
-		//TextGRPCServer = create_files.AddImport(TextGRPCServer, RepositoryModelURL)
 	}
 
 	//удаление пустого импорта
@@ -632,4 +642,123 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 
 	return Otvet
+}
+
+// CreateFilesCache - создаёт 1 файл в папке grpc_server
+func CreateFilesCache(Table1 *types.Table) error {
+	var err error
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+
+	FilenameTemplateCache := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_CACHE_FILENAME
+	TableName := strings.ToLower(Table1.Name)
+	DirReadyTable := DirReadyGRPCServer
+	FilenameReadyCache := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_cache.go"
+
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
+	bytes, err := os.ReadFile(FilenameTemplateCache)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCache, " error: ", err)
+	}
+	TextGRPCServer := string(bytes)
+
+	//заменим имя пакета на новое
+	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
+
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+	}
+
+	//создание текста
+	ModelName := Table1.NameGo
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
+	}
+
+	//удаление пустого импорта
+	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// CreateFilesCacheTest - создаёт 1 файл в папке grpc_server
+func CreateFilesCacheTest(Table1 *types.Table) error {
+	var err error
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+
+	FilenameTemplateCache := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_CACHE_TEST_FILENAME
+	TableName := strings.ToLower(Table1.Name)
+	DirReadyTable := DirReadyGRPCServer
+	FilenameReadyCache := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_cache_test.go"
+
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
+	bytes, err := os.ReadFile(FilenameTemplateCache)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCache, " error: ", err)
+	}
+	TextGRPCServer := string(bytes)
+
+	//заменим имя пакета на новое
+	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
+
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+
+		CrudStarterURL := create_files.FindCrudStarterURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
+	}
+
+	//создание текста
+	ModelName := Table1.NameGo
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
+	}
+
+	//удаление пустого импорта
+	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+
+	return err
 }

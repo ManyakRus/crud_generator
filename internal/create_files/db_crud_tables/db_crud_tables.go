@@ -111,6 +111,7 @@ func CreateFiles(Table1 *types.Table) error {
 		}
 	}
 
+	//загрузим шаблон файла
 	bytes, err := os.ReadFile(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
@@ -120,6 +121,7 @@ func CreateFiles(Table1 *types.Table) error {
 	//заменим имя пакета на новое
 	TextDB = create_files.ReplacePackageName(TextDB, DirReadyTable)
 
+	ModelName := Table1.NameGo
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextDB = create_files.DeleteTemplateRepositoryImports(TextDB)
@@ -142,18 +144,18 @@ func CreateFiles(Table1 *types.Table) error {
 		TextDB = create_files.DeleteFuncDeleteCtx(TextDB, Table1)
 		TextDB = create_files.DeleteFuncRestoreCtx(TextDB, Table1)
 		TextDB = create_files.DeleteFuncFind_byExtIDCtx(TextDB, Table1)
+
+		//кэш
+		if config.Settings.NEED_CREATE_CACHE_API == true {
+			//исправление Save()
+			TextDB = strings.ReplaceAll(TextDB, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
+		}
 	}
 
 	//создание текста
-	ModelName := Table1.NameGo
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
-
-	//кэш
-	if config.Settings.NEED_CREATE_CACHE_API == true {
-		TextDB = strings.ReplaceAll(TextDB, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
-	}
 
 	//TextDB = create_files.DeleteFuncFind_byExtID(TextDB, Table1)
 	//TextDB = create_files.DeleteFuncFind_byExtIDCtx(TextDB, Table1)
@@ -789,7 +791,7 @@ func CreateFilesCache(Table1 *types.Table) error {
 
 	FilenameTemplateCache := DirTemplatesCrud + constants.CRUD_TABLES_CACHE_FILENAME
 	DirReadyTable := DirReadyCrud
-	FilenameReadyCache := DirReadyTable + create_files.FilenameWithoutLastUnderline(constants.CRUD_TABLES_CACHE_FILENAME)
+	FilenameReadyCache := DirReadyTable + "crud_" + TableName + "_cache.go"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
@@ -850,7 +852,7 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 
 	FilenameTemplateCache := DirTemplatesCrud + constants.CRUD_TABLES_CACHE_TEST_FILENAME
 	DirReadyTable := DirReadyCrud
-	FilenameReadyCache := DirReadyTable + create_files.FilenameWithoutLastUnderline(constants.CRUD_TABLES_CACHE_TEST_FILENAME)
+	FilenameReadyCache := DirReadyTable + "crud_" + TableName + "_cache_test.go"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
