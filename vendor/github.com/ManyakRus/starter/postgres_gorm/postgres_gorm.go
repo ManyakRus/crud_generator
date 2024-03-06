@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/ManyakRus/starter/constants"
 	"github.com/ManyakRus/starter/logger"
 	"github.com/ManyakRus/starter/port_checker"
 	"strings"
@@ -38,11 +39,11 @@ var log = logger.GetLog()
 // mutexReconnect - защита от многопоточности Reconnect()
 var mutexReconnect = &sync.Mutex{}
 
-// Settings хранит все нужные переменные окружения
-var Settings SettingsINI
-
 // NeedReconnect - флаг необходимости переподключения
 var NeedReconnect bool
+
+// Settings хранит все нужные переменные окружения
+var Settings SettingsINI
 
 // SettingsINI - структура для хранения всех нужных переменных окружения
 type SettingsINI struct {
@@ -97,7 +98,9 @@ func Connect_WithApplicationName_err(ApplicationName string) error {
 	dsn := GetDSN(ApplicationName)
 
 	//
-	conf := &gorm.Config{}
+	conf := &gorm.Config{
+		Logger: gormlogger.Default.LogMode(gormlogger.Silent),
+	}
 	//conn := postgres.Open(dsn)
 
 	dialect := postgres.New(postgres.Config{
@@ -108,7 +111,7 @@ func Connect_WithApplicationName_err(ApplicationName string) error {
 
 	//Conn, err = gorm.Open(conn, conf)
 	Conn.Config.NamingStrategy = schema.NamingStrategy{TablePrefix: Settings.DB_SCHEMA + "."}
-	Conn.Config.Logger = gormlogger.Default.LogMode(gormlogger.Warn)
+	//Conn.Config.Logger = gormlogger.Default.LogMode(gormlogger.Error)
 
 	if err == nil {
 		DB, err := Conn.DB()
@@ -334,7 +337,8 @@ func GetDSN(ApplicationName string) string {
 	dsn += "user=" + Settings.DB_USER + " "
 	dsn += "password=" + Settings.DB_PASSWORD + " "
 	dsn += "dbname=" + Settings.DB_NAME + " "
-	dsn += "port=" + Settings.DB_PORT + " sslmode=disable TimeZone=UTC "
+	dsn += "port=" + Settings.DB_PORT + " "
+	dsn += "sslmode=disable TimeZone=" + constants.TIME_ZONE + " "
 	dsn += "application_name=" + ApplicationName
 
 	return dsn
@@ -382,7 +386,11 @@ loop:
 			} else if NeedReconnect == true {
 				log.Warn("postgres_gorm CheckPort(", addr, ") OK. Start Reconnect()")
 				NeedReconnect = false
-				Connect()
+				err = Connect_err()
+				if err != nil {
+					NeedReconnect = true
+					log.Error("Connect_err() error: ", err)
+				}
 			}
 		}
 	}
@@ -390,32 +398,72 @@ loop:
 	stopapp.GetWaitGroup_Main().Done()
 }
 
+//// RawMultipleSQL - выполняет текст запроса, отдельно для каждого запроса
+//func RawMultipleSQL(db *gorm.DB, TextSQL string) *gorm.DB {
+//	var tx *gorm.DB
+//	var err error
+//	tx = db
+//
+//	// запустим все запросы отдельно
+//	sqlSlice := strings.Split(TextSQL, ";")
+//	len1 := len(sqlSlice)
+//	for i, v := range sqlSlice {
+//		if i == len1-1 {
+//			tx = tx.Raw(v)
+//			err = tx.Error
+//		} else {
+//			tx = tx.Exec(v)
+//			err = tx.Error
+//		}
+//		if err != nil {
+//			TextError := fmt.Sprint("db.Raw() error: ", err, ", TextSQL: \n", v)
+//			err = errors.New(TextError)
+//			break
+//		}
+//	}
+//
+//	if tx == nil {
+//		log.Panic("db.Raw() error: rows =nil")
+//	}
+//
+//	return tx
+//}
+
 // RawMultipleSQL - выполняет текст запроса, отдельно для каждого запроса
 func RawMultipleSQL(db *gorm.DB, TextSQL string) *gorm.DB {
 	var tx *gorm.DB
 	var err error
 	tx = db
 
-	// запустим все запросы отдельно
-	sqlSlice := strings.Split(TextSQL, ";")
-	len1 := len(sqlSlice)
-	for i, v := range sqlSlice {
-		if i == len1-1 {
-			tx = tx.Raw(v)
-			err = tx.Error
-		} else {
-			tx = tx.Exec(v)
-			err = tx.Error
-		}
+	if tx == nil {
+		log.Error("RawMultipleSQL() error: db =nil")
+		return tx
+	}
+
+	TextSQL1 := ""
+	TextSQL2 := TextSQL
+
+	//запустим все запросы, кроме последнего
+	pos1 := strings.LastIndex(TextSQL, ";")
+	if pos1 > 0 {
+		TextSQL1 = TextSQL[0:pos1]
+		TextSQL2 = TextSQL[pos1:]
+		tx = tx.Exec(TextSQL1)
+		err = tx.Error
 		if err != nil {
-			TextError := fmt.Sprint("db.Raw() error: ", err, ", TextSQL: \n", v)
+			TextError := fmt.Sprint("db.Exec() error: ", err, ", TextSQL: \n", TextSQL1)
 			err = errors.New(TextError)
-			break
+			return tx
 		}
 	}
 
-	if tx == nil {
-		log.Panic("db.Raw() error: rows =nil")
+	//запустим последний запрос, с возвратом результата
+	tx = tx.Raw(TextSQL2)
+	err = tx.Error
+	if err != nil {
+		TextError := fmt.Sprint("db.Raw() error: ", err, ", TextSQL: \n", TextSQL2)
+		err = errors.New(TextError)
+		return tx
 	}
 
 	return tx
