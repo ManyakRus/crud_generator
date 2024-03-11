@@ -1,0 +1,56 @@
+package grpc_lawsuit_status_types
+
+import (
+	"context"
+	"encoding/json"
+	"github.com/ManyakRus/starter/log"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"time"
+)
+
+// ReadFromCache - возвращает модель из БД
+func (crud Crud_GRPC) ReadFromCache(m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	// подключение
+	grpc_client.Connect_GRPC_NRPC()
+
+	// подготовка запроса
+	var versionModel = crud.GetVersionModel()
+
+	Request := &grpc_proto.RequestId{}
+	Request.ID = int64(m.ID)
+	Request.VersionModel = versionModel
+
+	ctxMain := context.Background()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(grpc_constants.GetTimeoutSeconds()))
+	defer ctxCancelFunc()
+
+	// запрос
+	var Response *grpc_proto.Response
+	if grpc_nrpc.NeedNRPC == true {
+		Response, err = nrpc_client.Client.LawsuitStatusType_ReadFromCache(Request)
+	} else {
+		Response, err = grpc_client.Client.LawsuitStatusType_ReadFromCache(ctx, Request)
+	}
+	if err != nil {
+		if grpc_client.IsErrorModelVersion(err) == true {
+			log.Panic(err)
+		}
+		return err
+	}
+
+	// ответ
+	sModel := Response.ModelString
+	err = json.Unmarshal([]byte(sModel), m)
+	if err != nil {
+		return err
+	}
+
+	return err
+}

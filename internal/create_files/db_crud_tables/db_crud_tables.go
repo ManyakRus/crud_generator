@@ -539,7 +539,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		//TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
+		TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
 	}
 
 	//создание текста
@@ -692,7 +692,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		//TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
+		TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
 	}
 
 	//создание текста

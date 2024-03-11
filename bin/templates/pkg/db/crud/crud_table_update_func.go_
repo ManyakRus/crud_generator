@@ -45,7 +45,7 @@ func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.Lawsui
 	}
 
 	//удалим из кэша
-	//cache.Remove(m.ID)
+	//cache.Remove(int64(m.ID))
 
 	return err
 }

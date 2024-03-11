@@ -61,7 +61,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 		}
 
-		//UPDATE_EVERY_COLUMN
+		//NEED_CREATE_CACHE_API
 		if config.Settings.NEED_CREATE_CACHE_API == true {
 			//файлы grpc_server cache
 			if config.Settings.NEED_CREATE_CACHE_FILES == true {

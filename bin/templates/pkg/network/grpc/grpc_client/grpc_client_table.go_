@@ -1,6 +1,3 @@
-//Файл создан автоматически кодогенератором crud_generator
-//Не изменяйте ничего здесь.
-
 package grpc_lawsuit_status_types
 
 import (
