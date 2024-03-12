@@ -187,7 +187,7 @@ func (crud Crud_DB) create_update_ctx(ctx context.Context, m *lawsuit_status_typ
 	}
 
 	//удалим из кэша
-	//cache.Remove(m.ID)
+	//cache.Remove(int64(m.ID))
 
 	//запишем NULL в пустые колонки
 	MapOmit := crud_functions.MapOmit_from_MassOmit(MassOmit)

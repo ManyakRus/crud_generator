@@ -432,7 +432,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
 
-		//TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
+		//TextGRPC_Client = create_files.ConvertRequestIdToAlias(TextGRPC_Client, Table1)
 	}
 
 	//создание текста
@@ -579,7 +579,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
 
-		//TextGRPC_Client = create_files.ConvertIdToAlias(TextGRPC_Client, Table1)
+		//TextGRPC_Client = create_files.ConvertRequestIdToAlias(TextGRPC_Client, Table1)
 	}
 
 	//создание текста

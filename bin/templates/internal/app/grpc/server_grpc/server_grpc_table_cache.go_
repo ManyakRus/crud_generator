@@ -27,9 +27,8 @@ func (s *ServerGRPC) LawsuitStatusType_ReadFromCache(ctx context.Context, Reques
 	}
 
 	//запрос в БД
-	Model := &lawsuit_status_types.LawsuitStatusType{}
-	Model.ID = Request.ID
-	err = Model.ReadFromCache()
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	Model, err = Model.ReadFromCache(Request.ID)
 	if err != nil {
 		return &Otvet, err
 	}

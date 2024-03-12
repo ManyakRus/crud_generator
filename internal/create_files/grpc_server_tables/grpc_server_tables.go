@@ -137,7 +137,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
 	}
 
 	//удаление пустого импорта
@@ -426,7 +426,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
 		TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
 		TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 	}
@@ -559,7 +559,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 		CrudStarterURL := create_files.FindCrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
-		//TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
+		//TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
 	}
 
 	//создание текста
@@ -689,9 +689,9 @@ func CreateFilesCache(Table1 *types.Table) error {
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
-	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
-	}
+	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
+	//	TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
+	//}
 
 	//удаление пустого импорта
 	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
@@ -751,7 +751,7 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.ConvertIdToAlias(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
 	}
 
 	//удаление пустого импорта

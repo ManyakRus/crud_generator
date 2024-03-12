@@ -539,7 +539,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
+		//TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
 	}
 
 	//создание текста
@@ -692,7 +692,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		TextCrud = create_files.ConvertIdToAlias(TextCrud, Table1)
+		TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
 	}
 
 	//создание текста
@@ -816,7 +816,7 @@ func CreateFilesCache(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCache = create_files.AddImport(TextCache, ModelTableURL)
 
-		//TextCache = create_files.ConvertIdToAlias(TextCache, Table1)
+		//TextCache = create_files.ConvertRequestIdToAlias(TextCache, Table1)
 	}
 
 	//замена слов
@@ -824,6 +824,9 @@ func CreateFilesCache(Table1 *types.Table) error {
 	TextCache = strings.ReplaceAll(TextCache, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextCache = strings.ReplaceAll(TextCache, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextCache = config.Settings.TEXT_MODULE_GENERATED + TextCache
+
+	//alias
+	TextCache = create_files.ConvertIDToAlias_OtvetID(TextCache, Table1)
 
 	//удаление пустого импорта
 	TextCache = create_files.DeleteEmptyImport(TextCache)
@@ -877,7 +880,7 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCache = create_files.AddImport(TextCache, ModelTableURL)
 
-		//TextCache = create_files.ConvertIdToAlias(TextCache, Table1)
+		//TextCache = create_files.ConvertRequestIdToAlias(TextCache, Table1)
 	}
 
 	//замена слов

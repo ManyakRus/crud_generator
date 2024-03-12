@@ -1175,8 +1175,8 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 	return Otvet, TextRequestFieldName, TextRequestFieldGolang
 }
 
-// ConvertIdToAlias - заменяет ID на Alias
-func ConvertIdToAlias(Text string, Table1 *types.Table) string {
+// ConvertRequestIdToAlias - заменяет ID на Alias
+func ConvertRequestIdToAlias(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	TableName := Table1.Name
@@ -1197,6 +1197,50 @@ func ConvertIdToAlias(Text string, Table1 *types.Table) string {
 	}
 
 	Otvet = AddImport(Otvet, URL)
+
+	return Otvet
+}
+
+// ConvertIDToAlias_OtvetID - заменяет "Otvet.ID = ID" на "Otvet.ID = alias.Name(ID)"
+func ConvertIDToAlias_OtvetID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TableName := Table1.Name
+	IDName, _ := FindPrimaryKeyNameType(Table1)
+	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+	if ok == false {
+		return Otvet
+	}
+
+	if TextConvert[:6] != "alias." {
+		return Otvet
+	}
+
+	TextFrom := constants.TEXT_OTVET_ID_ALIAS
+	TextTo := TextFrom
+	TextTo = strings.ReplaceAll(TextFrom, " ID", " "+TextConvert+"(ID)")
+
+	Otvet = strings.ReplaceAll(Otvet, TextFrom, TextTo)
+	URL := FindURL_Alias()
+	if URL == "" {
+		return Otvet
+	}
+
+	Otvet = AddImport(Otvet, URL)
+
+	return Otvet
+}
+
+// DeleteCommentFromString - удаляет комментарий из строки //
+func DeleteCommentFromString(TextFrom string) string {
+	Otvet := TextFrom
+
+	pos1 := strings.Index(Otvet, "//")
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	Otvet = Otvet[:pos1]
 
 	return Otvet
 }
