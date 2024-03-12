@@ -54,7 +54,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			}
 
 			//тестовые файлы db update
-			err = CreateTestFilesUpdateEveryColumn(Table1)
+			err = CreateFilesUpdateEveryColumnTest(Table1)
 			if err != nil {
 				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
 				return err
@@ -637,8 +637,8 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	return Otvet
 }
 
-// CreateTestFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_client
-func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
+// CreateFilesUpdateEveryColumnTest - создаёт 1 файл в папке grpc_client
+func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	var err error
 
 	TableName := strings.ToLower(Table1.Name)
@@ -692,7 +692,7 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
+		//TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
 	}
 
 	//создание текста
@@ -874,11 +874,11 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextCache = create_files.DeleteTemplateRepositoryImports(TextCache)
 
-		DBConstantsURL := create_files.FindDBConstantsURL()
-		TextCache = create_files.AddImport(TextCache, DBConstantsURL)
-
-		ModelTableURL := create_files.FindModelTableURL(TableName)
-		TextCache = create_files.AddImport(TextCache, ModelTableURL)
+		//DBConstantsURL := create_files.FindDBConstantsURL()
+		//TextCache = create_files.AddImport(TextCache, DBConstantsURL)
+		//
+		//ModelTableURL := create_files.FindModelTableURL(TableName)
+		//TextCache = create_files.AddImport(TextCache, ModelTableURL)
 
 		//TextCache = create_files.ConvertRequestIdToAlias(TextCache, Table1)
 	}
@@ -894,6 +894,9 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 
 	//удаление пустых строк
 	TextCache = create_files.DeleteEmptyLines(TextCache)
+
+	//SkipNow() если нет строк в БД
+	TextCache = create_files.AddSkipNow(TextCache, Table1)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyCache, []byte(TextCache), constants.FILE_PERMISSIONS)

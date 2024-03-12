@@ -778,7 +778,29 @@ func CreateFiles_GRPC_Client_Cache_Test(Table1 *types.Table) error {
 
 		ModelTableName := create_files.FindModelTableURL(TableName)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ModelTableName)
+
+		////proto
+		//RepositoryGRPCProtoURL := create_files.FindProtoURL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCProtoURL)
+		//
+		////nrpc client
+		//RepositoryNRPCClientlURL := create_files.FindNRPClientURL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryNRPCClientlURL)
+		//
+		////grpc_nrpc
+		//GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
+		//
+		////constants GRPC
+		//RepositoryGRPCConstantsURL := create_files.FindGRPCConstantsURL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCConstantsURL)
 	}
+
+	//создание текста
+	ModelName := Table1.NameGo
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
 
 	// замена ID на PrimaryKey
 	TextGRPCClient = create_files.ReplacePrimaryKeyID(TextGRPCClient, Table1)
@@ -794,9 +816,6 @@ func CreateFiles_GRPC_Client_Cache_Test(Table1 *types.Table) error {
 
 	//удаление пустых строк
 	TextGRPCClient = create_files.DeleteEmptyLines(TextGRPCClient)
-
-	//добавим комментарий в начало файла
-	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)

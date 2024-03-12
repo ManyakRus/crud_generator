@@ -226,5 +226,5 @@ NEED_CREATE_CACHE_TEST_FILES=true
 #TEMPLATES_GRPC_CLIENT_TABLES_CACHE_FILENAME - short filename of "grpc_client_table_cache.go_" file
 TEMPLATES_GRPC_CLIENT_TABLES_CACHE_FILENAME="grpc_client_table_cache.go_"
 
-#TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME - short filename of "grpc_client_table_cache.go_" file
-TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME="grpc_client_table_cache.go_"
+#TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME - short filename of "grpc_client_table_cache_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME="grpc_client_table_cache_test.go_"

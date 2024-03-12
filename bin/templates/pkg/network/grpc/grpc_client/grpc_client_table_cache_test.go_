@@ -14,8 +14,7 @@ func TestReadFromCache(t *testing.T) {
 
 	crud := Crud_GRPC{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
-	Otvet.ID = Postgres_ID_Test
-	err := crud.ReadFromCache(&Otvet)
+	Otvet, err := crud.ReadFromCache(Postgres_ID_Test)
 
 	if err != nil {
 		t.Error("ReadFromCache() error: ", err)

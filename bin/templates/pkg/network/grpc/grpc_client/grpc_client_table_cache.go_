@@ -14,7 +14,8 @@ import (
 )
 
 // ReadFromCache - возвращает модель из БД
-func (crud Crud_GRPC) ReadFromCache(m *lawsuit_status_types.LawsuitStatusType) error {
+func (crud Crud_GRPC) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatusType, error) {
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	var err error
 
 	// подключение
@@ -24,7 +25,7 @@ func (crud Crud_GRPC) ReadFromCache(m *lawsuit_status_types.LawsuitStatusType) e
 	var versionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.ID = int64(m.ID)
+	Request.ID = ID
 	Request.VersionModel = versionModel
 
 	ctxMain := context.Background()
@@ -42,15 +43,15 @@ func (crud Crud_GRPC) ReadFromCache(m *lawsuit_status_types.LawsuitStatusType) e
 		if grpc_client.IsErrorModelVersion(err) == true {
 			log.Panic(err)
 		}
-		return err
+		return Otvet, err
 	}
 
 	// ответ
 	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), m)
+	err = json.Unmarshal([]byte(sModel), &Otvet)
 	if err != nil {
-		return err
+		return Otvet, err
 	}
 
-	return err
+	return Otvet, err
 }
