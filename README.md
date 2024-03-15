@@ -35,7 +35,8 @@ The code generator replaces part of the code in the template with another code:
 
 Installation procedure:
 1. Compile this repository
-make build
+>make build
+>
 the crud_generator file will appear in the bin folder
 
 2. Fill in the settings in the file bin/templates/configs_/settings.txt
@@ -55,7 +56,7 @@ make run
 
 
 P.S.
-I generated myself 170,000 lines of code, from 70 tables in the database, for my service.
+I generated myself 350,000 lines of code, from 70 tables in the database, for my service.
 
 
 Source code in Golang language.
