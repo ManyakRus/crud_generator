@@ -3,7 +3,12 @@ in golang language to perform CRUD operations.
 A completely ready-made microservice is created that can be launched immediately.
 
 For each table in the Postgres SQL database, files will be created to perform crud operations:
-create, read, update, save, delete (or delete + restore)
+- Create(), Read(), Update(), Delete() (or Delete() + Restore(), if there is an is_deleted field)
+- Save() - creating a new record when ID=0, or updating a record when ID<>0
+- ReadFromCache() - reading from cache or database
+- Update_ColumnName() - changing only one column with the name ColumnName,
+separate function for each column of each table
+
 files are generated:
 1. table - struct structure with all fields from the database, and gorm + json annotations
    Tables with fields in the database must be created manually in advance.
@@ -45,11 +50,13 @@ the crud_generator file will appear in the bin folder
 - URL of your new service
 - and etc.
 
-3. Launch crud_generator
+3. Tables in the database must be created in advance, manually.
+
+4. Launch crud_generator
 A new folder with the name of your service will appear in the bin folder,
 with subfolders and finished files inside.
 
-4. Fill in the configuration parameters in the .env file
+5. Fill in the configuration parameters in the .env file
 Start microservice:
 make run
 
