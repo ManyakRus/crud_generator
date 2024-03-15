@@ -58,7 +58,8 @@ with subfolders and finished files inside.
 
 5. Fill in the configuration parameters in the .env file
 Start microservice:
-make run
+>make run
+>
 
 
 
