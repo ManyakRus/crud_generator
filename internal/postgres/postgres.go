@@ -30,6 +30,11 @@ type TableColumn struct {
 	TableComment      string `json:"table_comment"   gorm:"column:table_comment;default:''"`
 }
 
+type TableRowsStruct struct {
+	IDMinimum sql.NullString `json:"id_min"   gorm:"column:id_min;default:0"`
+	RowsCount sql.NullInt64  `json:"rows_count"   gorm:"column:rows_count;default:0"`
+}
+
 // FillMapTable - возвращает массив MassTable данными из БД
 func FillMapTable() (map[string]*types.Table, error) {
 	var err error
@@ -261,6 +266,7 @@ order by
 	//FillTypeGo(MapTable)
 
 	FillIDMinimum(MapTable)
+	FillRowsCount(MapTable)
 
 	return MapTable, err
 }
@@ -272,6 +278,7 @@ func CreateTable() *types.Table {
 	return Otvet
 }
 
+// FillIDMinimum - находим минимальный ID, для тестов с этим ID
 func FillIDMinimum(MapTable map[string]*types.Table) {
 	var err error
 
@@ -286,7 +293,7 @@ func FillIDMinimum(MapTable map[string]*types.Table) {
 			continue
 		}
 		DefaultValueSQL := create_files.FindTextDefaultValueSQL(TypeGo)
-		TextSQL := "SELECT Min(" + NameID + ") from \"" + postgres_gorm.Settings.DB_SCHEMA + "\".\"" + TableName + "\" WHERE " + NameID + " <> " + DefaultValueSQL
+		TextSQL := "SELECT Min(" + NameID + ") as id_minimum FROM \"" + postgres_gorm.Settings.DB_SCHEMA + "\".\"" + TableName + "\" WHERE " + NameID + " <> " + DefaultValueSQL
 		ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*60)
 		defer ctxCancelFunc()
 		db.WithContext(ctx)
@@ -299,6 +306,7 @@ func FillIDMinimum(MapTable map[string]*types.Table) {
 		}
 
 		var IDMinimum sql.NullString
+		//TableRows := TableRowsStruct{}
 		tx = tx.Scan(&IDMinimum)
 		err = tx.Error
 		if err != nil {
@@ -311,6 +319,49 @@ func FillIDMinimum(MapTable map[string]*types.Table) {
 		} else if mini_func.IsNumberType(TypeGo) == true {
 			Table1.IDMinimum = IDMinimum.String
 		}
+	}
+
+}
+
+// FillRowsCount - находим количество строк в таблице, для кэша
+func FillRowsCount(MapTable map[string]*types.Table) {
+	var err error
+
+	//соединение
+	db := postgres_gorm.GetConnection()
+	ctxMain := contextmain.GetContext()
+
+	for TableName, Table1 := range MapTable {
+		//текст запроса
+		//только Postgres SQL
+		TextSQL := `
+SELECT 
+	reltuples::bigint AS rows_count
+FROM
+	pg_class
+WHERE  
+	oid = 'public."` + TableName + `"'::regclass
+`
+		ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*60)
+		defer ctxCancelFunc()
+		db.WithContext(ctx)
+
+		//запрос
+		tx := db.Raw(TextSQL)
+		err = tx.Error
+		if err != nil {
+			log.Panic("Wrong SQL query: ", TextSQL, " error: ", err)
+		}
+
+		var RowsCount sql.NullInt64
+		//TableRows := TableRowsStruct{}
+		tx = tx.Scan(&RowsCount)
+		err = tx.Error
+		if err != nil {
+			log.Panic("Wrong SQL Scan(): ", TextSQL, " error: ", err)
+		}
+
+		Table1.RowsCount = RowsCount.Int64
 	}
 
 }

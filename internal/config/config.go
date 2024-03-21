@@ -88,6 +88,7 @@ type SettingsINI struct {
 	TEXT_MODULE_GENERATED                            string
 	READY_ALIAS_FILENAME                             string
 	NEED_CREATE_UPDATE_EVERY_COLUMN                  bool
+	CACHE_ELEMENTS_COUNT_MAX                         int64
 }
 
 func Getenv(Name string, IsRequired bool) string {
@@ -479,6 +480,15 @@ func FillSettings() {
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME = s
+
+	//
+	Name = "CACHE_ELEMENTS_COUNT_MAX"
+	s = Getenv(Name, true)
+	i, err := micro.Int64FromString(s)
+	if err != nil {
+		log.Error("CACHE_ELEMENTS_COUNT_MAX: ", s, " Int64FromString() error: ", err)
+	}
+	Settings.CACHE_ELEMENTS_COUNT_MAX = i
 
 }
 

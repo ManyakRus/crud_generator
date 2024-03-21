@@ -12,8 +12,8 @@ import (
 // cache - кэш с данными
 var cache *expirable.LRU[int64, lawsuit_status_types.LawsuitStatusType]
 
-// CACHE_SIZE - количество элементо в кэше
-const CACHE_SIZE = 100
+// CACHE_SIZE - количество элементов в кэше
+const CACHE_SIZE = 1000
 
 // CACHE_EXPIRE_MINUTES - время жизни элемента в кэше
 const CACHE_EXPIRE_MINUTES = 86400

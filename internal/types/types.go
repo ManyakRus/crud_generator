@@ -22,6 +22,7 @@ type Table struct {
 	NameGo      string
 	IDMinimum   string
 	Comment     string `json:"table_comment"   gorm:"column:table_comment;default:''"`
+	RowsCount   int64
 }
 
 type ReplaceStruct struct {

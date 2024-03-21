@@ -1374,3 +1374,24 @@ func FilenameWithoutLastUnderline(Filename string) string {
 
 	return Otvet
 }
+
+// FillVariable - заменяет переменную в тексте
+func FillVariable(Text, VariableName, Value string) string {
+	Otvet := Text
+
+	sFind := VariableName + " = "
+	pos1 := strings.Index(Otvet, sFind)
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	s2 := Text[pos1:]
+	posEnd := strings.Index(s2, "\n")
+	if posEnd < 0 {
+		return Otvet
+	}
+
+	Otvet = Otvet[:pos1] + VariableName + " = " + Value + Otvet[pos1+posEnd:]
+
+	return Otvet
+}

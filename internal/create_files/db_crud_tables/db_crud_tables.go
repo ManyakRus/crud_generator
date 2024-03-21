@@ -828,6 +828,13 @@ func CreateFilesCache(Table1 *types.Table) error {
 	//alias
 	TextCache = create_files.ConvertIDToAlias_OtvetID(TextCache, Table1)
 
+	//const CACHE_SIZE = 1000
+	CACHE_ELEMENTS_COUNT_MAX := config.Settings.CACHE_ELEMENTS_COUNT_MAX
+	Count_Now := Table1.RowsCount
+	CACHE_ELEMENTS_COUNT := micro.MinInt64(Count_Now, CACHE_ELEMENTS_COUNT_MAX)
+	sCACHE_ELEMENTS_COUNT := micro.StringFromInt64(CACHE_ELEMENTS_COUNT)
+	TextCache = create_files.FillVariable(TextCache, constants.TEXT_CACHE_SIZE_1000, sCACHE_ELEMENTS_COUNT)
+
 	//удаление пустого импорта
 	TextCache = create_files.DeleteEmptyImport(TextCache)
 
