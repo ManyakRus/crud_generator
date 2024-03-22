@@ -40,7 +40,7 @@ func (crud Crud_DB) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatusT
 	defer ctxCancelFunc()
 
 	Otvet.ID = ID
-	err = crud.Read_ctx(ctx, &Otvet)
+	err = Read_ctx(ctx, &Otvet)
 	if err == nil {
 		cache.Add(ID, Otvet)
 	}

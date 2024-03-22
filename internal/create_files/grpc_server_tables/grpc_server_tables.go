@@ -124,6 +124,9 @@ func CreateFiles(Table1 *types.Table) error {
 		ProtoURL := create_files.FindProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
+		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
+
 		//удалим лишние функции
 		TextGRPCServer = DeleteFuncDelete(TextGRPCServer, Table1)
 		TextGRPCServer = DeleteFuncRestore(TextGRPCServer, Table1)

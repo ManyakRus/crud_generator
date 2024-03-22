@@ -6,12 +6,12 @@ func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = crud.Read_ctx(ctx, m)
+	err = Read_ctx(ctx, m)
 	return err
 }
 
 // Read_ctx - изменяет 1 поле ColumnName в базе данных
-func (crud Crud_DB) Read_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+func Read_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	if micro.ContextDone(ctx) == true {
