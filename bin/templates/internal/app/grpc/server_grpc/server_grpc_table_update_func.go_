@@ -17,11 +17,16 @@ func (s *ServerGRPC) LawsuitStatusType_Update(ctx context.Context, Request *grpc
 		return &Otvet, err
 	}
 
+	ctxMain := contextmain.GetContext()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
 	//запрос в БД
+	db := postgres_gorm.GetConnection()
 	Model := &lawsuit_status_types.LawsuitStatusType{}
 	Model.ID = Request.ID
 	Model.ColumnName = Request.FieldName
-	err = Model.Update()
+	err = crud_lawsuit_status_types.Update_ColumnName_ctx(ctx, db, Model)
 	if err != nil {
 		return &Otvet, err
 	}

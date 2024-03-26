@@ -6,12 +6,14 @@ func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = Read_ctx(ctx, m)
+	db := postgres_gorm.GetConnection()
+
+	err = Read_ctx(ctx, db, m)
 	return err
 }
 
 // Read_ctx - изменяет 1 поле ColumnName в базе данных
-func Read_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	if micro.ContextDone(ctx) == true {
@@ -26,7 +28,6 @@ func Read_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) er
 	}
 
 	//
-	db := postgres_gorm.GetConnection()
 	db.WithContext(ctx)
 
 	//

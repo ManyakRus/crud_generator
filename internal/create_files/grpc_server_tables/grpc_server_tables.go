@@ -411,8 +411,11 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ProtoURL := create_files.FindProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-		//ModelURL := create_files.FindModelURL()
-		//TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
+		DBConstantsURL := create_files.FindDBConstantsURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, DBConstantsURL)
+
+		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
 
 	}
 
@@ -684,6 +687,12 @@ func CreateFilesCache(Table1 *types.Table) error {
 
 		ProtoURL := create_files.FindProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+
+		DBConstantsURL := create_files.FindDBConstantsURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, DBConstantsURL)
+
+		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
 	}
 
 	//создание текста

@@ -11,6 +11,7 @@ import (
 	"time"
 	"github.com/ManyakRus/starter/contextmain"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_functions"
+	"gorm.io/gorm"
 )
 
 // TableName - имя таблицы в БД Postgres
@@ -28,12 +29,14 @@ func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = Read_ctx(ctx, m)
+	db := postgres_gorm.GetConnection()
+
+	err = Read_ctx(ctx, db, m)
 	return err
 }
 
 // Read_ctx - находит запись в БД по ID
-func Read_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	if micro.ContextDone(ctx) == true {
@@ -43,7 +46,6 @@ func Read_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) er
 
 	id := int64(m.ID)
 
-	db := postgres_gorm.GetConnection()
 	db.WithContext(ctx)
 
 	tx := db.First(m, id)
@@ -61,12 +63,14 @@ func (crud Crud_DB) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err := Save_ctx(ctx, m)
+	db := postgres_gorm.GetConnection()
+
+	err := Save_ctx(ctx, db, m)
 	return err
 }
 
 // Save_ctx - записывает новый или существующий объект в базу данных
-func Save_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+func Save_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
@@ -74,7 +78,7 @@ func Save_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) er
 	}
 
 	is_create := !micro.BoolFromInt64(int64(m.ID))
-	err = create_update_ctx(ctx, m, is_create)
+	err = create_update_ctx(ctx, db, m, is_create)
 	return err
 }
 
@@ -84,19 +88,21 @@ func (crud Crud_DB) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err := Update_ctx(ctx, m)
+	db := postgres_gorm.GetConnection()
+
+	err := Update_ctx(ctx, db, m)
 	return err
 }
 
 // Update_ctx - записывает существующий объект в базу данных
-func Update_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+func Update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err
 	}
 
-	err = create_update_ctx(ctx, m, false)
+	err = create_update_ctx(ctx, db, m, false)
 	return err
 }
 
@@ -106,19 +112,21 @@ func (crud Crud_DB) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err := Create_ctx(ctx, m)
+	db := postgres_gorm.GetConnection()
+
+	err := Create_ctx(ctx, db, m)
 	return err
 }
 
 // Create_ctx - записывает новый объект в базу данных
-func Create_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+func Create_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err
 	}
 
-	err = create_update_ctx(ctx, m, true)
+	err = create_update_ctx(ctx, db, m, true)
 	return err
 }
 
@@ -130,12 +138,14 @@ func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType, is_
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = create_update_ctx(ctx, m, is_create)
+	db := postgres_gorm.GetConnection()
+
+	err = create_update_ctx(ctx, db, m, is_create)
 	return err
 }
 
 // create_update_ctx - записывает объект в базу данных
-func create_update_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType, is_create bool) error {
+func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType, is_create bool) error {
 	var err error
 
 	// log.Trace("start Save() ", TableName, " id: ", int64(m.ID))
@@ -159,7 +169,6 @@ func create_update_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatu
 	}
 
 	//
-	db := postgres_gorm.GetConnection()
 	db.WithContext(ctx)
 
 	// заполним даты
@@ -208,12 +217,14 @@ func (crud Crud_DB) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = Restore_ctx(ctx, m)
+	db := postgres_gorm.GetConnection()
+
+	err = Restore_ctx(ctx, db, m)
 	return err
 }
 
 // Restore_ctx - записывает is_deleted = true
-func Restore_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+func Restore_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	if micro.ContextDone(ctx) == true {
@@ -223,7 +234,7 @@ func Restore_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType)
 
 	m2 := lawsuit_status_types.LawsuitStatusType{}
 	m2.ID = m.ID
-	err = Read_ctx(ctx, &m2)
+	err = Read_ctx(ctx, db, &m2)
 	if err != nil {
 		return err
 	}
@@ -231,7 +242,7 @@ func Restore_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType)
 	m2.IsDeleted = false
 	m.IsDeleted = false
 
-	err = Save_ctx(ctx, &m2)
+	err = Save_ctx(ctx, db, &m2)
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Restore() id: %v, error: %v", m.ID, err)
 	}
@@ -253,13 +264,15 @@ func (crud Crud_DB) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) erro
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = Find_ByExtID_ctx(ctx, m)
+	db := postgres_gorm.GetConnection()
+
+	err = Find_ByExtID_ctx(ctx, db, m)
 
 	return err
 }
 
 // Find_ByExtID_ctx - находит запись в БД по ext_id и connection_id
-func Find_ByExtID_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+func Find_ByExtID_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	if micro.ContextDone(ctx) == true {
@@ -272,7 +285,6 @@ func Find_ByExtID_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatus
 		return err
 	}
 
-	db := postgres_gorm.GetConnection()
 	db.WithContext(ctx)
 
 	tx := db.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).First(m)
@@ -294,12 +306,14 @@ func (crud Crud_DB) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	err = Delete_ctx(ctx, m)
+	db := postgres_gorm.GetConnection()
+
+	err = Delete_ctx(ctx, db, m)
 	return err
 }
 
 // Delete_ctx - удаляет запись в БД
-func Delete_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) error {
+func Delete_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	if micro.ContextDone(ctx) == true {
@@ -307,7 +321,6 @@ func Delete_ctx(ctx context.Context, m *lawsuit_status_types.LawsuitStatusType) 
 		return err
 	}
 
-	db := postgres_gorm.GetConnection()
 	db.WithContext(ctx)
 
 	tx := db.Delete(m)

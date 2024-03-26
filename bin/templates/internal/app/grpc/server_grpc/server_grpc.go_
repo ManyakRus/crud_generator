@@ -3,6 +3,7 @@ package server_grpc
 import (
 	"context"
 	"github.com/ManyakRus/starter/micro"
+	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud/crud_lawsuit_status_types"
@@ -28,9 +29,10 @@ func (s *ServerGRPC) LawsuitStatusType_Read(ctx context.Context, Request *grpc_p
 	}
 
 	//запрос в БД
+	db := postgres_gorm.GetConnection()
 	Model := &lawsuit_status_types.LawsuitStatusType{}
 	Model.ID = Request.ID
-	err = crud_lawsuit_status_types.Read_ctx(ctx, Model)
+	err = crud_lawsuit_status_types.Read_ctx(ctx, db, Model)
 	if err != nil {
 		return &Otvet, err
 	}
@@ -65,9 +67,10 @@ func (s *ServerGRPC) LawsuitStatusType_Delete(ctx context.Context, Request *grpc
 	}
 
 	//запрос в БД
+	db := postgres_gorm.GetConnection()
 	Model := &lawsuit_status_types.LawsuitStatusType{}
 	Model.ID = Request.ID
-	err = crud_lawsuit_status_types.Delete_ctx(ctx, Model)
+	err = crud_lawsuit_status_types.Delete_ctx(ctx, db, Model)
 	if err != nil {
 		return &Otvet, err
 	}
@@ -102,9 +105,10 @@ func (s *ServerGRPC) LawsuitStatusType_Restore(ctx context.Context, Request *grp
 	}
 
 	//запрос в БД
+	db := postgres_gorm.GetConnection()
 	Model := &lawsuit_status_types.LawsuitStatusType{}
 	Model.ID = Request.ID
-	err = crud_lawsuit_status_types.Restore_ctx(ctx, Model)
+	err = crud_lawsuit_status_types.Restore_ctx(ctx, db, Model)
 	if err != nil {
 		return &Otvet, err
 	}
@@ -146,7 +150,8 @@ func (s *ServerGRPC) LawsuitStatusType_Create(ctx context.Context, Request *grpc
 	}
 
 	//запрос в БД
-	err = crud_lawsuit_status_types.Create_ctx(ctx, Model)
+	db := postgres_gorm.GetConnection()
+	err = crud_lawsuit_status_types.Create_ctx(ctx, db, Model)
 	if err != nil {
 		return &Otvet, err
 	}
@@ -188,7 +193,8 @@ func (s *ServerGRPC) LawsuitStatusType_Update(ctx context.Context, Request *grpc
 	}
 
 	//запрос в БД
-	err = crud_lawsuit_status_types.Update_ctx(ctx, Model)
+	db := postgres_gorm.GetConnection()
+	err = crud_lawsuit_status_types.Update_ctx(ctx, db, Model)
 	if err != nil {
 		return &Otvet, err
 	}
@@ -230,7 +236,8 @@ func (s *ServerGRPC) LawsuitStatusType_Save(ctx context.Context, Request *grpc_p
 	}
 
 	//запрос в БД
-	err = crud_lawsuit_status_types.Save_ctx(ctx, &Model)
+	db := postgres_gorm.GetConnection()
+	err = crud_lawsuit_status_types.Save_ctx(ctx, db, &Model)
 	if err != nil {
 		return &Otvet, err
 	}
@@ -265,10 +272,11 @@ func (s *ServerGRPC) LawsuitStatusType_FindByExtID(ctx context.Context, Request 
 	}
 
 	//запрос в БД
+	db := postgres_gorm.GetConnection()
 	Model := &lawsuit_status_types.LawsuitStatusType{}
 	Model.ExtID = Request.ExtID
 	Model.ConnectionID = Request.ConnectionId
-	err = crud_lawsuit_status_types.Find_ByExtID_ctx(ctx, Model)
+	err = crud_lawsuit_status_types.Find_ByExtID_ctx(ctx, db, Model)
 	if err != nil {
 		return &Otvet, err
 	}

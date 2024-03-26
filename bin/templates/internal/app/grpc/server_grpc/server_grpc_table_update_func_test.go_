@@ -27,8 +27,8 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 	Request2.ID = LawsuitStatusType_ID_Test
 	Request2.ColumnName = Model.ColumnName
 	Request2.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
-	_, err = server1.LawsuitStatusType_Update(ctx, &Request2)
+	_, err = server1.LawsuitStatusType_Update_ColumnName(ctx, &Request2)
 	if err != nil {
-		t.Error("Test_server_LawsuitStatusType_Update() Update() error: ", err)
+		t.Error("Test_server_LawsuitStatusType_Update() Update_ColumnName() error: ", err)
 	}
 }
