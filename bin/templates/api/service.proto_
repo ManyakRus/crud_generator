@@ -151,23 +151,35 @@ message Request_ID_String {
     string StringFind = 3; // строка поиска
 }
 
+// Request_Model_MassString - модель и массив строк
+message Request_Model_MassString {
+    uint32 VersionModel= 1; //версия структуры модели
+    string ModelString = 2; //объект-модель в формате json
+    repeated string MassNames	= 3; //массив строк
+}
+
+
 // -------------------------- Response ----------------------------------------------
 
 // Response - возвращает строка json Модель
 message Response {
     string ModelString 	= 1; //объект-модель в формате json
 }
+
 // ResponseFloat64 - возвращает float64
 message ResponseFloat64 {
     double Otvet 	= 1; //Ответ - число
 }
+
 // ResponseInt64 - возвращает int64
 message ResponseInt64 {
     int64 Otvet 	= 1; //Ответ - число
 }
+
 // Response - параметры ответа на клиент
 message ResponseEmpty {
 }
+
 // Response - параметры ответа на клиент
 message ResponseMass {
     repeated string MassModelString 	= 1; //массив объект-модель в формате json

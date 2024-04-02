@@ -6,3 +6,26 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"testing"
 )
+
+
+func TestUpdateManyFields(t *testing.T) {
+	config_main.LoadEnv()
+
+	postgres_gorm.Connect()
+	defer postgres_gorm.CloseConnection()
+
+	//прочитаем из БД
+	crud := Crud_DB{}
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	Model.ID = Postgres_ID_Test
+	err := crud.Read(&Model)
+	if err != nil {
+		t.Error("TestUpdateManyFields() Read() error: ", err)
+	}
+
+	//запишем в БД это же значение
+	err = crud.UpdateManyFields(&Otvet, nil)
+	if err != nil {
+		t.Error("TestUpdateManyFields() UpdateManyFields() error: ", err)
+	}
+}

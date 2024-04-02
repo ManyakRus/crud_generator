@@ -397,18 +397,11 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	}
 	TextGRPC_Client := string(bytes)
 	TextGRPC_Client = TextGRPC_Client + "\n"
+	TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
+	TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	//заменим имя пакета на новое
 	TextGRPC_Client = create_files.ReplacePackageName(TextGRPC_Client, DirReadyTable)
-
-	//	TextGRPC_Client := "package " + config.Settings.PREFIX_CLIENT_GRPC + TableName + "\n\n"
-	//	TextGRPC_Client = TextGRPC_Client + `import (
-	//	"context"
-	//	"time"
-	//	"github.com/ManyakRus/starter/log"
-	//)
-	//
-	//`
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -557,6 +550,8 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	}
 	TextGRPC_Client := string(bytes)
 	TextGRPC_Client = TextGRPC_Client + "\n"
+	TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
+	TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	//заменим имя пакета на новое
 	TextGRPC_Client = create_files.ReplacePackageName(TextGRPC_Client, DirReadyTable)

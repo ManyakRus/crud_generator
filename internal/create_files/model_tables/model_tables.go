@@ -178,6 +178,7 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 		TextModel = DeleteFromInterfaceDelete(TextModel, Table1)
 		TextModel = DeleteFromInterfaceRestore(TextModel, Table1)
 		TextModel = DeleteFromInterfaceFind_ByExtID(TextModel, Table1)
+		TextModel = DeleteFromInterfaceUpdateManyFields(TextModel, Table1)
 		//кэш
 		if config.Settings.NEED_CREATE_CACHE_API == false {
 			//исправление Save()
@@ -679,6 +680,22 @@ func DeleteFromInterfaceReadFromCache(TextModel string, Table1 *types.Table) str
 
 	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
 	TextFind := "\n\tReadFromCache(*" + ModelName + ") error"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
+
+	return Otvet
+}
+
+// DeleteFromInterfaceUpdateManyFields - удаляет функцию UpdateManyFields() из интерфейса
+func DeleteFromInterfaceUpdateManyFields(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверим есть ли колонка IsDeleted
+	if config.Settings.NEED_CREATE_UPDATE_EVERY_COLUMN == true {
+		return Otvet
+	}
+
+	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
+	TextFind := "\n\tUpdateManyFields(*" + ModelName + ", []string) error"
 	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
 
 	return Otvet

@@ -2,6 +2,7 @@ package grpc_lawsuit_status_types
 
 import (
 	"context"
+	"time"
 	"github.com/ManyakRus/starter/log"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
@@ -9,5 +10,44 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
-	"time"
 )
+
+// UpdateManyFields - обновляет несколько полей в базе данных, по ИД
+func (crud Crud_GRPC) UpdateManyFields(m *lawsuit_status_types.LawsuitStatusType, MassNeedUpdateFields []string) error {
+	var err error
+
+	// подключение
+	grpc_client.Connect_GRPC_NRPC()
+
+	// подготовка запроса
+	var VersionModel = crud.GetVersionModel()
+
+	ModelString, err := m.GetJSON()
+	if err != nil {
+		return err
+	}
+	Request := &grpc_proto.Request_Model_MassString{}
+	Request.VersionModel = VersionModel
+	Request.ModelString = ModelString
+	Request.MassNames = MassNeedUpdateFields
+
+	ctxMain := context.Background()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(grpc_constants.GetTimeoutSeconds()))
+	defer ctxCancelFunc()
+
+	// запрос
+	if grpc_nrpc.NeedNRPC == true {
+		_, err = nrpc_client.Client.LawsuitStatusType_UpdateManyFields(Request)
+	} else {
+		_, err = grpc_client.Client.LawsuitStatusType_UpdateManyFields(ctx, Request)
+	}
+	if err != nil {
+		if grpc_client.IsErrorModelVersion(err) == true {
+			log.Panic(err)
+		}
+		return err
+	}
+
+	return err
+}
+

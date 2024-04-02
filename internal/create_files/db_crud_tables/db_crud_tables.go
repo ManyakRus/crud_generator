@@ -474,6 +474,7 @@ func ReplaceText_created_at(s string, Table1 *types.Table) string {
 	return Otvet
 }
 
+// RenameFunctions - заменяет названия функций, на названия из файла
 func RenameFunctions(TextDB string, Table1 *types.Table) string {
 	Otvet := TextDB
 
@@ -528,6 +529,8 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//заменим имя пакета на новое
 	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
+	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
+	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -557,6 +560,9 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	if config.Settings.NEED_CREATE_CACHE_API == true {
 		TextCrud = strings.ReplaceAll(TextCrud, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
 	}
+
+	//переименование функций
+	TextCrud = RenameFunctions(TextCrud, Table1)
 
 	//удаление пустого импорта
 	TextCrud = create_files.DeleteEmptyImport(TextCrud)
@@ -675,15 +681,8 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 	//заменим имя пакета на новое
 	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
-
-	//	TextCrud := "package " + config.Settings.PREFIX_CRUD + TableName + "\n\n"
-	//	TextCrud = TextCrud + `import (
-	//	"testing"
-	//	"github.com/ManyakRus/starter/config_main"
-	//	"github.com/ManyakRus/starter/postgres_gorm"
-	//)
-	//
-	//`
+	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
+	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -701,9 +700,6 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	if TextUpdateEveryColumn == "" {
 		return err
 	}
-	//ModelName := Table1.NameGo
-	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextCrud = TextCrud + TextUpdateEveryColumn
 
 	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud

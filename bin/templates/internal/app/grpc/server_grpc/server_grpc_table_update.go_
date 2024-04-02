@@ -2,10 +2,49 @@ package server_grpc
 
 import (
 	"context"
-	"time"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/contextmain"
+	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
-	"github.com/ManyakRus/starter/postgres_gorm"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud/crud_lawsuit_status_types"
+	"time"
 )
+
+// LawsuitStatusType_UpdateManyFields - изменяет только нужные колонки в базе данных
+func (s *ServerGRPC) LawsuitStatusType_UpdateManyFields(ctx context.Context, Request *grpc_proto.Request_Model_MassString) (*grpc_proto.ResponseEmpty, error) {
+	var Otvet grpc_proto.ResponseEmpty
+	var err error
+
+	//проверим контекст уже отменён
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return &Otvet, err
+	}
+
+	//проверим совпадения версии модели
+	VersionServer := lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+	VersionClient := Request.VersionModel
+	if VersionServer != VersionClient {
+		err = ErrorModelVersion(lawsuit_status_types.LawsuitStatusType{})
+		return &Otvet, err
+	}
+
+	//получим модель из строки JSON
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	err = Model.GetModelFromJSON(Request.ModelString)
+	if err != nil {
+		return &Otvet, err
+	}
+
+	//запрос в БД
+	db := postgres_gorm.GetConnection()
+	err = crud_lawsuit_status_types.UpdateManyFields_ctx(ctx, db, &Model, Request.MassNames)
+	if err != nil {
+		return &Otvet, err
+	}
+
+	return &Otvet, err
+}
+

@@ -13,6 +13,7 @@ func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 }
 
 // Read_ctx - изменяет 1 поле ColumnName в базе данных
+// с учётом контекста и соединения к БД
 func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 

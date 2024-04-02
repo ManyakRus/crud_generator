@@ -12,3 +12,37 @@ import (
 	"gorm.io/gorm"
 	"time"
 )
+
+// UpdateManyFields - изменяет несколько полей в базе данных
+// MassNeedUpdateFields - список полей структуры golang для обновления
+func (crud Crud_DB) UpdateManyFields(m *lawsuit_status_types.LawsuitStatusType, MassNeedUpdateFields []string) error {
+	var err error
+
+	ctxMain := contextmain.GetContext()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	db := postgres_gorm.GetConnection()
+
+	err = UpdateManyFields_ctx(ctx, db, m, MassNeedUpdateFields)
+	return err
+}
+
+// UpdateManyFields_ctx - изменяет несколько полей в базе данных
+// с учётом контекста и соединения к БД
+// MassNeedUpdateFields - список полей структуры golang для обновления
+func UpdateManyFields_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType, MassNeedUpdateFields []string) error {
+	var err error
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
+
+	if m.ID == 0 {
+		err = errors.New(m.TableNameDB() + " UpdateManyFields() error: ID=0")
+		return err
+	}
+
+	err = create_update_ctx(ctx, db, m, false, MassNeedUpdateFields)
+	return err
+}

@@ -24,6 +24,7 @@ type ICrud_LawsuitStatusType interface {
 	Restore(*LawsuitStatusType) error
 	Find_ByExtID(*LawsuitStatusType) error
 	ReadFromCache(ID int64) (LawsuitStatusType, error)
+	UpdateManyFields(*LawsuitStatusType, []string) error
 }
 
 // TableName - возвращает имя таблицы в БД
@@ -187,6 +188,17 @@ func (m LawsuitStatusType) SetCrudInterface(crud ICrud_LawsuitStatusType) {
 	Crud_LawsuitStatusType = crud
 
 	return
+}
+
+// UpdateManyFields - находит запись в БД по ID, и изменяет только нужные колонки
+func (m *LawsuitStatusType) UpdateManyFields(MassNeedUpdateFields []string) error {
+	if Crud_LawsuitStatusType == nil {
+		return constants.ErrorCrudIsNotInit
+	}
+
+	err := Crud_LawsuitStatusType.UpdateManyFields(m, MassNeedUpdateFields)
+
+	return err
 }
 
 // ---------------------------- конец CRUD операции ------------------------------------------------------------

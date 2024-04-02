@@ -14,7 +14,8 @@ func main() {
 }
 
 func StartApp() {
-	//ConfigMain.LoadENV_or_SettingsTXT()
+	//defer micro.ShowTimePassed(time.Now())
+
 	config.LoadSettingsTxt()
 
 	config.FillSettings()

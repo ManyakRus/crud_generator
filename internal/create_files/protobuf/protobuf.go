@@ -83,6 +83,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		}
 
 		TextProtoNew = TextProtoNew + FindTextProtoTable1(TextProto, Table1)
+		TextProtoNew = TextProtoNew + FindTextProtoTable1_UpdateManyFields(TextProto, Table1)
 		TextProtoNew = TextProtoNew + FindTextProtoTable1_UpdateEveryColumn(TextProto, Table1)
 
 		if config.Settings.NEED_CREATE_CACHE_API == true {
@@ -413,6 +414,39 @@ func FindTextReadFromCache(TextProto string, ModelName string) string {
 // TextReadFromCache - возвращает текст .proto
 func TextReadFromCache(ModelName string) string {
 	Otvet := "rpc " + ModelName + "_ReadFromCache(RequestId) returns (Response) {}"
+
+	return Otvet
+}
+
+// FindTextProtoTable1_UpdateManyFields - возвращает текст функции UpdateManyFields() .proto для таблицы
+func FindTextProtoTable1_UpdateManyFields(TextProto string, Table1 *types.Table) string {
+	Otvet := "\n" //"\n\t//\n"
+
+	ModelName := Table1.NameGo
+	Otvet = Otvet + FindTextUpdateManyFields(TextProto, ModelName)
+
+	return Otvet
+}
+
+// FindTextUpdateManyFields - возвращает текст .proto
+func FindTextUpdateManyFields(TextProto string, ModelName string) string {
+	Otvet := ""
+	Otvet2 := TextUpdateManyFields(ModelName)
+
+	//проверка такой текст уже есть
+	pos1 := strings.Index(TextProto, Otvet2)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	Otvet = "\t" + Otvet2 + "\n"
+
+	return Otvet
+}
+
+// TextUpdateManyFields - возвращает текст .proto
+func TextUpdateManyFields(ModelName string) string {
+	Otvet := "rpc " + ModelName + "_UpdateManyFields(Request_Model_MassString) returns (ResponseEmpty) {}"
 
 	return Otvet
 }

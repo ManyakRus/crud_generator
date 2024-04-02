@@ -78,7 +78,7 @@ func Save_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 	}
 
 	is_create := !micro.BoolFromInt64(int64(m.ID))
-	err = create_update_ctx(ctx, db, m, is_create)
+	err = create_update_ctx(ctx, db, m, is_create, nil)
 	return err
 }
 
@@ -102,7 +102,7 @@ func Update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 		return err
 	}
 
-	err = create_update_ctx(ctx, db, m, false)
+	err = create_update_ctx(ctx, db, m, false, nil)
 	return err
 }
 
@@ -126,7 +126,7 @@ func Create_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 		return err
 	}
 
-	err = create_update_ctx(ctx, db, m, true)
+	err = create_update_ctx(ctx, db, m, true, nil)
 	return err
 }
 
@@ -140,12 +140,12 @@ func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType, is_
 
 	db := postgres_gorm.GetConnection()
 
-	err = create_update_ctx(ctx, db, m, is_create)
+	err = create_update_ctx(ctx, db, m, is_create, nil)
 	return err
 }
 
 // create_update_ctx - записывает объект в базу данных
-func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType, is_create bool) error {
+func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType, is_create bool, MassNeedUpdateFields []string) error {
 	var err error
 
 	// log.Trace("start Save() ", TableName, " id: ", int64(m.ID))
@@ -168,16 +168,21 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 		return err
 	}
 
-	//
-	db.WithContext(ctx)
-
 	// заполним даты
 	//Text_modified_at
 	//Text_is_deleted_deleted_at
 	//Text_created_at
+	
+	//
+	tx := db.WithContext(ctx).Model(&m)
+
+	//колонки для обновления
+	MassNeedFields := crud_functions.MassNeedFields_from_MassNeedUpdateFields(MassNeedUpdateFields)
+	if len(MassNeedUpdateFields) > 0 {
+		tx = tx.Select(MassNeedFields)
+	}
 
 	//колонки с null
-	tx := db
 	MassOmit := make([]string, 0)
 	var ColumnName string
 
@@ -200,7 +205,11 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 
 	//запишем NULL в пустые колонки
 	MapOmit := crud_functions.MapOmit_from_MassOmit(MassOmit)
-	tx = db.Model(&m).Updates(MapOmit)
+	tx = db.Model(&m)
+	if len(MassNeedUpdateFields) > 0 {
+		tx = tx.Select(MassNeedFields)
+	}
+	tx = tx.Updates(MapOmit)
 	err = tx.Error
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Create_Update() id: %v, error: %v", m.ID, err)

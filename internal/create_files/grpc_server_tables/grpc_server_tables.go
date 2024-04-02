@@ -391,15 +391,8 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//заменим имя пакета на новое
 	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
-
-	//	PackageName := micro.LastWord(config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER)
-	//	TextGRPCServer := "package " + PackageName + "\n\n"
-	//	TextGRPCServer = TextGRPCServer + `import (
-	//	"context"
-	//	"github.com/ManyakRus/starter/micro"
-	//)
-	//
-	//`
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -426,9 +419,6 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		return err
 	}
 
-	//ModelName := Table1.NameGo
-	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -538,16 +528,8 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//заменим имя пакета на новое
 	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
-
-	//	PackageName := micro.LastWord(config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER)
-	//	TextGRPCServer := "package " + PackageName + "\n\n"
-	//	TextGRPCServer = TextGRPCServer + `import (
-	//	"context"
-	//	"testing"
-	//	"github.com/ManyakRus/starter/config_main"
-	//)
-	//
-	//`
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -570,13 +552,11 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc, Table1)
+
 	// пустой файл не нужен
 	if TextUpdateEveryColumn == "" {
 		return err
 	}
-	//ModelName := Table1.NameGo
-	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
 
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
