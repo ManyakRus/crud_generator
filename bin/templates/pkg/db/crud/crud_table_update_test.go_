@@ -24,7 +24,7 @@ func TestUpdateManyFields(t *testing.T) {
 	}
 
 	//запишем в БД это же значение
-	err = crud.UpdateManyFields(&Otvet, nil)
+	err = crud.UpdateManyFields(&Model, nil)
 	if err != nil {
 		t.Error("TestUpdateManyFields() UpdateManyFields() error: ", err)
 	}
