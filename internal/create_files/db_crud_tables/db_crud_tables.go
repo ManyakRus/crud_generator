@@ -562,7 +562,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	}
 
 	//переименование функций
-	TextCrud = RenameFunctions(TextCrud, Table1)
+	//TextCrud = RenameFunctions(TextCrud, Table1)
 
 	//удаление пустого импорта
 	TextCrud = create_files.DeleteEmptyImport(TextCrud)
