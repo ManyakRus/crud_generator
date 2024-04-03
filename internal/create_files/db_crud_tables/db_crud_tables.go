@@ -485,7 +485,7 @@ func RenameFunctions(TextDB string, Table1 *types.Table) string {
 	}
 
 	for _, v := range Rename1 {
-		Otvet = strings.ReplaceAll(Otvet, " "+v.Old+"(", " "+v.New+"(")
+		Otvet = strings.ReplaceAll(Otvet, "func "+v.Old+"(", "func "+v.New+"(")
 	}
 
 	return Otvet
