@@ -17,6 +17,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/model_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/nrpc_client"
 	"github.com/ManyakRus/crud_generator/internal/create_files/protobuf"
+	"github.com/ManyakRus/crud_generator/internal/create_files/readme_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_func"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_nrpc_starter"
@@ -179,6 +180,13 @@ func StartFillAll() error {
 
 	//alias
 	err = alias.CreateAllFiles()
+	if err != nil {
+		//log.Error("env_file.CreateAllFiles() error: ", err)
+		return err
+	}
+
+	//readme
+	err = readme_file.CreateAllFiles()
 	if err != nil {
 		//log.Error("env_file.CreateAllFiles() error: ", err)
 		return err

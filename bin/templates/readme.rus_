@@ -19,6 +19,7 @@ InitCrudTransport_NRPC()
 "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
 
 Также для начала работы должны быть заполнены переменные окружения:
+(в файле .env)
 
 1) для DB CRUD:
    DB_HOST="10.1.9.23"

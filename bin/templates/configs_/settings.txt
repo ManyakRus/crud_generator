@@ -26,10 +26,10 @@ EXCLUDE_TABLES="ext_"
 #---------------------Template settings---------------------
 
 #SERVICE_REPOSITORY_URL - URL of your new service repository (Github, gitlab, etc.)
-SERVICE_REPOSITORY_URL="gitlab.aescorp.ru/dsp_dev/claim/sync_service"
+SERVICE_REPOSITORY_URL="gitlab.aescorp.ru/dsp_dev/claim/crud_service"
 
 #SERVICE_NAME - service name for your new service
-SERVICE_NAME=sync_service
+SERVICE_NAME=crud_service
 
 #TEMPLATE_SERVICE_NAME - service name in your template files
 TEMPLATE_SERVICE_NAME=sync_service
@@ -101,6 +101,9 @@ USE_DEFAULT_TEMPLATE=true
 #HAS_IS_DELETED - fill "true" if you have "is_deleted" column, and want Delete() Restore() functions.
 HAS_IS_DELETED=true
 
+#TEMPLATE_EXTERNAL_PROTO_FILENAME - can fill real .proto file full filename with folder, from external real project - for use as template
+TEMPLATE_EXTERNAL_PROTO_FILENAME=/home/user/GolandProjects/!sanek/sync_service/api/sync_service.proto
+
 #---------------------Create files settings---------------------
 
 #NEED_CREATE_CRUD - fill "true" if you want create crud operations files
@@ -123,6 +126,9 @@ NEED_CREATE_DB_TEST=true
 
 #NEED_CREATE_DB - fill "true" if you want create DB .go files
 NEED_CREATE_DB=true
+
+#NEED_CREATE_DB_TABLES - fill "true" if you want create DB .go files
+NEED_CREATE_DB_TABLES=true
 
 #NEED_CREATE_GRPC_SERVER_TEST - fill "true" if you want create GRPC server _test.go files
 NEED_CREATE_GRPC_SERVER_TEST=true
@@ -231,3 +237,9 @@ TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME="grpc_client_table_cache_test.g
 
 #CACHE_ELEMENTS_COUNT_MAX - maximum elements counts in cache, for every table
 CACHE_ELEMENTS_COUNT_MAX=1000
+
+#TEMPLATES_README_MD_FILENAME - short filename of "README.md_" file
+TEMPLATES_README_MD_FILENAME="README.md_"
+
+#TEMPLATES_README_RUS_FILENAME - short filename of "readme.rus_" file
+TEMPLATES_README_RUS_FILENAME="readme.rus_"

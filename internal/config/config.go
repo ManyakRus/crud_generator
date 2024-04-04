@@ -54,6 +54,8 @@ type SettingsINI struct {
 	TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME string
 	TEMPLATES_GRPC_CLIENT_TABLES_CACHE_FILENAME      string
 	TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME string
+	TEMPLATES_README_MD_FILENAME                     string
+	TEMPLATES_README_RUS_FILENAME                    string
 	NEED_CREATE_MODEL_STRUCT                         bool
 	NEED_CREATE_MODEL_CRUD                           bool
 	NEED_CREATE_DB                                   bool
@@ -489,6 +491,16 @@ func FillSettings() {
 		log.Error("CACHE_ELEMENTS_COUNT_MAX: ", s, " Int64FromString() error: ", err)
 	}
 	Settings.CACHE_ELEMENTS_COUNT_MAX = i
+
+	//
+	Name = "TEMPLATES_README_MD_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_README_MD_FILENAME = s
+
+	//
+	Name = "TEMPLATES_README_RUS_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_README_RUS_FILENAME = s
 
 }
 

@@ -19,22 +19,23 @@ from module
 "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
 
 Also, to get started, the environment variables must be filled in:
+(in ".env" file)
 
 1) for DB CRUD:
-    DB_HOST="10.1.9.23"
-    DB_NAME="claim"
-    DB_SCHEME="public"
-    DB_PORT="5432"
+    DB_HOST=""
+    DB_NAME=""
+    DB_SCHEME=""
+    DB_PORT=""
     DB_USER=""
     DB_PASSWORD=""
 
 2) for GRPC:
-    SYNC_SERVICE_HOST=10.1.9.150
-    SYNC_SERVICE_PORT=30031
+    SYNC_SERVICE_HOST=
+    SYNC_SERVICE_PORT=
 
 3) for NRPC:
-    BUS_LOCAL_HOST="10.1.9.150"
-    BUS_LOCAL_PORT=30222
+    BUS_LOCAL_HOST=
+    BUS_LOCAL_PORT=
 
 For NRPC (GRPC) it is advisable to connect there first and disconnect at the end
 nrpc_client.Connect()
