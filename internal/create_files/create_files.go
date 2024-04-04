@@ -138,7 +138,7 @@ func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
 	Type := ""
 
 	for _, Column1 := range Table1.MapColumns {
-		if Column1.IsIdentity == true {
+		if Column1.IsPrimaryKey == true {
 			return Column1.NameGo, Column1.TypeGo
 		}
 	}
@@ -152,7 +152,7 @@ func FindPrimaryKeyNameType(Table1 *types.Table) (string, string) {
 	Type := ""
 
 	for _, Column1 := range Table1.MapColumns {
-		if Column1.IsIdentity == true {
+		if Column1.IsPrimaryKey == true {
 			return Column1.Name, Column1.Type
 		}
 	}
@@ -464,6 +464,8 @@ func FindTextDefaultGORMValue(Column1 *types.Column) string {
 			sValue = "0"
 		case "time.Time":
 			sValue = "null"
+		case "uuid.UUID", "uuid.NullUUID":
+			sValue = "null"
 		}
 	}
 
@@ -474,7 +476,7 @@ func FindTextDefaultGORMValue(Column1 *types.Column) string {
 	return Otvet
 }
 
-// FindTextDefaultValue - возвращает значение по умолчанию для типа
+// FindTextDefaultValue - возвращает golang значение по умолчанию для типа
 func FindTextDefaultValue(Type_go string) string {
 	var Otvet string
 
@@ -487,6 +489,8 @@ func FindTextDefaultValue(Type_go string) string {
 		Otvet = "time.Time{}"
 	case "bool":
 		Otvet = "false"
+	case "uuid.UUID", "uuid.NullUUID":
+		Otvet = "nil"
 	}
 
 	return Otvet
@@ -505,6 +509,8 @@ func FindTextDefaultValueSQL(Type_go string) string {
 		Otvet = "null"
 	case "bool":
 		Otvet = "false"
+	case "uuid.UUID", "uuid.NullUUID":
+		Otvet = "nil"
 	}
 
 	return Otvet
@@ -1393,5 +1399,11 @@ func FillVariable(Text, VariableName, Value string) string {
 
 	Otvet = Otvet[:pos1] + VariableName + " = " + Value + Otvet[pos1+posEnd:]
 
+	return Otvet
+}
+
+// Is_UUID_Type - проверяет является ли тип UUID
+func Is_UUID_Type(TypeGo string) bool {
+	Otvet := TypeGo == "uuid.UUID" || TypeGo == "uuid.NullUUID"
 	return Otvet
 }

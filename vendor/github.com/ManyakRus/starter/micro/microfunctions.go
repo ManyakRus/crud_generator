@@ -808,3 +808,24 @@ func FindLastPos(s, TextFind string) int {
 	Otvet := strings.LastIndex(s, TextFind)
 	return Otvet
 }
+
+// StringFloat64_Dimension2 - возвращает строку с 2 знака после запятой
+func StringFloat64_Dimension2(f float64) string {
+	Otvet := fmt.Sprintf("%.2f", f)
+
+	return Otvet
+}
+
+// StringFloat32_Dimension2 - возвращает строку с 2 знака после запятой
+func StringFloat32_Dimension2(f float32) string {
+	Otvet := fmt.Sprintf("%.2f", f)
+
+	return Otvet
+}
+
+// ShowTimePassed - показывает время прошедшее с момента старта
+// запускать:
+// defer micro.ShowTimePassed(time.Now())
+func ShowTimePassed(StartAt time.Time) {
+	fmt.Print("Time passed: ", time.Since(StartAt))
+}

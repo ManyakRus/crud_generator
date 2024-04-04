@@ -13,7 +13,6 @@ import (
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/postgres_gorm"
-	"gorm.io/gorm"
 	"strings"
 	"time"
 )
@@ -28,6 +27,7 @@ type TableColumn struct {
 	ColumnTableKey    string `json:"table_key"   gorm:"column:table_key;default:''"`
 	ColumnColumnKey   string `json:"column_key"   gorm:"column:column_key;default:''"`
 	TableComment      string `json:"table_comment"   gorm:"column:table_comment;default:''"`
+	IsPrimaryKey      bool   `json:"is_primary_key"   gorm:"column:is_primary_key;default:false"`
 }
 
 type TableRowsStruct struct {
@@ -66,6 +66,30 @@ WHERE 1=1
 	--AND c.confrelid!=c.conrelid
 ;
 
+
+------------------------------------------- Все primary keys ------------------------------
+drop table if exists temp_primary_keys; 
+CREATE TEMPORARY TABLE temp_primary_keys (table_name text,  column_name text);
+
+insert into temp_primary_keys
+select 
+    ccu.table_name,
+	max(ccu.column_name) as column_name
+       
+from pg_constraint pgc
+         join pg_namespace nsp on nsp.oid = pgc.connamespace
+         join pg_class  cls on pgc.conrelid = cls.oid
+         left join information_schema.constraint_column_usage ccu
+                   on pgc.conname = ccu.constraint_name
+                       and nsp.nspname = ccu.constraint_schema
+WHERE 1=1
+	and ccu.table_schema = 'notifier_dev'
+	and contype = 'p'
+	
+GROUP BY
+	ccu.table_name
+HAVING sum(1)=1
+;
 ------------------------------------------- Все таблицы и колонки ------------------------------
 
 SELECT 
@@ -77,7 +101,12 @@ SELECT
 	COALESCE(pgd.description, '') as description,
 	COALESCE(keys.table_to, '') as table_key,
 	COALESCE(keys.column_to, '') as column_key, 
-    (SELECT obj_description(oid) FROM pg_class as r WHERE relkind = 'r' and r.oid = st.relid) as table_comment
+    (SELECT obj_description(oid) FROM pg_class as r WHERE relkind = 'r' and r.oid = st.relid) as table_comment,
+	CASE
+		WHEN tpk.table_name is not null
+		THEN true
+		ELSE false END 
+	    as is_primary_key
 
 FROM 
 	pg_catalog.pg_statio_all_tables as st
@@ -109,6 +138,12 @@ ON
 	v.table_schema = 'public'
 	and v.table_name = c.table_name
 
+
+LEFT JOIN
+	temp_primary_keys as tpk
+ON 
+	tpk.table_name = c.table_name
+	and tpk.column_name = c.column_name
 
 where 1=1
 	and c.table_schema='public'
@@ -149,22 +184,27 @@ order by
 
 	//запрос
 	//запустим все запросы отдельно
-	var tx *gorm.DB
-	sqlSlice := strings.Split(TextSQL, ";")
-	len1 := len(sqlSlice)
-	for i, TextSQL1 := range sqlSlice {
-		//batch.Queue(TextSQL1)
-		if i == len1-1 {
-			tx = db.Raw(TextSQL1)
-		} else {
-			tx = db.Exec(TextSQL1)
-			//rows.Close()
-		}
-		err = tx.Error
-		if err != nil {
-			log.Panic("DB.Raw() error:", err)
-		}
+	tx := postgres_gorm.RawMultipleSQL(db, TextSQL)
+	err = tx.Error
+	if err != nil {
+		log.Panic("RawMultipleSQL() error:", err)
 	}
+	//var tx *gorm.DB
+	//sqlSlice := strings.Split(TextSQL, ";")
+	//len1 := len(sqlSlice)
+	//for i, TextSQL1 := range sqlSlice {
+	//	//batch.Queue(TextSQL1)
+	//	if i == len1-1 {
+	//		tx = db.Raw(TextSQL1)
+	//	} else {
+	//		tx = db.Exec(TextSQL1)
+	//		//rows.Close()
+	//	}
+	//	err = tx.Error
+	//	if err != nil {
+	//		log.Panic("DB.Raw() error:", err)
+	//	}
+	//}
 
 	//tx := db.Raw(TextSQL)
 	//err = tx.Error
@@ -249,6 +289,7 @@ order by
 		Column1.OrderNumber = OrderNumberColumn
 		Column1.TableKey = v.ColumnTableKey
 		Column1.ColumnKey = v.ColumnColumnKey
+		Column1.IsPrimaryKey = v.IsPrimaryKey
 
 		MapColumns[v.ColumnName] = &Column1
 		//Table1.Columns = append(Table1.Columns, Column1)
@@ -286,14 +327,22 @@ func FillIDMinimum(MapTable map[string]*types.Table) {
 	db := postgres_gorm.GetConnection()
 	ctxMain := contextmain.GetContext()
 
+	Schema := strings.Trim(postgres_gorm.Settings.DB_SCHEMA, " ")
+
 	for TableName, Table1 := range MapTable {
 		//текст запроса
-		NameID, TypeGo := FindNameTypeID(Table1)
+		NameID, TypeGo := FindNameType_from_PrimaryKey(Table1)
 		if NameID == "" {
 			continue
 		}
-		DefaultValueSQL := create_files.FindTextDefaultValueSQL(TypeGo)
-		TextSQL := "SELECT Min(" + NameID + ") as id_minimum FROM \"" + postgres_gorm.Settings.DB_SCHEMA + "\".\"" + TableName + "\" WHERE " + NameID + " <> " + DefaultValueSQL
+		TextSQL := ""
+		Is_UUID_Type := create_files.Is_UUID_Type(TypeGo)
+		if Is_UUID_Type == false {
+			DefaultValueSQL := create_files.FindTextDefaultValueSQL(TypeGo)
+			TextSQL = `SELECT Min("` + NameID + `") as id_minimum FROM "` + Schema + `"."` + TableName + `" WHERE " + NameID + " <> ` + DefaultValueSQL
+		} else {
+			TextSQL = `SELECT "` + NameID + `" as id_minimum FROM "` + Schema + `"."` + TableName + `" WHERE " + NameID + " is not null LIMIT 1`
+		}
 		ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*60)
 		defer ctxCancelFunc()
 		db.WithContext(ctx)
@@ -331,6 +380,8 @@ func FillRowsCount(MapTable map[string]*types.Table) {
 	db := postgres_gorm.GetConnection()
 	ctxMain := contextmain.GetContext()
 
+	Schema := strings.Trim(postgres_gorm.Settings.DB_SCHEMA, " ")
+
 	for TableName, Table1 := range MapTable {
 		//текст запроса
 		//только Postgres SQL
@@ -340,7 +391,7 @@ SELECT
 FROM
 	pg_class
 WHERE  
-	oid = 'public."` + TableName + `"'::regclass
+	oid = '` + Schema + `."` + TableName + `"'::regclass
 `
 		ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*60)
 		defer ctxCancelFunc()
@@ -366,12 +417,13 @@ WHERE
 
 }
 
-func FindNameTypeID(Table1 *types.Table) (string, string) {
+// FindNameType_from_PrimaryKey - возвращает наименование и тип БД для колонки PrimaryKey (ID)
+func FindNameType_from_PrimaryKey(Table1 *types.Table) (string, string) {
 	Otvet := ""
 	Type := ""
 
 	for ColumnName, Column1 := range Table1.MapColumns {
-		if Column1.IsIdentity == true {
+		if Column1.IsPrimaryKey == true {
 			return ColumnName, Column1.TypeGo
 		}
 	}

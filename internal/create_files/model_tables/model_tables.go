@@ -322,7 +322,7 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	TextModel, Type_go = FindColumnTypeGoImport(TextModel, Table1, Column1)
 	//Column1.TypeGo = Type_go
 	TextDefaultValue := ""
-	if Column1.IsIdentity == false {
+	if Column1.IsPrimaryKey == false {
 		TextDefaultValue = create_files.FindTextDefaultGORMValue(Column1)
 	}
 	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)

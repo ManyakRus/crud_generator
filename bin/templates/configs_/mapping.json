@@ -446,11 +446,11 @@
     },
     {
       "sql_type": "uuid",
-      "go_type": "string",
+      "go_type": "uuid.UUID",
       "json_type": "Text",
       "protobuf_type": "string",
       "guregu_type": "null.String",
-      "go_nullable_type": "sql.NullString",
+      "go_nullable_type": "uuid.NullUUID",
       "swagger_type": "string"
     },
     {
