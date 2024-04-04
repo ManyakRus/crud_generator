@@ -339,9 +339,17 @@ func FillIDMinimum(MapTable map[string]*types.Table) {
 		Is_UUID_Type := create_files.Is_UUID_Type(TypeGo)
 		if Is_UUID_Type == false {
 			DefaultValueSQL := create_files.FindTextDefaultValueSQL(TypeGo)
-			TextSQL = `SELECT Min("` + NameID + `") as id_minimum FROM "` + Schema + `"."` + TableName + `" WHERE " + NameID + " <> ` + DefaultValueSQL
+			TextSQL = `SELECT 
+				Min("` + NameID + `") as id_minimum 
+				FROM
+					"` + Schema + `"."` + TableName + `" 
+				WHERE 
+					"` + NameID + `" <> ` + DefaultValueSQL
 		} else {
-			TextSQL = `SELECT "` + NameID + `" as id_minimum FROM "` + Schema + `"."` + TableName + `" WHERE " + NameID + " is not null ORDER BY ` + NameID + `LIMIT 1`
+			TextSQL = `SELECT "` + NameID + `" as id_minimum FROM "` + Schema + `"."` + TableName + `
+				" WHERE "` + NameID + `" is not null 
+				ORDER BY ` + NameID + `
+				LIMIT 1`
 		}
 		ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*60)
 		defer ctxCancelFunc()
