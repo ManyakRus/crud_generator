@@ -582,19 +582,45 @@ func AddImportTime(TextModel string) string {
 	Otvet := TextModel
 
 	//если уже есть импорт
-	pos1 := strings.Index(Otvet, `"time"`)
+	RepositoryURL := `"time"`
+	pos1 := strings.Index(Otvet, RepositoryURL)
 	if pos1 >= 0 {
 		return Otvet
 	}
 
 	//
-	pos1 = strings.Index(Otvet, "import (")
+	TextImport := "import ("
+	pos1 = strings.Index(Otvet, TextImport)
 	if pos1 < 0 {
-		log.Error("not found word: import (")
+		log.Error("not found word: ", TextImport)
 		return TextModel
 	}
 
-	Otvet = Otvet[:pos1+8] + "\n\t" + `"time"` + Otvet[pos1+8:]
+	Otvet = Otvet[:pos1+len(TextImport)] + "\n\t" + RepositoryURL + Otvet[pos1+len(TextImport):]
+
+	return Otvet
+}
+
+// AddImportTime - добавляет покет в секцию Import, если его там нет
+func AddImportUUID(TextModel string) string {
+	Otvet := TextModel
+
+	//если уже есть импорт
+	RepositoryURL := `"github.com/google/uuid"`
+	pos1 := strings.Index(Otvet, RepositoryURL)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	//
+	TextImport := "import ("
+	pos1 = strings.Index(Otvet, TextImport)
+	if pos1 < 0 {
+		log.Error("not found word: ", TextImport)
+		return TextModel
+	}
+
+	Otvet = Otvet[:pos1+len(TextImport)] + "\n\t" + RepositoryURL + Otvet[pos1+len(TextImport):]
 
 	return Otvet
 }
@@ -674,6 +700,20 @@ func CheckAndAddImportTime_FromText(Text string) string {
 	}
 
 	Otvet = AddImportTime(Otvet)
+
+	return Otvet
+}
+
+// CheckAndAddImportUUID_FromText - добавляет пакет "uuid" в секцию Import, если его там нет
+func CheckAndAddImportUUID_FromText(Text string) string {
+	Otvet := Text
+
+	pos1 := strings.Index(Text, " uuid.")
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	Otvet = AddImportUUID(Otvet)
 
 	return Otvet
 }

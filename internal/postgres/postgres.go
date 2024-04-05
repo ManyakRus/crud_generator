@@ -346,8 +346,8 @@ func FillIDMinimum(MapTable map[string]*types.Table) {
 				WHERE 
 					"` + NameID + `" <> ` + DefaultValueSQL
 		} else {
-			TextSQL = `SELECT "` + NameID + `" as id_minimum FROM "` + Schema + `"."` + TableName + `
-				" WHERE "` + NameID + `" is not null 
+			TextSQL = `SELECT "` + NameID + `" as id_minimum FROM "` + Schema + `"."` + TableName + `"
+				WHERE "` + NameID + `" is not null 
 				ORDER BY ` + NameID + `
 				LIMIT 1`
 		}

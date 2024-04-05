@@ -22,3 +22,4 @@
 /bin/templates/configs_/.env_rapira
 /bin/templates/configs_/.env_test
 /bin/templates/configs_/.env0
+/bin/notifier_service/
