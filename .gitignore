@@ -21,5 +21,7 @@
 /bin/templates_main/
 /bin/templates/configs_/.env_rapira
 /bin/templates/configs_/.env_test
-/bin/templates/configs_/.env0
+/bin/templates/configs_/.env
 /bin/notifier_service/
+/bin/templates/configs_/.env_notifier
+/bin/templates/configs_/.env*

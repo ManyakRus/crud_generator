@@ -83,7 +83,7 @@ from pg_constraint pgc
                    on pgc.conname = ccu.constraint_name
                        and nsp.nspname = ccu.constraint_schema
 WHERE 1=1
-	and ccu.table_schema = 'notifier_dev'
+	and ccu.table_schema = 'public'
 	and contype = 'p'
 	
 GROUP BY
