@@ -448,12 +448,13 @@ func FindTextDefaultGORMValue(Column1 *types.Column) string {
 	ColumnName := Column1.Name
 
 	//ищем в файле настроек nullable.json
-	is_nullable_config, has_is_nullable_config := types.MapNullableFileds[ColumnName]
+	is_nullable_config, _ := types.MapNullableFileds[ColumnName]
 
 	//
 	sValue := ""
 	Type_go := Column1.TypeGo
-	if Column1.TableKey != "" && Column1.IsNullable == true && (is_nullable_config == true || has_is_nullable_config == false) {
+	//	if Column1.TableKey != "" && Column1.IsNullable == true && (is_nullable_config == true || has_is_nullable_config == false) {
+	if Column1.IsNullable == true || (is_nullable_config == true) {
 		sValue = "null"
 	} else {
 
@@ -490,7 +491,7 @@ func FindTextDefaultValue(Type_go string) string {
 	case "bool":
 		Otvet = "false"
 	case "uuid.UUID", "uuid.NullUUID":
-		Otvet = "nil"
+		Otvet = "uuid.Nil"
 	}
 
 	return Otvet
@@ -510,7 +511,7 @@ func FindTextDefaultValueSQL(Type_go string) string {
 	case "bool":
 		Otvet = "false"
 	case "uuid.UUID", "uuid.NullUUID":
-		Otvet = "nil"
+		Otvet = "null"
 	}
 
 	return Otvet
@@ -1128,6 +1129,11 @@ func FindTextProtobufRequest(TypeGo string) (string, string) {
 			Otvet = "RequestString"
 			TextRequestFieldName = "StringFind"
 		}
+	case "uuid.UUID":
+		{
+			Otvet = "RequestString"
+			TextRequestFieldName = "StringFind"
+		}
 	case "time.Time":
 		{
 			Otvet = "RequestDate"
@@ -1158,10 +1164,12 @@ func FindTextProtobufRequest(TypeGo string) (string, string) {
 // Otvet - имя message из .proto
 // TextRequestFieldName - название поля в Request
 // TextRequestFieldGolang - название поля в Request с преобразованием в тип гоу
-func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column, VariableName string) (string, string, string) {
+// TextGolangLine - замена всей строки в го
+func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column, VariableName string) (string, string, string, string) {
 	Otvet := "RequestID"
 	TextRequestFieldName := "ID"
 	TextRequestFieldGolang := "ID"
+	TextGolangLine := ""
 
 	TypeGo := Column1.TypeGo
 	TableName := Table1.Name
@@ -1186,6 +1194,21 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 			Otvet = "Request_ID_String"
 			TextRequestFieldName = "StringFind"
 			TextRequestFieldGolang = VariableName + "StringFind"
+		}
+	case "uuid.UUID":
+		{
+			Otvet = "Request_ID_String"
+			TextRequestFieldName = "StringFind"
+			TextRequestFieldGolang = VariableName + "StringFind"
+			TextGolangLine = "value, err := uuid.Parse(" + VariableName + "" + TextRequestFieldName + ")" + `
+	if Request.StringFind == "" {
+		value = uuid.Nil
+		err = nil
+	}
+	if err != nil {
+		return &Otvet, err
+	}
+`
 		}
 	case "time.Time":
 		{
@@ -1218,7 +1241,7 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 		TextRequestFieldGolang = TextConvert + "(" + VariableName + TextRequestFieldName + ")"
 	}
 
-	return Otvet, TextRequestFieldName, TextRequestFieldGolang
+	return Otvet, TextRequestFieldName, TextRequestFieldGolang, TextGolangLine
 }
 
 // ConvertRequestIdToAlias - заменяет ID на Alias
@@ -1325,6 +1348,8 @@ func FindTextConvertGolangTypeToProtobufType(Table1 *types.Table, Column1 *types
 		Otvet = "float32(" + VariableName + Column1.NameGo + ")"
 	case "float64":
 		Otvet = "float64(" + VariableName + Column1.NameGo + ")"
+	case "uuid.UUID":
+		Otvet = VariableName + Column1.NameGo + ".String()"
 	}
 
 	return Otvet
@@ -1345,10 +1370,22 @@ func FindTextConvertProtobufTypeToGolangType(Table1 *types.Table, Column1 *types
 	}
 
 	//time.Time в timestamppb
-	if Column1.TypeGo == "time.Time" {
-		Otvet = VariableName + Column1.NameGo + ".AsTime()"
-		return Otvet
+	switch Column1.TypeGo {
+	case "time.Time":
+		{
+			Otvet = VariableName + Column1.NameGo + ".AsTime()"
+			return Otvet
+		}
+	case "uuid.UUID":
+		{
+			Otvet = "uuid.FromBytes([]byte(" + VariableName + Column1.NameGo + "))"
+			return Otvet
+		}
 	}
+	//if Column1.TypeGo == "time.Time" {
+	//	Otvet = VariableName + Column1.NameGo + ".AsTime()"
+	//	return Otvet
+	//}
 
 	////преобразуем alias в обычный тип, и дату в timestamp
 	//switch Column1.TypeGo {

@@ -39,7 +39,6 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 	} else {
 		tx = db.Model(&m).Update("ColumnName", Value)
 	}
-
 	err = tx.Error
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Read() id: %v, error: %v", m.ID, err)

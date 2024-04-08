@@ -5,22 +5,22 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/alias"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter_tables"
-	"github.com/ManyakRus/crud_generator/internal/create_files/db_crud_tables"
-	"github.com/ManyakRus/crud_generator/internal/create_files/db_tables"
+	"github.com/ManyakRus/crud_generator/internal/create_files/crud_tables"
+	"github.com/ManyakRus/crud_generator/internal/create_files/entities_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/env_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/generation_code_sh"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client_tables"
-	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_server_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/main_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/makefile"
-	"github.com/ManyakRus/crud_generator/internal/create_files/model_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/nrpc_client"
 	"github.com/ManyakRus/crud_generator/internal/create_files/protobuf"
 	"github.com/ManyakRus/crud_generator/internal/create_files/readme_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_func"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_starter"
+	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_nrpc_starter"
+	"github.com/ManyakRus/crud_generator/internal/create_files/tables_tables"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/postgres"
 	"github.com/ManyakRus/starter/log"
@@ -53,21 +53,21 @@ func StartFillAll() error {
 	}
 
 	//модель
-	err = model_tables.CreateAllFiles(MapAll)
+	err = entities_tables.CreateAllFiles(MapAll)
 	if err != nil {
 		//log.Error("model.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//db crud
-	err = db_crud_tables.CreateAllFiles(MapAll)
+	err = crud_tables.CreateAllFiles(MapAll)
 	if err != nil {
 		//log.Error("db_crud_tables.CreateAllFiles() error: ", err)
 		return err
 	}
 
 	//grpc_server
-	err = grpc_server_tables.CreateAllFiles(MapAll)
+	err = server_grpc_tables.CreateAllFiles(MapAll)
 	if err != nil {
 		//log.Error("grpc_server.CreateAllFiles() error: ", err)
 		return err
@@ -158,7 +158,7 @@ func StartFillAll() error {
 	}
 
 	//tables
-	err = db_tables.CreateAllFiles(MapAll)
+	err = tables_tables.CreateAllFiles(MapAll)
 	if err != nil {
 		//log.Error("db_tables.CreateAllFiles() error: ", err)
 		return err

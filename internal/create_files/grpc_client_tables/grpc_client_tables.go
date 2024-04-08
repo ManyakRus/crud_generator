@@ -495,7 +495,7 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
+	TextRequest, TextRequestFieldName, _, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
 
 	ColumnNameGolang := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m.")
 
@@ -641,7 +641,7 @@ func FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc string, Table1 *ty
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
+	TextRequest, TextRequestFieldName, _, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
 	DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
 
 	Otvet = strings.ReplaceAll(Otvet, "TestCrud_GRPC_Update(", "TestCrud_GRPC_"+FuncName+"(")

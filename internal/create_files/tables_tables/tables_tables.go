@@ -1,4 +1,4 @@
-package db_tables
+package tables_tables
 
 import (
 	"errors"
@@ -91,8 +91,13 @@ func CreateFilesTable_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTab
 	}
 	TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
 
+	//import time
 	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
+
+	//import uuid
 	TextModel = create_files.CheckAndAddImportUUID_FromText(TextModel)
+
+	//
 	TextModel = create_files.DeleteImportModel(TextModel)
 
 	//замена импортов на новые URL
@@ -219,7 +224,7 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	if Column1.IsPrimaryKey == false {
 		TextDefaultValue = create_files.FindTextDefaultGORMValue(Column1)
 	}
-	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)
+	TextPrimaryKey := FindTextPrimaryKey(Column1.IsPrimaryKey)
 	Description := Column1.Description
 	Description = create_files.PrintableString(Description) //экранирование символов
 

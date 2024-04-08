@@ -1,4 +1,4 @@
-package db_crud_tables
+package crud_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
@@ -532,19 +532,6 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
 	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
-	//заменим импорты
-	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
-
-		DBConstantsURL := create_files.FindDBConstantsURL()
-		TextCrud = create_files.AddImport(TextCrud, DBConstantsURL)
-
-		ModelTableURL := create_files.FindModelTableURL(TableName)
-		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
-
-		//TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
-	}
-
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextCrudUpdateFunc, Table1)
 
@@ -555,6 +542,20 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	TextCrud = TextCrud + TextUpdateEveryColumn
 	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
+
+		DBConstantsURL := create_files.FindDBConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, DBConstantsURL)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+
+		TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
+		//TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
+	}
 
 	//кэш
 	if config.Settings.NEED_CREATE_CACHE_API == true {

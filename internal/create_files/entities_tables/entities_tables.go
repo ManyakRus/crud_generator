@@ -1,4 +1,4 @@
-package model_tables
+package entities_tables
 
 import (
 	"errors"
