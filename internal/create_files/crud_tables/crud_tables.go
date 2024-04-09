@@ -155,6 +155,7 @@ func CreateFiles(Table1 *types.Table) error {
 	//создание текста
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextDB = create_files.ReplacePrimaryKeyM_ID(TextDB, Table1)
 	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
 	//TextDB = create_files.DeleteFuncFind_byExtID(TextDB, Table1)
@@ -247,7 +248,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextDB = create_files.AddSkipNow(TextDB, Table1)
 
 	//замена ID на PrimaryKey
-	TextDB = create_files.ReplacePrimaryKeyID(TextDB, Table1)
+	TextDB = create_files.ReplacePrimaryKeyOtvetID(TextDB, Table1)
 
 	//замена импортов на новые URL
 	TextDB = create_files.ReplaceServiceURLImports(TextDB)
@@ -831,6 +832,13 @@ func CreateFilesCache(Table1 *types.Table) error {
 	CACHE_ELEMENTS_COUNT := micro.MinInt64(Count_Now, CACHE_ELEMENTS_COUNT_MAX)
 	sCACHE_ELEMENTS_COUNT := micro.StringFromInt64(CACHE_ELEMENTS_COUNT)
 	TextCache = create_files.FillVariable(TextCache, constants.TEXT_CACHE_SIZE_1000, sCACHE_ELEMENTS_COUNT)
+
+	//тип ID кэша
+	_, ColumnTypeGo := create_files.FindPrimaryKeyNameTypeGo(Table1)
+	TextCache = strings.ReplaceAll(TextCache, ".LRU[int64", ".LRU["+ColumnTypeGo)
+
+	//uuid
+	TextCache = create_files.CheckAndAddImportUUID_FromText(TextCache)
 
 	//удаление пустого импорта
 	TextCache = create_files.DeleteEmptyImport(TextCache)

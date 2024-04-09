@@ -180,7 +180,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	}
 
 	// замена ID на PrimaryKey
-	TextNRPCClient = create_files.ReplacePrimaryKeyID(TextNRPCClient, Table1)
+	TextNRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextNRPCClient, Table1)
 
 	//SkipNow()
 	TextNRPCClient = create_files.AddSkipNow(TextNRPCClient, Table1)

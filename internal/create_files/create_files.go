@@ -174,16 +174,71 @@ func FindPrimaryKeyNameType(Table1 *types.Table) (string, string) {
 //	return Otvet, Type
 //}
 
-// ReplacePrimaryKeyID - заменяет "ID" на название колонки PrimaryKey
-func ReplacePrimaryKeyID(Text string, Table1 *types.Table) string {
+// ReplacePrimaryKeyOtvetID - заменяет "Otvet.ID" на название колонки PrimaryKey
+func ReplacePrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	ColumnName, ColumnTypeGo := FindPrimaryKeyNameTypeGo(Table1)
+
+	//заменим ID-Alias на ID
+	TableName := Table1.Name
+	IDName, _ := FindPrimaryKeyNameType(Table1)
+	_, ok := types.MapConvertID[TableName+"."+IDName]
+	OtvetColumnName := "Otvet." + ColumnName
+	if ok == true {
+		OtvetColumnName = ColumnTypeGo + "(" + OtvetColumnName + ")"
+	}
+
+	//заменим int64(m.ID) на m.ID
 	if mini_func.IsNumberType(ColumnTypeGo) == true {
-		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", "Otvet."+ColumnName)
+		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", OtvetColumnName)
 	} else if ColumnTypeGo == "string" {
-		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID == 0", "Otvet."+ColumnName+" == \"\"")
-		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", "Otvet."+ColumnName)
+		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID == 0", OtvetColumnName+" == \"\"")
+		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID != 0", OtvetColumnName+" != \"\"")
+		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", OtvetColumnName)
+	} else if ColumnTypeGo == "uuid.UUID" || ColumnTypeGo == "uuid.NullUUID" {
+		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID == 0", OtvetColumnName+" == uuid.Nil")
+		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID != 0", OtvetColumnName+" != uuid.Nil")
+		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", OtvetColumnName)
+	} else if ColumnTypeGo == "time.Time" {
+		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) == 0", OtvetColumnName+".IsZero() == true")
+		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) != 0", OtvetColumnName+".IsZero() == false")
+		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
+	}
+
+	return Otvet
+}
+
+// ReplacePrimaryKeyM_ID - заменяет "m.ID" на название колонки PrimaryKey
+func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	ColumnName, ColumnTypeGo := FindPrimaryKeyNameTypeGo(Table1)
+
+	//заменим ID-Alias на ID
+	TableName := Table1.Name
+	IDName, _ := FindPrimaryKeyNameType(Table1)
+	_, ok := types.MapConvertID[TableName+"."+IDName]
+	OtvetColumnName := "m." + ColumnName
+	if ok == true {
+		OtvetColumnName = ColumnTypeGo + "(" + OtvetColumnName + ")"
+	}
+
+	//заменим int64(m.ID) на m.ID
+	if mini_func.IsNumberType(ColumnTypeGo) == true {
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
+	} else if ColumnTypeGo == "string" {
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+" == \"\"")
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+" != \"\"")
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
+	} else if ColumnTypeGo == "uuid.UUID" || ColumnTypeGo == "uuid.NullUUID" {
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+" == uuid.Nil")
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+" != uuid.Nil")
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
+	} else if ColumnTypeGo == "time.Time" {
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+".IsZero() == true")
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+".IsZero() == false")
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
 	}
 
 	return Otvet
@@ -709,7 +764,7 @@ func CheckAndAddImportTime_FromText(Text string) string {
 func CheckAndAddImportUUID_FromText(Text string) string {
 	Otvet := Text
 
-	pos1 := strings.Index(Text, " uuid.")
+	pos1 := strings.Index(Text, "uuid.")
 	if pos1 < 0 {
 		return Otvet
 	}
@@ -1484,3 +1539,22 @@ func Is_UUID_Type(TypeGo string) bool {
 	Otvet := TypeGo == "uuid.UUID" || TypeGo == "uuid.NullUUID"
 	return Otvet
 }
+
+//// ConvertID_toTypeID - заменяет int64(m.ID) на m.ID
+//func ConvertID_toTypeID(Text string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	//заменим ID-Alias на ID
+//	TableName := Table1.Name
+//	IDName, _ := FindPrimaryKeyNameType(Table1)
+//	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+//	if ok == true {
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", ""+TextConvert+"(m.ID)")
+//		return Otvet
+//	}
+//
+//	//заменим int64(m.ID) на m.ID
+//	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", "m.ID")
+//
+//	return Otvet
+//}

@@ -256,10 +256,13 @@ order by
 			ModelName = create_files.FormatName(ModelName)
 
 			//
+			TableComment := v.TableComment
+			TableComment = strings.ReplaceAll(TableComment, "\n", "")
+			TableComment = strings.ReplaceAll(TableComment, "\r", "")
 			Table1 = CreateTable()
 			Table1.Name = TableName
 			Table1.OrderNumber = OrderNumberTable
-			Table1.Comment = v.TableComment
+			Table1.Comment = TableComment
 			Table1.NameGo = ModelName
 
 		}

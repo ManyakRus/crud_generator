@@ -7,6 +7,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/crud_starter/crud_starter_attachament"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/crud_starter/crud_starter_channel"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/crud_starter/crud_starter_channel_prod"
+	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/crud_starter/crud_starter_constructor_users"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/crud_starter/crud_starter_debt_list"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/crud_starter/crud_starter_debt_list2"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/crud_starter/crud_starter_delivery_error"
@@ -34,6 +35,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/db/crud/crud_attachament"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/db/crud/crud_channel"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/db/crud/crud_channel_prod"
+	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/db/crud/crud_constructor_users"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/db/crud/crud_debt_list"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/db/crud/crud_debt_list2"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/db/crud/crud_delivery_error"
@@ -61,6 +63,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/network/grpc/grpc_client/grpc_attachament"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/network/grpc/grpc_client/grpc_channel"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/network/grpc/grpc_client/grpc_channel_prod"
+	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/network/grpc/grpc_client/grpc_constructor_users"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/network/grpc/grpc_client/grpc_debt_list"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/network/grpc/grpc_client/grpc_debt_list2"
 	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/network/grpc/grpc_client/grpc_delivery_error"
@@ -91,6 +94,7 @@ func initCrudTransport_manual_DB() {
 	crud_starter_attachament.SetCrudManualInterface(crud_attachament.Crud_DB{})
 	crud_starter_channel.SetCrudManualInterface(crud_channel.Crud_DB{})
 	crud_starter_channel_prod.SetCrudManualInterface(crud_channel_prod.Crud_DB{})
+	crud_starter_constructor_users.SetCrudManualInterface(crud_constructor_users.Crud_DB{})
 	crud_starter_debt_list.SetCrudManualInterface(crud_debt_list.Crud_DB{})
 	crud_starter_debt_list2.SetCrudManualInterface(crud_debt_list2.Crud_DB{})
 	crud_starter_delivery_error.SetCrudManualInterface(crud_delivery_error.Crud_DB{})
@@ -121,6 +125,7 @@ func initCrudTransport_manual_GRPC() {
 	crud_starter_attachament.SetCrudManualInterface(grpc_attachament.Crud_GRPC{})
 	crud_starter_channel.SetCrudManualInterface(grpc_channel.Crud_GRPC{})
 	crud_starter_channel_prod.SetCrudManualInterface(grpc_channel_prod.Crud_GRPC{})
+	crud_starter_constructor_users.SetCrudManualInterface(grpc_constructor_users.Crud_GRPC{})
 	crud_starter_debt_list.SetCrudManualInterface(grpc_debt_list.Crud_GRPC{})
 	crud_starter_debt_list2.SetCrudManualInterface(grpc_debt_list2.Crud_GRPC{})
 	crud_starter_delivery_error.SetCrudManualInterface(grpc_delivery_error.Crud_GRPC{})
@@ -151,6 +156,7 @@ func initCrudTransport_manual_NRPC() {
 	crud_starter_attachament.SetCrudManualInterface(grpc_attachament.Crud_GRPC{})
 	crud_starter_channel.SetCrudManualInterface(grpc_channel.Crud_GRPC{})
 	crud_starter_channel_prod.SetCrudManualInterface(grpc_channel_prod.Crud_GRPC{})
+	crud_starter_constructor_users.SetCrudManualInterface(grpc_constructor_users.Crud_GRPC{})
 	crud_starter_debt_list.SetCrudManualInterface(grpc_debt_list.Crud_GRPC{})
 	crud_starter_debt_list2.SetCrudManualInterface(grpc_debt_list2.Crud_GRPC{})
 	crud_starter_delivery_error.SetCrudManualInterface(grpc_delivery_error.Crud_GRPC{})

@@ -215,7 +215,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	}
 
 	// замена ID на PrimaryKey
-	TextGRPCServer = create_files.ReplacePrimaryKeyID(TextGRPCServer, Table1)
+	TextGRPCServer = create_files.ReplacePrimaryKeyOtvetID(TextGRPCServer, Table1)
 
 	//SkipNow()
 	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)

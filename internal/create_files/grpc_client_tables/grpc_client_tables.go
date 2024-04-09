@@ -226,7 +226,7 @@ func CreateTestFiles(Table1 *types.Table) error {
 	}
 
 	// замена ID на PrimaryKey
-	TextGRPCClient = create_files.ReplacePrimaryKeyID(TextGRPCClient, Table1)
+	TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)
 
 	//SkipNow()
 	TextGRPCClient = create_files.AddSkipNow(TextGRPCClient, Table1)
@@ -798,7 +798,7 @@ func CreateFiles_GRPC_Client_Cache_Test(Table1 *types.Table) error {
 	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
 
 	// замена ID на PrimaryKey
-	TextGRPCClient = create_files.ReplacePrimaryKeyID(TextGRPCClient, Table1)
+	TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)
 
 	//SkipNow()
 	TextGRPCClient = create_files.AddSkipNow(TextGRPCClient, Table1)
