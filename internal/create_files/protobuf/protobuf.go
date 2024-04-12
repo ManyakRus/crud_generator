@@ -317,7 +317,7 @@ func TextFindByExtId(ModelName string) string {
 
 // FindTextProtoTable1_UpdateEveryColumn - возвращает текст всех функций .proto для таблицы, обновления каждого поля таблицы
 func FindTextProtoTable1_UpdateEveryColumn(TextProto string, Table1 *types.Table) string {
-	Otvet := "\n" //"\n\t//\n"
+	Otvet := "" //"\n\t//\n"
 
 	//ModelName := Table1.NameGo
 
@@ -387,18 +387,17 @@ func TextUpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
 
 // FindTextProtoTable1_Cache - возвращает текст функции ReadFromCache() .proto для таблицы
 func FindTextProtoTable1_Cache(TextProto string, Table1 *types.Table) string {
-	Otvet := "\n" //"\n\t//\n"
+	Otvet := "" //"\n\t//\n"
 
-	ModelName := Table1.NameGo
-	Otvet = Otvet + FindTextReadFromCache(TextProto, ModelName)
+	Otvet = Otvet + FindTextReadFromCache(TextProto, Table1)
 
 	return Otvet
 }
 
 // FindTextReadFromCache - возвращает текст .proto
-func FindTextReadFromCache(TextProto string, ModelName string) string {
+func FindTextReadFromCache(TextProto string, Table1 *types.Table) string {
 	Otvet := ""
-	Otvet2 := TextReadFromCache(ModelName)
+	Otvet2 := TextReadFromCache(Table1)
 
 	//проверка такой текст уже есть
 	pos1 := strings.Index(TextProto, Otvet2)
@@ -412,15 +411,18 @@ func FindTextReadFromCache(TextProto string, ModelName string) string {
 }
 
 // TextReadFromCache - возвращает текст .proto
-func TextReadFromCache(ModelName string) string {
-	Otvet := "rpc " + ModelName + "_ReadFromCache(RequestId) returns (Response) {}"
+func TextReadFromCache(Table1 *types.Table) string {
+	Column1 := create_files.FindPrimaryKeyColumn(Table1)
+	TextRequestId, _ := create_files.FindTextProtobufRequest(Column1.TypeGo)
+	ModelName := Table1.NameGo
+	Otvet := "rpc " + ModelName + "_ReadFromCache(" + TextRequestId + ") returns (Response) {}"
 
 	return Otvet
 }
 
 // FindTextProtoTable1_UpdateManyFields - возвращает текст функции UpdateManyFields() .proto для таблицы
 func FindTextProtoTable1_UpdateManyFields(TextProto string, Table1 *types.Table) string {
-	Otvet := "\n" //"\n\t//\n"
+	Otvet := "" //"\n\t//\n"
 
 	ModelName := Table1.NameGo
 	Otvet = Otvet + FindTextUpdateManyFields(TextProto, ModelName)

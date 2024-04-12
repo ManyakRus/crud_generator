@@ -350,7 +350,7 @@ func FillSettings() {
 
 	//
 	Name = "TEMPLATE_EXTERNAL_PROTO_FILENAME"
-	s = Getenv(Name, true)
+	s = Getenv(Name, false)
 	Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME = s
 
 	//

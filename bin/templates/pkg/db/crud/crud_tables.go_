@@ -77,7 +77,7 @@ func Save_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 		return err
 	}
 
-	is_create := !micro.BoolFromInt64(int64(m.ID))
+	is_create := !micro.IsEmptyValue(int64(m.ID))
 	err = create_update_ctx(ctx, db, m, is_create, nil)
 	return err
 }

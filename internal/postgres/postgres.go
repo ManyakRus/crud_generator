@@ -37,6 +37,32 @@ type TableRowsStruct struct {
 
 // FillMapTable - возвращает массив MassTable данными из БД
 func FillMapTable() (map[string]*types.Table, error) {
+	MapTable := make(map[string]*types.Table, 0)
+	var err error
+
+	MapTable, err = FillMapTable1()
+	if err != nil {
+		log.Error("FillMapTable1() error: ", err)
+		return MapTable, err
+	}
+
+	err = FillIDMinimum(MapTable)
+	if err != nil {
+		log.Error("FillIDMinimum() error: ", err)
+		return MapTable, err
+	}
+
+	err = FillRowsCount(MapTable)
+	if err != nil {
+		log.Error("FillRowsCount() error: ", err)
+		return MapTable, err
+	}
+
+	return MapTable, err
+}
+
+// FillMapTable1 - возвращает массив MassTable данными из БД
+func FillMapTable1() (map[string]*types.Table, error) {
 	var err error
 	//MassTable := make([]types.Table, 0)
 	MapTable := make(map[string]*types.Table, 0)
@@ -309,9 +335,6 @@ order by
 
 	//FillTypeGo(MapTable)
 
-	FillIDMinimum(MapTable)
-	FillRowsCount(MapTable)
-
 	return MapTable, err
 }
 
@@ -323,7 +346,7 @@ func CreateTable() *types.Table {
 }
 
 // FillIDMinimum - находим минимальный ID, для тестов с этим ID
-func FillIDMinimum(MapTable map[string]*types.Table) {
+func FillIDMinimum(MapTable map[string]*types.Table) error {
 	var err error
 
 	//соединение
@@ -349,7 +372,8 @@ func FillIDMinimum(MapTable map[string]*types.Table) {
 				WHERE 
 					"` + NameID + `" <> ` + DefaultValueSQL
 		} else {
-			TextSQL = `SELECT "` + NameID + `" as id_minimum FROM "` + Schema + `"."` + TableName + `"
+			TextSQL = `SELECT "` + NameID + `" as id_minimum 
+				FROM "` + Schema + `"."` + TableName + `"
 				WHERE "` + NameID + `" is not null 
 				ORDER BY ` + NameID + `
 				LIMIT 1`
@@ -381,10 +405,11 @@ func FillIDMinimum(MapTable map[string]*types.Table) {
 		}
 	}
 
+	return err
 }
 
 // FillRowsCount - находим количество строк в таблице, для кэша
-func FillRowsCount(MapTable map[string]*types.Table) {
+func FillRowsCount(MapTable map[string]*types.Table) error {
 	var err error
 
 	//соединение
@@ -426,6 +451,7 @@ WHERE
 		Table1.RowsCount = RowsCount.Int64
 	}
 
+	return err
 }
 
 // FindNameType_from_PrimaryKey - возвращает наименование и тип БД для колонки PrimaryKey (ID)

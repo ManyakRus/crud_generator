@@ -169,6 +169,9 @@ func CreateFiles(Table1 *types.Table) error {
 	//замена импортов на новые URL
 	TextDB = create_files.ReplaceServiceURLImports(TextDB)
 
+	//uuid
+	TextDB = create_files.CheckAndAddImportUUID_FromText(TextDB)
+
 	//удаление пустого импорта
 	TextDB = create_files.DeleteEmptyImport(TextDB)
 
@@ -241,7 +244,12 @@ func CreateTestFiles(Table1 *types.Table) error {
 	//Postgres_ID_Test = ID Minimum
 	if Table1.IDMinimum != "" {
 		TextFind := "const Postgres_ID_Test = "
-		TextDB = strings.ReplaceAll(TextDB, TextFind+"0", TextFind+Table1.IDMinimum)
+		ColumnPrimary := create_files.FindPrimaryKeyColumn(Table1)
+		if ColumnPrimary.TypeGo == "uuid.UUID" {
+			TextDB = strings.ReplaceAll(TextDB, TextFind+"0", TextFind+`var Postgres_ID_Test, _ = uuid.Parse("`+TextFind+Table1.IDMinimum+`")`)
+		} else {
+			TextDB = strings.ReplaceAll(TextDB, TextFind+"0", TextFind+Table1.IDMinimum)
+		}
 	}
 
 	//SkipNow() если нет строк в БД
@@ -566,6 +574,12 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//переименование функций
 	//TextCrud = RenameFunctions(TextCrud, Table1)
 
+	//заменяет "m.ID" на название колонки PrimaryKey
+	TextCrud = create_files.ReplacePrimaryKeyM_ID(TextCrud, Table1)
+
+	//uuid
+	TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
+
 	//удаление пустого импорта
 	TextCrud = create_files.DeleteEmptyImport(TextCrud)
 
@@ -835,7 +849,8 @@ func CreateFilesCache(Table1 *types.Table) error {
 
 	//тип ID кэша
 	_, ColumnTypeGo := create_files.FindPrimaryKeyNameTypeGo(Table1)
-	TextCache = strings.ReplaceAll(TextCache, ".LRU[int64", ".LRU["+ColumnTypeGo)
+	TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU["+ColumnTypeGo)
+	TextCache = strings.ReplaceAll(TextCache, "ID int64", "ID "+ColumnTypeGo)
 
 	//uuid
 	TextCache = create_files.CheckAndAddImportUUID_FromText(TextCache)

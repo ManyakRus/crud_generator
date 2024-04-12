@@ -160,6 +160,19 @@ func FindPrimaryKeyNameType(Table1 *types.Table) (string, string) {
 	return Otvet, Type
 }
 
+// FindPrimaryKeyColumn - возвращает Column для колонки PrimaryKey
+func FindPrimaryKeyColumn(Table1 *types.Table) (Column1 *types.Column) {
+	var Otvet *types.Column
+
+	for _, Column1 := range Table1.MapColumns {
+		if Column1.IsPrimaryKey == true {
+			return Column1
+		}
+	}
+
+	return Otvet
+}
+
 //// FindPrimaryKeyNameTypeGo - возвращает наименование и тип golang колонки PrimaryKey
 //func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
 //	Otvet := ""
