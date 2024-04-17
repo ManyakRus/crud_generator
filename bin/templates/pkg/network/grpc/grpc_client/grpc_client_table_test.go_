@@ -33,7 +33,7 @@ func TestRead(t *testing.T) {
 		t.Error("TestRead() error: ", err)
 	}
 
-	if Otvet.ID == 0 {
+	if int64(Otvet.ID) == 0 {
 		t.Error("TestRead() error: ID =0")
 	}
 }
@@ -98,7 +98,7 @@ func TestSave(t *testing.T) {
 		t.Error("TestSave() error: ", err)
 	}
 
-	if Otvet.ID == 0 {
+	if int64(Otvet.ID) == 0 {
 		t.Error("TestSave() error: ID =0")
 	}
 }
@@ -121,7 +121,7 @@ func TestDelete(t *testing.T) {
 		if err != nil {
 			t.Error("TestDelete() error: ", err)
 		}
-		if Otvet.ID == 0 {
+		if int64(Otvet.ID) == 0 {
 			t.Error("TestDelete() error: ID =0")
 		}
 
@@ -129,7 +129,7 @@ func TestDelete(t *testing.T) {
 		if err != nil {
 			t.Error("TestDelete() error: ", err)
 		}
-		if Otvet.ID == 0 {
+		if int64(Otvet.ID) == 0 {
 			t.Error("TestDelete() error: ID =0")
 		}
 	} else {
@@ -137,7 +137,7 @@ func TestDelete(t *testing.T) {
 		if err != nil {
 			t.Error("TestDelete() error: ", err)
 		}
-		if Otvet.ID == 0 {
+		if int64(Otvet.ID) == 0 {
 			t.Error("TestDelete() error: ID =0")
 		}
 
@@ -145,7 +145,7 @@ func TestDelete(t *testing.T) {
 		if err != nil {
 			t.Error("TestDelete() error: ", err)
 		}
-		if Otvet.ID == 0 {
+		if int64(Otvet.ID) == 0 {
 			t.Error("TestDelete() error: ID =0")
 		}
 	}
@@ -178,7 +178,7 @@ func TestFindByExtID(t *testing.T) {
 		t.Error("TestFindByExtID() error: ", err)
 	}
 
-	if Otvet.ID == 0 {
+	if int64(Otvet.ID) == 0 {
 		t.Error("TestFindByExtID() error: ID =0")
 	}
 }

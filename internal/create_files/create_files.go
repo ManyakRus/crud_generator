@@ -204,7 +204,7 @@ func ReplacePrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
 
 	//заменим int64(m.ID) на m.ID
 	if mini_func.IsNumberType(ColumnTypeGo) == true {
-		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", OtvetColumnName)
+		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
 	} else if ColumnTypeGo == "string" {
 		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID == 0", OtvetColumnName+" == \"\"")
 		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID != 0", OtvetColumnName+" != \"\"")

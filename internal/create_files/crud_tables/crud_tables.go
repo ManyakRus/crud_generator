@@ -37,9 +37,9 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 		//тестовые файлы crud
 		if config.Settings.NEED_CREATE_DB_TEST == true {
-			err = CreateTestFiles(Table1)
+			err = CreateFilesTest(Table1)
 			if err != nil {
-				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+				log.Error("CreateFilesTest() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 		}
@@ -56,7 +56,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			//тестовые файлы db update
 			err = CreateFilesUpdateEveryColumnTest(Table1)
 			if err != nil {
-				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+				log.Error("CreateFilesTest() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 		}
@@ -76,7 +76,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			if config.Settings.NEED_CREATE_CACHE_TEST_FILES == true {
 				err = CreateFilesCacheTest(Table1)
 				if err != nil {
-					log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+					log.Error("CreateFilesTest() table: ", Table1.Name, " error: ", err)
 					return err
 				}
 			}
@@ -187,8 +187,8 @@ func CreateFiles(Table1 *types.Table) error {
 	return err
 }
 
-// CreateTestFiles - создаёт 1 файл в папке db
-func CreateTestFiles(Table1 *types.Table) error {
+// CreateFilesTest - создаёт 1 файл в папке db
+func CreateFilesTest(Table1 *types.Table) error {
 	var err error
 
 	TableName := strings.ToLower(Table1.Name)
