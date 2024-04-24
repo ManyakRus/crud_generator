@@ -127,6 +127,18 @@ func CreateFiles(Table1 *types.Table) error {
 		CrudTableURL := create_files.FindCrudTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
 
+		//замена ID на PrimaryKey
+		TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
+
+		//замена RequestId{}
+		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+
+		//замена int64(ID) на ID
+		TextGRPCServer = create_files.ReplaceIDtoID(TextGRPCServer, Table1)
+
+		//добавим импорт uuid
+		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+
 		//удалим лишние функции
 		TextGRPCServer = DeleteFuncDelete(TextGRPCServer, Table1)
 		TextGRPCServer = DeleteFuncRestore(TextGRPCServer, Table1)

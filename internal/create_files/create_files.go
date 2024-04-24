@@ -1244,6 +1244,7 @@ func FindTextProtobufRequest(Table1 *types.Table, TypeGo string) (string, string
 func FindTextProtobufRequestPrimaryKey(Table1 *types.Table, TypeGo string) (string, string) {
 	Otvet := "RequestId"
 	TextRequestFieldName := "ID"
+
 	TextRequest := "Request"
 
 	switch TypeGo {
@@ -1514,6 +1515,9 @@ func FindTextConvertProtobufTypeToGolangType(Table1 *types.Table, Column1 *types
 	TableName := Table1.Name
 	IDName := Column1.Name
 
+	RequestColumnName := Column1.NameGo
+	RequestColumnName = FindRequestColumnName(Table1, Column1)
+
 	//alias в Int64
 	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
 	if ok == true {
@@ -1530,7 +1534,7 @@ func FindTextConvertProtobufTypeToGolangType(Table1 *types.Table, Column1 *types
 		}
 	case "uuid.UUID":
 		{
-			Otvet = "uuid.FromBytes([]byte(" + VariableName + Column1.NameGo + "))"
+			Otvet = "uuid.FromBytes([]byte(" + VariableName + RequestColumnName + "))"
 			return Otvet
 		}
 	}
@@ -1701,7 +1705,11 @@ func ReplaceTextRequestID_PrimaryKey(Text string, Table1 *types.Table) string {
 
 	TextRequestID, TextID := FindTextProtobufRequestPrimaryKey(Table1, TypeGo)
 	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
-	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextID)
+	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*grpc_proto."+TextRequestID)
+	//Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextID)
+
+	TextID = FindTextConvertProtobufTypeToGolangType(Table1, PrimaryKeyColumn, "Request.")
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", TextID)
 
 	return Otvet
 }
@@ -1739,6 +1747,15 @@ func FindNegativeValue(TypeGo string) string {
 	if mini_func.IsNumberType(TypeGo) == true {
 		Otvet = "-1"
 	}
+
+	return Otvet
+}
+
+// FindRequestColumnName - возвращает название колонки в Request
+func FindRequestColumnName(Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := ""
+
+	_, Otvet := FindTextProtobufRequest(Table1, Column1.TypeGo)
 
 	return Otvet
 }
