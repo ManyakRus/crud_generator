@@ -46,7 +46,7 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 	}
 
 	//удалим из кэша
-	//cache.Remove(int64(m.ID))
+	cache.Remove(m.ID)
 
 	return err
 }

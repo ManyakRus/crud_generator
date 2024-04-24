@@ -201,7 +201,7 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 	}
 
 	//удалим из кэша
-	//cache.Remove(int64(m.ID))
+	//cache.Remove(m.ID)
 
 	//запишем NULL в пустые колонки
 	MapOmit := crud_functions.MapOmit_from_MassOmit(MassOmit)
