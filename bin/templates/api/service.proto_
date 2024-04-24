@@ -15,6 +15,7 @@ import "google/protobuf/timestamp.proto";
 service Sync_service {
 }
 
+
 // -------------------------- Request ----------------------------------------------
 
 // RequestId - параметры запроса на сервер
@@ -26,17 +27,17 @@ message RequestId {
 // RequestString - параметры запроса на сервер
 message RequestString {
     uint32 VersionModel= 1; //версия структуры модели
-    string StringFind   = 2; // строка поиска
+    string String_1   = 2; // строка поиска
 }
 
 // RequestString3 - параметры запроса на сервер
 message RequestString3 {
     uint32 VersionModel= 1; //версия структуры модели
-    string StringFind1   = 2; // строка поиска
-    string StringFind2   = 3; // строка поиска
-    string StringFind3   = 4; // строка поиска
+    string String_1   = 2; // строка поиска
+    string String_2   = 3; // строка поиска
+    string String_3   = 4; // строка поиска
 }
-// RequestId - параметры запроса на сервер
+// RequestExtID - параметры запроса на сервер
 message RequestExtID {
     uint32 VersionModel= 1; //версия структуры модели
     int64 ExtID   = 2; // ext_id записи в БД
@@ -59,16 +60,16 @@ message RequestInnKpp {
 // RequestIdId - параметры запроса на сервер
 message RequestIdId {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 iD1   = 2; // id записи в БД
-    int64 iD2   = 3; // id записи в БД
+    int64 ID1   = 2; // id записи в БД
+    int64 ID2   = 3; // id записи в БД
 }
 
 // RequestIdIdId - параметры запроса на сервер
 message RequestIdIdId {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 iD1   = 2; // id записи в БД
-    int64 iD2   = 3; // id записи в БД
-    int64 iD3   = 4; // id записи в БД
+    int64 ID1   = 2; // id записи в БД
+    int64 ID2   = 3; // id записи в БД
+    int64 ID3   = 4; // id записи в БД
 }
 
 // RequestDate - параметры запроса на сервер, передаётся Дата time.Time
@@ -101,55 +102,160 @@ message RequestBool {
     bool Bool   = 2; // строка поиска
 }
 
+//----------------------------- Request_ID -------------------------------------------
 
-// Request_ID_Date - параметры запроса на сервер, передаётся ID + Дата time.Time
-message Request_ID_Date {
+// RequestId_Date - параметры запроса на сервер, передаётся ID + Дата time.Time
+message RequestId_Date {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 iD = 2; 	// id записи в БД
+    int64 ID = 2; 	// id записи в БД
     google.protobuf.Timestamp Date = 3; // значение поиска
 }
 
-// Request_ID_Float64 - параметры запроса на сервер, передаётся ID + float64
-message Request_ID_Float64 {
+// RequestId_Float64 - параметры запроса на сервер, передаётся ID + float64
+message RequestId_Float64 {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 iD = 2; 	// id записи в БД
+    int64 ID = 2; 	// id записи в БД
     double Float64 = 3; // значение поиска
 }
 
-// Request_ID_Float32 - параметры запроса на сервер, передаётся ID + float32
-message Request_ID_Float32 {
+// RequestId_Float32 - параметры запроса на сервер, передаётся ID + float32
+message RequestId_Float32 {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 iD = 2; 	// id записи в БД
+    int64 ID = 2; 	// id записи в БД
     float Float32 = 3; // значение поиска
 }
 
-// Request_ID_Int32 - параметры запроса на сервер, передаётся ID + int32
-message Request_ID_Int32 {
+// RequestId_Int32 - параметры запроса на сервер, передаётся ID + int32
+message RequestId_Int32 {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 iD = 2; 	// id записи в БД
+    int64 ID = 2; 	// id записи в БД
     int32 Int32 = 3; // значение поиска
 }
 
-// Request_ID_Int64 - параметры запроса на сервер, передаётся ID + int64
-message Request_ID_Int64 {
+// RequestId_Int64 - параметры запроса на сервер, передаётся ID + int64
+message RequestId_Int64 {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 iD = 2; 	// id записи в БД
+    int64 ID = 2; 	// id записи в БД
     int64 Int64 = 3; // значение поиска
 }
 
-// Request_ID_Bool - параметры запроса на сервер, передаётся ID + bool
-message Request_ID_Bool {
+// RequestId_Bool - параметры запроса на сервер, передаётся ID + bool
+message RequestId_Bool {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 iD = 2; 	// id записи в БД
+    int64 ID = 2; 	// id записи в БД
     bool Bool = 3; // значение поиска
 }
 
-// Request_ID_String - параметры запроса на сервер, передаётся ID + string
-message Request_ID_String {
+// RequestId_String - параметры запроса на сервер, передаётся ID + string
+message RequestId_String {
     uint32 VersionModel= 1; //версия структуры модели
-    int64 iD = 2; 	// id записи в БД
-    string StringFind = 3; // строка поиска
+    int64 ID = 2; 	// id записи в БД
+    string String_1 = 3; // строка поиска
 }
+
+//----------------------------- Request_Int32 -------------------------------------------
+
+// RequestInt32_Date - параметры запроса на сервер, передаётся int32 + Дата time.Time
+message RequestInt32_Date {
+    uint32 VersionModel= 1; //версия структуры модели
+    int32 Int32 = 2; 	// id записи в БД
+    google.protobuf.Timestamp Date = 3; // значение поиска
+}
+
+// RequestInt32_Float64 - параметры запроса на сервер, передаётся int32 + float64
+message RequestInt32_Float64 {
+    uint32 VersionModel= 1; //версия структуры модели
+    int32 Int32 = 2; 	// id записи в БД
+    double Float64 = 3; // значение поиска
+}
+
+// RequestInt32_Float32 - параметры запроса на сервер, передаётся int32 + float32
+message RequestInt32_Float32 {
+    uint32 VersionModel= 1; //версия структуры модели
+    int32 Int32 = 2; 	// id записи в БД
+    float Float32 = 3; // значение поиска
+}
+
+// RequestInt32_Int32 - параметры запроса на сервер, передаётся int32 + int32
+message RequestInt32_Int32 {
+    uint32 VersionModel= 1; //версия структуры модели
+    int32 Int32 = 2; 	// id записи в БД
+    int32 Int32_2 = 3; // значение поиска
+}
+
+// RequestInt32_Int64 - параметры запроса на сервер, передаётся int32 + int64
+message RequestInt32_Int64 {
+    uint32 VersionModel= 1; //версия структуры модели
+    int32 Int32 = 2; 	// id записи в БД
+    int64 Int64 = 3; // значение поиска
+}
+
+// RequestInt32_Bool - параметры запроса на сервер, передаётся int32 + bool
+message RequestInt32_Bool {
+    uint32 VersionModel= 1; //версия структуры модели
+    int32 Int32 = 2; 	// id записи в БД
+    bool Bool = 3; // значение поиска
+}
+
+// RequestInt32_String - параметры запроса на сервер, передаётся int32 + string
+message RequestInt32_String {
+    uint32 VersionModel= 1; //версия структуры модели
+    int32 Int32 = 2; 	// id записи в БД
+    string String_1 = 3; // строка поиска
+}
+
+//----------------------------- Request_String -------------------------------------------
+
+// RequestString_Date - параметры запроса на сервер, передаётся string + Дата time.Time
+message RequestString_Date {
+    uint32 VersionModel= 1; //версия структуры модели
+    string String_1 = 2; 	// ID записи в БД
+    google.protobuf.Timestamp Date = 3; // значение поиска
+}
+
+// RequestString_Float64 - параметры запроса на сервер, передаётся string + float64
+message RequestString_Float64 {
+    uint32 VersionModel= 1; //версия структуры модели
+    string String_1 = 2; 	// id записи в БД
+    double Float64 = 3; // значение поиска
+}
+
+// RequestString_Float32 - параметры запроса на сервер, передаётся string + float32
+message RequestString_Float32 {
+    uint32 VersionModel= 1; //версия структуры модели
+    string String_1 = 2; 	// id записи в БД
+    float Float32 = 3; // значение поиска
+}
+
+// RequestString_Int32 - параметры запроса на сервер, передаётся string + int32
+message RequestString_Int32 {
+    uint32 VersionModel= 1; //версия структуры модели
+    string String_1 = 2; 	// id записи в БД
+    int32 Int32 = 3; // значение поиска
+}
+
+// RequestString_Int64 - параметры запроса на сервер, передаётся string + int64
+message RequestString_Int64 {
+    uint32 VersionModel= 1; //версия структуры модели
+    string String_1 = 2; 	// id записи в БД
+    int64 Int64 = 3; // значение поиска
+}
+
+// RequestString_Bool - параметры запроса на сервер, передаётся string + bool
+message RequestString_Bool {
+    uint32 VersionModel= 1; //версия структуры модели
+    string String_1 = 2; 	// id записи в БД
+    bool Bool = 3; // значение поиска
+}
+
+// RequestString_String - параметры запроса на сервер, передаётся string + string
+message RequestString_String {
+    uint32 VersionModel= 1; //версия структуры модели
+    string String_1 = 2; 	// id записи в БД
+    string String_2 = 3; // строка поиска
+}
+
+//-------------------------------------------------------------------------------------
 
 // Request_Model_MassString - модель и массив строк
 message Request_Model_MassString {
@@ -157,7 +263,6 @@ message Request_Model_MassString {
     string ModelString = 2; //объект-модель в формате json
     repeated string MassNames	= 3; //массив строк
 }
-
 
 // -------------------------- Response ----------------------------------------------
 

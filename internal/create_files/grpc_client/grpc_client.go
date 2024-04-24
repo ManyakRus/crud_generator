@@ -89,6 +89,9 @@ func CreateGRPCClient() error {
 		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, ServiceNameTemplate, ServiceName)
 		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, strings.ToUpper(ServiceNameTemplate), strings.ToUpper(ServiceName))
 
+		//добавим импорт uuid
+		TextGRPCClient = create_files.CheckAndAddImportUUID_FromText(TextGRPCClient)
+
 	}
 
 	//заменим имя сервиса на новое

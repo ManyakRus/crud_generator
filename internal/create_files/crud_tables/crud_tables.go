@@ -227,6 +227,16 @@ func CreateFilesTest(Table1 *types.Table) error {
 		TextDB = create_files.DeleteFuncTestDelete(TextDB, Table1)
 		TextDB = create_files.DeleteFuncTestRestore(TextDB, Table1)
 		TextDB = create_files.DeleteFuncTestFind_byExtID(TextDB, Table1)
+
+		//Postgres_ID_Test = ID Minimum
+		TextDB = create_files.Replace_Postgres_ID_Test(TextDB, Table1)
+
+		//замена ID на PrimaryKey
+		TextDB = create_files.ReplacePrimaryKeyOtvetID(TextDB, Table1)
+
+		//добавим импорт uuid
+		TextDB = create_files.CheckAndAddImportUUID_FromText(TextDB)
+
 	}
 
 	//создание текста
@@ -241,22 +251,8 @@ func CreateFilesTest(Table1 *types.Table) error {
 	}
 	TextDB = create_files.DeleteFuncTestFind_byExtID(TextDB, Table1)
 
-	//Postgres_ID_Test = ID Minimum
-	if Table1.IDMinimum != "" {
-		TextFind := "const Postgres_ID_Test = "
-		ColumnPrimary := create_files.FindPrimaryKeyColumn(Table1)
-		if ColumnPrimary.TypeGo == "uuid.UUID" {
-			TextDB = strings.ReplaceAll(TextDB, TextFind+"0", TextFind+`var Postgres_ID_Test, _ = uuid.Parse("`+TextFind+Table1.IDMinimum+`")`)
-		} else {
-			TextDB = strings.ReplaceAll(TextDB, TextFind+"0", TextFind+Table1.IDMinimum)
-		}
-	}
-
 	//SkipNow() если нет строк в БД
 	TextDB = create_files.AddSkipNow(TextDB, Table1)
-
-	//замена ID на PrimaryKey
-	TextDB = create_files.ReplacePrimaryKeyOtvetID(TextDB, Table1)
 
 	//замена импортов на новые URL
 	TextDB = create_files.ReplaceServiceURLImports(TextDB)
@@ -562,6 +558,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
+		//добавим импорт uuid
 		TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
 		//TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
 	}
@@ -628,7 +625,7 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1, Column1.TypeGo)
 
 	//заменяем Read_ctx()
 	Otvet = strings.ReplaceAll(Otvet, " Read_ctx ", " "+FuncName+"_ctx ")
@@ -771,7 +768,7 @@ func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Tab
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Column1.TypeGo)
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1, Column1.TypeGo)
 	DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
 
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)

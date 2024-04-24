@@ -202,17 +202,17 @@ func ReplacePrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
 		OtvetColumnName = ColumnTypeGo + "(" + OtvetColumnName + ")"
 	}
 
-	//заменим int64(m.ID) на m.ID
+	//заменим int64(Otvet.ID) на Otvet.ID
 	if mini_func.IsNumberType(ColumnTypeGo) == true {
 		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
 	} else if ColumnTypeGo == "string" {
-		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID == 0", OtvetColumnName+" == \"\"")
-		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID != 0", OtvetColumnName+" != \"\"")
-		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", OtvetColumnName)
+		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) == 0", OtvetColumnName+" == \"\"")
+		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) != 0", OtvetColumnName+" != \"\"")
+		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
 	} else if ColumnTypeGo == "uuid.UUID" || ColumnTypeGo == "uuid.NullUUID" {
-		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID == 0", OtvetColumnName+" == uuid.Nil")
-		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID != 0", OtvetColumnName+" != uuid.Nil")
-		Otvet = strings.ReplaceAll(Otvet, "Otvet.ID", OtvetColumnName)
+		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) == 0", OtvetColumnName+" == uuid.Nil")
+		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) != 0", OtvetColumnName+" != uuid.Nil")
+		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
 	} else if ColumnTypeGo == "time.Time" {
 		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) == 0", OtvetColumnName+".IsZero() == true")
 		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) != 0", OtvetColumnName+".IsZero() == false")
@@ -247,7 +247,7 @@ func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 	} else if ColumnTypeGo == "uuid.UUID" || ColumnTypeGo == "uuid.NullUUID" {
 		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+" == uuid.Nil")
 		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+" != uuid.Nil")
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
+		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName+".String()")
 	} else if ColumnTypeGo == "time.Time" {
 		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+".IsZero() == true")
 		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+".IsZero() == false")
@@ -1175,51 +1175,117 @@ func AddInterfaceFunction(s, TextAdd string) string {
 	return Otvet
 }
 
-// FindTextProtobufRequest - возвращает имя message из .proto, в зависимости от типа, а также название поля
-func FindTextProtobufRequest(TypeGo string) (string, string) {
-	Otvet := "RequestID"
+// FindTextProtobufRequest - возвращает "RequestID" и "ID" - имя message из .proto, в зависимости от типа, а также название поля
+func FindTextProtobufRequest(Table1 *types.Table, TypeGo string) (string, string) {
+	Otvet := "RequestId"
 	TextRequestFieldName := "ID"
+	TextRequest := "Request"
+
+	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	PrimaryKeyTypeGo := PrimaryKeyColumn.TypeGo
+	switch PrimaryKeyTypeGo {
+	case "string", "uuid.UUID":
+		TextRequest = "RequestString_"
+	}
 
 	switch TypeGo {
 	case "int", "int64":
 		{
-			Otvet = "RequestId"
+			if PrimaryKeyTypeGo == "int64" {
+				Otvet = TextRequest + "Id"
+				TextRequestFieldName = "ID"
+			} else {
+				Otvet = TextRequest + "Int64"
+				TextRequestFieldName = "Int64"
+			}
+		}
+
+	case "int32":
+		{
+			Otvet = TextRequest + "Int32"
+			TextRequestFieldName = "Int32"
+		}
+	case "string":
+		{
+			Otvet = TextRequest + "String"
+			TextRequestFieldName = "String_1"
+		}
+	case "uuid.UUID":
+		{
+			Otvet = TextRequest + "String"
+			TextRequestFieldName = "String_1"
+		}
+	case "time.Time":
+		{
+			Otvet = TextRequest + "Date"
+			TextRequestFieldName = "Date"
+		}
+	case "float32":
+		{
+			Otvet = TextRequest + "Float32"
+			TextRequestFieldName = "Float32"
+		}
+	case "float64":
+		{
+			Otvet = TextRequest + "Float64"
+			TextRequestFieldName = "Float64"
+		}
+	case "bool":
+		{
+			Otvet = TextRequest + "Bool"
+			TextRequestFieldName = "Bool"
+		}
+	}
+
+	return Otvet, TextRequestFieldName
+}
+
+// FindTextProtobufRequestPrimaryKey - возвращает "RequestID" и "ID" - имя message из .proto, в зависимости от типа, а также название поля
+func FindTextProtobufRequestPrimaryKey(Table1 *types.Table, TypeGo string) (string, string) {
+	Otvet := "RequestId"
+	TextRequestFieldName := "ID"
+	TextRequest := "Request"
+
+	switch TypeGo {
+	case "int", "int64":
+		{
+			Otvet = TextRequest + "Id"
 			TextRequestFieldName = "ID"
 		}
 
 	case "int32":
 		{
-			Otvet = "RequestInt32"
+			Otvet = TextRequest + "Int32"
 			TextRequestFieldName = "Int32"
 		}
 	case "string":
 		{
-			Otvet = "RequestString"
-			TextRequestFieldName = "StringFind"
+			Otvet = TextRequest + "String"
+			TextRequestFieldName = "String_1"
 		}
 	case "uuid.UUID":
 		{
-			Otvet = "RequestString"
-			TextRequestFieldName = "StringFind"
+			Otvet = TextRequest + "String"
+			TextRequestFieldName = "String_1"
 		}
 	case "time.Time":
 		{
-			Otvet = "RequestDate"
+			Otvet = TextRequest + "Date"
 			TextRequestFieldName = "Date"
 		}
 	case "float32":
 		{
-			Otvet = "RequestFloat32"
+			Otvet = TextRequest + "Float32"
 			TextRequestFieldName = "Float32"
 		}
 	case "float64":
 		{
-			Otvet = "RequestFloat64"
+			Otvet = TextRequest + "Float64"
 			TextRequestFieldName = "Float64"
 		}
 	case "bool":
 		{
-			Otvet = "RequestBool"
+			Otvet = TextRequest + "Bool"
 			TextRequestFieldName = "Bool"
 		}
 	}
@@ -1234,7 +1300,7 @@ func FindTextProtobufRequest(TypeGo string) (string, string) {
 // TextRequestFieldGolang - название поля в Request с преобразованием в тип гоу
 // TextGolangLine - замена всей строки в го
 func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column, VariableName string) (string, string, string, string) {
-	Otvet := "RequestID"
+	Otvet := "RequestId"
 	TextRequestFieldName := "ID"
 	TextRequestFieldGolang := "ID"
 	TextGolangLine := ""
@@ -1243,33 +1309,51 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 	TableName := Table1.Name
 	ColumnName := Column1.Name
 
+	//найдём тип колонки PrimaryKey
+	PrimaryKey_Column := FindPrimaryKeyColumn(Table1)
+	PrimaryKey_TypeGo := PrimaryKey_Column.TypeGo
+	//Text_Request_ID := "Request_ID"
+	Otvet, _ = FindTextProtobufRequest(Table1, PrimaryKey_TypeGo)
+	//Text_Request_ID = "Request_" + TextID
+
+	//найдём строку по типу колонки
 	switch TypeGo {
 	case "int", "int64":
 		{
-			Otvet = "Request_ID_Int64"
+			//Otvet = Text_Request_ID + "_Int64"
 			TextRequestFieldName = "Int64"
 			TextRequestFieldGolang = VariableName + "Int64"
 		}
 
 	case "int32":
 		{
-			Otvet = "Request_ID_Int32"
+			//Otvet = Text_Request_ID + "_Int32"
 			TextRequestFieldName = "Int32"
 			TextRequestFieldGolang = VariableName + "Int32"
 		}
 	case "string":
 		{
-			Otvet = "Request_ID_String"
-			TextRequestFieldName = "StringFind"
-			TextRequestFieldGolang = VariableName + "StringFind"
+			//Otvet = Text_Request_ID + "_String"
+			if Column1 != PrimaryKey_Column {
+				TextRequestFieldName = "String_2"
+				TextRequestFieldGolang = VariableName + "String_2"
+			} else {
+				TextRequestFieldName = "String_1"
+				TextRequestFieldGolang = VariableName + "String_1"
+			}
 		}
 	case "uuid.UUID":
 		{
-			Otvet = "Request_ID_String"
-			TextRequestFieldName = "StringFind"
-			TextRequestFieldGolang = VariableName + "StringFind"
+			//Otvet = Text_Request_ID + "_String"
+			if Column1 != PrimaryKey_Column {
+				TextRequestFieldName = "String_2"
+				TextRequestFieldGolang = VariableName + "String_2"
+			} else {
+				TextRequestFieldName = "String_1"
+				TextRequestFieldGolang = VariableName + "String_1"
+			}
 			TextGolangLine = "value, err := uuid.Parse(" + VariableName + "" + TextRequestFieldName + ")" + `
-	if Request.StringFind == "" {
+	if Request.String_2 == "" {
 		value = uuid.Nil
 		err = nil
 	}
@@ -1280,25 +1364,25 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 		}
 	case "time.Time":
 		{
-			Otvet = "Request_ID_Date"
+			//Otvet = Text_Request_ID + "_Date"
 			TextRequestFieldName = "Date"
 			TextRequestFieldGolang = VariableName + "Date.AsTime()"
 		}
 	case "float32":
 		{
-			Otvet = "Request_ID_Float32"
+			//Otvet = Text_Request_ID + "_Float32"
 			TextRequestFieldName = "Float32"
 			TextRequestFieldGolang = VariableName + "Float32"
 		}
 	case "float64":
 		{
-			Otvet = "Request_ID_Float64"
+			//Otvet = Text_Request_ID + "_Float64"
 			TextRequestFieldName = "Float64"
 			TextRequestFieldGolang = VariableName + "Float64"
 		}
 	case "bool":
 		{
-			Otvet = "Request_ID_Bool"
+			//Otvet = Text_Request_ID + "_Bool"
 			TextRequestFieldName = "Bool"
 			TextRequestFieldGolang = VariableName + "Bool"
 		}
@@ -1571,3 +1655,90 @@ func Is_UUID_Type(TypeGo string) bool {
 //
 //	return Otvet
 //}
+
+// Replace_Postgres_ID_Test - заменяет текст "const Postgres_ID_Test = 0" на нужный ИД
+func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TextFind := "const Postgres_ID_Test = 0"
+	ColumnPrimary := FindPrimaryKeyColumn(Table1)
+	IDMinimum := Table1.IDMinimum
+
+	if ColumnPrimary.TypeGo == "uuid.UUID" {
+		if Table1.IDMinimum == "" {
+			IDMinimum = FindTextDefaultValue(ColumnPrimary.TypeGo)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_ID_Test = `+IDMinimum+``)
+		} else {
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_ID_Test, _ = uuid.Parse("`+IDMinimum+`")`)
+		}
+	} else {
+		Otvet = strings.ReplaceAll(Otvet, TextFind, TextFind+IDMinimum)
+	}
+
+	return Otvet
+}
+
+// ReplaceTextRequestID - заменяет RequestId{} на RequestString{}
+func ReplaceTextRequestID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	TypeGo := PrimaryKeyColumn.TypeGo
+
+	TextRequestID, TextID := FindTextProtobufRequest(Table1, TypeGo)
+	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextID)
+
+	return Otvet
+}
+
+// ReplaceTextRequestID_PrimaryKey - заменяет RequestId{} на RequestString{}
+func ReplaceTextRequestID_PrimaryKey(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	TypeGo := PrimaryKeyColumn.TypeGo
+
+	TextRequestID, TextID := FindTextProtobufRequestPrimaryKey(Table1, TypeGo)
+	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextID)
+
+	return Otvet
+}
+
+// ReplaceIDtoID - заменяет int64(ID) на ID
+func ReplaceIDtoID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	OtvetColumnName := FindTextConvertGolangTypeToProtobufType(Table1, PrimaryKeyColumn, "")
+
+	Otvet = strings.ReplaceAll(Otvet, "int64(ID)", OtvetColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "(ID int64", "(ID "+PrimaryKeyColumn.TypeGo)
+
+	return Otvet
+}
+
+// ReplaceOtvetIDEqual1 - заменяет Otvet.ID = -1
+func ReplaceOtvetIDEqual1(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	Value := FindNegativeValue(PrimaryKeyColumn.TypeGo)
+
+	Otvet = strings.ReplaceAll(Otvet, "Otvet.ID = -1", "Otvet.ID = "+Value)
+
+	return Otvet
+}
+
+// FindNegativeValue - возвращает -1 для числовых типов
+func FindNegativeValue(TypeGo string) string {
+	Otvet := ""
+
+	Otvet = FindTextDefaultValue(TypeGo)
+	if mini_func.IsNumberType(TypeGo) == true {
+		Otvet = "-1"
+	}
+
+	return Otvet
+}

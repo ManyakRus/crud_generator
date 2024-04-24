@@ -43,18 +43,18 @@ func TestCreate(t *testing.T) {
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
-	Model := lawsuit_status_types.LawsuitStatusType{}
-	Model.ID = -1
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = -1
 
 	crud := Crud_GRPC{}
-	err := crud.Create(&Model)
+	err := crud.Create(&Otvet)
 
 	if err == nil {
 		t.Error("TestCreate() error: ", err)
 	}
 
-	if Model.ID > 0 {
-		t.Error("TestCreate() error: ID >0")
+	if int64(Otvet.ID) != 0 {
+		t.Error("TestCreate() error: ID !=0")
 	}
 }
 
@@ -63,17 +63,17 @@ func TestUpdate(t *testing.T) {
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
-	Model := lawsuit_status_types.LawsuitStatusType{}
-	Model.ID = 0
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.ID = -1
 
 	crud := Crud_GRPC{}
-	err := crud.Update(&Model)
+	err := crud.Update(&Otvet)
 
 	if err == nil {
 		t.Error("TestUpdate() error: ", err)
 	}
 
-	if Model.ID != 0 {
+	if int64(Otvet.ID) != 0 {
 		t.Error("TestUpdate() error: ID =0")
 	}
 }
