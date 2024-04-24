@@ -35,8 +35,9 @@ func (s *ServerGRPC) LawsuitStatusType_ReadFromCache(ctx context.Context, Reques
 
 	//запрос в БД
 	db := postgres_gorm.GetConnection()
+	ID := Request.ID
 	Model := lawsuit_status_types.LawsuitStatusType{}
-	Model, err = crud_lawsuit_status_types.ReadFromCache_ctx(ctx, db, Request.ID)
+	Model, err = crud_lawsuit_status_types.ReadFromCache_ctx(ctx, db, ID)
 	if err != nil {
 		return &Otvet, err
 	}

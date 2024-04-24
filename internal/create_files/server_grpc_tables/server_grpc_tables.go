@@ -34,9 +34,9 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 		//тестовые файлы grpc_server
 		if config.Settings.NEED_CREATE_GRPC_SERVER_TEST == true {
-			err = CreateTestFiles(Table1)
+			err = CreateFilesTest(Table1)
 			if err != nil {
-				log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+				log.Error("CreateFilesTest() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 		}
@@ -52,9 +52,9 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 			//тестовые файлы grpc_server update
 			if config.Settings.NEED_CREATE_GRPC_SERVER_TEST == true {
-				err = CreateTestFilesUpdateEveryColumn(Table1)
+				err = CreateFilesUpdateEveryColumnTest(Table1)
 				if err != nil {
-					log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+					log.Error("CreateFilesTest() table: ", Table1.Name, " error: ", err)
 					return err
 				}
 			}
@@ -76,7 +76,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			if config.Settings.NEED_CREATE_CACHE_TEST_FILES == true {
 				err = CreateFilesCacheTest(Table1)
 				if err != nil {
-					log.Error("CreateTestFiles() table: ", Table1.Name, " error: ", err)
+					log.Error("CreateFilesTest() table: ", Table1.Name, " error: ", err)
 					return err
 				}
 			}
@@ -164,8 +164,8 @@ func CreateFiles(Table1 *types.Table) error {
 	return err
 }
 
-// CreateTestFiles - создаёт 1 файл в папке grpc_server
-func CreateTestFiles(Table1 *types.Table) error {
+// CreateFilesTest - создаёт 1 файл в папке grpc_server
+func CreateFilesTest(Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов
@@ -212,6 +212,19 @@ func CreateTestFiles(Table1 *types.Table) error {
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
 		TextGRPCServer = create_files.CheckAndAddImport(TextGRPCServer, "encoding/json")
+
+		//Postgres_ID_Test = ID Minimum
+		TextGRPCServer = create_files.Replace_Model_ID_Test(TextGRPCServer, Table1)
+
+		//замена RequestId{}
+		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+
+		//замена Otvet.ID = -1
+		TextGRPCServer = create_files.ReplaceModelIDEqual1(TextGRPCServer, Table1)
+
+		//добавим импорт uuid
+		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+
 	}
 
 	//создание текста
@@ -437,10 +450,14 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
 		TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
 		TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
-	}
 
-	//import uuid
-	TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+		//замена RequestId{}
+		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+
+		//добавим импорт uuid
+		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+
+	}
 
 	//удаление пустого импорта
 	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
@@ -509,8 +526,8 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	return Otvet
 }
 
-// CreateTestFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_server
-func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
+// CreateFilesUpdateEveryColumnTest - создаёт 1 файл в папке grpc_server
+func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов
@@ -578,6 +595,12 @@ func CreateTestFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
 
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+
+	//замена RequestId{}
+	TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+
+	//добавим импорт uuid
+	TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
 
 	//Import Timestamp
 	TextGRPCServer = create_files.CheckAndAddImportTimestamp_FromText(TextGRPCServer)
@@ -694,6 +717,13 @@ func CreateFilesCache(Table1 *types.Table) error {
 
 		CrudTableURL := create_files.FindCrudTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
+
+		//замена RequestId{}
+		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+
+		//добавим импорт uuid
+		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+
 	}
 
 	//создание текста
@@ -755,6 +785,13 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 
 		CrudStarterURL := create_files.FindCrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
+
+		//замена RequestId{}
+		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+
+		//добавим импорт uuid
+		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+
 	}
 
 	//создание текста
