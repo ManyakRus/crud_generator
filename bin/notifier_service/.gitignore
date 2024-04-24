@@ -1,7 +1,0 @@
-.env
-/bin/.env
-
-/.idea/
-.vscode
-/log.txt
-cover.out
