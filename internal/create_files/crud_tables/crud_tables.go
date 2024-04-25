@@ -704,6 +704,8 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
+		TextCrud = create_files.ReplacePrimaryKeyM_ID(TextCrud, Table1)
+		TextCrud = create_files.ReplacePrimaryKeyOtvetID(TextCrud, Table1)
 		//TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
 	}
 
@@ -771,6 +773,9 @@ func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Tab
 	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1, Column1.TypeGo)
 	DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
 
+	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
+	Otvet = create_files.ReplacePrimaryKeyOtvetID(Otvet, Table1)
+
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
@@ -825,6 +830,7 @@ func CreateFilesCache(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCache = create_files.AddImport(TextCache, ModelTableURL)
 
+		TextCache = create_files.ReplacePrimaryKeyOtvetID(TextCache, Table1)
 		//TextCache = create_files.ConvertRequestIdToAlias(TextCache, Table1)
 	}
 

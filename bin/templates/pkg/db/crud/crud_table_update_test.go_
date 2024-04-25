@@ -16,15 +16,15 @@ func TestUpdateManyFields(t *testing.T) {
 
 	//прочитаем из БД
 	crud := Crud_DB{}
-	Model := lawsuit_status_types.LawsuitStatusType{}
-	Model.ID = Postgres_ID_Test
-	err := crud.Read(&Model)
+	m := lawsuit_status_types.LawsuitStatusType{}
+	m.ID = Postgres_ID_Test
+	err := crud.Read(&m)
 	if err != nil {
 		t.Error("TestUpdateManyFields() Read() error: ", err)
 	}
 
 	//запишем в БД это же значение
-	err = crud.UpdateManyFields(&Model, nil)
+	err = crud.UpdateManyFields(&m, nil)
 	if err != nil {
 		t.Error("TestUpdateManyFields() UpdateManyFields() error: ", err)
 	}

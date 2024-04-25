@@ -218,6 +218,9 @@ func ReplacePrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
 		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) != 0", OtvetColumnName+".IsZero() == false")
 		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
 	}
+	Otvet = strings.ReplaceAll(Otvet, "Otvet.ID = ", OtvetColumnName+" = ")
+	Otvet = strings.ReplaceAll(Otvet, "Otvet.ID != ", OtvetColumnName+" != ")
+	Otvet = strings.ReplaceAll(Otvet, " Otvet.ID)", " "+OtvetColumnName+")")
 
 	return Otvet
 }
@@ -253,6 +256,10 @@ func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+".IsZero() == false")
 		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
 	}
+	Otvet = strings.ReplaceAll(Otvet, "m.ID = ", OtvetColumnName+" = ")
+	Otvet = strings.ReplaceAll(Otvet, " = m.ID", " = "+OtvetColumnName)
+	Otvet = strings.ReplaceAll(Otvet, ", m.ID,", ", "+OtvetColumnName+",")
+	Otvet = strings.ReplaceAll(Otvet, "(m.ID)", "("+OtvetColumnName+")")
 
 	return Otvet
 }
@@ -1312,9 +1319,9 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 
 	//найдём тип колонки PrimaryKey
 	PrimaryKey_Column := FindPrimaryKeyColumn(Table1)
-	PrimaryKey_TypeGo := PrimaryKey_Column.TypeGo
+	//PrimaryKey_TypeGo := PrimaryKey_Column.TypeGo
 	//Text_Request_ID := "Request_ID"
-	Otvet, _ = FindTextProtobufRequest(Table1, PrimaryKey_TypeGo)
+	Otvet, _ = FindTextProtobufRequest(Table1, TypeGo)
 	//Text_Request_ID = "Request_" + TextID
 
 	//найдём строку по типу колонки
@@ -1682,7 +1689,7 @@ func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 			Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_ID_Test, _ = uuid.Parse("`+IDMinimum+`")`)
 		}
 	} else {
-		Otvet = strings.ReplaceAll(Otvet, TextFind, TextFind+IDMinimum)
+		Otvet = strings.ReplaceAll(Otvet, TextFind, "const Postgres_ID_Test = "+IDMinimum)
 	}
 
 	return Otvet
@@ -1712,15 +1719,14 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 }
 
 // ReplaceTextRequestID - заменяет RequestId{} на RequestString{}
-func ReplaceTextRequestID(Text string, Table1 *types.Table) string {
+func ReplaceTextRequestID(Text string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := Text
 
-	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
-	TypeGo := PrimaryKeyColumn.TypeGo
+	TypeGo := Column1.TypeGo
 
-	TextRequestID, TextID := FindTextProtobufRequest(Table1, TypeGo)
+	TextRequestID, _ := FindTextProtobufRequest(Table1, TypeGo)
 	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
-	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextID)
+	//Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextID)
 
 	return Otvet
 }
@@ -1747,17 +1753,16 @@ func ReplaceTextRequestID_PrimaryKey1(Text string, Table1 *types.Table, TextRequ
 
 	TextRequestID, TextID := FindTextProtobufRequestPrimaryKey(Table1, TypeGo)
 
-	TextConvertID, GolangCode := FindTextConvertProtobufTypeToGolangType(Table1, PrimaryKeyColumn, "Request.")
+	_, GolangCode := FindTextConvertProtobufTypeToGolangType(Table1, PrimaryKeyColumn, "Request.")
 	if GolangCode != "" {
 		Otvet = strings.ReplaceAll(Otvet, "ID := "+TextRequest+".ID", GolangCode)
 		Otvet = strings.ReplaceAll(Otvet, TextRequest+".ID = ", TextRequest+"."+TextID+" = ")
-	} else {
-		Otvet = strings.ReplaceAll(Otvet, TextRequest+".ID", TextConvertID)
 	}
 
 	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
 	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*grpc_proto."+TextRequestID)
 	//Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextID)
+	Otvet = strings.ReplaceAll(Otvet, TextRequest+".ID", TextRequest+"."+TextID)
 
 	return Otvet
 }
@@ -1770,7 +1775,7 @@ func ReplaceIDtoID(Text string, Table1 *types.Table) string {
 	OtvetColumnName := FindTextConvertGolangTypeToProtobufType(Table1, PrimaryKeyColumn, "")
 
 	Otvet = strings.ReplaceAll(Otvet, "int64(ID)", OtvetColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "(ID int64", "(ID "+PrimaryKeyColumn.TypeGo)
+	Otvet = strings.ReplaceAll(Otvet, "(ID int64", "("+PrimaryKeyColumn.NameGo+" "+PrimaryKeyColumn.TypeGo)
 
 	return Otvet
 }

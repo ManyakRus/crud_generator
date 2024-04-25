@@ -219,11 +219,11 @@ func CreateFilesTest(Table1 *types.Table) error {
 		//Postgres_ID_Test = ID Minimum
 		TextGRPCClient = create_files.Replace_Postgres_ID_Test(TextGRPCClient, Table1)
 
-		//замена ID на PrimaryKey
-		TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)
-
 		//замена Otvet.ID = -1
 		TextGRPCClient = create_files.ReplaceOtvetIDEqual1(TextGRPCClient, Table1)
+
+		//замена ID на PrimaryKey
+		TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)
 
 		//добавим импорт uuid
 		TextGRPCClient = create_files.CheckAndAddImportUUID_FromText(TextGRPCClient)
@@ -241,12 +241,6 @@ func CreateFilesTest(Table1 *types.Table) error {
 		TextGRPCClient = DeleteFuncTestRestore(TextGRPCClient, ModelName, Table1)
 	}
 	TextGRPCClient = DeleteFuncTestFind_byExtID(TextGRPCClient, ModelName, Table1)
-
-	//Postgres_ID_Test = ID Minimum
-	if Table1.IDMinimum != "" {
-		TextFind := "const Postgres_ID_Test = "
-		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, TextFind+"0", TextFind+Table1.IDMinimum)
-	}
 
 	// замена ID на PrimaryKey
 	TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)
@@ -525,10 +519,8 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	TextRequest, TextRequestFieldName, _, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
 
 	//замена RequestId{}
-	Otvet = create_files.ReplaceTextRequestID(Otvet, Table1)
-
-	//
-	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
+	Otvet = create_files.ReplaceTextRequestID(Otvet, Table1, Column1)
+	Otvet = create_files.ReplaceTextRequestID_PrimaryKey(Otvet, Table1)
 
 	//замена ID на PrimaryKey
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
@@ -615,6 +607,9 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 		TextGRPC_Client = create_files.ReplacePrimaryKeyOtvetID(TextGRPC_Client, Table1)
 
+		//замена m.ID = Postgres_ID_Test
+		TextGRPC_Client = create_files.ReplacePrimaryKeyM_ID(TextGRPC_Client, Table1)
+
 	}
 
 	//создание текста
@@ -684,7 +679,7 @@ func FindTextUpdateEveryColumnTest(TextGRPC_ClientUpdateFunc string, Table1 *typ
 func FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextGRPC_ClientUpdateFunc
 
-	Otvet = create_files.ReplaceTextRequestID(Otvet, Table1)
+	Otvet = create_files.ReplaceTextRequestID(Otvet, Table1, Column1)
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
 	Otvet = create_files.ReplacePrimaryKeyOtvetID(Otvet, Table1)
 

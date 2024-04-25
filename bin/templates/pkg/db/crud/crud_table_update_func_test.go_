@@ -6,9 +6,9 @@ func TestUpdate(t *testing.T) {
 
 	//прочитаем из БД
 	crud := Crud_DB{}
-	Model := lawsuit_status_types.LawsuitStatusType{}
-	Model.ID = Postgres_ID_Test
-	err := crud.Read(&Model)
+	m := lawsuit_status_types.LawsuitStatusType{}
+	m.ID = Postgres_ID_Test
+	err := crud.Read(&m)
 	if err != nil {
 		t.Error("TestUpdate() Read() error: ", err)
 	}
@@ -16,7 +16,7 @@ func TestUpdate(t *testing.T) {
 	//запишем в БД это же значение
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
-	Otvet.ColumnName = Model.ColumnName
+	Otvet.ColumnName = m.ColumnName
 	err = crud.Update(&Otvet)
 	if err != nil {
 		t.Error("TestUpdate() Update() error: ", err)
