@@ -103,9 +103,9 @@ func Test_server_LawsuitStatusType_Create(t *testing.T) {
 	crud_starter.InitCrudTransport_DB()
 
 	var ModelString string
-	Model := lawsuit_status_types.LawsuitStatusType{}
-	Model.ID = -1
-	ModelString, err := Model.GetJSON()
+	m := lawsuit_status_types.LawsuitStatusType{}
+	m.ID = -1
+	ModelString, err := m.GetJSON()
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Create() error: ", err)
 		return

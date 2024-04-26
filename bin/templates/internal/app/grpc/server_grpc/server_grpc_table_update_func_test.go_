@@ -16,8 +16,8 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 	if Response1.ModelString == "" {
 		t.Error("Test_server_LawsuitStatusType_Update() Read() error: ModelString=''")
 	}
-	Model := lawsuit_status_types.LawsuitStatusType{}
-	err = Model.GetModelFromJSON(Response1.ModelString)
+	m := lawsuit_status_types.LawsuitStatusType{}
+	err = m.GetModelFromJSON(Response1.ModelString)
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Update_ColumnName() GetModelFromJSON() error: ", err)
 	}
@@ -25,7 +25,7 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 	//запишем в БД это же значение
 	Request2 := grpc_proto.RequestString{}
 	Request2.ID = LawsuitStatusType_ID_Test
-	Request2.ColumnName = Model.ColumnName
+	Request2.ColumnName = m.ColumnName
 	Request2.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	_, err = server1.LawsuitStatusType_Update_ColumnName(ctx, &Request2)
 	if err != nil {

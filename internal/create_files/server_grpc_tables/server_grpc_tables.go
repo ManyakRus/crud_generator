@@ -234,13 +234,14 @@ func CreateFilesTest(Table1 *types.Table) error {
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	//Postgres_ID_Test = ID Minimum
-	if Table1.IDMinimum != "" {
-		TextFind := "const " + ModelName + "_ID_Test = "
-		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, TextFind+"0", TextFind+Table1.IDMinimum)
-	}
+	//if Table1.IDMinimum != "" {
+	//	TextFind := "const " + ModelName + "_ID_Test = "
+	//	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, TextFind+"0", TextFind+Table1.IDMinimum)
+	//}
 
 	// замена ID на PrimaryKey
 	TextGRPCServer = create_files.ReplacePrimaryKeyOtvetID(TextGRPCServer, Table1)
+	TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
 
 	//SkipNow()
 	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)

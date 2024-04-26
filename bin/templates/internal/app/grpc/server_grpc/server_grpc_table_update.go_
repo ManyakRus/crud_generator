@@ -32,15 +32,15 @@ func (s *ServerGRPC) LawsuitStatusType_UpdateManyFields(ctx context.Context, Req
 	}
 
 	//получим модель из строки JSON
-	Model := lawsuit_status_types.LawsuitStatusType{}
-	err = Model.GetModelFromJSON(Request.ModelString)
+	m := lawsuit_status_types.LawsuitStatusType{}
+	err = m.GetModelFromJSON(Request.ModelString)
 	if err != nil {
 		return &Otvet, err
 	}
 
 	//запрос в БД
 	db := postgres_gorm.GetConnection()
-	err = crud_lawsuit_status_types.UpdateManyFields_ctx(ctx, db, &Model, Request.MassNames)
+	err = crud_lawsuit_status_types.UpdateManyFields_ctx(ctx, db, &m, Request.MassNames)
 	if err != nil {
 		return &Otvet, err
 	}

@@ -155,7 +155,6 @@ func CreateFiles(Table1 *types.Table) error {
 	//создание текста
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = create_files.ReplacePrimaryKeyM_ID(TextDB, Table1)
 	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
 	//TextDB = create_files.DeleteFuncFind_byExtID(TextDB, Table1)
@@ -165,6 +164,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = ReplaceText_created_at(TextDB, Table1)
 	TextDB = ReplaceText_is_deleted_deleted_at(TextDB, Table1)
 	TextDB = create_files.DeleteImportModel(TextDB)
+	TextDB = create_files.ReplacePrimaryKeyM_ID(TextDB, Table1)
 
 	//замена импортов на новые URL
 	TextDB = create_files.ReplaceServiceURLImports(TextDB)
@@ -781,7 +781,7 @@ func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Tab
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
-	Otvet = strings.ReplaceAll(Otvet, "Otvet.Name", "Otvet."+ColumnName)
+	//Otvet = strings.ReplaceAll(Otvet, "Otvet.Name", "Otvet."+ColumnName)
 	//Otvet = strings.ReplaceAll(Otvet, "Postgres_ID_Test", DefaultValue)
 	Otvet = strings.ReplaceAll(Otvet, "TestUpdate(", "Test"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, ".Update(", "."+FuncName+"(")

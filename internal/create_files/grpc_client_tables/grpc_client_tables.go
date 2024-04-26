@@ -516,10 +516,10 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName, _, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
+	_, TextRequestFieldName, _, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
 
 	//замена RequestId{}
-	Otvet = create_files.ReplaceTextRequestID(Otvet, Table1, Column1)
+	Otvet = create_files.ReplaceTextRequestID_and_Column(Otvet, Table1, Column1)
 	Otvet = create_files.ReplaceTextRequestID_PrimaryKey(Otvet, Table1)
 
 	//замена ID на PrimaryKey
@@ -535,7 +535,7 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	Otvet = strings.ReplaceAll(Otvet, " Update(", " "+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	//Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", ColumnNameGolang)
 	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", " "+IDTypeGo+"(m.ID)")
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
@@ -629,7 +629,7 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	//
 	TextGRPC_Client = config.Settings.TEXT_MODULE_GENERATED + TextGRPC_Client
 
-	//TextGRPC_Client = create_files.ReplaceTextRequestID(TextGRPC_Client, Table1)
+	//TextGRPC_Client = create_files.ReplaceTextRequestID_and_Column(TextGRPC_Client, Table1)
 
 	//SkipNow() если нет строк в БД
 	TextGRPC_Client = create_files.AddSkipNow(TextGRPC_Client, Table1)
@@ -679,7 +679,7 @@ func FindTextUpdateEveryColumnTest(TextGRPC_ClientUpdateFunc string, Table1 *typ
 func FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextGRPC_ClientUpdateFunc
 
-	Otvet = create_files.ReplaceTextRequestID(Otvet, Table1, Column1)
+	Otvet = create_files.ReplaceTextRequestID_and_Column(Otvet, Table1, Column1)
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
 	Otvet = create_files.ReplacePrimaryKeyOtvetID(Otvet, Table1)
 
