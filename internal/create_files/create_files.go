@@ -613,12 +613,12 @@ func FindURL_Tables() string {
 	return Otvet
 }
 
-// AddImport - добавляет URL в секцию Import, если его там нет
-func AddImport(Text, URL string) string {
+// AddImport - добавляет RepositoryURL в секцию Import, если его там нет
+func AddImport(Text, RepositoryURL string) string {
 	Otvet := Text
 
 	//если уже есть импорт
-	pos1 := strings.Index(Otvet, `"`+URL+`"`)
+	pos1 := strings.Index(Otvet, `"`+RepositoryURL+`"`)
 	if pos1 >= 0 {
 		return Otvet
 	}
@@ -632,7 +632,7 @@ func AddImport(Text, URL string) string {
 		return Otvet
 	}
 
-	Otvet = Otvet[:pos1+LenFind] + "\n\t" + `"` + URL + `"` + Otvet[pos1+LenFind:]
+	Otvet = Otvet[:pos1+LenFind] + "\n\t" + `"` + RepositoryURL + `"` + Otvet[pos1+LenFind:]
 
 	return Otvet
 }
@@ -653,72 +653,102 @@ func CheckAndAddImport(Text, URL string) string {
 	return Otvet
 }
 
-// AddImportTime - добавляет покет в секцию Import, если его там нет
-func AddImportTime(TextModel string) string {
-	Otvet := TextModel
+// AddImportTime - добавляет пакет в секцию Import, если его там нет
+func AddImportTime(Text string) string {
+	Otvet := Text
 
 	//если уже есть импорт
-	RepositoryURL := `"time"`
-	pos1 := strings.Index(Otvet, RepositoryURL)
-	if pos1 >= 0 {
-		return Otvet
-	}
-
+	RepositoryURL := `time`
+	Otvet = AddImport(Text, RepositoryURL)
+	//pos1 := strings.Index(Otvet, RepositoryURL)
+	//if pos1 >= 0 {
+	//	return Otvet
+	//}
 	//
-	TextImport := "import ("
-	pos1 = strings.Index(Otvet, TextImport)
-	if pos1 < 0 {
-		log.Error("not found word: ", TextImport)
-		return TextModel
-	}
-
-	Otvet = Otvet[:pos1+len(TextImport)] + "\n\t" + RepositoryURL + Otvet[pos1+len(TextImport):]
+	////
+	//TextImport := "import ("
+	//pos1 = strings.Index(Otvet, TextImport)
+	//if pos1 < 0 {
+	//	log.Error("not found word: ", TextImport)
+	//	return Text
+	//}
+	//
+	//Otvet = Otvet[:pos1+len(TextImport)] + "\n\t" + RepositoryURL + Otvet[pos1+len(TextImport):]
 
 	return Otvet
 }
 
-// AddImportTime - добавляет покет в секцию Import, если его там нет
-func AddImportUUID(TextModel string) string {
-	Otvet := TextModel
+// AddImportUUID - добавляет пакет в секцию Import, если его там нет
+func AddImportUUID(Text string) string {
+	Otvet := Text
 
 	//если уже есть импорт
-	RepositoryURL := `"github.com/google/uuid"`
-	pos1 := strings.Index(Otvet, RepositoryURL)
-	if pos1 >= 0 {
-		return Otvet
-	}
-
+	RepositoryURL := `github.com/google/uuid`
+	Otvet = AddImport(Text, RepositoryURL)
+	//pos1 := strings.Index(Otvet, RepositoryURL)
+	//if pos1 >= 0 {
+	//	return Otvet
+	//}
 	//
-	TextImport := "import ("
-	pos1 = strings.Index(Otvet, TextImport)
-	if pos1 < 0 {
-		log.Error("not found word: ", TextImport)
-		return TextModel
-	}
+	////
+	//TextImport := "import ("
+	//pos1 = strings.Index(Otvet, TextImport)
+	//if pos1 < 0 {
+	//	log.Error("not found word: ", TextImport)
+	//	return TextModel
+	//}
+	//
+	//Otvet = Otvet[:pos1+len(TextImport)] + "\n\t" + RepositoryURL + Otvet[pos1+len(TextImport):]
 
-	Otvet = Otvet[:pos1+len(TextImport)] + "\n\t" + RepositoryURL + Otvet[pos1+len(TextImport):]
+	return Otvet
+}
+
+// AddImportGorm - добавляет пакет в секцию Import, если его там нет
+func AddImportGorm(Text string) string {
+	Otvet := Text
+
+	//если уже есть импорт
+	RepositoryURL := `gorm.io/gorm`
+	Otvet = AddImport(Text, RepositoryURL)
+	//pos1 := strings.Index(Otvet, RepositoryURL)
+	//if pos1 >= 0 {
+	//	return Otvet
+	//}
+	//
+	////
+	//TextImport := "import ("
+	//pos1 = strings.Index(Otvet, TextImport)
+	//if pos1 < 0 {
+	//	log.Error("not found word: ", TextImport)
+	//	return TextModel
+	//}
+	//
+	//Otvet = Otvet[:pos1+len(TextImport)] + "\n\t" + RepositoryURL + Otvet[pos1+len(TextImport):]
 
 	return Otvet
 }
 
 // AddImportTimestamp - добавляет покет в секцию Import, если его там нет
-func AddImportTimestamp(TextModel string) string {
-	Otvet := TextModel
+func AddImportTimestamp(Text string) string {
+	Otvet := Text
 
-	//если уже есть импорт
-	pos1 := strings.Index(Otvet, `"google.golang.org/protobuf/types/known/timestamppb"`)
-	if pos1 >= 0 {
-		return Otvet
-	}
+	RepositoryURL := `google.golang.org/protobuf/types/known/timestamppb`
+	Otvet = AddImport(Text, RepositoryURL)
 
+	////если уже есть импорт
+	//pos1 := strings.Index(Otvet, `"google.golang.org/protobuf/types/known/timestamppb"`)
+	//if pos1 >= 0 {
+	//	return Otvet
+	//}
 	//
-	pos1 = strings.Index(Otvet, "import (")
-	if pos1 < 0 {
-		log.Error("not found word: import (")
-		return TextModel
-	}
-
-	Otvet = Otvet[:pos1+8] + "\n\t" + `"google.golang.org/protobuf/types/known/timestamppb"` + Otvet[pos1+8:]
+	////
+	//pos1 = strings.Index(Otvet, "import (")
+	//if pos1 < 0 {
+	//	log.Error("not found word: import (")
+	//	return TextModel
+	//}
+	//
+	//Otvet = Otvet[:pos1+8] + "\n\t" + `"google.golang.org/protobuf/types/known/timestamppb"` + Otvet[pos1+8:]
 
 	return Otvet
 }
@@ -790,6 +820,20 @@ func CheckAndAddImportUUID_FromText(Text string) string {
 	}
 
 	Otvet = AddImportUUID(Otvet)
+
+	return Otvet
+}
+
+// CheckAndAddImportGorm_FromText - добавляет пакет "gorm.io/gorm" в секцию Import, если его там нет
+func CheckAndAddImportGorm_FromText(Text string) string {
+	Otvet := Text
+
+	pos1 := strings.Index(Text, `"gorm.io/gorm"`)
+	if pos1 < 0 {
+		return Otvet
+	}
+
+	Otvet = AddImportGorm(Otvet)
 
 	return Otvet
 }
@@ -1488,7 +1532,13 @@ func DeleteCommentFromString(TextFrom string) string {
 
 // FindTextConvertGolangTypeToProtobufType - возвращает имя переменной +  имя колонки, преобразованное в тип protobuf
 func FindTextConvertGolangTypeToProtobufType(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
-	Otvet := VariableName + Column1.NameGo
+	Otvet := ""
+
+	if Column1 == nil {
+		return Otvet
+	}
+
+	Otvet = VariableName + Column1.NameGo
 
 	//TableName := Table1.Name
 	//IDName := Column1.Name
@@ -1785,9 +1835,13 @@ func ReplaceIDtoID(Text string, Table1 *types.Table) string {
 
 	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
 	OtvetColumnName := FindTextConvertGolangTypeToProtobufType(Table1, PrimaryKeyColumn, "")
+	if OtvetColumnName == "" {
+		return Otvet
+	}
 
 	Otvet = strings.ReplaceAll(Otvet, "int64(ID)", OtvetColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "(ID int64", "("+PrimaryKeyColumn.NameGo+" "+PrimaryKeyColumn.TypeGo)
+	Otvet = strings.ReplaceAll(Otvet, "(ID)", "("+PrimaryKeyColumn.NameGo+")")
 
 	return Otvet
 }

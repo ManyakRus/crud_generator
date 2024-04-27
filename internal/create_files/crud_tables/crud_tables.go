@@ -558,9 +558,9 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		//добавим импорт uuid
-		TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
+		TextCrud = create_files.CheckAndAddImportGorm_FromText(TextCrud)
 		//TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
+		//добавим импорт uuid
 	}
 
 	//кэш
@@ -574,7 +574,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//заменяет "m.ID" на название колонки PrimaryKey
 	TextCrud = create_files.ReplacePrimaryKeyM_ID(TextCrud, Table1)
 
-	//uuid
+	//добавим импорт uuid
 	TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
 
 	//удаление пустого импорта

@@ -181,10 +181,14 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 		TextModel = DeleteFromInterfaceUpdateManyFields(TextModel, Table1)
 		//кэш
 		if config.Settings.NEED_CREATE_CACHE_API == false {
-			//исправление Save()
 			TextModel = DeleteFromInterfaceReadFromCache(TextModel, Table1)
 			TextModel = create_files.DeleteFuncReadFromCache(TextModel, Table1)
 		}
+		TextModel = create_files.ReplaceIDtoID(TextModel, Table1)
+
+		//добавим импорт uuid
+		TextModel = create_files.CheckAndAddImportUUID_FromText(TextModel)
+
 	}
 
 	//
