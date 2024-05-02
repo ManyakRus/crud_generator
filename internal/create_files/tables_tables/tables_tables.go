@@ -18,10 +18,18 @@ import (
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
-	for _, table1 := range MapAll {
-		err = CreateFiles(table1)
+	for _, Table1 := range MapAll {
+		//проверка имени таблицы "DELETED_"
+		err1 := create_files.IsGoodTableNamePrefix(Table1)
+		if err1 != nil {
+			log.Warn("CreateFiles() table: ", Table1.Name, " warning: ", err)
+			continue
+		}
+
+		//
+		err = CreateFiles(Table1)
 		if err != nil {
-			log.Error("CreateFiles() table: ", table1.Name, " error: ", err)
+			log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 	}

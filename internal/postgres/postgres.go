@@ -278,6 +278,7 @@ order by
 				OrderNumberTable++
 			}
 
+			//новая таблица
 			//найдём имя модели golang
 			TableName := v.TableName
 			ModelName := create_files.FindSingularName(TableName)
@@ -287,6 +288,7 @@ order by
 			TableComment := v.TableComment
 			TableComment = strings.ReplaceAll(TableComment, "\n", "")
 			TableComment = strings.ReplaceAll(TableComment, "\r", "")
+
 			Table1 = CreateTable()
 			Table1.Name = TableName
 			Table1.OrderNumber = OrderNumberTable
@@ -333,9 +335,10 @@ order by
 		TableName0 = v.TableName
 	}
 
-	//
+	//последнюю таблицу заполним тут
 	if Table1.Name != "" {
 		Table1.MapColumns = MapColumns
+		Table1.PrimaryKeyColumnsCount = PrimaryKeyColumnsCount
 		MapTable[TableName0] = Table1
 	}
 

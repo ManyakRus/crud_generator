@@ -287,7 +287,7 @@ func IsGoodTable(Table1 *types.Table) error {
 	//	err = errors.New(TextError)
 	//}
 
-	err = IsGoodTablePrefix(Table1)
+	err = IsGoodTableNamePrefix(Table1)
 	if err != nil {
 		return err
 	}
@@ -312,8 +312,8 @@ func IsGoodPrimaryKeyColumnsCount(Table1 *types.Table) error {
 	return err
 }
 
-// IsGoodTablePrefix - возвращает ошибку если префикс таблицы = "DELETED_"
-func IsGoodTablePrefix(Table1 *types.Table) error {
+// IsGoodTableNamePrefix - возвращает ошибку если префикс таблицы = "DELETED_"
+func IsGoodTableNamePrefix(Table1 *types.Table) error {
 	var err error
 
 	TableName := Table1.Name
@@ -1778,16 +1778,18 @@ func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	TextFind := "const Postgres_ID_Test = 0"
-	ColumnPrimary := FindPrimaryKeyColumn(Table1)
-	if ColumnPrimary == nil {
+	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
 		return Otvet
 	}
 
 	IDMinimum := Table1.IDMinimum
+	if IDMinimum == "" {
+		IDMinimum = FindTextDefaultValue(PrimaryKeyColumn.TypeGo)
+	}
 
-	if ColumnPrimary.TypeGo == "uuid.UUID" {
+	if PrimaryKeyColumn.TypeGo == "uuid.UUID" {
 		if Table1.IDMinimum == "" {
-			IDMinimum = FindTextDefaultValue(ColumnPrimary.TypeGo)
 			Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_ID_Test = `+IDMinimum+``)
 		} else {
 			Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_ID_Test, _ = uuid.Parse("`+IDMinimum+`")`)
@@ -1812,15 +1814,18 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 	}
 
 	IDMinimum := Table1.IDMinimum
+	if IDMinimum == "" {
+		IDMinimum = FindTextDefaultValue(PrimaryKeyColumn.TypeGo)
+	}
 
 	if PrimaryKeyColumn.TypeGo == "uuid.UUID" {
 		if Table1.IDMinimum == "" {
-			Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test = ""`)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test = `+IDMinimum+``)
 		} else {
-			Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test = "`+IDMinimum+`"`)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test, _ = uuid.Parse("`+IDMinimum+`")`)
 		}
 	} else {
-		Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test = `+IDMinimum)
+		Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+ModelName+`_ID_Test = `+IDMinimum)
 	}
 
 	return Otvet
