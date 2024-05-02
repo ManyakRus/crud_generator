@@ -100,7 +100,7 @@ CREATE TEMPORARY TABLE temp_primary_keys (table_name text,  column_name text);
 insert into temp_primary_keys
 select 
     ccu.table_name,
-	max(ccu.column_name) as column_name
+	(ccu.column_name) as column_name
        
 from pg_constraint pgc
          join pg_namespace nsp on nsp.oid = pgc.connamespace
@@ -112,9 +112,9 @@ WHERE 1=1
 	and ccu.table_schema = 'public'
 	and contype = 'p'
 	
-GROUP BY
-	ccu.table_name
-HAVING sum(1)=1
+--GROUP BY
+--	ccu.table_name
+--HAVING sum(1)=1
 ;
 ------------------------------------------- Все таблицы и колонки ------------------------------
 
@@ -263,12 +263,14 @@ order by
 	MapColumns := make(map[string]*types.Column, 0)
 	OrderNumberColumn := 0
 	OrderNumberTable := 0
+	PrimaryKeyColumnsCount := 0
 	TableName0 := ""
 	Table1 := CreateTable()
 	for _, v := range MassTableColumn {
 		if v.TableName != TableName0 {
 			OrderNumberColumn = 0
 			Table1.MapColumns = MapColumns
+			Table1.PrimaryKeyColumnsCount = PrimaryKeyColumnsCount
 			MapColumns = make(map[string]*types.Column, 0)
 			if TableName0 != "" {
 				//MassTable = append(MassTable, Table1)
@@ -291,6 +293,7 @@ order by
 			Table1.Comment = TableComment
 			Table1.NameGo = ModelName
 
+			PrimaryKeyColumnsCount = 0
 		}
 
 		Column1 := types.Column{}
@@ -319,6 +322,9 @@ order by
 		Column1.TableKey = v.ColumnTableKey
 		Column1.ColumnKey = v.ColumnColumnKey
 		Column1.IsPrimaryKey = v.IsPrimaryKey
+		if v.IsPrimaryKey == true {
+			PrimaryKeyColumnsCount++
+		}
 
 		MapColumns[v.ColumnName] = &Column1
 		//Table1.Columns = append(Table1.Columns, Column1)

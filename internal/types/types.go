@@ -19,11 +19,12 @@ type Table struct {
 	//Element     *etree.Element
 	MapColumns map[string]*Column
 	//Columns []Column
-	OrderNumber int
-	NameGo      string
-	IDMinimum   string
-	Comment     string `json:"table_comment"   gorm:"column:table_comment;default:''"`
-	RowsCount   int64
+	OrderNumber            int
+	NameGo                 string
+	IDMinimum              string
+	Comment                string `json:"table_comment"   gorm:"column:table_comment;default:''"`
+	RowsCount              int64
+	PrimaryKeyColumnsCount int
 }
 
 type ReplaceStruct struct {

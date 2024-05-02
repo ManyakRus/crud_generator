@@ -280,13 +280,43 @@ func AddSkipNow(Text string, Table1 *types.Table) string {
 func IsGoodTable(Table1 *types.Table) error {
 	var err error
 
-	TableName := Table1.Name
-	ColumnName, _ := FindPrimaryKeyNameTypeGo(Table1)
-	if ColumnName == "" {
-		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: not found Primary key")
+	//TableName := Table1.Name
+	//ColumnName, _ := FindPrimaryKeyNameTypeGo(Table1)
+	//if ColumnName == "" {
+	//	TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: not found Primary key")
+	//	err = errors.New(TextError)
+	//}
+
+	err = IsGoodTablePrefix(Table1)
+	if err != nil {
+		return err
+	}
+
+	err = IsGoodPrimaryKeyColumnsCount(Table1)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+// IsGoodPrimaryKeyColumnsCount - возвращает ошибку если количество колонок PrimaryKey неправильное
+func IsGoodPrimaryKeyColumnsCount(Table1 *types.Table) error {
+	var err error
+
+	if Table1.PrimaryKeyColumnsCount <= 0 || Table1.PrimaryKeyColumnsCount >= 2 {
+		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: can not use many Primary key columns count: ", Table1.PrimaryKeyColumnsCount)
 		err = errors.New(TextError)
 	}
 
+	return err
+}
+
+// IsGoodTablePrefix - возвращает ошибку если префикс таблицы = "DELETED_"
+func IsGoodTablePrefix(Table1 *types.Table) error {
+	var err error
+
+	TableName := Table1.Name
 	if strings.HasPrefix(TableName, "DELETED_") == true {
 		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: name = DELETED_")
 		err = errors.New(TextError)
@@ -1233,6 +1263,10 @@ func FindTextProtobufRequest(Table1 *types.Table, TypeGo string) (string, string
 	TextRequest := "Request"
 
 	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return "", ""
+	}
+
 	PrimaryKeyTypeGo := PrimaryKeyColumn.TypeGo
 	switch PrimaryKeyTypeGo {
 	case "string", "uuid.UUID":
@@ -1362,8 +1396,12 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 	ColumnName := Column1.Name
 
 	//найдём тип колонки PrimaryKey
-	PrimaryKey_Column := FindPrimaryKeyColumn(Table1)
-	PrimaryKey_TypeGo := PrimaryKey_Column.TypeGo
+	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return "", "", "", ""
+	}
+
+	PrimaryKey_TypeGo := PrimaryKeyColumn.TypeGo
 	//Text_Request_ID := "Request_ID"
 	Otvet, _ = FindTextProtobufRequest(Table1, PrimaryKey_TypeGo)
 	//Text_Request_ID = "Request_" + TextID
@@ -1381,7 +1419,7 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 
 	case "int32":
 		{
-			if Column1.TypeGo == "Int32" && PrimaryKey_Column.TypeGo == "Int32" {
+			if Column1.TypeGo == "Int32" && PrimaryKeyColumn.TypeGo == "Int32" {
 				TextRequestProtoName = "Int32"
 				TextRequestFieldName = "Int32_2"
 				TextRequestFieldGolang = VariableName + "Int32"
@@ -1393,7 +1431,7 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 		}
 	case "string":
 		{
-			if Column1.TypeGo == "string" && PrimaryKey_Column.TypeGo == "string" {
+			if Column1.TypeGo == "string" && PrimaryKeyColumn.TypeGo == "string" {
 				TextRequestProtoName = "String"
 				TextRequestFieldName = "String_2"
 				TextRequestFieldGolang = VariableName + "String_2"
@@ -1405,7 +1443,7 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 		}
 	case "uuid.UUID":
 		{
-			if Column1.TypeGo == "string" && PrimaryKey_Column.TypeGo == "string" {
+			if Column1.TypeGo == "string" && PrimaryKeyColumn.TypeGo == "string" {
 				TextRequestProtoName = "String"
 				TextRequestFieldName = "String_2"
 				TextRequestFieldGolang = VariableName + "String_2"
@@ -1741,6 +1779,10 @@ func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 
 	TextFind := "const Postgres_ID_Test = 0"
 	ColumnPrimary := FindPrimaryKeyColumn(Table1)
+	if ColumnPrimary == nil {
+		return Otvet
+	}
+
 	IDMinimum := Table1.IDMinimum
 
 	if ColumnPrimary.TypeGo == "uuid.UUID" {
@@ -1764,10 +1806,14 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 	TEXT_TEMPLATE_MODEL := config.Settings.TEXT_TEMPLATE_MODEL
 	ModelName := Table1.NameGo
 	TextFind := "const " + TEXT_TEMPLATE_MODEL + "_ID_Test = 0"
-	ColumnPrimary := FindPrimaryKeyColumn(Table1)
+	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return Otvet
+	}
+
 	IDMinimum := Table1.IDMinimum
 
-	if ColumnPrimary.TypeGo == "uuid.UUID" {
+	if PrimaryKeyColumn.TypeGo == "uuid.UUID" {
 		if Table1.IDMinimum == "" {
 			Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test = ""`)
 		} else {
@@ -1811,6 +1857,10 @@ func ReplaceTextRequestID_PrimaryKey1(Text string, Table1 *types.Table, TextRequ
 	Otvet := Text
 
 	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return Otvet
+	}
+
 	TypeGo := PrimaryKeyColumn.TypeGo
 
 	TextRequestID, TextID := FindTextProtobufRequest(Table1, TypeGo)
@@ -1851,6 +1901,10 @@ func ReplaceOtvetIDEqual1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return Otvet
+	}
+
 	Value := FindNegativeValue(PrimaryKeyColumn.TypeGo)
 
 	Otvet = strings.ReplaceAll(Otvet, "Otvet.ID = -1", "Otvet.ID = "+Value)
@@ -1863,6 +1917,10 @@ func ReplaceModelIDEqual1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return Otvet
+	}
+
 	Value := FindNegativeValue(PrimaryKeyColumn.TypeGo)
 
 	Otvet = strings.ReplaceAll(Otvet, "m.ID = -1", "m.ID = "+Value)

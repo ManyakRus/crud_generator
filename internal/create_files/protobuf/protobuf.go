@@ -268,12 +268,18 @@ func FindTextFindByExtId(TextProto string, ModelName string) string {
 
 // TextRead - возвращает текст .proto
 func TextRead(Table1 *types.Table) string {
+	Otvet := ""
+
 	ModelName := Table1.NameGo
 	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return Otvet
+	}
+
 	TypeGo := PrimaryKeyColumn.TypeGo
 	TextRequest := "RequestId"
 	TextRequest, _ = create_files.FindTextProtobufRequest(Table1, TypeGo)
-	Otvet := "rpc " + ModelName + "_Read(" + TextRequest + ") returns (Response) {}"
+	Otvet = "rpc " + ModelName + "_Read(" + TextRequest + ") returns (Response) {}"
 
 	return Otvet
 }
@@ -417,10 +423,16 @@ func FindTextReadFromCache(TextProto string, Table1 *types.Table) string {
 
 // TextReadFromCache - возвращает текст .proto
 func TextReadFromCache(Table1 *types.Table) string {
-	Column1 := create_files.FindPrimaryKeyColumn(Table1)
-	TextRequestId, _ := create_files.FindTextProtobufRequest(Table1, Column1.TypeGo)
+	Otvet := ""
+
+	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return Otvet
+	}
+
+	TextRequestId, _ := create_files.FindTextProtobufRequest(Table1, PrimaryKeyColumn.TypeGo)
 	ModelName := Table1.NameGo
-	Otvet := "rpc " + ModelName + "_ReadFromCache(" + TextRequestId + ") returns (Response) {}"
+	Otvet = "rpc " + ModelName + "_ReadFromCache(" + TextRequestId + ") returns (Response) {}"
 
 	return Otvet
 }
