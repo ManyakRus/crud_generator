@@ -627,6 +627,18 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	FuncName := "Update_" + ColumnName
 	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1, Column1.TypeGo)
 
+	//запись null в nullable колонки
+	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
+	} else {
+		TextFind := `	if Value == 0 {
+		tx = db.Model(&m).Update("ColumnName", gorm.Expr("NULL"))
+	} else {
+		tx = db.Model(&m).Update("ColumnName", Value)
+	}`
+		TextReplace := `	tx = db.Model(&m).Update("ColumnName", Value)`
+		Otvet = strings.ReplaceAll(Otvet, TextFind, TextReplace)
+	}
+
 	//заменяем Read_ctx()
 	Otvet = strings.ReplaceAll(Otvet, " Read_ctx ", " "+FuncName+"_ctx ")
 	Otvet = strings.ReplaceAll(Otvet, " Read_ctx(", " "+FuncName+"_ctx(")
@@ -649,9 +661,9 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	//внешние ключи заменяем 0 на null
 	TextEqualEmpty := create_files.FindTextEqualEmpty(Column1, "Value")
 	Otvet = strings.ReplaceAll(Otvet, "Value == 0", TextEqualEmpty)
-	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
-		Otvet = strings.ReplaceAll(Otvet, "0==1 && ", "")
-	}
+	//if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
+	//	Otvet = strings.ReplaceAll(Otvet, "0==1 && ", "")
+	//}
 
 	return Otvet
 }

@@ -77,8 +77,7 @@ func Save_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 		return err
 	}
 
-	is_create := micro.IsEmptyValue(int64(m.ID))
-	err = create_update_ctx(ctx, db, m, is_create, nil)
+	err = create_update_ctx(ctx, db, m, nil)
 	return err
 }
 
@@ -102,7 +101,14 @@ func Update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 		return err
 	}
 
-	err = create_update_ctx(ctx, db, m, false, nil)
+	// проверка ID
+	if int64(m.ID) == 0 {
+		TextError := fmt.Sprint(m.TableNameDB()+" Update() ", TableName, " error: id =0")
+		err = errors.New(TextError)
+		return err
+	}
+
+	err = create_update_ctx(ctx, db, m, nil)
 	return err
 }
 
@@ -126,12 +132,19 @@ func Create_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 		return err
 	}
 
-	err = create_update_ctx(ctx, db, m, true, nil)
+	// проверка ID
+	if int64(m.ID) != 0 {
+		TextError := fmt.Sprint(m.TableNameDB()+" Save() ", TableName, " error: id !=0")
+		err = errors.New(TextError)
+		return err
+	}
+
+	err = create_update_ctx(ctx, db, m, nil)
 	return err
 }
 
 // create_update - записывает объект в базу данных
-func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType, is_create bool) error {
+func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	ctxMain := contextmain.GetContext()
@@ -140,12 +153,12 @@ func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType, is_
 
 	db := postgres_gorm.GetConnection()
 
-	err = create_update_ctx(ctx, db, m, is_create, nil)
+	err = create_update_ctx(ctx, db, m, nil)
 	return err
 }
 
 // create_update_ctx - записывает объект в базу данных
-func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType, is_create bool, MassNeedUpdateFields []string) error {
+func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType, MassNeedUpdateFields []string) error {
 	var err error
 
 	// log.Trace("start Save() ", TableName, " id: ", int64(m.ID))
@@ -155,20 +168,6 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 		return err
 	}
 
-	// проверка ID
-	if is_create == true {
-		if int64(m.ID) != 0 {
-			TextError := fmt.Sprint(m.TableNameDB()+" Save() ", TableName, " error: id !=0")
-			err = errors.New(TextError)
-			return err
-		}
-	} else if int64(m.ID) == 0 {
-		TextError := fmt.Sprint(m.TableNameDB()+" Save() ", TableName, " error: id =0")
-		err = errors.New(TextError)
-		return err
-	}
-
-	// заполним даты
 	//Text_modified_at
 	//Text_is_deleted_deleted_at
 	//Text_created_at
@@ -190,11 +189,7 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 	tx = tx.Omit(MassOmit...)
 
 	// запись
-	if is_create == true {
-		tx = tx.Create(&m)
-	} else {
-		tx = tx.Save(&m)
-	}
+	tx = tx.Create(&m)
 	err = tx.Error
 	if err != nil {
 		return err

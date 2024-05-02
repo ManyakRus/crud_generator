@@ -34,7 +34,7 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 	//
 	var tx *gorm.DB
 	Value := m.ColumnName
-	if 0==1 && Value == 0 {
+	if Value == 0 {
 		tx = db.Model(&m).Update("ColumnName", gorm.Expr("NULL"))
 	} else {
 		tx = db.Model(&m).Update("ColumnName", Value)
