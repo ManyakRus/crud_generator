@@ -4,6 +4,7 @@ import (
 	"github.com/ManyakRus/starter/config_main"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
 	"testing"
 )
 
@@ -12,7 +13,7 @@ const Postgres_ID_Test = 0
 func TestRead(t *testing.T) {
 	config_main.LoadEnv()
 
-	postgres_gorm.Connect()
+	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
 	defer postgres_gorm.CloseConnection()
 
 	crud := Crud_DB{}
@@ -33,7 +34,7 @@ func TestRead(t *testing.T) {
 func TestSave(t *testing.T) {
 	config_main.LoadEnv()
 
-	postgres_gorm.Connect()
+	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
 	defer postgres_gorm.CloseConnection()
 
 	crud := Crud_DB{}
@@ -59,7 +60,7 @@ func TestSave(t *testing.T) {
 func TestDelete(t *testing.T) {
 	config.LoadEnv()
 
-	postgres_gorm.Connect()
+	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
 	defer postgres_gorm.CloseConnection()
 
 	crud := Crud_DB{}
@@ -74,7 +75,7 @@ func TestDelete(t *testing.T) {
 
 func TestFind_ByExtID(t *testing.T) {
 	config_main.LoadEnv()
-	postgres_gorm.Connect()
+	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
 	defer postgres_gorm.CloseConnection()
 
 	crud := Crud_DB{}

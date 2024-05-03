@@ -492,11 +492,20 @@ func FindNRPC_Client_URL() string {
 	return Otvet
 }
 
-// FindDBConstantsURL - возвращает URL репозитория с пакетом db "constants"
+// FindDBConstantsURL - возвращает URL репозитория с пакетом db "db_constants"
 func FindDBConstantsURL() string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_DB + "/" + "constants"
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_DB + "/" + "db_constants"
+
+	return Otvet
+}
+
+// FindConstantsURL - возвращает URL репозитория с пакетом pkg "constants"
+func FindConstantsURL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CONSTANTS
 
 	return Otvet
 }

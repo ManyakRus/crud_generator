@@ -3,6 +3,7 @@ package logic
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/create_files/alias"
+	"github.com/ManyakRus/crud_generator/internal/create_files/constants_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_tables"
@@ -187,6 +188,13 @@ func StartFillAll() error {
 
 	//readme
 	err = readme_file.CreateAllFiles()
+	if err != nil {
+		//log.Error("env_file.CreateAllFiles() error: ", err)
+		return err
+	}
+
+	//constants
+	err = constants_file.CreateAllFiles()
 	if err != nil {
 		//log.Error("env_file.CreateAllFiles() error: ", err)
 		return err

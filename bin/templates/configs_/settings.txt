@@ -243,3 +243,9 @@ TEMPLATES_README_MD_FILENAME="README.md_"
 
 #TEMPLATES_README_RUS_FILENAME - short filename of "readme.rus_" file
 TEMPLATES_README_RUS_FILENAME="readme.rus_"
+
+#TEMPLATE_FOLDERNAME_CONSTANTS - folder name for service constants
+TEMPLATE_FOLDERNAME_CONSTANTS="pkg/constants"
+
+#TEMPLATES_CONSTANTS_FILENAME - short filename of "constants.go_" file
+TEMPLATES_CONSTANTS_FILENAME="constants.go_"

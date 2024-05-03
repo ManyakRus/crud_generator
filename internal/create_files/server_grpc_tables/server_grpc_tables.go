@@ -211,6 +211,9 @@ func CreateFilesTest(Table1 *types.Table) error {
 		CrudStarterURL := create_files.FindCrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
+		ConstantsURL := create_files.FindConstantsURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
+
 		TextGRPCServer = create_files.CheckAndAddImport(TextGRPCServer, "encoding/json")
 
 		//Postgres_ID_Test = ID Minimum
@@ -584,6 +587,9 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 		CrudStarterURL := create_files.FindCrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
+		ConstantsURL := create_files.FindConstantsURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
+
 		//TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
 	}
 
@@ -796,6 +802,9 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 
 		CrudStarterURL := create_files.FindCrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
+
+		ConstantsURL := create_files.FindConstantsURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
 
 		//замена RequestId{}
 		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
-	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/contextmain"
@@ -407,11 +406,16 @@ func FillIDMinimum(MapTable map[string]*types.Table) error {
 		}
 
 		//
-		if TypeGo == "string" {
-			Table1.IDMinimum = `"` + IDMinimum.String + `"`
-		} else if mini_func.IsNumberType(TypeGo) == true {
-			Table1.IDMinimum = IDMinimum.String
-		}
+		Table1.IDMinimum = IDMinimum.String
+		//if TypeGo == "string" || TypeGo == "uuid.UUID" {
+		//	Table1.IDMinimum = IDMinimum.String
+		//} else if mini_func.IsNumberType(TypeGo) == true {
+		//	Table1.IDMinimum = IDMinimum.String
+		//} else if TypeGo == "time.Time" {
+		//	Table1.IDMinimum = IDMinimum.String
+		//} else {
+		//	Table1.IDMinimum = IDMinimum.String
+		//}
 	}
 
 	return err

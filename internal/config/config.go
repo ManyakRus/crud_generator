@@ -56,6 +56,8 @@ type SettingsINI struct {
 	TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME string
 	TEMPLATES_README_MD_FILENAME                     string
 	TEMPLATES_README_RUS_FILENAME                    string
+	TEMPLATE_FOLDERNAME_CONSTANTS                    string
+	TEMPLATES_CONSTANTS_FILENAME                     string
 	NEED_CREATE_MODEL_STRUCT                         bool
 	NEED_CREATE_MODEL_CRUD                           bool
 	NEED_CREATE_DB                                   bool
@@ -501,6 +503,16 @@ func FillSettings() {
 	Name = "TEMPLATES_README_RUS_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_README_RUS_FILENAME = s
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_CONSTANTS"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_CONSTANTS = s
+
+	//
+	Name = "TEMPLATES_CONSTANTS_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CONSTANTS_FILENAME = s
 
 }
 

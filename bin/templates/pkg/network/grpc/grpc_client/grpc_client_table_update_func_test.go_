@@ -1,7 +1,7 @@
 func TestCrud_GRPC_Update(t *testing.T) {
 	config_main.LoadEnv()
 
-	grpc_client.Connect()
+	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
 	defer grpc_client.CloseConnection()
 
 	crud := Crud_GRPC{}

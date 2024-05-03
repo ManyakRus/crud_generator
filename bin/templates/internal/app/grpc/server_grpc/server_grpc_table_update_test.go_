@@ -6,12 +6,17 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
+	"github.com/ManyakRus/starter/postgres_gorm"
 	"testing"
 )
 
 func TestServerGRPC_LawsuitStatusType_UpdateManyFields(t *testing.T) {
 	config_main.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
+	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	defer postgres_gorm.CloseConnection()
+
 	var err error
 
 	//прочитаем из БД

@@ -223,6 +223,9 @@ func CreateFilesTest(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextDB = create_files.AddImport(TextDB, ModelTableURL)
 
+		ConstantsURL := create_files.FindConstantsURL()
+		TextDB = create_files.AddImport(TextDB, ConstantsURL)
+
 		//удалим лишние функции
 		TextDB = create_files.DeleteFuncTestDelete(TextDB, Table1)
 		TextDB = create_files.DeleteFuncTestRestore(TextDB, Table1)
@@ -719,6 +722,10 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 		TextCrud = create_files.ReplacePrimaryKeyM_ID(TextCrud, Table1)
 		TextCrud = create_files.ReplacePrimaryKeyOtvetID(TextCrud, Table1)
 		//TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
+
+		ConstantsURL := create_files.FindConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
+
 	}
 
 	//создание текста
@@ -923,6 +930,9 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 		//TextCache = create_files.AddImport(TextCache, ModelTableURL)
 
 		//TextCache = create_files.ConvertRequestIdToAlias(TextCache, Table1)
+		ConstantsURL := create_files.FindConstantsURL()
+		TextCache = create_files.AddImport(TextCache, ConstantsURL)
+
 	}
 
 	//замена слов

@@ -1,0 +1,3 @@
+package constants
+
+const SERVICE_NAME = "sync_service"
