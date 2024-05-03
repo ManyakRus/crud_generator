@@ -68,6 +68,13 @@ func CreateFileMain() error {
 
 		URLCrudStarter := create_files.FindCrudStarterURL()
 		TextMain = create_files.AddImport(TextMain, URLCrudStarter)
+
+		ConstantsURL := create_files.FindConstantsURL()
+		TextMain = create_files.AddImport(TextMain, ConstantsURL)
+
+		//замена "postgres_gorm.Start("
+		TextMain = create_files.ReplaceConnect_WithApplicationName(TextMain)
+
 	}
 
 	//замена импортов на новые URL

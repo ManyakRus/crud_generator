@@ -23,6 +23,9 @@ INCLUDE_TABLES=""
 #INCLUDE_TABLES - table name ignore filter. Regular expression
 EXCLUDE_TABLES="ext_"
 
+#SINGULAR_TABLE_NAMES: true = table names will be not renamed to plural name
+SINGULAR_TABLE_NAMES=true
+
 #---------------------Template settings---------------------
 
 #SERVICE_REPOSITORY_URL - URL of your new service repository (Github, gitlab, etc.)

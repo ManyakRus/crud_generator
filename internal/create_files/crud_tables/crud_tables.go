@@ -240,6 +240,9 @@ func CreateFilesTest(Table1 *types.Table) error {
 		//добавим импорт uuid
 		TextDB = create_files.CheckAndAddImportUUID_FromText(TextDB)
 
+		//замена "postgres_gorm.Connect_WithApplicationName("
+		TextDB = create_files.ReplaceConnect_WithApplicationName(TextDB)
+
 	}
 
 	//создание текста
@@ -726,6 +729,9 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 		ConstantsURL := create_files.FindConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
 
+		//замена "postgres_gorm.Connect_WithApplicationName("
+		TextCrud = create_files.ReplaceConnect_WithApplicationName(TextCrud)
+
 	}
 
 	//создание текста
@@ -932,6 +938,9 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 		//TextCache = create_files.ConvertRequestIdToAlias(TextCache, Table1)
 		ConstantsURL := create_files.FindConstantsURL()
 		TextCache = create_files.AddImport(TextCache, ConstantsURL)
+
+		//замена "postgres_gorm.Connect_WithApplicationName("
+		TextCache = create_files.ReplaceConnect_WithApplicationName(TextCache)
 
 	}
 

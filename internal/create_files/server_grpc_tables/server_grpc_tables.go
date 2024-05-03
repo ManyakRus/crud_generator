@@ -216,6 +216,9 @@ func CreateFilesTest(Table1 *types.Table) error {
 
 		TextGRPCServer = create_files.CheckAndAddImport(TextGRPCServer, "encoding/json")
 
+		//замена "postgres_gorm.Connect_WithApplicationName("
+		TextGRPCServer = create_files.ReplaceConnect_WithApplicationName(TextGRPCServer)
+
 		//Postgres_ID_Test = ID Minimum
 		TextGRPCServer = create_files.Replace_Model_ID_Test(TextGRPCServer, Table1)
 
@@ -590,6 +593,9 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 		ConstantsURL := create_files.FindConstantsURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
 
+		//замена "postgres_gorm.Connect_WithApplicationName("
+		TextGRPCServer = create_files.ReplaceConnect_WithApplicationName(TextGRPCServer)
+
 		//TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
 	}
 
@@ -805,6 +811,9 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 
 		ConstantsURL := create_files.FindConstantsURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
+
+		//замена "postgres_gorm.Connect_WithApplicationName("
+		TextGRPCServer = create_files.ReplaceConnect_WithApplicationName(TextGRPCServer)
 
 		//замена RequestId{}
 		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)

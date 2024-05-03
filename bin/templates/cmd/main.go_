@@ -4,6 +4,7 @@ import (
 	configmain "github.com/ManyakRus/starter/config_main"
 	"github.com/ManyakRus/starter/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
+	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/constants"
 	"github.com/ManyakRus/starter/postgres_gorm"
 )
 
@@ -18,7 +19,7 @@ func StartApp() {
 
 	stopapp.StartWaitStop()
 	crud_starter.InitCrudTransport_DB()
-	postgres_gorm.StartDB()
+	postgres_gorm.Start(constants.SERVICE_NAME)
 	server_grpc.Start()
 	server_nrpc.Start()
 

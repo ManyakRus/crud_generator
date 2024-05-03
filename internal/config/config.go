@@ -93,6 +93,7 @@ type SettingsINI struct {
 	READY_ALIAS_FILENAME                             string
 	NEED_CREATE_UPDATE_EVERY_COLUMN                  bool
 	CACHE_ELEMENTS_COUNT_MAX                         int64
+	SINGULAR_TABLE_NAMES                             bool
 }
 
 func Getenv(Name string, IsRequired bool) string {
@@ -513,6 +514,11 @@ func FillSettings() {
 	Name = "TEMPLATES_CONSTANTS_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_CONSTANTS_FILENAME = s
+
+	//
+	Name = "SINGULAR_TABLE_NAMES"
+	s = Getenv(Name, true)
+	Settings.SINGULAR_TABLE_NAMES = BoolFromString(s)
 
 }
 

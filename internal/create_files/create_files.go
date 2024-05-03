@@ -1964,3 +1964,17 @@ func FindRequestColumnName(Table1 *types.Table, Column1 *types.Column) string {
 
 	return Otvet
 }
+
+// ReplaceConnect_WithApplicationName - заменяет Connect_WithApplicationName() на Connect_WithApplicationName_SingularTableName()
+func ReplaceConnect_WithApplicationName(Text string) string {
+	Otvet := Text
+
+	if config.Settings.SINGULAR_TABLE_NAMES == false {
+		return Otvet
+	}
+
+	Otvet = strings.ReplaceAll(Otvet, "postgres_gorm.Connect_WithApplicationName(", "postgres_gorm.Connect_WithApplicationName_SingularTableName(")
+	Otvet = strings.ReplaceAll(Otvet, "postgres_gorm.Start(", "postgres_gorm.Start_SingularTableName(")
+
+	return Otvet
+}
