@@ -1443,7 +1443,7 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 		}
 	case "uuid.UUID":
 		{
-			if Column1.TypeGo == "string" && PrimaryKeyColumn.TypeGo == "string" {
+			if PrimaryKeyColumn.TypeGo == "string" || PrimaryKeyColumn.TypeGo == "uuid.UUID" {
 				TextRequestProtoName = "String"
 				TextRequestFieldName = "String_2"
 				TextRequestFieldGolang = VariableName + "String_2"
@@ -1817,6 +1817,7 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 	if IDMinimum == "" {
 		IDMinimum = FindTextDefaultValue(PrimaryKeyColumn.TypeGo)
 	}
+	DefaultModelName := config.Settings.TEXT_TEMPLATE_MODEL
 
 	if PrimaryKeyColumn.TypeGo == "uuid.UUID" {
 		if Table1.IDMinimum == "" {
@@ -1824,6 +1825,7 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 		} else {
 			Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test, _ = uuid.Parse("`+IDMinimum+`")`)
 		}
+		Otvet = strings.ReplaceAll(Otvet, ``+DefaultModelName+`_ID_Test`, ``+ModelName+`_ID_Test.String()`)
 	} else {
 		Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+ModelName+`_ID_Test = `+IDMinimum)
 	}

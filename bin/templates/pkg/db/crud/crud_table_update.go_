@@ -43,6 +43,6 @@ func UpdateManyFields_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_ty
 		return err
 	}
 
-	err = create_update_ctx(ctx, db, m, false, MassNeedUpdateFields)
+	err = create_update_ctx(ctx, db, m, MassNeedUpdateFields)
 	return err
 }

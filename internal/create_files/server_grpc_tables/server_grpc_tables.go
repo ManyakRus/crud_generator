@@ -567,8 +567,6 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 	//заменим имя пакета на новое
 	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
-	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
-	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -591,6 +589,12 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc, Table1)
+
+	//Postgres_ID_Test = ID Minimum
+	TextGRPCServer = create_files.Replace_Model_ID_Test(TextGRPCServer, Table1)
+
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	// пустой файл не нужен
 	if TextUpdateEveryColumn == "" {
@@ -661,18 +665,21 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
 	TextRequest2, TextRequestField, TextRequestFieldGolang, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request2.")
-	TextModelColumnName := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "Model.")
+	TextModelColumnName := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m.")
+
+	//Postgres_ID_Test = ID Minimum
+	Otvet = create_files.Replace_Model_ID_Test(Otvet, Table1)
 
 	//if TextGolangLine != "" {
 	//	Otvet = strings.ReplaceAll(Otvet, "value := Request.FieldName", TextGolangLine)
 	//}
-	Otvet = strings.ReplaceAll(Otvet, "Request2.ColumnName", "Request2."+TextRequestField)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", "grpc_proto."+TextRequest2)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update(", ModelName+"_"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ColumnName", TextRequestFieldGolang)
-	Otvet = strings.ReplaceAll(Otvet, "Model.ColumnName", TextModelColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "Request2.ColumnName", "Request2."+TextRequestField)
+	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", TextModelColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 
 	return Otvet
@@ -792,6 +799,9 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 
 		//замена RequestId{}
 		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+
+		//Postgres_ID_Test = ID Minimum
+		TextGRPCServer = create_files.Replace_Model_ID_Test(TextGRPCServer, Table1)
 
 		//добавим импорт uuid
 		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
