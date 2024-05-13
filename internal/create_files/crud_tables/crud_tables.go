@@ -631,7 +631,7 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1, Column1.TypeGo)
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1)
 
 	//запись null в nullable колонки
 	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
@@ -795,7 +795,7 @@ func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Tab
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1, Column1.TypeGo)
+	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1)
 	DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
 
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)

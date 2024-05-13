@@ -5,7 +5,7 @@ import (
 	"github.com/vmihailenco/msgpack/v5"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/calc_struct_version"
 	"reflect"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 )
 
 // versionLawsuitStatusType - версия структуры модели, с учётом имен и типов полей
@@ -95,7 +95,7 @@ func (m LawsuitStatusType) GetJSON() (string, error) {
 // Read - находит запись в БД по ID, и заполняет в объект
 func (m *LawsuitStatusType) Read() error {
 	if Crud_LawsuitStatusType == nil {
-		return constants.ErrorCrudIsNotInit
+		return db_constants.ErrorCrudIsNotInit
 	}
 	
 	err := Crud_LawsuitStatusType.Read(m)
@@ -106,7 +106,7 @@ func (m *LawsuitStatusType) Read() error {
 // Save - записывает объект в БД по ID
 func (m *LawsuitStatusType) Save() error {
 	if Crud_LawsuitStatusType == nil {
-		return constants.ErrorCrudIsNotInit
+		return db_constants.ErrorCrudIsNotInit
 	}
 	
 	err := Crud_LawsuitStatusType.Save(m)
@@ -117,7 +117,7 @@ func (m *LawsuitStatusType) Save() error {
 // Update - обновляет объект в БД по ID
 func (m *LawsuitStatusType) Update() error {
 	if Crud_LawsuitStatusType == nil {
-		return constants.ErrorCrudIsNotInit
+		return db_constants.ErrorCrudIsNotInit
 	}
 	
 	err := Crud_LawsuitStatusType.Update(m)
@@ -128,7 +128,7 @@ func (m *LawsuitStatusType) Update() error {
 // Create - создаёт объект в БД с новым ID
 func (m *LawsuitStatusType) Create() error {
 	if Crud_LawsuitStatusType == nil {
-		return constants.ErrorCrudIsNotInit
+		return db_constants.ErrorCrudIsNotInit
 	}
 	
 	err := Crud_LawsuitStatusType.Create(m)
@@ -139,7 +139,7 @@ func (m *LawsuitStatusType) Create() error {
 // Delete - устанавливает признак пометки удаления в БД
 func (m *LawsuitStatusType) Delete() error {
 	if Crud_LawsuitStatusType == nil {
-		return constants.ErrorCrudIsNotInit
+		return db_constants.ErrorCrudIsNotInit
 	}
 	
 	err := Crud_LawsuitStatusType.Delete(m)
@@ -150,7 +150,7 @@ func (m *LawsuitStatusType) Delete() error {
 // Restore - снимает признак пометки удаления в БД
 func (m *LawsuitStatusType) Restore() error {
 	if Crud_LawsuitStatusType == nil {
-		return constants.ErrorCrudIsNotInit
+		return db_constants.ErrorCrudIsNotInit
 	}
 	
 	err := Crud_LawsuitStatusType.Restore(m)
@@ -161,7 +161,7 @@ func (m *LawsuitStatusType) Restore() error {
 // Find_ByExtID - находит объект по ExtID
 func (m *LawsuitStatusType) Find_ByExtID() error {
 	if Crud_LawsuitStatusType == nil {
-		return constants.ErrorCrudIsNotInit
+		return db_constants.ErrorCrudIsNotInit
 	}
 	
 	err := Crud_LawsuitStatusType.Find_ByExtID(m)
@@ -175,7 +175,7 @@ func (m *LawsuitStatusType) ReadFromCache(ID int64) (LawsuitStatusType, error) {
 	var err error
 
 	if Crud_LawsuitStatusType == nil {
-		return Otvet, constants.ErrorCrudIsNotInit
+		return Otvet, db_constants.ErrorCrudIsNotInit
 	}
 
 	Otvet, err = Crud_LawsuitStatusType.ReadFromCache(ID)
@@ -193,7 +193,7 @@ func (m LawsuitStatusType) SetCrudInterface(crud ICrud_LawsuitStatusType) {
 // UpdateManyFields - находит запись в БД по ID, и изменяет только нужные колонки
 func (m *LawsuitStatusType) UpdateManyFields(MassNeedUpdateFields []string) error {
 	if Crud_LawsuitStatusType == nil {
-		return constants.ErrorCrudIsNotInit
+		return db_constants.ErrorCrudIsNotInit
 	}
 
 	err := Crud_LawsuitStatusType.UpdateManyFields(m, MassNeedUpdateFields)

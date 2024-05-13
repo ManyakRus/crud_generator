@@ -631,7 +631,7 @@ func FindTextUpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) strin
 // Update_` + ColumnName + ` - изменяет объект в БД по ID, присваивает ` + ColumnName + `
 func (m *` + ModelName + `) Update_` + ColumnName + `() error {
 	if Crud_` + ModelName + ` == nil {
-		return constants.ErrorCrudIsNotInit
+		return db_constants.ErrorCrudIsNotInit
 	}
 
 	err := Crud_` + ModelName + `.Update_` + ColumnName + `(m)

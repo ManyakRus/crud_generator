@@ -6,6 +6,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
+	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"os"
@@ -89,6 +90,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		if config.Settings.NEED_CREATE_CACHE_API == true {
 			TextProtoNew = TextProtoNew + FindTextProtoTable1_Cache(TextProto, Table1)
 		}
+		TextProto = AddTextMessageRequestID(TextProto, Table1)
 	}
 
 	//найдём куда вставить текст
@@ -135,6 +137,8 @@ func FindTextProtoTable1(TextProto string, Table1 *types.Table) string {
 	Otvet := "\n" //"\n\t//\n"
 
 	ModelName := Table1.NameGo
+	//Otvet = Otvet + AddTextMessageRequestID(TextProto, Table1)
+
 	Otvet = Otvet + FindTextRead(TextProto, Table1)
 	Otvet = Otvet + FindTextCreate(TextProto, ModelName)
 	Otvet = Otvet + FindTextUpdate(TextProto, ModelName)
@@ -276,9 +280,7 @@ func TextRead(Table1 *types.Table) string {
 		return Otvet
 	}
 
-	TypeGo := PrimaryKeyColumn.TypeGo
-	TextRequest := "RequestId"
-	TextRequest, _ = create_files.FindTextProtobufRequest(Table1, TypeGo)
+	TextRequest, _ := create_files.FindTextProtobufRequest(Table1)
 	Otvet = "rpc " + ModelName + "_Read(" + TextRequest + ") returns (Response) {}"
 
 	return Otvet
@@ -332,14 +334,14 @@ func FindTextProtoTable1_UpdateEveryColumn(TextProto string, Table1 *types.Table
 
 	//ModelName := Table1.NameGo
 
-	//сортировка по названию таблиц
+	//сортировка по названию колонок
 	keys := make([]string, 0, len(Table1.MapColumns))
 	for k := range Table1.MapColumns {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
 
-	//найдём новый текст для каждой таблицы
+	//найдём новый текст для каждой колонки
 	for _, key1 := range keys {
 		Column1, ok := Table1.MapColumns[key1]
 		if ok == false {
@@ -367,6 +369,9 @@ func FindTextProtoTable1_UpdateEveryColumn(TextProto string, Table1 *types.Table
 func FindTextUpdateEveryColumn(TextProto string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := ""
 	Otvet2 := TextUpdateEveryColumn(Table1, Column1)
+
+	//добавим текст message RequestId_Float64 {
+	//Otvet = Otvet + AddTextMessageRequestID_ColumnType(TextProto, Table1, Column1)
 
 	//проверка такой текст уже есть
 	pos1 := strings.Index(TextProto, Otvet2)
@@ -430,7 +435,7 @@ func TextReadFromCache(Table1 *types.Table) string {
 		return Otvet
 	}
 
-	TextRequestId, _ := create_files.FindTextProtobufRequest(Table1, PrimaryKeyColumn.TypeGo)
+	TextRequestId, _ := create_files.FindTextProtobufRequest(Table1)
 	ModelName := Table1.NameGo
 	Otvet = "rpc " + ModelName + "_ReadFromCache(" + TextRequestId + ") returns (Response) {}"
 
@@ -466,6 +471,125 @@ func FindTextUpdateManyFields(TextProto string, ModelName string) string {
 // TextUpdateManyFields - возвращает текст .proto
 func TextUpdateManyFields(ModelName string) string {
 	Otvet := "rpc " + ModelName + "_UpdateManyFields(Request_Model_MassString) returns (ResponseEmpty) {}"
+
+	return Otvet
+}
+
+// AddTextMessageRequestID - в текст .proto добавляет message с RequestID
+func AddTextMessageRequestID1(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	//найдём текст RequestID
+	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return Otvet
+	}
+
+	TextRequest, TextFieldName := create_files.FindTextProtobufRequest(Table1)
+
+	//найдём уже есть message
+	TextFind := "message " + TextRequest + " {"
+	pos1 := strings.Index(Otvet, TextFind)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	//найдём ProtobufTypePK
+	MappingPK, ok := dbmeta.GetMappings()[PrimaryKeyColumn.Type]
+	if ok == false {
+		log.Error("Неизвестный тип столбца " + PrimaryKeyColumn.Type)
+		return Otvet
+	}
+	ProtobufTypePK := MappingPK.ProtobufType
+
+	//добавим message
+	TextMessage := `
+// ` + TextRequest + ` - параметры запроса на сервер
+message ` + TextRequest + ` {
+    uint32 VersionModel= 1; //версия структуры модели
+    ` + ProtobufTypePK + ` ` + TextFieldName + `   = 2; // id записи в БД
+}
+`
+
+	Otvet = Otvet + TextMessage
+
+	return Otvet
+}
+
+// AddTextMessageRequestID_ColumnType - в текст .proto добавляет message с RequestID_Int64
+func AddTextMessageRequestID_ColumnType(Text string, Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := Text
+
+	//найдём текст RequestID
+	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return Otvet
+	}
+	//
+	_, FieldNamePK := create_files.FindTextProtobufRequest(Table1)
+
+	TextRequest, FieldName, _, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "_")
+
+	//найдём уже есть message
+	TextFind := "message " + TextRequest + " {"
+	pos1 := strings.Index(Otvet, TextFind)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	//найдём ProtobufTypePK
+	MappingPK, ok := dbmeta.GetMappings()[PrimaryKeyColumn.Type]
+	if ok == false {
+		log.Error("Неизвестный тип столбца " + PrimaryKeyColumn.Type)
+		return Otvet
+	}
+	ProtobufTypePK := MappingPK.ProtobufType
+
+	//найдём ProtobufTypeColumn
+	Mapping1, ok := dbmeta.GetMappings()[Column1.Type]
+	if ok == false {
+		log.Error("Неизвестный тип столбца " + Column1.Type)
+		return Otvet
+	}
+	ProtobufTypeColumn := Mapping1.ProtobufType
+
+	//добавим message
+	TextMessage := `
+// ` + TextRequest + ` - параметры запроса на сервер
+message ` + TextRequest + ` {
+    uint32 VersionModel= 1; //версия структуры модели
+    ` + ProtobufTypePK + ` ` + FieldNamePK + `   = 2; // id записи в БД
+    ` + ProtobufTypeColumn + ` ` + FieldName + ` = 3; // значение поиска
+}
+`
+
+	Otvet = Otvet + TextMessage
+
+	return Otvet
+}
+
+// AddTextMessageRequestID - возвращает текст в.proto для таблицы
+func AddTextMessageRequestID(TextProto string, Table1 *types.Table) string {
+	Otvet := TextProto //"\n\t//\n"
+
+	Otvet = AddTextMessageRequestID1(Otvet, Table1)
+
+	//сортировка по названию колонок
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	//для каждой колонки добавим добавим message RequestId_Int64
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
+		}
+
+		Otvet = AddTextMessageRequestID_ColumnType(Otvet, Table1, Column1)
+	}
 
 	return Otvet
 }

@@ -3,7 +3,7 @@ func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	ctxMain := contextmain.GetContext()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
 	db := postgres_gorm.GetConnection()

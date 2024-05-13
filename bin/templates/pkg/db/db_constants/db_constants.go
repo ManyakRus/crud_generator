@@ -1,4 +1,4 @@
-package constants
+package db_constants
 
 import (
 	"errors"

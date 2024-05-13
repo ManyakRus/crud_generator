@@ -5,7 +5,7 @@ import (
 	"time"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/hashicorp/golang-lru/v2/expirable"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"gorm.io/gorm"
@@ -38,7 +38,7 @@ func (crud Crud_DB) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatusT
 
 	// поищем в БД
 	ctxMain := contextmain.GetContext()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(constants.TIMEOUT_DB_SECONDS))
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
 	db := postgres_gorm.GetConnection()
