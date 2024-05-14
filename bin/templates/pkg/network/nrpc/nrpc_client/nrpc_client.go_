@@ -15,7 +15,7 @@ import (
 	"github.com/ManyakRus/starter/stopapp"
 	"github.com/nats-io/nats.go"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_constants"
 	"sync"
 
@@ -185,10 +185,10 @@ func IsRecordNotFound(err error) bool {
 		return Otvet
 	}
 
-	// len1 := len(constants.TEXT_RECORD_NOT_FOUND)
+	// len1 := len(db_constants.TEXT_RECORD_NOT_FOUND)
 	TextErr := err.Error()
-	pos1 := strings.Index(TextErr, constants.TEXT_RECORD_NOT_FOUND)
-	// if TextErr[0:len1] == constants.TEXT_RECORD_NOT_FOUND {
+	pos1 := strings.Index(TextErr, db_constants.TEXT_RECORD_NOT_FOUND)
+	// if TextErr[0:len1] == db_constants.TEXT_RECORD_NOT_FOUND {
 	if pos1 >= 0 {
 		Otvet = true
 	}

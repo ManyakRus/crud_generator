@@ -5,7 +5,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client/nrpc_constants"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"log"
 	"sync"
@@ -55,7 +55,7 @@ func (crud Crud_NRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	Response, err := nrpc_client.LawsuitStatusTypeClient.Read(Request)
 	if err != nil {
 		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(nrpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(nrpc_constants.TEXT_ERROR_MODEL_VERSION)] == nrpc_constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
@@ -95,7 +95,7 @@ func (crud Crud_NRPC) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 	Response, err := nrpc_client.LawsuitStatusTypeClient.Create(Request)
 	if err != nil {
 		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(nrpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(nrpc_constants.TEXT_ERROR_MODEL_VERSION)] == nrpc_constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
@@ -135,7 +135,7 @@ func (crud Crud_NRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	Response, err := nrpc_client.LawsuitStatusTypeClient.Update(Request)
 	if err != nil {
 		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(nrpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(nrpc_constants.TEXT_ERROR_MODEL_VERSION)] == nrpc_constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
@@ -175,7 +175,7 @@ func (crud Crud_NRPC) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 	Response, err := nrpc_client.LawsuitStatusTypeClient.Save(Request)
 	if err != nil {
 		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(nrpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(nrpc_constants.TEXT_ERROR_MODEL_VERSION)] == nrpc_constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
@@ -211,7 +211,7 @@ func (crud Crud_NRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	Response, err := nrpc_client.LawsuitStatusTypeClient.Delete(Request)
 	if err != nil {
 		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(nrpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(nrpc_constants.TEXT_ERROR_MODEL_VERSION)] == nrpc_constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
@@ -247,7 +247,7 @@ func (crud Crud_NRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	Response, err := nrpc_client.LawsuitStatusTypeClient.Restore(Request)
 	if err != nil {
 		sError := err.Error()
-		if len(sError) >= len(constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if len(sError) >= len(nrpc_constants.TEXT_ERROR_MODEL_VERSION) && sError[0:len(nrpc_constants.TEXT_ERROR_MODEL_VERSION)] == nrpc_constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
@@ -282,7 +282,7 @@ func (crud Crud_NRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) er
 	Response, err := nrpc_client.LawsuitStatusTypeClient.FindByExtID(Request)
 	if err != nil {
 		sError := err.Error()
-		if sError[0:len(constants.TEXT_ERROR_MODEL_VERSION)] == constants.TEXT_ERROR_MODEL_VERSION {
+		if sError[0:len(nrpc_constants.TEXT_ERROR_MODEL_VERSION)] == nrpc_constants.TEXT_ERROR_MODEL_VERSION {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
 		return err
