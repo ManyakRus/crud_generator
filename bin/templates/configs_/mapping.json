@@ -284,7 +284,7 @@
       "sql_type": "decimal",
       "go_type": "float64",
       "json_type": "Float",
-      "protobuf_type": "float",
+      "protobuf_type": "double",
       "guregu_type": "null.Float",
       "go_nullable_type": "sql.NullFloat64",
       "swagger_type": "float64"
@@ -293,7 +293,7 @@
       "sql_type": "double",
       "go_type": "float64",
       "json_type": "Float",
-      "protobuf_type": "float",
+      "protobuf_type": "double",
       "guregu_type": "null.Float",
       "go_nullable_type": "sql.NullFloat64",
       "swagger_type": "float64"
@@ -302,7 +302,7 @@
       "sql_type": "money",
       "go_type": "float64",
       "json_type": "Float",
-      "protobuf_type": "float",
+      "protobuf_type": "double",
       "guregu_type": "null.Float",
       "go_nullable_type": "sql.NullFloat64",
       "swagger_type": "float64"
@@ -311,7 +311,7 @@
       "sql_type": "real",
       "go_type": "float64",
       "json_type": "Float",
-      "protobuf_type": "float",
+      "protobuf_type": "double",
       "guregu_type": "null.Float",
       "go_nullable_type": "sql.NullFloat64",
       "swagger_type": "float64"
@@ -339,7 +339,7 @@
       "sql_type": "float8",
       "go_type": "float64",
       "json_type": "Float",
-      "protobuf_type": "float",
+      "protobuf_type": "double",
       "guregu_type": "null.Float",
       "go_nullable_type": "sql.NullFloat64",
       "swagger_type": "float64"
@@ -394,7 +394,7 @@
       "sql_type": "numeric",
       "go_type": "float64",
       "json_type": "Float",
-      "protobuf_type": "float",
+      "protobuf_type": "double",
       "guregu_type": "null.Float",
       "go_nullable_type": "sql.NullFloat64",
       "swagger_type": "float64"
@@ -511,7 +511,7 @@
       "sql_type": "udecimal",
       "go_type": "float64",
       "json_type": "Float",
-      "protobuf_type": "float",
+      "protobuf_type": "double",
       "guregu_type": "null.Float",
       "go_nullable_type": "sql.NullFloat64",
       "swagger_type": "float64"
@@ -520,7 +520,7 @@
       "sql_type": "udouble",
       "go_type": "float64",
       "json_type": "Float",
-      "protobuf_type": "float",
+      "protobuf_type": "double",
       "guregu_type": "null.Float",
       "go_nullable_type": "sql.NullFloat64",
       "swagger_type": "float64"

@@ -10,7 +10,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
-	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/db/db_constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"

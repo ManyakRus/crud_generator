@@ -148,10 +148,10 @@ func FindTextProtoTable1(TextProto string, Table1 *types.Table) string {
 	}
 
 	if create_files.Has_Column_IsDeleted(Table1) == true {
-		Otvet = Otvet + FindTextDelete(TextProto, ModelName)
+		Otvet = Otvet + FindTextDelete(TextProto, Table1)
 
 		if config.Settings.HAS_IS_DELETED == true {
-			Otvet = Otvet + FindTextRestore(TextProto, ModelName)
+			Otvet = Otvet + FindTextRestore(TextProto, Table1)
 		}
 	}
 
@@ -223,9 +223,9 @@ func FindTextSave(TextProto string, ModelName string) string {
 }
 
 // FindTextDelete - возвращает текст .proto
-func FindTextDelete(TextProto string, ModelName string) string {
+func FindTextDelete(TextProto string, Table1 *types.Table) string {
 	Otvet := ""
-	Otvet2 := TextDelete(ModelName)
+	Otvet2 := TextDelete(Table1)
 
 	//проверка такой текст уже есть
 	pos1 := strings.Index(TextProto, Otvet2)
@@ -239,9 +239,9 @@ func FindTextDelete(TextProto string, ModelName string) string {
 }
 
 // FindTextRestore - возвращает текст .proto
-func FindTextRestore(TextProto string, ModelName string) string {
+func FindTextRestore(TextProto string, Table1 *types.Table) string {
 	Otvet := ""
-	Otvet2 := TextRestore(ModelName)
+	Otvet2 := TextRestore(Table1)
 
 	//проверка такой текст уже есть
 	pos1 := strings.Index(TextProto, Otvet2)
@@ -308,15 +308,33 @@ func TextSave(ModelName string) string {
 }
 
 // TextDelete - возвращает текст .proto
-func TextDelete(ModelName string) string {
-	Otvet := "rpc " + ModelName + "_Delete(RequestId) returns (Response) {}"
+func TextDelete(Table1 *types.Table) string {
+	Otvet := ""
+
+	ModelName := Table1.NameGo
+	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return Otvet
+	}
+
+	TextRequest, _ := create_files.FindTextProtobufRequest(Table1)
+	Otvet = "rpc " + ModelName + "_Delete(" + TextRequest + ") returns (Response) {}"
 
 	return Otvet
 }
 
 // TextRestore - возвращает текст .proto
-func TextRestore(ModelName string) string {
-	Otvet := "rpc " + ModelName + "_Restore(RequestId) returns (Response) {}"
+func TextRestore(Table1 *types.Table) string {
+	Otvet := ""
+
+	ModelName := Table1.NameGo
+	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	if PrimaryKeyColumn == nil {
+		return Otvet
+	}
+
+	TextRequest, _ := create_files.FindTextProtobufRequest(Table1)
+	Otvet = "rpc " + ModelName + "_Restore(" + TextRequest + ") returns (Response) {}"
 
 	return Otvet
 }
