@@ -234,10 +234,11 @@ func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 	//заменим ID-Alias на ID
 	TableName := Table1.Name
 	IDName, _ := FindPrimaryKeyNameType(Table1)
-	_, ok := types.MapConvertID[TableName+"."+IDName]
+	Alias, ok := types.MapConvertID[TableName+"."+IDName]
 	OtvetColumnName := "m." + ColumnName
 	if ok == true {
-		OtvetColumnName = ColumnTypeGo + "(" + OtvetColumnName + ")"
+		OtvetColumnName = Alias + "(" + OtvetColumnName + ")"
+		//OtvetColumnName = ColumnTypeGo + "(" + OtvetColumnName + ")"
 	}
 
 	//заменим int64(m.ID) на m.ID
