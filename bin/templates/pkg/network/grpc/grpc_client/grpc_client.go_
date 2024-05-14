@@ -8,9 +8,9 @@ import (
 	"github.com/ManyakRus/starter/port_checker"
 	"github.com/ManyakRus/starter/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
+	"gitlab.aescorp.ru/dsp_dev/claim/notifier_service/pkg/db/db_constants"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"
@@ -185,7 +185,7 @@ func IsRecordNotFound(err error) bool {
 	}
 
 	TextErr := err.Error()
-	pos1 := strings.Index(TextErr, constants.TEXT_RECORD_NOT_FOUND)
+	pos1 := strings.Index(TextErr, db_constants.TEXT_RECORD_NOT_FOUND)
 	if pos1 >= 0 {
 		Otvet = true
 	}
