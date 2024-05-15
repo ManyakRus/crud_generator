@@ -33,7 +33,7 @@ func TestRead(t *testing.T) {
 		t.Error("TestRead() error: ", err)
 	}
 
-	if int64(Otvet.ID) == 0 {
+	if IntFromAlias(Otvet.ID) == 0 {
 		t.Error("TestRead() error: ID =0")
 	}
 }
@@ -53,9 +53,6 @@ func TestCreate(t *testing.T) {
 		t.Error("TestCreate() error: ", err)
 	}
 
-	if int64(Otvet.ID) != 0 {
-		t.Error("TestCreate() error: ID !=0")
-	}
 }
 
 func TestUpdate(t *testing.T) {
@@ -64,7 +61,7 @@ func TestUpdate(t *testing.T) {
 	defer grpc_client.CloseConnection()
 
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
-	Otvet.ID = -1
+	Otvet.ID = 0
 
 	crud := Crud_GRPC{}
 	err := crud.Update(&Otvet)
@@ -73,7 +70,7 @@ func TestUpdate(t *testing.T) {
 		t.Error("TestUpdate() error: ", err)
 	}
 
-	if int64(Otvet.ID) != 0 {
+	if IntFromAlias(Otvet.ID) != 0 {
 		t.Error("TestUpdate() error: ID =0")
 	}
 }
@@ -98,7 +95,7 @@ func TestSave(t *testing.T) {
 		t.Error("TestSave() error: ", err)
 	}
 
-	if int64(Otvet.ID) == 0 {
+	if IntFromAlias(Otvet.ID) == 0 {
 		t.Error("TestSave() error: ID =0")
 	}
 }
@@ -121,7 +118,7 @@ func TestDelete(t *testing.T) {
 		if err != nil {
 			t.Error("TestDelete() error: ", err)
 		}
-		if int64(Otvet.ID) == 0 {
+		if IntFromAlias(Otvet.ID) == 0 {
 			t.Error("TestDelete() error: ID =0")
 		}
 
@@ -129,7 +126,7 @@ func TestDelete(t *testing.T) {
 		if err != nil {
 			t.Error("TestDelete() error: ", err)
 		}
-		if int64(Otvet.ID) == 0 {
+		if IntFromAlias(Otvet.ID) == 0 {
 			t.Error("TestDelete() error: ID =0")
 		}
 	} else {
@@ -137,7 +134,7 @@ func TestDelete(t *testing.T) {
 		if err != nil {
 			t.Error("TestDelete() error: ", err)
 		}
-		if int64(Otvet.ID) == 0 {
+		if IntFromAlias(Otvet.ID) == 0 {
 			t.Error("TestDelete() error: ID =0")
 		}
 
@@ -145,7 +142,7 @@ func TestDelete(t *testing.T) {
 		if err != nil {
 			t.Error("TestDelete() error: ", err)
 		}
-		if int64(Otvet.ID) == 0 {
+		if IntFromAlias(Otvet.ID) == 0 {
 			t.Error("TestDelete() error: ID =0")
 		}
 	}
@@ -178,7 +175,7 @@ func TestFindByExtID(t *testing.T) {
 		t.Error("TestFindByExtID() error: ", err)
 	}
 
-	if int64(Otvet.ID) == 0 {
+	if IntFromAlias(Otvet.ID) == 0 {
 		t.Error("TestFindByExtID() error: ID =0")
 	}
 }

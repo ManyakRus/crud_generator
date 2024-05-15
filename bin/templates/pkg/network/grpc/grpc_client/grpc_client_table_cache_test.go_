@@ -20,7 +20,7 @@ func TestReadFromCache(t *testing.T) {
 		t.Error("ReadFromCache() error: ", err)
 	}
 
-	if int64(Otvet.ID) == 0 {
+	if IntFromAlias(Otvet.ID) == 0 {
 		t.Error("ReadFromCache() error: ID =0")
 	}
 }

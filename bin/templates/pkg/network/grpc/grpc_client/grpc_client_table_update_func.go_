@@ -9,7 +9,7 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	var versionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
-	Request.ID = int64(m.ID)
+	Request.ID = IntFromAlias(m.ID)
 	Request.FieldName = m.ColumnName
 	Request.VersionModel = versionModel
 

@@ -23,7 +23,7 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 	}
 
 	//ID не должен быть =0
-	if int64(m.ID) == 0 {
+	if IntFromAlias(m.ID) == 0 {
 		err = errors.New(m.TableNameDB()+" Read() error: ID=0")
 		return err
 	}
@@ -41,12 +41,12 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 	}
 	err = tx.Error
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Read() id: %v, error: %v", m.ID, err)
+		err = fmt.Errorf(m.TableNameDB()+" Read() id: %v, error: %v", IntFromAlias(m.ID), err)
 		return err
 	}
 
 	//удалим из кэша
-	cache.Remove(m.ID)
+	cache.Remove(IntFromAlias(m.ID))
 
 	return err
 }

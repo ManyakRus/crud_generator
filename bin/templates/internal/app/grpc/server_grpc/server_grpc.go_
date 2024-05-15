@@ -32,7 +32,7 @@ func (s *ServerGRPC) LawsuitStatusType_Read(ctx context.Context, Request *grpc_p
 	db := postgres_gorm.GetConnection()
 	ID := Request.ID
 	m := &lawsuit_status_types.LawsuitStatusType{}
-	m.ID = ID
+	m.ID = IntToAlias(ID)
 	err = crud_lawsuit_status_types.Read_ctx(ctx, db, m)
 	if err != nil {
 		return &Otvet, err
@@ -71,7 +71,7 @@ func (s *ServerGRPC) LawsuitStatusType_Delete(ctx context.Context, Request *grpc
 	db := postgres_gorm.GetConnection()
 	ID := Request.ID
 	m := &lawsuit_status_types.LawsuitStatusType{}
-	m.ID = ID
+	m.ID = IntToAlias(ID)
 	err = crud_lawsuit_status_types.Delete_ctx(ctx, db, m)
 	if err != nil {
 		return &Otvet, err
@@ -110,7 +110,7 @@ func (s *ServerGRPC) LawsuitStatusType_Restore(ctx context.Context, Request *grp
 	db := postgres_gorm.GetConnection()
 	ID := Request.ID
 	m := &lawsuit_status_types.LawsuitStatusType{}
-	m.ID = ID
+	m.ID = IntToAlias(ID)
 	err = crud_lawsuit_status_types.Restore_ctx(ctx, db, m)
 	if err != nil {
 		return &Otvet, err

@@ -242,9 +242,6 @@ func CreateFilesTest(Table1 *types.Table) error {
 	}
 	TextGRPCClient = DeleteFuncTestFind_byExtID(TextGRPCClient, ModelName, Table1)
 
-	// замена ID на PrimaryKey
-	TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)
-
 	//SkipNow()
 	TextGRPCClient = create_files.AddSkipNow(TextGRPCClient, Table1)
 
@@ -602,6 +599,9 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
+
+		//ConstantsURL := create_files.FindConstantsURL()
+		//TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ConstantsURL)
 
 		//TextGRPC_Client = create_files.ConvertRequestIdToAlias(TextGRPC_Client, Table1)
 

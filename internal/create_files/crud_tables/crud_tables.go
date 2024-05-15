@@ -172,6 +172,9 @@ func CreateFiles(Table1 *types.Table) error {
 	//uuid
 	TextDB = create_files.CheckAndAddImportUUID_FromText(TextDB)
 
+	//alias
+	TextDB = create_files.CheckAndAddImportAlias(TextDB)
+
 	//удаление пустого импорта
 	TextDB = create_files.DeleteEmptyImport(TextDB)
 

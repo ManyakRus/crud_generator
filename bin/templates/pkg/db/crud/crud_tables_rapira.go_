@@ -189,14 +189,14 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 	tx = tx.Omit(MassOmit...)
 
 	// запись
-	tx = tx.Create(&m)
+	tx = tx.Save(&m)
 	err = tx.Error
 	if err != nil {
 		return err
 	}
 
 	//удалим из кэша
-	//cache.Remove(m.ID)
+	//cache.Remove(IntFromAlias(m.ID))
 
 	//запишем NULL в пустые колонки
 	MapOmit := crud_functions.MapOmit_from_MassOmit(MassOmit)
@@ -237,7 +237,7 @@ func Delete_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 	}
 
 	m2 := lawsuit_status_types.LawsuitStatusType{}
-	m2.ID = int64(m.ID)
+	m2.ID = m.ID
 	err = Read_ctx(ctx, db, &m2)
 	if err != nil {
 		return err
@@ -278,7 +278,7 @@ func Restore_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsu
 	}
 
 	m2 := lawsuit_status_types.LawsuitStatusType{}
-	m2.ID = int64(m.ID)
+	m2.ID = m.ID
 	err = Read_ctx(ctx, db, &m2)
 	if err != nil {
 		return err
