@@ -54,7 +54,7 @@ func ReadFromCache_ctx(ctx context.Context, db *gorm.DB, ID int64) (lawsuit_stat
 	var err error
 
 
-	Otvet.ID = IntToAlias(ID)
+	Otvet.ID = AliasFromInt(ID)
 	err = Read_ctx(ctx, db, &Otvet)
 	if err == nil {
 		cache.Add(ID, Otvet)

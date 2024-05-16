@@ -48,7 +48,7 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 
 	db.WithContext(ctx)
 
-	tx := db.First(m, id)
+	tx := db.First(m)
 	err = tx.Error
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Read() id: %v, error: %v", id, err)

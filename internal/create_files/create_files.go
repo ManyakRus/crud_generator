@@ -226,12 +226,12 @@ func ReplacePrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
 	//Alias преобразуем в int64, и наоборот
 	if Alias != "" {
 		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(Otvet.ID)", ColumnTypeGoPK+"(Otvet."+ColumnNamePK+")")
-		Otvet = strings.ReplaceAll(Otvet, "IntToAlias(Otvet.ID)", OtvetColumnName)
-		Otvet = strings.ReplaceAll(Otvet, "IntToAlias(ID)", Alias+"("+ColumnNamePK+")")
+		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(Otvet.ID)", OtvetColumnName)
+		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", Alias+"("+ColumnNamePK+")")
 	} else {
 		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(Otvet.ID)", "Otvet."+ColumnNamePK+"")
-		Otvet = strings.ReplaceAll(Otvet, "IntToAlias(Otvet.ID)", OtvetColumnName)
-		Otvet = strings.ReplaceAll(Otvet, "IntToAlias(ID)", "ID")
+		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(Otvet.ID)", OtvetColumnName)
+		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", "ID")
 	}
 
 	return Otvet
