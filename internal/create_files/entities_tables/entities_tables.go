@@ -194,8 +194,17 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 		}
 		TextModel = create_files.ReplaceIDtoID(TextModel, Table1)
 
+		//
+		TextModel = AddFunctionStringIdentifier(TextModel, Table1)
+
 		//добавим импорт uuid
 		TextModel = create_files.CheckAndAddImportUUID_FromText(TextModel)
+
+		//добавим импорт strconv
+		TextModel = create_files.CheckAndAddImportStrconv(TextModel)
+
+		//добавим импорт fmt
+		TextModel = create_files.CheckAndAddImportFmt(TextModel)
 
 	}
 
@@ -709,6 +718,39 @@ func DeleteFromInterfaceUpdateManyFields(TextModel string, Table1 *types.Table) 
 	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
 	TextFind := "\n\tUpdateManyFields(*" + ModelName + ", []string) error"
 	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
+
+	return Otvet
+}
+
+// AddFunctionStringIdentifier - добавляет функцию StringIdentifier(), для таблиц где много PrimaryKey
+func AddFunctionStringIdentifier(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	if Table1.PrimaryKeyColumnsCount == 1 {
+		return Otvet
+	}
+
+	_, TextNamesTypes, _ := create_files.FindTextIDMany(Table1)
+
+	Text := `
+// StringIdentifier - возвращает строковое представление PrimaryKey
+func StringIdentifier(` + TextNamesTypes + `) string {
+	Otvet := ""
+`
+
+	for _, Column1 := range Table1.MapColumns {
+		if Column1.IsPrimaryKey == false {
+			continue
+		}
+		TextConvert := create_files.FindTextConvertToString(Column1, Column1.NameGo)
+		Text = Text + "\tOtvet = Otvet + " + `"_" + ` + TextConvert + "\n"
+	}
+
+	Text = Text + `
+	return Otvet
+}`
+
+	Otvet = Otvet + Text
 
 	return Otvet
 }

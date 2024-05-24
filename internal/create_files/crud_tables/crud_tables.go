@@ -26,6 +26,13 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			continue
 		}
 
+		//проверка что таблица нормальная
+		err2 := create_files.IsGoodTableNamePrefix(Table1)
+		if err2 != nil {
+			log.Warn(err2)
+			continue
+		}
+
 		//файлы crud
 		if config.Settings.NEED_CREATE_DB == true {
 			err = CreateFiles(Table1)
@@ -879,9 +886,20 @@ func CreateFilesCache(Table1 *types.Table) error {
 	TextCache = create_files.FillVariable(TextCache, constants.TEXT_CACHE_SIZE_1000, sCACHE_ELEMENTS_COUNT)
 
 	//тип ID кэша
-	_, ColumnTypeGo := create_files.FindPrimaryKeyNameTypeGo(Table1)
-	TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU["+ColumnTypeGo)
-	TextCache = strings.ReplaceAll(TextCache, "ID int64", "ID "+ColumnTypeGo)
+	if Table1.PrimaryKeyColumnsCount == 1 {
+		_, ColumnTypeGo := create_files.FindPrimaryKeyNameTypeGo(Table1)
+		TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU["+ColumnTypeGo)
+		TextCache = strings.ReplaceAll(TextCache, "ID int64", "ID "+ColumnTypeGo)
+	} else {
+		TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU[string")
+		TextCache = create_files.ReplacePrimaryKeyOtvetID_Many(TextCache, Table1)
+		TextIDMany := "(ID)"
+		TextIDMany = create_files.ReplaceIDtoID_Many(TextIDMany, Table1)
+		TextCache = strings.ReplaceAll(TextCache, "(ID)", "("+Table1.Name+".StringIdentifier"+TextIDMany+")")
+		TextCache = create_files.ReplaceIDtoID_Many(TextCache, Table1)
+		//TextCache = strings.ReplaceAll(TextCache, "(ID,", "("+Table1.Name+".StringIdentifier"+TextIDMany+",")
+		//TextCache = strings.ReplaceAll(TextCache, "ID int64", "ID "+ColumnTypeGo)
+	}
 
 	//uuid
 	TextCache = create_files.CheckAndAddImportUUID_FromText(TextCache)

@@ -30,13 +30,6 @@ func (crud Crud_DB) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatusT
 	var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
-	// поищем сначала в кэше
-	Otvet, ok := cache.Get(ID)
-	if ok {
-		return Otvet, nil
-	}
-
-	// поищем в БД
 	ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
@@ -53,11 +46,18 @@ func ReadFromCache_ctx(ctx context.Context, db *gorm.DB, ID int64) (lawsuit_stat
 	var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
+	// поищем сначала в кэше
+	Identifier := (ID)
+	Otvet, ok := cache.Get(Identifier)
+	if ok {
+		return Otvet, nil
+	}
 
+	// поищем в БД
 	Otvet.ID = AliasFromInt(ID)
 	err = Read_ctx(ctx, db, &Otvet)
 	if err == nil {
-		cache.Add(ID, Otvet)
+		cache.Add(Identifier, Otvet)
 	}
 
 	return Otvet, err

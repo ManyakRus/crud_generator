@@ -173,6 +173,19 @@ func FindPrimaryKeyColumn(Table1 *types.Table) (Column1 *types.Column) {
 	return Otvet
 }
 
+// FindPrimaryKeyColumns - возвращает несколько Column для колонки PrimaryKey
+func FindPrimaryKeyColumns(Table1 *types.Table) []*types.Column {
+	Otvet := make([]*types.Column, 0)
+
+	for _, Column1 := range Table1.MapColumns {
+		if Column1.IsPrimaryKey == true {
+			Otvet = append(Otvet, Column1)
+		}
+	}
+
+	return Otvet
+}
+
 //// FindPrimaryKeyNameTypeGo - возвращает наименование и тип golang колонки PrimaryKey
 //func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
 //	Otvet := ""
@@ -189,6 +202,20 @@ func FindPrimaryKeyColumn(Table1 *types.Table) (Column1 *types.Column) {
 
 // ReplacePrimaryKeyOtvetID - заменяет "Otvet.ID" на название колонки PrimaryKey
 func ReplacePrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	PrimaryKeyCount := Table1.PrimaryKeyColumnsCount
+	if PrimaryKeyCount == 1 {
+		Otvet = ReplacePrimaryKeyOtvetID1(Otvet, Table1)
+	} else {
+		Otvet = ReplacePrimaryKeyOtvetID_Many(Otvet, Table1)
+	}
+
+	return Otvet
+}
+
+// ReplacePrimaryKeyOtvetID1 - заменяет "Otvet.ID" на название колонки PrimaryKey
+func ReplacePrimaryKeyOtvetID1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	ColumnNamePK, ColumnTypeGoPK := FindPrimaryKeyNameTypeGo(Table1)
@@ -233,6 +260,66 @@ func ReplacePrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
 		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(Otvet.ID)", OtvetColumnName)
 		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", "ID")
 	}
+
+	return Otvet
+}
+
+// ReplacePrimaryKeyOtvetID_Many - заменяет "Otvet.ID" на название колонки PrimaryKey
+func ReplacePrimaryKeyOtvetID_Many(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TextOtvetIDID := ""
+	for _, Column1 := range Table1.MapColumns {
+		if Column1.IsPrimaryKey == false {
+			continue
+		}
+
+		TextOtvetIDID = TextOtvetIDID + "\tOtvet." + Column1.NameGo + " = " + Column1.NameGo + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "\tOtvet.ID = AliasFromInt(ID)", TextOtvetIDID)
+
+	//TextNames, TextNamesTypes, TextProtoNames := FindTextIDMany(Table1)
+
+	////заменим ID-Alias на ID
+	//TableName := Table1.Name
+	//IDName, _ := FindPrimaryKeyNameType(Table1)
+	//Alias, ok := types.MapConvertID[TableName+"."+IDName]
+	//OtvetColumnName := "Otvet." + ColumnNamePK
+	//if ok == true {
+	//	OtvetColumnName = Alias + "(" + OtvetColumnName + ")"
+	//}
+
+	////заменим int64(Otvet.ID) на Otvet.ID
+	//if mini_func.IsNumberType(ColumnTypeGoPK) == true {
+	//	Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
+	//} else if ColumnTypeGoPK == "string" {
+	//	Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) == 0", OtvetColumnName+" == \"\"")
+	//	Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) != 0", OtvetColumnName+" != \"\"")
+	//	Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
+	//} else if ColumnTypeGoPK == "uuid.UUID" || ColumnTypeGoPK == "uuid.NullUUID" {
+	//	Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) == 0", OtvetColumnName+" == uuid.Nil")
+	//	Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) != 0", OtvetColumnName+" != uuid.Nil")
+	//	Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
+	//} else if ColumnTypeGoPK == "time.Time" {
+	//	Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) == 0", OtvetColumnName+".IsZero() == true")
+	//	Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID) != 0", OtvetColumnName+".IsZero() == false")
+	//	Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
+	//}
+	////Otvet = strings.ReplaceAll(Otvet, "Otvet.ID = ", OtvetColumnName+" = ")
+	////Otvet = strings.ReplaceAll(Otvet, "Otvet.ID != ", OtvetColumnName+" != ")
+	////Otvet = strings.ReplaceAll(Otvet, " Otvet.ID)", " "+OtvetColumnName+")")
+	//Otvet = strings.ReplaceAll(Otvet, " Otvet.ID)", " Otvet."+ColumnNamePK+")")
+	//
+	////Alias преобразуем в int64, и наоборот
+	//if Alias != "" {
+	//	Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(Otvet.ID)", ColumnTypeGoPK+"(Otvet."+ColumnNamePK+")")
+	//	Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(Otvet.ID)", OtvetColumnName)
+	//	Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", Alias+"("+ColumnNamePK+")")
+	//} else {
+	//	Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(Otvet.ID)", "Otvet."+ColumnNamePK+"")
+	//	Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(Otvet.ID)", OtvetColumnName)
+	//	Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", "ID")
+	//}
 
 	return Otvet
 }
@@ -719,23 +806,28 @@ func CheckAndAddImport(Text, URL string) string {
 func AddImportTime(Text string) string {
 	Otvet := Text
 
-	//если уже есть импорт
 	RepositoryURL := `time`
 	Otvet = AddImport(Text, RepositoryURL)
-	//pos1 := strings.Index(Otvet, RepositoryURL)
-	//if pos1 >= 0 {
-	//	return Otvet
-	//}
-	//
-	////
-	//TextImport := "import ("
-	//pos1 = strings.Index(Otvet, TextImport)
-	//if pos1 < 0 {
-	//	log.Error("not found word: ", TextImport)
-	//	return Text
-	//}
-	//
-	//Otvet = Otvet[:pos1+len(TextImport)] + "\n\t" + RepositoryURL + Otvet[pos1+len(TextImport):]
+
+	return Otvet
+}
+
+// CheckAndAddImportStrconv - добавляет пакет в секцию Import, если его там нет
+func CheckAndAddImportStrconv(Text string) string {
+	Otvet := Text
+
+	RepositoryURL := `strconv`
+	Otvet = AddImport(Text, RepositoryURL)
+
+	return Otvet
+}
+
+// CheckAndAddImportFmt - добавляет пакет fmt в секцию Import, если его там нет
+func CheckAndAddImportFmt(Text string) string {
+	Otvet := Text
+
+	RepositoryURL := `fmt`
+	Otvet = AddImport(Text, RepositoryURL)
 
 	return Otvet
 }
@@ -1957,8 +2049,21 @@ func ReplaceTextRequestID_PrimaryKey1(Text string, Table1 *types.Table, TextRequ
 	return Otvet
 }
 
-// ReplaceIDtoID - заменяет int64(ID) на ID
 func ReplaceIDtoID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	PrimaryKeyCount := Table1.PrimaryKeyColumnsCount
+	if PrimaryKeyCount == 1 {
+		Otvet = ReplaceIDtoID1(Otvet, Table1)
+	} else {
+		Otvet = ReplaceIDtoID_Many(Otvet, Table1)
+	}
+
+	return Otvet
+}
+
+// ReplaceIDtoID1 - заменяет int64(ID) на ID
+func ReplaceIDtoID1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
@@ -1970,6 +2075,45 @@ func ReplaceIDtoID(Text string, Table1 *types.Table) string {
 	Otvet = strings.ReplaceAll(Otvet, "int64(ID)", OtvetColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "(ID int64", "("+PrimaryKeyColumn.NameGo+" "+PrimaryKeyColumn.TypeGo)
 	Otvet = strings.ReplaceAll(Otvet, "(ID)", "("+PrimaryKeyColumn.NameGo+")")
+
+	return Otvet
+}
+
+// FindTextIDMany - находит все PrimaryKey строкой
+func FindTextIDMany(Table1 *types.Table) (TextNames, TextNamesTypes, TextProtoNames string) {
+	//TextProtoNames := ""
+	//TextNamesTypes := ""
+	//TextNames := ""
+
+	Comma := ""
+	MassPrimaryKey := FindPrimaryKeyColumns(Table1)
+	for _, PrimaryKey1 := range MassPrimaryKey {
+		OtvetColumnName := FindTextConvertGolangTypeToProtobufType(Table1, PrimaryKey1, "")
+		if OtvetColumnName == "" {
+			continue
+		}
+
+		TextProtoNames = TextProtoNames + Comma + OtvetColumnName
+		TextNamesTypes = TextNamesTypes + Comma + PrimaryKey1.NameGo + " " + PrimaryKey1.TypeGo
+		TextNames = TextNames + Comma + PrimaryKey1.NameGo
+
+		Comma = ", "
+	}
+
+	return
+}
+
+// ReplaceIDtoID_Many - заменяет int64(ID) на ID, и остальные PrimaryKey
+func ReplaceIDtoID_Many(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TextNames, TextNamesTypes, TextProtoNames := FindTextIDMany(Table1)
+
+	Otvet = strings.ReplaceAll(Otvet, "int64(ID)", TextProtoNames)
+	Otvet = strings.ReplaceAll(Otvet, "(ID int64", "("+TextNamesTypes)
+	Otvet = strings.ReplaceAll(Otvet, "(ID)", "("+TextNames+")")
+	Otvet = strings.ReplaceAll(Otvet, ", ID)", ", "+TextNames+")")
+	Otvet = strings.ReplaceAll(Otvet, ", ID int64)", ", "+TextNamesTypes+")")
 
 	return Otvet
 }
@@ -2037,6 +2181,34 @@ func ReplaceConnect_WithApplicationName(Text string) string {
 
 	Otvet = strings.ReplaceAll(Otvet, "postgres_gorm.Connect_WithApplicationName(", "postgres_gorm.Connect_WithApplicationName_SingularTableName(")
 	Otvet = strings.ReplaceAll(Otvet, "postgres_gorm.Start(", "postgres_gorm.Start_SingularTableName(")
+
+	return Otvet
+}
+
+// FindTextConvertToString - возвращает имя переменной +  имя колонки, преобразованное в тип string
+func FindTextConvertToString(Column1 *types.Column, VariableName string) string {
+	Otvet := ""
+
+	if Column1 == nil {
+		return Otvet
+	}
+	Otvet = VariableName + "." + Column1.NameGo
+	switch Column1.TypeGo {
+	case "time.Time":
+		Otvet = VariableName + ".String()"
+	case "int64":
+		Otvet = "strconv.Itoa(int(" + VariableName + "))"
+	case "int32":
+		Otvet = "strconv.Itoa(int(" + VariableName + "))"
+	case "bool":
+		Otvet = "strconv.FormatBool(" + VariableName + ")"
+	case "float32":
+		Otvet = "fmt.Sprintf(%f," + VariableName + ")"
+	case "float64":
+		Otvet = "fmt.Sprintf(%f," + VariableName + ")"
+	case "uuid.UUID":
+		Otvet = VariableName + ".String()"
+	}
 
 	return Otvet
 }
