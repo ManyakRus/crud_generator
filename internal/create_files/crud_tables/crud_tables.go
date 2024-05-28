@@ -171,6 +171,9 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = ReplaceText_created_at(TextDB, Table1)
 	TextDB = ReplaceText_is_deleted_deleted_at(TextDB, Table1)
 	TextDB = create_files.DeleteImportModel(TextDB)
+
+	TextDB = create_files.ReplaceCacheRemove_ManyPK(TextDB, Table1)
+
 	TextDB = create_files.ReplacePrimaryKeyM_ID(TextDB, Table1)
 
 	//замена импортов на новые URL
@@ -642,6 +645,8 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
 	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1)
+
+	Otvet = create_files.ReplaceCacheRemove_ManyPK(Otvet, Table1)
 
 	//запись null в nullable колонки
 	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {

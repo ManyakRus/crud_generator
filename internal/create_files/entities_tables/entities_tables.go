@@ -738,7 +738,15 @@ func StringIdentifier(` + TextNamesTypes + `) string {
 	Otvet := ""
 `
 
-	for _, Column1 := range Table1.MapColumns {
+	//сортировка по названию таблиц
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key1 := range keys {
+		Column1, _ := Table1.MapColumns[key1]
 		if Column1.IsPrimaryKey == false {
 			continue
 		}

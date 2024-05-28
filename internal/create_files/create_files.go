@@ -11,6 +11,7 @@ import (
 	"github.com/ManyakRus/starter/micro"
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/inflection"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -177,7 +178,15 @@ func FindPrimaryKeyColumn(Table1 *types.Table) (Column1 *types.Column) {
 func FindPrimaryKeyColumns(Table1 *types.Table) []*types.Column {
 	Otvet := make([]*types.Column, 0)
 
-	for _, Column1 := range Table1.MapColumns {
+	//сортировка по названию таблиц
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key1 := range keys {
+		Column1, _ := Table1.MapColumns[key1]
 		if Column1.IsPrimaryKey == true {
 			Otvet = append(Otvet, Column1)
 		}
@@ -268,14 +277,22 @@ func ReplacePrimaryKeyOtvetID1(Text string, Table1 *types.Table) string {
 func ReplacePrimaryKeyOtvetID_Many(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
+	//сортировка по названию таблиц
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	TextOtvetIDID := ""
-	for _, Column1 := range Table1.MapColumns {
-		if Column1.IsPrimaryKey == false {
+	for _, key1 := range keys {
+		Column1, _ := Table1.MapColumns[key1]
+		if Column1.IsPrimaryKey != true {
 			continue
 		}
-
 		TextOtvetIDID = TextOtvetIDID + "\tOtvet." + Column1.NameGo + " = " + Column1.NameGo + "\n"
 	}
+
 	Otvet = strings.ReplaceAll(Otvet, "\tOtvet.ID = AliasFromInt(ID)", TextOtvetIDID)
 
 	//TextNames, TextNamesTypes, TextProtoNames := FindTextIDMany(Table1)
@@ -817,7 +834,7 @@ func CheckAndAddImportStrconv(Text string) string {
 	Otvet := Text
 
 	RepositoryURL := `strconv`
-	Otvet = AddImport(Text, RepositoryURL)
+	Otvet = CheckAndAddImport(Text, RepositoryURL)
 
 	return Otvet
 }
@@ -827,7 +844,7 @@ func CheckAndAddImportFmt(Text string) string {
 	Otvet := Text
 
 	RepositoryURL := `fmt`
-	Otvet = AddImport(Text, RepositoryURL)
+	Otvet = CheckAndAddImport(Text, RepositoryURL)
 
 	return Otvet
 }
@@ -2085,6 +2102,36 @@ func FindTextIDMany(Table1 *types.Table) (TextNames, TextNamesTypes, TextProtoNa
 	//TextNamesTypes := ""
 	//TextNames := ""
 
+	TextNames, TextNamesTypes, TextProtoNames = FindTextID_VariableName_Many(Table1, "")
+
+	//Comma := ""
+	//MassPrimaryKey := FindPrimaryKeyColumns(Table1)
+	//for _, PrimaryKey1 := range MassPrimaryKey {
+	//	OtvetColumnName := FindTextConvertGolangTypeToProtobufType(Table1, PrimaryKey1, "")
+	//	if OtvetColumnName == "" {
+	//		continue
+	//	}
+	//
+	//	TextProtoNames = TextProtoNames + Comma + OtvetColumnName
+	//	TextNamesTypes = TextNamesTypes + Comma + PrimaryKey1.NameGo + " " + PrimaryKey1.TypeGo
+	//	TextNames = TextNames + Comma + PrimaryKey1.NameGo
+	//
+	//	Comma = ", "
+	//}
+
+	return
+}
+
+// FindTextID_VariableName_Many - находит все PrimaryKey строкой
+func FindTextID_VariableName_Many(Table1 *types.Table, VariableName string) (TextNames, TextNamesTypes, TextProtoNames string) {
+	//TextProtoNames := ""
+	//TextNamesTypes := ""
+	//TextNames := ""
+
+	Dot := ""
+	if VariableName != "" {
+		Dot = "."
+	}
 	Comma := ""
 	MassPrimaryKey := FindPrimaryKeyColumns(Table1)
 	for _, PrimaryKey1 := range MassPrimaryKey {
@@ -2095,7 +2142,7 @@ func FindTextIDMany(Table1 *types.Table) (TextNames, TextNamesTypes, TextProtoNa
 
 		TextProtoNames = TextProtoNames + Comma + OtvetColumnName
 		TextNamesTypes = TextNamesTypes + Comma + PrimaryKey1.NameGo + " " + PrimaryKey1.TypeGo
-		TextNames = TextNames + Comma + PrimaryKey1.NameGo
+		TextNames = TextNames + Comma + VariableName + Dot + PrimaryKey1.NameGo
 
 		Comma = ", "
 	}
@@ -2208,6 +2255,20 @@ func FindTextConvertToString(Column1 *types.Column, VariableName string) string 
 		Otvet = "fmt.Sprintf(%f," + VariableName + ")"
 	case "uuid.UUID":
 		Otvet = VariableName + ".String()"
+	}
+
+	return Otvet
+}
+
+// ReplaceCacheRemove_ManyPK - заменяет cache.Remove(IntFromAlias(m.ID)) на cache.Remove(m.StringIdentifier())
+func ReplaceCacheRemove_ManyPK(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	if Table1.PrimaryKeyColumnsCount > 1 {
+		TextOld := "cache.Remove(IntFromAlias(m.ID))"
+		TextNames, _, _ := FindTextID_VariableName_Many(Table1, "m")
+		TextNew := "cache.Remove(" + Table1.Name + ".StringIdentifier(" + TextNames + "))"
+		Otvet = strings.ReplaceAll(Otvet, TextOld, TextNew)
 	}
 
 	return Otvet
