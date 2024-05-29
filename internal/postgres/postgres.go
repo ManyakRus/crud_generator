@@ -45,7 +45,8 @@ func FillMapTable() (map[string]*types.Table, error) {
 		return MapTable, err
 	}
 
-	err = FillIDMinimum(MapTable)
+	err = FillIDMinimum_ManyPK(MapTable)
+	//err = FillIDMinimum(MapTable)
 	if err != nil {
 		log.Error("FillIDMinimum() error: ", err)
 		return MapTable, err
@@ -398,7 +399,6 @@ func FillIDMinimum(MapTable map[string]*types.Table) error {
 		}
 
 		var IDMinimum sql.NullString
-		//TableRows := TableRowsStruct{}
 		tx = tx.Scan(&IDMinimum)
 		err = tx.Error
 		if err != nil {
@@ -406,16 +406,128 @@ func FillIDMinimum(MapTable map[string]*types.Table) error {
 		}
 
 		//
-		Table1.IDMinimum = IDMinimum.String
-		//if TypeGo == "string" || TypeGo == "uuid.UUID" {
-		//	Table1.IDMinimum = IDMinimum.String
-		//} else if mini_func.IsNumberType(TypeGo) == true {
-		//	Table1.IDMinimum = IDMinimum.String
-		//} else if TypeGo == "time.Time" {
-		//	Table1.IDMinimum = IDMinimum.String
-		//} else {
-		//	Table1.IDMinimum = IDMinimum.String
-		//}
+		ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+		ColumnPK.IDMinimum = IDMinimum.String
+	}
+
+	return err
+}
+
+// FillIDMinimum_ManyPK - находим минимальный ID, для тестов с этим ID, для многих Primary Key
+func FillIDMinimum_ManyPK(MapTable map[string]*types.Table) error {
+	var err error
+
+	//соединение
+	db := postgres_gorm.GetConnection()
+	ctxMain := contextmain.GetContext()
+
+	Schema := strings.Trim(postgres_gorm.Settings.DB_SCHEMA, " ")
+
+	for TableName, Table1 := range MapTable {
+		ColumnsPK := create_files.FindPrimaryKeyColumns(Table1)
+
+		Is_UUID_Type := false
+		for _, Column1 := range ColumnsPK {
+			Is_UUID_Type1 := create_files.Is_UUID_Type(Column1.TypeGo)
+			Is_UUID_Type = Is_UUID_Type || Is_UUID_Type1
+		}
+
+		//текст запроса
+		TextSQL := ""
+		if Is_UUID_Type == false {
+			TextSQL = `SELECT 
+				`
+			Comma := ""
+			for _, Column1 := range ColumnsPK {
+				TextSQL += Comma + `Min("` + Column1.Name + `") as "` + Column1.Name + `"`
+				Comma = ","
+			}
+
+			TextSQL = TextSQL + ` 
+				FROM
+					"` + Schema + `"."` + TableName + `" 
+				WHERE 1=1`
+
+			for _, Column1 := range ColumnsPK {
+				DefaultValueSQL := create_files.FindTextDefaultValueSQL(Column1.TypeGo)
+				TextSQL += `and ` + Column1.Name + ` <> ` + DefaultValueSQL
+			}
+		} else {
+			TextSQL = `SELECT 
+				`
+			Comma := ""
+			for _, Column1 := range ColumnsPK {
+				TextSQL += Comma + `"` + Column1.Name + `" as "` + Column1.Name + `"`
+				Comma = ","
+			}
+
+			TextSQL = TextSQL + ` 
+				FROM
+					"` + Schema + `"."` + TableName + `" 
+				WHERE 1=1`
+
+			for _, Column1 := range ColumnsPK {
+				TextSQL += `and ` + Column1.Name + ` is not null `
+			}
+			TextSQL = TextSQL + `
+			ORDER BY
+`
+			Comma = ""
+			for _, Column1 := range ColumnsPK {
+				TextSQL += Comma + `"` + Column1.Name + `"`
+				Comma = ","
+			}
+			//TextSQL = `SELECT "` + NameID + `" as id_minimum
+			//	FROM "` + Schema + `"."` + TableName + `"
+			//	WHERE "` + NameID + `" is not null
+			//	ORDER BY ` + NameID + `
+			//	LIMIT 1`
+		}
+		ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*60)
+		defer ctxCancelFunc()
+		db.WithContext(ctx)
+
+		//запрос с разным количеством колонок
+		tx := db.Raw(TextSQL)
+		err = tx.Error
+		if err != nil {
+			log.Panic("Raw() Wrong SQL query: ", TextSQL, " error: ", err)
+		}
+
+		rows, err := tx.Rows()
+		if err != nil {
+			log.Panic("Rows() Wrong SQL query: ", TextSQL, " error: ", err)
+		}
+		has_next := rows.Next()
+		if has_next == false {
+			log.Panic("Next() Wrong SQL query: ", TextSQL, " error: ", err)
+		}
+		ColumnsGorm, err := rows.Columns()
+
+		MapIDMinimum := make(map[string]string)
+
+		values := make([]interface{}, len(ColumnsGorm))
+		for i := range values {
+			values[i] = new(interface{})
+		}
+		if err := rows.Scan(values...); err != nil {
+			return err
+		}
+
+		for i, colName := range ColumnsGorm {
+			value1 := ""
+			value1 = fmt.Sprint(*values[i].(*interface{}))
+			if value1 == "<nil>" {
+				value1 = ""
+			}
+			MapIDMinimum[colName] = value1
+		}
+
+		//
+		for _, Column1 := range ColumnsPK {
+			value := MapIDMinimum[Column1.Name]
+			Column1.IDMinimum = value
+		}
 	}
 
 	return err

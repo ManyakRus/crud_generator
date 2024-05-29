@@ -1,13 +1,14 @@
 package postgres
 
 import (
-	ConfigMain "github.com/ManyakRus/starter/config_main"
+	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"testing"
 )
 
 func TestFillMassTable(t *testing.T) {
-	ConfigMain.LoadEnv()
+	//ConfigMain.LoadEnv()
+	config.LoadSettingsTxt()
 	postgres_gorm.Connect()
 	defer postgres_gorm.CloseConnection()
 

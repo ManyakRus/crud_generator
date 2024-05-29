@@ -395,10 +395,28 @@ func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 func AddSkipNow(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	if Table1.IDMinimum == "" || Table1.IDMinimum == "0" {
-		TextFind := "(t *testing.T) {"
-		Otvet = strings.ReplaceAll(Otvet, TextFind, TextFind+"\n\tt.SkipNow() //now rows in DB\n")
+	Columns := FindPrimaryKeyColumns(Table1)
+	if Columns == nil {
+		return Otvet
 	}
+
+	//проверка ИД=""
+	is_no_zero := true
+	for _, Column1 := range Columns {
+		if Column1.IDMinimum == "" || Column1.IDMinimum == "0" {
+			is_no_zero = false
+			break
+		}
+	}
+
+	//если нет пустых то возврат
+	if is_no_zero == true {
+		return Otvet
+	}
+
+	//добавляем t.SkipNow()
+	TextFind := "(t *testing.T) {"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextFind+"\n\tt.SkipNow() //now rows in DB\n")
 
 	return Otvet
 }
@@ -1945,7 +1963,7 @@ func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 		return Otvet
 	}
 
-	IDMinimum := Table1.IDMinimum
+	IDMinimum := PrimaryKeyColumn.IDMinimum
 	if IDMinimum == "" {
 		IDMinimum = FindTextDefaultValue(PrimaryKeyColumn.TypeGo)
 	}
@@ -1953,7 +1971,7 @@ func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 	switch PrimaryKeyColumn.TypeGo {
 	case "uuid.UUID":
 		{
-			if Table1.IDMinimum == "" {
+			if PrimaryKeyColumn.IDMinimum == "" {
 				Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_ID_Test = `+IDMinimum+``)
 			} else {
 				Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_ID_Test, _ = uuid.Parse("`+IDMinimum+`")`)
@@ -1984,7 +2002,7 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 		return Otvet
 	}
 
-	IDMinimum := Table1.IDMinimum
+	IDMinimum := PrimaryKeyColumn.IDMinimum
 	if IDMinimum == "" {
 		IDMinimum = FindTextDefaultValue(PrimaryKeyColumn.TypeGo)
 	}
@@ -1993,7 +2011,7 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 	switch PrimaryKeyColumn.TypeGo {
 	case "uuid.UUID":
 		{
-			if Table1.IDMinimum == "" {
+			if PrimaryKeyColumn.IDMinimum == "" {
 				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test = `+IDMinimum+``)
 			} else {
 				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test, _ = uuid.Parse("`+IDMinimum+`")`)

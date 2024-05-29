@@ -12,6 +12,7 @@ type Column struct {
 	NameGo       string `gorm:-`
 	TypeGo       string `gorm:-`
 	IsPrimaryKey bool   `json:"is_primary_key"   gorm:"column:is_primary_key;default:false"`
+	IDMinimum    string
 }
 
 type Table struct {
@@ -19,9 +20,9 @@ type Table struct {
 	//Element     *etree.Element
 	MapColumns map[string]*Column
 	//Columns []Column
-	OrderNumber            int
-	NameGo                 string
-	IDMinimum              string
+	OrderNumber int
+	NameGo      string
+	//IDMinimum              string
 	Comment                string `json:"table_comment"   gorm:"column:table_comment;default:''"`
 	RowsCount              int64
 	PrimaryKeyColumnsCount int
