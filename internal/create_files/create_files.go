@@ -1934,56 +1934,71 @@ func Is_UUID_Type(TypeGo string) bool {
 	return Otvet
 }
 
-//// ConvertID_toTypeID - заменяет int64(m.ID) на m.ID
-//func ConvertID_toTypeID(Text string, Table1 *types.Table) string {
-//	Otvet := Text
-//
-//	//заменим ID-Alias на ID
-//	TableName := Table1.Name
-//	IDName, _ := FindPrimaryKeyNameType(Table1)
-//	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
-//	if ok == true {
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", ""+TextConvert+"(m.ID)")
-//		return Otvet
-//	}
-//
-//	//заменим int64(m.ID) на m.ID
-//	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", "m.ID")
-//
-//	return Otvet
-//}
-
 // Replace_Postgres_ID_Test - заменяет текст "const Postgres_ID_Test = 0" на нужный ИД
 func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	TextFind := "const Postgres_ID_Test = 0"
-	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
-	if PrimaryKeyColumn == nil {
-		return Otvet
+	if Table1.PrimaryKeyColumnsCount == 1 {
+		PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+		if PrimaryKeyColumn == nil {
+			return Otvet
+		}
+
+		Otvet = Replace_Postgres_ID_Test1(Otvet, Table1, PrimaryKeyColumn)
+		TextFind := "Postgres_ID_Test"
+		PrimaryKeyName := strings.ToUpper(PrimaryKeyColumn.NameGo)
+		Otvet = strings.ReplaceAll(Otvet, TextFind, `Postgres_`+PrimaryKeyName+`_Test`)
+	} else {
+		Otvet = Replace_Postgres_ID_Test_ManyPK(Otvet, Table1)
 	}
 
+	return Otvet
+}
+
+// Replace_Postgres_ID_Test_ManyPK - заменяет текст "const Postgres_ID_Test = 0" на нужные ИД, для много колонок PrimaryKey
+func Replace_Postgres_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TextFind := "const Postgres_ID_Test = 0\n"
+
+	TextNew := ""
+	MassPK := FindPrimaryKeyColumns(Table1)
+	for _, PrimaryKeyColumn := range MassPK {
+		TextNew = TextNew + Replace_Postgres_ID_Test1(TextFind, Table1, PrimaryKeyColumn)
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	return Otvet
+}
+
+// Replace_Postgres_ID_Test1 - заменяет текст "const Postgres_ID_Test = 0" на нужный ИД
+func Replace_Postgres_ID_Test1(Text string, Table1 *types.Table, PrimaryKeyColumn *types.Column) string {
+	Otvet := Text
+
+	TextFind := "const Postgres_ID_Test = 0"
 	IDMinimum := PrimaryKeyColumn.IDMinimum
 	if IDMinimum == "" {
 		IDMinimum = FindTextDefaultValue(PrimaryKeyColumn.TypeGo)
 	}
 
+	PrimaryKeyName := strings.ToUpper(PrimaryKeyColumn.NameGo)
+
 	switch PrimaryKeyColumn.TypeGo {
 	case "uuid.UUID":
 		{
 			if PrimaryKeyColumn.IDMinimum == "" {
-				Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_ID_Test = `+IDMinimum+``)
+				Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_`+PrimaryKeyName+`_Test = `+IDMinimum+``)
 			} else {
-				Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_ID_Test, _ = uuid.Parse("`+IDMinimum+`")`)
+				Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_`+PrimaryKeyName+`_Test, _ = uuid.Parse("`+IDMinimum+`")`)
 			}
 		}
 	case "string":
 		{
-			Otvet = strings.ReplaceAll(Otvet, TextFind, `const Postgres_ID_Test = "`+IDMinimum+`"`)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `const Postgres_`+PrimaryKeyName+`_Test = "`+IDMinimum+`"`)
 		}
 	default:
 		{
-			Otvet = strings.ReplaceAll(Otvet, TextFind, "const Postgres_ID_Test = "+IDMinimum)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `const Postgres_`+PrimaryKeyName+`_Test = `+IDMinimum)
 		}
 	}
 
