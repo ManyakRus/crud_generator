@@ -1947,7 +1947,8 @@ func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 		Otvet = Replace_Postgres_ID_Test1(Otvet, Table1, PrimaryKeyColumn)
 		TextFind := "Postgres_ID_Test"
 		PrimaryKeyName := strings.ToUpper(PrimaryKeyColumn.NameGo)
-		Otvet = strings.ReplaceAll(Otvet, TextFind, `Postgres_`+PrimaryKeyName+`_Test`)
+		Otvet = strings.ReplaceAll(Otvet, TextFind, PrimaryKeyName+`_Test`)
+		//Otvet = strings.ReplaceAll(Otvet, TextFind, `Postgres_`+PrimaryKeyName+`_Test`)
 	} else {
 		Otvet = Replace_Postgres_ID_Test_ManyPK(Otvet, Table1)
 	}
@@ -1959,14 +1960,97 @@ func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 func Replace_Postgres_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	TextFind := "const Postgres_ID_Test = 0\n"
-
-	TextNew := ""
 	MassPK := FindPrimaryKeyColumns(Table1)
-	for _, PrimaryKeyColumn := range MassPK {
-		TextNew = TextNew + Replace_Postgres_ID_Test1(TextFind, Table1, PrimaryKeyColumn)
+	if len(MassPK) == 0 {
+		return Otvet
+	}
+
+	//заменим const Postgres_ID_Test = 0
+	TextFind := "const Postgres_ID_Test = 0\n"
+	TextNew := ""
+	for _, PrimaryKey1 := range MassPK {
+		TextNew = TextNew + Replace_Postgres_ID_Test1(TextFind, Table1, PrimaryKey1)
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим Otvet.ID = Postgres_ID_Test
+	TextFind = "\tOtvet.ID = Postgres_ID_Test\n"
+	TextNew = ""
+	for _, PrimaryKey1 := range MassPK {
+		Text1 := FindTextIDMinimumVariable(PrimaryKey1, "Otvet."+PrimaryKey1.NameGo)
+		TextNew = TextNew + "\t" + Text1 + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим m.ID = Postgres_ID_Test
+	TextFind = "\tm.ID = Postgres_ID_Test\n"
+	TextNew = ""
+	for _, PrimaryKey1 := range MassPK {
+		Text1 := FindTextIDMinimumVariable(PrimaryKey1, "m."+PrimaryKey1.NameGo)
+		TextNew = TextNew + "\t" + Text1 + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим m1.ID = Postgres_ID_Test
+	TextFind = "\tm1.ID = Postgres_ID_Test\n"
+	TextNew = ""
+	for _, PrimaryKey1 := range MassPK {
+		Text1 := FindTextIDMinimumVariable(PrimaryKey1, "m1."+PrimaryKey1.NameGo)
+		TextNew = TextNew + "\t" + Text1 + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим ReadFromCache(Postgres_ID_Test)
+	TextFind = "ReadFromCache(Postgres_ID_Test)"
+	TextNew = "ReadFromCache("
+	Comma := ""
+	for _, PrimaryKey1 := range MassPK {
+		Name := FindNameGoTest(PrimaryKey1)
+		TextNew = TextNew + Comma + Name
+		Comma = ", "
+	}
+	TextNew = TextNew + ")"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//	//удалим лишний код
+	//	TextDelete := `	if Otvet.ID != Postgres_ID_Test {
+	//		t.Error(TableName + "_test.TestRead() error ID != ", Postgres_ID_Test)
+	//	} else {
+	//		t.Log(TableName+"_test.TestRead() Otvet: ", Otvet.ID)
+	//	}
+	//`
+	//	Otvet = strings.ReplaceAll(Otvet, TextDelete, "")
+
+	//заменим ненужные Otvet.ID на Otvet.Name
+	PrimaryKey1 := MassPK[0]
+	Otvet = strings.ReplaceAll(Otvet, " Otvet.ID ", " Otvet."+PrimaryKey1.NameGo+" ")
+	Otvet = strings.ReplaceAll(Otvet, " Otvet.ID)", " Otvet."+PrimaryKey1.NameGo+")")
+	Name := FindNameGoTest(PrimaryKey1)
+	Otvet = strings.ReplaceAll(Otvet, "Postgres_ID_Test", Name)
+
+	return Otvet
+}
+
+// FindNameGoTest - находит имя переменной для тестов
+func FindNameGoTest(Column1 *types.Column) string {
+	Otvet := ""
+	Otvet = strings.ToUpper(Column1.NameGo) + "_Test"
+	return Otvet
+}
+
+// FindTextNameTest_ManyPK - находит текст "ID, ID" для тестов
+func FindTextNameTest_ManyPK(Table1 *types.Table) string {
+	Otvet := ""
+
+	MassPK := FindPrimaryKeyColumns(Table1)
+	if len(MassPK) == 0 {
+		return Otvet
+	}
+
+	for _, PrimaryKey1 := range MassPK {
+		Otvet = Otvet + FindNameGoTest(PrimaryKey1) + ", "
+	}
+	Otvet = strings.TrimSuffix(Otvet, ", ")
 
 	return Otvet
 }
@@ -1981,24 +2065,72 @@ func Replace_Postgres_ID_Test1(Text string, Table1 *types.Table, PrimaryKeyColum
 		IDMinimum = FindTextDefaultValue(PrimaryKeyColumn.TypeGo)
 	}
 
-	PrimaryKeyName := strings.ToUpper(PrimaryKeyColumn.NameGo)
-
+	Name := FindNameGoTest(PrimaryKeyColumn)
+	sIDMinimum := FindTextIDMinimum(PrimaryKeyColumn)
 	switch PrimaryKeyColumn.TypeGo {
 	case "uuid.UUID":
 		{
 			if PrimaryKeyColumn.IDMinimum == "" {
-				Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_`+PrimaryKeyName+`_Test = `+IDMinimum+``)
+				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+Name+` = `+sIDMinimum)
 			} else {
-				Otvet = strings.ReplaceAll(Otvet, TextFind, `var Postgres_`+PrimaryKeyName+`_Test, _ = uuid.Parse("`+IDMinimum+`")`)
+				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+Name+`, _ = `+sIDMinimum)
 			}
 		}
 	case "string":
 		{
-			Otvet = strings.ReplaceAll(Otvet, TextFind, `const Postgres_`+PrimaryKeyName+`_Test = "`+IDMinimum+`"`)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+Name+` = `+sIDMinimum+``)
 		}
 	default:
 		{
-			Otvet = strings.ReplaceAll(Otvet, TextFind, `const Postgres_`+PrimaryKeyName+`_Test = `+IDMinimum)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+Name+` = `+sIDMinimum)
+		}
+	}
+
+	return Otvet
+}
+
+// FindTextIDMinimumVariable - возвращает текст для присваивания переменной IDMinimum
+func FindTextIDMinimumVariable(Column1 *types.Column, VariableName string) string {
+	Otvet := ""
+
+	TextValue := FindTextIDMinimum(Column1)
+
+	IDMinimum := Column1.IDMinimum
+	switch Column1.TypeGo {
+	case "uuid.UUID":
+		{
+			if IDMinimum == "" {
+				Otvet = VariableName + " = " + "uuid.Nil"
+			} else {
+				Otvet = VariableName + ", _ = " + `uuid.Parse("` + IDMinimum + `")`
+			}
+		}
+	default:
+		{
+			Otvet = VariableName + " = " + TextValue
+		}
+	}
+
+	return Otvet
+}
+
+// FindTextIDMinimum - возвращает текст для IDMinimum, в зависимости от типа
+func FindTextIDMinimum(Column1 *types.Column) string {
+	Otvet := Column1.IDMinimum
+
+	IDMinimum := Column1.IDMinimum
+	switch Column1.TypeGo {
+	case "uuid.UUID":
+		{
+			if IDMinimum == "" {
+				Otvet = "uuid.Nil"
+			} else {
+				Otvet = `uuid.Parse("` + IDMinimum + `")`
+			}
+		}
+	case "string":
+		{
+			Otvet = `"` + IDMinimum + `"`
 		}
 	}
 
@@ -2010,7 +2142,7 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	TEXT_TEMPLATE_MODEL := config.Settings.TEXT_TEMPLATE_MODEL
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
 	TextFind := "const " + TEXT_TEMPLATE_MODEL + "_ID_Test = 0"
 	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
@@ -2023,23 +2155,24 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 	}
 	DefaultModelName := config.Settings.TEXT_TEMPLATE_MODEL
 
+	Name := FindNameGoTest(PrimaryKeyColumn)
 	switch PrimaryKeyColumn.TypeGo {
 	case "uuid.UUID":
 		{
 			if PrimaryKeyColumn.IDMinimum == "" {
-				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test = `+IDMinimum+``)
+				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+Name+` = `+IDMinimum+``)
 			} else {
-				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_ID_Test, _ = uuid.Parse("`+IDMinimum+`")`)
+				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+Name+`, _ = uuid.Parse("`+IDMinimum+`")`)
 			}
-			Otvet = strings.ReplaceAll(Otvet, ``+DefaultModelName+`_ID_Test`, ``+ModelName+`_ID_Test.String()`)
+			Otvet = strings.ReplaceAll(Otvet, ``+DefaultModelName+`_ID_Test`, ``+Name+`.String()`)
 		}
 	case "string":
 		{
-			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+ModelName+`_ID_Test = "`+IDMinimum+`"`)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+Name+` = "`+IDMinimum+`"`)
 		}
 	default:
 		{
-			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+ModelName+`_ID_Test = `+IDMinimum)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+Name+` = `+IDMinimum)
 		}
 	}
 

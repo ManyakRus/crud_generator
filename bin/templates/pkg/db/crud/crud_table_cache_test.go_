@@ -16,12 +16,14 @@ func TestReadFromCache(t *testing.T) {
 	defer postgres_gorm.CloseConnection()
 
 	//читаем из БД
-	m1, err := Crud_DB{}.ReadFromCache(Postgres_ID_Test)
+	m1 := lawsuit_status_types.LawsuitStatusType{}
+	m1.ID = Postgres_ID_Test
+	err = Crud_DB{}.Read(&m1)
 	if err != nil {
 		t.Errorf("TestReadFromCache() error:t %v", err)
 	}
 
-	//читаем из БД
+	//читаем из Кеша
 	m2, err := Crud_DB{}.ReadFromCache(Postgres_ID_Test)
 	if err != nil {
 		t.Errorf("TestReadFromCache() error:t %v", err)
