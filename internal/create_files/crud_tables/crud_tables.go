@@ -982,8 +982,9 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 			//TextIDMany := create_files.FindTextNameTest_ManyPK(Table1)
 			//TextCache = strings.ReplaceAll(TextCache, "ReadFromCache(Postgres_ID_Test)", "ReadFromCache("+TextIDMany+")")
 			//TextCache = create_files.Replace_Postgres_ID_Test(TextCache, Table1)
-			//EntityURL := create_files.FindModelTableURL(Table1.Name)
-			//TextCache = create_files.CheckAndAddImport(TextCache, EntityURL)
+			EntityURL := create_files.FindModelTableURL(Table1.Name)
+			TextCache = create_files.AddImport(TextCache, EntityURL)
+
 			TextCache = create_files.Replace_Postgres_ID_Test_ManyPK(TextCache, Table1)
 		}
 	}
