@@ -962,8 +962,8 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 		//DBConstantsURL := create_files.FindDBConstantsURL()
 		//TextCache = create_files.AddImport(TextCache, DBConstantsURL)
 		//
-		//ModelTableURL := create_files.FindModelTableURL(TableName)
-		//TextCache = create_files.AddImport(TextCache, ModelTableURL)
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextCache = create_files.AddImport(TextCache, ModelTableURL)
 
 		//TextCache = create_files.ConvertRequestIdToAlias(TextCache, Table1)
 		ConstantsURL := create_files.FindConstantsURL()
@@ -974,6 +974,9 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 
 		//тип ID кэша
 		if Table1.PrimaryKeyColumnsCount == 1 {
+			//Postgres_ID_Test = ID Minimum
+			TextCache = create_files.Replace_Postgres_ID_Test(TextCache, Table1)
+
 		} else {
 			TextIDMany := "(ID)"
 			TextIDMany = create_files.ReplaceIDtoID_Many(TextIDMany, Table1)

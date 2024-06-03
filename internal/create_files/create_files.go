@@ -2116,9 +2116,13 @@ func FindTextIDMinimumVariable(Column1 *types.Column, VariableName string) strin
 
 // FindTextIDMinimum - возвращает текст для IDMinimum, в зависимости от типа
 func FindTextIDMinimum(Column1 *types.Column) string {
-	Otvet := Column1.IDMinimum
+	Otvet := ""
 
 	IDMinimum := Column1.IDMinimum
+	if IDMinimum == "" {
+		IDMinimum = FindTextDefaultValue(Column1.TypeGo)
+	}
+
 	switch Column1.TypeGo {
 	case "uuid.UUID":
 		{
@@ -2131,6 +2135,10 @@ func FindTextIDMinimum(Column1 *types.Column) string {
 	case "string":
 		{
 			Otvet = `"` + IDMinimum + `"`
+		}
+	default:
+		{
+			Otvet = `` + IDMinimum + ``
 		}
 	}
 
@@ -2155,24 +2163,25 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 	}
 	DefaultModelName := config.Settings.TEXT_TEMPLATE_MODEL
 
+	ModelName := Table1.NameGo
 	Name := FindNameGoTest(PrimaryKeyColumn)
 	switch PrimaryKeyColumn.TypeGo {
 	case "uuid.UUID":
 		{
 			if PrimaryKeyColumn.IDMinimum == "" {
-				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+Name+` = `+IDMinimum+``)
+				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+"_"+Name+` = `+IDMinimum+``)
 			} else {
-				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+Name+`, _ = uuid.Parse("`+IDMinimum+`")`)
+				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+"_"+Name+`, _ = uuid.Parse("`+IDMinimum+`")`)
 			}
-			Otvet = strings.ReplaceAll(Otvet, ``+DefaultModelName+`_ID_Test`, ``+Name+`.String()`)
+			Otvet = strings.ReplaceAll(Otvet, ``+DefaultModelName+`_ID_Test`, ``+ModelName+`_`+Name+`.String()`)
 		}
 	case "string":
 		{
-			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+Name+` = "`+IDMinimum+`"`)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+ModelName+`_`+Name+` = "`+IDMinimum+`"`)
 		}
 	default:
 		{
-			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+Name+` = `+IDMinimum)
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+ModelName+`_`+Name+` = `+IDMinimum)
 		}
 	}
 

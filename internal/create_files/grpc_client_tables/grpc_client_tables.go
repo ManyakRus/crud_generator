@@ -605,6 +605,8 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 		//TextGRPC_Client = create_files.ConvertRequestIdToAlias(TextGRPC_Client, Table1)
 
+		TextGRPC_Client = create_files.Replace_Postgres_ID_Test(TextGRPC_Client, Table1)
+
 		TextGRPC_Client = create_files.ReplacePrimaryKeyOtvetID(TextGRPC_Client, Table1)
 
 		//замена m.ID = Postgres_ID_Test
@@ -678,6 +680,8 @@ func FindTextUpdateEveryColumnTest(TextGRPC_ClientUpdateFunc string, Table1 *typ
 // FindTextUpdateEveryColumnTest1 - возвращает текст для одной таблицы
 func FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextGRPC_ClientUpdateFunc
+
+	Otvet = create_files.Replace_Postgres_ID_Test(Otvet, Table1)
 
 	Otvet = create_files.ReplaceTextRequestID_and_Column(Otvet, Table1, Column1)
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
@@ -829,6 +833,7 @@ func CreateFiles_GRPC_Client_Cache_Test(Table1 *types.Table) error {
 		ModelTableName := create_files.FindModelTableURL(TableName)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ModelTableName)
 
+		TextGRPCClient = create_files.Replace_Postgres_ID_Test(TextGRPCClient, Table1)
 		////proto
 		//RepositoryGRPCProtoURL := create_files.FindProtoURL()
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCProtoURL)
