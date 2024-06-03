@@ -3,7 +3,6 @@ package server_grpc
 import (
 	"context"
 	"time"
-	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
@@ -17,8 +16,8 @@ func (s *ServerGRPC) LawsuitStatusType_ReadFromCache(ctx context.Context, Reques
 	var err error
 
 	//проверим контекст уже отменён
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return &Otvet, err
 	}
 

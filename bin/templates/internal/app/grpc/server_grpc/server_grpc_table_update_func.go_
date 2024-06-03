@@ -4,8 +4,8 @@ func (s *ServerGRPC) LawsuitStatusType_Update(ctx context.Context, Request *grpc
 	var err error
 
 	//проверим контекст уже отменён
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return &Otvet, err
 	}
 

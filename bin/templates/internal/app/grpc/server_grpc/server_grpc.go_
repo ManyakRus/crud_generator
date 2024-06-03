@@ -2,7 +2,6 @@ package server_grpc
 
 import (
 	"context"
-	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
@@ -15,8 +14,8 @@ func (s *ServerGRPC) LawsuitStatusType_Read(ctx context.Context, Request *grpc_p
 	var err error
 
 	//проверим контекст уже отменён
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return &Otvet, err
 	}
 
@@ -54,8 +53,8 @@ func (s *ServerGRPC) LawsuitStatusType_Delete(ctx context.Context, Request *grpc
 	var err error
 
 	//проверим контекст уже отменён
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return &Otvet, err
 	}
 
@@ -93,8 +92,8 @@ func (s *ServerGRPC) LawsuitStatusType_Restore(ctx context.Context, Request *grp
 	var err error
 
 	//проверим контекст уже отменён
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return &Otvet, err
 	}
 
@@ -132,8 +131,8 @@ func (s *ServerGRPC) LawsuitStatusType_Create(ctx context.Context, Request *grpc
 	var err error
 
 	//проверим контекст уже отменён
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return &Otvet, err
 	}
 
@@ -175,8 +174,8 @@ func (s *ServerGRPC) LawsuitStatusType_Update(ctx context.Context, Request *grpc
 	var err error
 
 	//проверим контекст уже отменён
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return &Otvet, err
 	}
 
@@ -218,8 +217,8 @@ func (s *ServerGRPC) LawsuitStatusType_Save(ctx context.Context, Request *grpc_p
 	var err error
 
 	//проверим контекст уже отменён
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return &Otvet, err
 	}
 
@@ -261,8 +260,8 @@ func (s *ServerGRPC) LawsuitStatusType_FindByExtID(ctx context.Context, Request 
 	var err error
 
 	//проверим контекст уже отменён
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return &Otvet, err
 	}
 
