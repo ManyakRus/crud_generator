@@ -95,7 +95,7 @@ TEMPLATE_FOLDER_CRUD_FUNCTIONS="pkg/db/crud_functions"
 #TEXT_TEMPLATE_MODEL - model name text in templates, for replace to new model names
 TEXT_TEMPLATE_MODEL="LawsuitStatusType"
 
-#TEXT_TEMPLATE_TABLENAME - table name text in tamplates, for replace to new table names
+#TEXT_TEMPLATE_TABLENAME - table name text in templates, for replace to new table names
 TEXT_TEMPLATE_TABLENAME="lawsuit_status_types"
 
 #USE_DEFAULT_TEMPLATE - "true" will do default text replaces. "false" - for use own templates

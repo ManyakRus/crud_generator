@@ -26,7 +26,7 @@ func (s *ServerGRPC) LawsuitStatusType_Update(ctx context.Context, Request *grpc
 	db := postgres_gorm.GetConnection()
 	ID := Request.ID
 	m := &lawsuit_status_types.LawsuitStatusType{}
-	m.ID = ID
+	m.ID = AliasFromInt(ID)
 	m.ColumnName = value
 	err = crud_lawsuit_status_types.Update_ColumnName_ctx(ctx, db, m)
 	if err != nil {

@@ -18,10 +18,17 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
 	for _, Table1 := range MapAll {
+		////проверка что таблица нормальная
+		//err1 := create_files.IsGoodTable(Table1)
+		//if err1 != nil {
+		//	log.Warn(err1)
+		//	continue
+		//}
+
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
-		if err1 != nil {
-			log.Warn(err1)
+		err2 := create_files.IsGoodTableNamePrefix(Table1)
+		if err2 != nil {
+			log.Warn(err2)
 			continue
 		}
 
@@ -145,6 +152,8 @@ func CreateFiles(Table1 *types.Table) error {
 		TextGRPCServer = DeleteFuncFind_byExtID(TextGRPCServer, Table1)
 	}
 
+	TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
+
 	//создание текста
 	ModelName := Table1.NameGo
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
@@ -218,6 +227,9 @@ func CreateFilesTest(Table1 *types.Table) error {
 
 		//замена "postgres_gorm.Connect_WithApplicationName("
 		TextGRPCServer = create_files.ReplaceConnect_WithApplicationName(TextGRPCServer)
+
+		if Table1.PrimaryKeyColumnsCount > 1 {
+		}
 
 		//Postgres_ID_Test = ID Minimum
 		TextGRPCServer = create_files.Replace_Model_ID_Test(TextGRPCServer, Table1)
@@ -515,6 +527,9 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
 	TextRequest, _, TextRequestFieldGolang, TextGolangLine := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
+	if Table1.PrimaryKeyColumnsCount > 1 {
+		TextRequest = create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
+	}
 
 	//замена ID на PrimaryKey
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
@@ -685,14 +700,21 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	//if TextGolangLine != "" {
 	//	Otvet = strings.ReplaceAll(Otvet, "value := Request.FieldName", TextGolangLine)
 	//}
+
+	if Table1.PrimaryKeyColumnsCount == 1 {
+	} else {
+		TextRequest2 = create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
+		Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId{}", "grpc_proto."+TextRequest2+"{}")
+	}
+
+	Otvet = strings.ReplaceAll(Otvet, "Request.ColumnName", TextRequestFieldGolang)
+	Otvet = strings.ReplaceAll(Otvet, "Request2.ColumnName", "Request2."+TextRequestField)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", "grpc_proto."+TextRequest2)
+	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", TextModelColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update(", ModelName+"_"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	Otvet = strings.ReplaceAll(Otvet, "Request.ColumnName", TextRequestFieldGolang)
-	Otvet = strings.ReplaceAll(Otvet, "Request2.ColumnName", "Request2."+TextRequestField)
-	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", TextModelColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 
 	return Otvet
 }
@@ -741,13 +763,24 @@ func CreateFilesCache(Table1 *types.Table) error {
 		CrudTableURL := create_files.FindCrudTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
 
-		//замена RequestId{}
-		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
-
 		//добавим импорт uuid
 		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
 
 	}
+
+	if Table1.PrimaryKeyColumnsCount == 1 {
+	} else {
+		TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
+		TextIDMany := ", ID)"
+		TextIDMany = create_files.ReplaceIDtoID_Many(TextIDMany, Table1)
+		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "(ID)", "("+Table1.Name+".StringIdentifier"+TextIDMany+")")
+		TextGRPCServer = create_files.ReplaceIDtoID_Many(TextGRPCServer, Table1)
+		//замена ID на PrimaryKey
+
+	}
+
+	//замена RequestId{}
+	TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
 
 	//создание текста
 	ModelName := Table1.NameGo
@@ -815,11 +848,11 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 		//замена "postgres_gorm.Connect_WithApplicationName("
 		TextGRPCServer = create_files.ReplaceConnect_WithApplicationName(TextGRPCServer)
 
-		//замена RequestId{}
-		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
-
 		//Postgres_ID_Test = ID Minimum
 		TextGRPCServer = create_files.Replace_Model_ID_Test(TextGRPCServer, Table1)
+
+		//замена RequestId{}
+		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
 
 		//добавим импорт uuid
 		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
