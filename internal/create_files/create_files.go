@@ -277,13 +277,16 @@ func ReplacePrimaryKeyOtvetID1(Text string, Table1 *types.Table) string {
 func ReplacePrimaryKeyOtvetID_Many(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	Otvet = ReplacePrimaryKeyOtvetID_Many1(Text, Table1, "Otvet")
+	Otvet = ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "Otvet")
+	Otvet = ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "Request")
+
+	Otvet = ReplacePrimaryKeyOtvetID1(Otvet, Table1) //для тестов
 
 	return Otvet
 }
 
-// ReplacePrimaryKeyOtvetID_Many1 - заменяет "Otvet.ID" на название колонки PrimaryKey
-func ReplacePrimaryKeyOtvetID_Many1(Text string, Table1 *types.Table, VariableName string) string {
+// ReplacePrimaryKeyOtvetID_ManyPK1 - заменяет "Otvet.ID" на название колонки PrimaryKey
+func ReplacePrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, VariableName string) string {
 	Otvet := Text
 
 	//сортировка по названию таблиц
@@ -295,6 +298,9 @@ func ReplacePrimaryKeyOtvetID_Many1(Text string, Table1 *types.Table, VariableNa
 
 	TextIDRequestID := ""
 	TextOtvetIDID := ""
+	TextRequestIDmID := ""
+	TextRequestIDInt64ID := ""
+	TextOtvetIDmID := ""
 	for _, key1 := range keys {
 		Column1, _ := Table1.MapColumns[key1]
 		if Column1.IsPrimaryKey != true {
@@ -303,15 +309,20 @@ func ReplacePrimaryKeyOtvetID_Many1(Text string, Table1 *types.Table, VariableNa
 		TextOtvetIDID = TextOtvetIDID + "\t" + VariableName + "." + Column1.NameGo + " = " + Column1.NameGo + "\n"
 		RequestColumnName := FindRequestColumnName(Table1, Column1)
 		TextIDRequestID = TextIDRequestID + "\t" + Column1.NameGo + " := Request." + RequestColumnName + "\n"
+		TextM := ConvertColumnToAlias(Otvet, Table1, Column1, "m")
+		TextRequestIDmID = TextRequestIDmID + "\t" + VariableName + "." + RequestColumnName + " = " + TextM + "\n"
+		TextInt64ID := FindTextConvertGolangTypeToProtobufType(Table1, Column1, "")
+		TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
+		TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
 	}
 
 	Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = AliasFromInt(ID)", TextOtvetIDID)
+	Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = IntFromAlias(m.ID)", TextRequestIDmID)
+	Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = int64(ID)", TextRequestIDInt64ID)
+	Otvet = strings.ReplaceAll(Otvet, "\tOtvet.ID = "+VariableName+".ID\n", TextOtvetIDmID)
 
 	//заменим ID := Request.ID
 	Otvet = strings.ReplaceAll(Otvet, "\tID := Request.ID\n", TextIDRequestID)
-
-	//заменим int64(m.ID)
-	Otvet = ReplacePrimaryKeyM_ID1(Otvet, Table1)
 
 	return Otvet
 }
@@ -334,7 +345,11 @@ func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 func ReplacePrimaryKeyM_ManyPK(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	Otvet = ReplacePrimaryKeyOtvetID_Many1(Text, Table1, "m")
+	Otvet = ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "m")
+	Otvet = ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "Request")
+
+	//заменим int64(m.ID)
+	Otvet = ReplacePrimaryKeyM_ID1(Otvet, Table1)
 
 	return Otvet
 }
@@ -1654,12 +1669,7 @@ func ConvertRequestIdToAlias(Text string, Table1 *types.Table) string {
 		return Otvet
 	}
 
-	URL := FindURL_Alias()
-	if URL == "" {
-		return Otvet
-	}
-
-	Otvet = AddImport(Otvet, URL)
+	Otvet = CheckAndAddImportAlias(Otvet)
 
 	return Otvet
 }
@@ -1690,6 +1700,29 @@ func ConvertIDToAlias_OtvetID(Text string, Table1 *types.Table) string {
 	}
 
 	Otvet = AddImport(Otvet, URL)
+
+	return Otvet
+}
+
+// ConvertColumnToAlias - заменяет "Otvet.ID = ID" на "Otvet.ID = alias.Name(ID)"
+func ConvertColumnToAlias(Text string, Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+	Otvet := VariableName + "." + Column1.NameGo
+
+	TableName := Table1.Name
+	IDName := Column1.Name
+	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+	if ok == false {
+		return Otvet
+	}
+
+	if TextConvert[:6] != "alias." {
+		return Otvet
+	}
+
+	Otvet = TextConvert + "(" + VariableName + "." + Column1.NameGo + ")"
+
+	//добавим испорт
+	Text = CheckAndAddImportAlias(Text)
 
 	return Otvet
 }
@@ -2380,6 +2413,19 @@ func ReplaceIDtoID_Many(Text string, Table1 *types.Table) string {
 func ReplaceOtvetIDEqual1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
+	if Table1.PrimaryKeyColumnsCount == 1 {
+		Otvet = ReplaceOtvetIDEqual1_1(Text, Table1)
+	} else {
+		Otvet = ReplaceOtvetIDEqual1_ManyPK(Text, Table1)
+	}
+
+	return Otvet
+}
+
+// ReplaceOtvetIDEqual1_1 - заменяет Otvet.ID = -1
+func ReplaceOtvetIDEqual1_1(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
 	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet
@@ -2388,6 +2434,48 @@ func ReplaceOtvetIDEqual1(Text string, Table1 *types.Table) string {
 	Value := FindNegativeValue(PrimaryKeyColumn.TypeGo)
 
 	Otvet = strings.ReplaceAll(Otvet, "Otvet.ID = -1", "Otvet.ID = "+Value)
+
+	return Otvet
+}
+
+// ReplaceOtvetIDEqual1_ManyPK - заменяет Otvet.ID = -1
+func ReplaceOtvetIDEqual1_ManyPK(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	PrimaryKeyColumns := FindPrimaryKeyColumns(Table1)
+	if len(PrimaryKeyColumns) == 0 {
+		return Otvet
+	}
+
+	TextFind := "\tOtvet.ID = -1\n"
+	TextNew := ""
+	for _, ColumnPK1 := range PrimaryKeyColumns {
+		Value := FindNegativeValue(ColumnPK1.TypeGo)
+		TextNew = TextNew + "\tOtvet." + ColumnPK1.NameGo + " = " + Value + "\n"
+	}
+
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	return Otvet
+}
+
+// ReplaceOtvetIDEqual0 - заменяет Otvet.ID = -1
+func ReplaceOtvetIDEqual0(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	PrimaryKeyColumns := FindPrimaryKeyColumns(Table1)
+	if len(PrimaryKeyColumns) == 0 {
+		return Otvet
+	}
+
+	TextFind := "\tOtvet.ID = 0\n"
+	TextNew := ""
+	for _, ColumnPK1 := range PrimaryKeyColumns {
+		Value := FindTextDefaultValue(ColumnPK1.TypeGo)
+		TextNew = TextNew + "\tOtvet." + ColumnPK1.NameGo + " = " + Value + "\n"
+	}
+
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 
 	return Otvet
 }

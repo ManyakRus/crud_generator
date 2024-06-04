@@ -876,15 +876,8 @@ func CreateFilesCache(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCache = create_files.AddImport(TextCache, ModelTableURL)
 
-		TextCache = create_files.ReplacePrimaryKeyOtvetID(TextCache, Table1)
 		//TextCache = create_files.ConvertRequestIdToAlias(TextCache, Table1)
 	}
-
-	//замена слов
-	ModelName := Table1.NameGo
-	TextCache = strings.ReplaceAll(TextCache, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextCache = strings.ReplaceAll(TextCache, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextCache = config.Settings.TEXT_MODULE_GENERATED + TextCache
 
 	//alias
 	TextCache = create_files.ConvertIDToAlias_OtvetID(TextCache, Table1)
@@ -901,6 +894,7 @@ func CreateFilesCache(Table1 *types.Table) error {
 		_, ColumnTypeGo := create_files.FindPrimaryKeyNameTypeGo(Table1)
 		TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU["+ColumnTypeGo)
 		TextCache = strings.ReplaceAll(TextCache, "ID int64", "ID "+ColumnTypeGo)
+		TextCache = create_files.ReplacePrimaryKeyOtvetID(TextCache, Table1)
 	} else {
 		TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU[string")
 		TextCache = create_files.ReplacePrimaryKeyOtvetID_Many(TextCache, Table1)
@@ -912,6 +906,12 @@ func CreateFilesCache(Table1 *types.Table) error {
 
 	//uuid
 	TextCache = create_files.CheckAndAddImportUUID_FromText(TextCache)
+
+	//замена слов
+	ModelName := Table1.NameGo
+	TextCache = strings.ReplaceAll(TextCache, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextCache = strings.ReplaceAll(TextCache, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextCache = config.Settings.TEXT_MODULE_GENERATED + TextCache
 
 	//удаление пустого импорта
 	TextCache = create_files.DeleteEmptyImport(TextCache)

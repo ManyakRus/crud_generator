@@ -18,10 +18,17 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
 	for _, Table1 := range MapAll {
+		////проверка что таблица нормальная
+		//err1 := create_files.IsGoodTable(Table1)
+		//if err1 != nil {
+		//	log.Warn(err1)
+		//	continue
+		//}
+
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
-		if err1 != nil {
-			log.Warn(err1)
+		err2 := create_files.IsGoodTableNamePrefix(Table1)
+		if err2 != nil {
+			log.Warn(err2)
 			continue
 		}
 
@@ -113,11 +120,6 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCClient = create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
 
 	//создание текста
-	ModelName := Table1.NameGo
-	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
-
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		//TextGRPCClient = create_files.ReplaceServiceURLImports(TextGRPCClient)
@@ -165,6 +167,12 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCClient = create_files.DeleteFuncDelete(TextGRPCClient, Table1)
 	TextGRPCClient = create_files.DeleteFuncRestore(TextGRPCClient, Table1)
 	TextGRPCClient = create_files.DeleteFuncFind_byExtID(TextGRPCClient, Table1)
+
+	//замена имени таблицы
+	ModelName := Table1.NameGo
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
 
 	//удаление пустого импорта
 	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
@@ -221,6 +229,9 @@ func CreateFilesTest(Table1 *types.Table) error {
 
 		//замена Otvet.ID = -1
 		TextGRPCClient = create_files.ReplaceOtvetIDEqual1(TextGRPCClient, Table1)
+
+		//замена Otvet.ID = 0
+		TextGRPCClient = create_files.ReplaceOtvetIDEqual0(TextGRPCClient, Table1)
 
 		//замена ID на PrimaryKey
 		TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)
@@ -514,6 +525,8 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
 	_, TextRequestFieldName, _, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
+	TextRequest := create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 
 	//замена RequestId{}
 	Otvet = create_files.ReplaceTextRequestID_and_Column(Otvet, Table1, Column1)
@@ -532,7 +545,6 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	Otvet = strings.ReplaceAll(Otvet, " Update(", " "+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	//Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", ColumnNameGolang)
 	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", " "+IDTypeGo+"(m.ID)")
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
@@ -771,6 +783,9 @@ func CreateFiles_GRPC_Client_Cache(Table1 *types.Table) error {
 		//grpc_nrpc
 		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
+
+		//замена Request.ID = Int64(ID)
+		TextGRPCClient = create_files.ReplacePrimaryKeyM_ID(TextGRPCClient, Table1)
 
 		//замена RequestId{}
 		TextGRPCClient = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCClient, Table1)
