@@ -118,17 +118,10 @@ import (`
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
 
-		////проверка что таблица нормальная
-		//err1 := create_files.IsGoodTable(Table1)
-		//if err1 != nil {
-		//	log.Warn(err1)
-		//	continue
-		//}
-
 		//проверка что таблица нормальная
-		err2 := create_files.IsGoodTableNamePrefix(Table1)
-		if err2 != nil {
-			log.Warn(err2)
+		err1 := create_files.IsGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
 			continue
 		}
 
@@ -215,17 +208,10 @@ func InitCrudTransport_DB() {`
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
 
-		////проверка что таблица нормальная
-		//err1 := create_files.IsGoodTable(Table1)
-		//if err1 != nil {
-		//	log.Warn(err1)
-		//	continue
-		//}
-
 		//проверка что таблица нормальная
-		err2 := create_files.IsGoodTableNamePrefix(Table1)
-		if err2 != nil {
-			log.Warn(err2)
+		err1 := create_files.IsGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
 			continue
 		}
 
@@ -270,17 +256,10 @@ func InitCrudTransport_GRPC() {`
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
 
-		////проверка что таблица нормальная
-		//err1 := create_files.IsGoodTable(Table1)
-		//if err1 != nil {
-		//	log.Warn(err1)
-		//	continue
-		//}
-
 		//проверка что таблица нормальная
-		err2 := create_files.IsGoodTableNamePrefix(Table1)
-		if err2 != nil {
-			log.Warn(err2)
+		err1 := create_files.IsGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
 			continue
 		}
 
@@ -324,17 +303,10 @@ func InitCrudTransport_NRPC() {`
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
 
-		////проверка что таблица нормальная
-		//err1 := create_files.IsGoodTable(Table1)
-		//if err1 != nil {
-		//	log.Warn(err1)
-		//	continue
-		//}
-
 		//проверка что таблица нормальная
-		err2 := create_files.IsGoodTableNamePrefix(Table1)
-		if err2 != nil {
-			log.Warn(err2)
+		err1 := create_files.IsGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
 			continue
 		}
 
@@ -436,17 +408,10 @@ func initCrudTransport_manual_DB() {`
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
 
-		////проверка что таблица нормальная
-		//err1 := create_files.IsGoodTable(Table1)
-		//if err1 != nil {
-		//	log.Warn(err1)
-		//	continue
-		//}
-
 		//проверка что таблица нормальная
-		err2 := create_files.IsGoodTableNamePrefix(Table1)
-		if err2 != nil {
-			log.Warn(err2)
+		err1 := create_files.IsGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
 			continue
 		}
 
@@ -490,17 +455,10 @@ func initCrudTransport_manual_GRPC() {`
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
 
-		////проверка что таблица нормальная
-		//err1 := create_files.IsGoodTable(Table1)
-		//if err1 != nil {
-		//	log.Warn(err1)
-		//	continue
-		//}
-
 		//проверка что таблица нормальная
-		err2 := create_files.IsGoodTableNamePrefix(Table1)
-		if err2 != nil {
-			log.Warn(err2)
+		err1 := create_files.IsGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
 			continue
 		}
 
@@ -543,17 +501,10 @@ func initCrudTransport_manual_NRPC() {`
 			log.Panic("MapAll[key1] not found, key: ", key1)
 		}
 
-		////проверка что таблица нормальная
-		//err1 := create_files.IsGoodTable(Table1)
-		//if err1 != nil {
-		//	log.Warn(err1)
-		//	continue
-		//}
-
 		//проверка что таблица нормальная
-		err2 := create_files.IsGoodTableNamePrefix(Table1)
-		if err2 != nil {
-			log.Warn(err2)
+		err1 := create_files.IsGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
 			continue
 		}
 

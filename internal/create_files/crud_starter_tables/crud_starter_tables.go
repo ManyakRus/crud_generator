@@ -17,17 +17,10 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
 	for _, Table1 := range MapAll {
-		////проверка что таблица нормальная
-		//err1 := create_files.IsGoodTable(Table1)
-		//if err1 != nil {
-		//	log.Warn(err1)
-		//	continue
-		//}
-
 		//проверка что таблица нормальная
-		err2 := create_files.IsGoodTableNamePrefix(Table1)
-		if err2 != nil {
-			log.Warn(err2)
+		err1 := create_files.IsGoodTable(Table1)
+		if err1 != nil {
+			log.Warn(err1)
 			continue
 		}
 

@@ -446,7 +446,8 @@ func FillIDMinimum_ManyPK(MapTable map[string]*types.Table) error {
 			TextSQL = TextSQL + ` 
 				FROM
 					"` + Schema + `"."` + TableName + `" 
-				WHERE 1=1`
+				WHERE 1=1
+`
 
 			for _, Column1 := range ColumnsPK {
 				DefaultValueSQL := create_files.FindTextDefaultValueSQL(Column1.TypeGo)
@@ -464,7 +465,8 @@ func FillIDMinimum_ManyPK(MapTable map[string]*types.Table) error {
 			TextSQL = TextSQL + ` 
 				FROM
 					"` + Schema + `"."` + TableName + `" 
-				WHERE 1=1`
+				WHERE 1=1
+`
 
 			for _, Column1 := range ColumnsPK {
 				TextSQL += `and ` + Column1.Name + ` is not null `
@@ -499,8 +501,9 @@ func FillIDMinimum_ManyPK(MapTable map[string]*types.Table) error {
 			log.Panic("Rows() Wrong SQL query: ", TextSQL, " error: ", err)
 		}
 		has_next := rows.Next()
-		if has_next == false {
-			log.Panic("Next() Wrong SQL query: ", TextSQL, " error: ", err)
+		if has_next == false { //нет строк
+			//log.Panic("Next() Wrong SQL query: ", TextSQL, " error: ", err)
+			continue
 		}
 		ColumnsGorm, err := rows.Columns()
 

@@ -301,6 +301,8 @@ func ReplacePrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variable
 	TextRequestIDmID := ""
 	TextRequestIDInt64ID := ""
 	TextOtvetIDmID := ""
+	TextMID0 := ""
+	TextOR := ""
 	for _, key1 := range keys {
 		Column1, _ := Table1.MapColumns[key1]
 		if Column1.IsPrimaryKey != true {
@@ -314,12 +316,17 @@ func ReplacePrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variable
 		TextInt64ID := FindTextConvertGolangTypeToProtobufType(Table1, Column1, "")
 		TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
 		TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
+
+		DefaultValue := FindTextDefaultValue(Column1.TypeGo)
+		TextMID0 = TextMID0 + TextOR + " (" + VariableName + "." + Column1.NameGo + " == " + DefaultValue + ")"
+		TextOR = " || "
 	}
 
 	Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = AliasFromInt(ID)", TextOtvetIDID)
 	Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = IntFromAlias(m.ID)", TextRequestIDmID)
 	Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = int64(ID)", TextRequestIDInt64ID)
 	Otvet = strings.ReplaceAll(Otvet, "\tOtvet.ID = "+VariableName+".ID\n", TextOtvetIDmID)
+	Otvet = strings.ReplaceAll(Otvet, " IntFromAlias("+VariableName+".ID) == 0", TextMID0)
 
 	//заменим ID := Request.ID
 	Otvet = strings.ReplaceAll(Otvet, "\tID := Request.ID\n", TextIDRequestID)
@@ -438,13 +445,6 @@ func AddSkipNow(Text string, Table1 *types.Table) string {
 func IsGoodTable(Table1 *types.Table) error {
 	var err error
 
-	//TableName := Table1.Name
-	//ColumnName, _ := FindPrimaryKeyNameTypeGo(Table1)
-	//if ColumnName == "" {
-	//	TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: not found Primary key")
-	//	err = errors.New(TextError)
-	//}
-
 	err = IsGoodTableNamePrefix(Table1)
 	if err != nil {
 		return err
@@ -462,7 +462,7 @@ func IsGoodTable(Table1 *types.Table) error {
 func IsGoodPrimaryKeyColumnsCount(Table1 *types.Table) error {
 	var err error
 
-	if Table1.PrimaryKeyColumnsCount <= 0 || Table1.PrimaryKeyColumnsCount >= 2 {
+	if Table1.PrimaryKeyColumnsCount <= 0 {
 		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: can not use many Primary key columns count: ", Table1.PrimaryKeyColumnsCount)
 		err = errors.New(TextError)
 	}
@@ -2119,7 +2119,7 @@ func FindTextIDMinimum(Column1 *types.Column) string {
 	switch Column1.TypeGo {
 	case "uuid.UUID":
 		{
-			if IDMinimum == "" {
+			if Column1.IDMinimum == "" {
 				Otvet = "uuid.Nil"
 			} else {
 				Otvet = `uuid.Parse("` + IDMinimum + `")`
