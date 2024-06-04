@@ -1419,7 +1419,7 @@ func FindTextProtobufRequest(Table1 *types.Table) (OtvetRequestType string, Otve
 	if Table1.PrimaryKeyColumnsCount == 1 {
 		OtvetRequestType, OtvetRequestName = FindTextProtobufRequest1(Table1)
 	} else {
-		//OtvetRequestType, OtvetRequestName = FindTextProtobufRequest_Column_ManyPK(Table1)
+		OtvetRequestType = FindTextProtobufRequest_ManyPK(Table1)
 	}
 
 	return OtvetRequestType, OtvetRequestName
@@ -1470,10 +1470,12 @@ func FindTextProtobufRequest_ManyPK(Table1 *types.Table) string {
 		return Otvet
 	}
 
-	for _, ColumnPK1 := range MassPrimaryKeyColumns {
-		Type1, _, _, _ := FindTextProtobufRequest_ID_Type(Table1, ColumnPK1, "")
-		Otvet = Otvet + Type1
-	}
+	Otvet = FindTextProtobufRequest_Column_ManyPK(Table1, MassPrimaryKeyColumns[0])
+
+	//for _, ColumnPK1 := range MassPrimaryKeyColumns {
+	//	Type1, _, _, _ := FindTextProtobufRequest_ID_Type(Table1, ColumnPK1, "")
+	//	Otvet = Otvet + Type1
+	//}
 
 	return Otvet
 }
@@ -1552,8 +1554,7 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 		sNumber = "_" + sNumber
 	}
 
-	//PrimaryKey_TypeGo := PrimaryKeyColumn.TypeGo
-	RequestName, _ = FindTextProtobufRequest(Table1)
+	//RequestName, _ = FindTextProtobufRequest(Table1)
 
 	TextRequestProtoName := ""
 
