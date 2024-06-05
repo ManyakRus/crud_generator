@@ -170,7 +170,6 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 
 	//Text_modified_at
 	//Text_is_deleted_deleted_at
-	//Text_created_at
 
 	//
 	tx := db.WithContext(ctx).Model(&m)
@@ -184,6 +183,8 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 	//колонки с null
 	MassOmit := make([]string, 0)
 	var ColumnName string
+
+	//Text_created_at
 
 	//игнор пустых колонок
 	tx = tx.Omit(MassOmit...)

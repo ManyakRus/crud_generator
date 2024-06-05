@@ -519,10 +519,10 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, _, TextRequestFieldGolang, TextGolangLine := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
-	if Table1.PrimaryKeyColumnsCount > 1 {
-		TextRequest = create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
-	}
+	_, _, TextRequestFieldGolang, TextGolangLine := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
+	//if Table1.PrimaryKeyColumnsCount > 1 {
+	TextRequest := create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
+	//}
 
 	//замена ID на PrimaryKey
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
@@ -684,8 +684,9 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest2, TextRequestField, TextRequestFieldGolang, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request2.")
+	_, TextRequestField, TextRequestFieldGolang, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request2.")
 	TextModelColumnName := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m.")
+	TextRequestID := create_files.FindTextProtobufRequest_ManyPK(Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	Otvet = create_files.Replace_Model_ID_Test(Otvet, Table1)
@@ -694,15 +695,15 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	//	Otvet = strings.ReplaceAll(Otvet, "value := Request.FieldName", TextGolangLine)
 	//}
 
-	if Table1.PrimaryKeyColumnsCount == 1 {
-	} else {
-		TextRequest2 = create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
-		Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId{}", "grpc_proto."+TextRequest2+"{}")
-	}
+	//if Table1.PrimaryKeyColumnsCount == 1 {
+	//} else {
+	TextRequestString := create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId{}", "grpc_proto."+TextRequestID+"{}")
+	//}
 
 	Otvet = strings.ReplaceAll(Otvet, "Request.ColumnName", TextRequestFieldGolang)
 	Otvet = strings.ReplaceAll(Otvet, "Request2.ColumnName", "Request2."+TextRequestField)
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", "grpc_proto."+TextRequest2)
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", "grpc_proto."+TextRequestString)
 	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", TextModelColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update(", ModelName+"_"+FuncName+"(")
