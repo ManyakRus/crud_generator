@@ -12,6 +12,7 @@ import (
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/postgres_gorm"
+	"sort"
 	"strings"
 	"time"
 )
@@ -587,9 +588,20 @@ func FindNameType_from_PrimaryKey(Table1 *types.Table) (string, string) {
 	Otvet := ""
 	Type := ""
 
-	for ColumnName, Column1 := range Table1.MapColumns {
+	//сортировка по названию колонок
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("Table1.MapColumns[key1] = false")
+		}
 		if Column1.IsPrimaryKey == true {
-			return ColumnName, Column1.TypeGo
+			return Column1.NameGo, Column1.TypeGo
 		}
 	}
 

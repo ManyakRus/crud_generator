@@ -4,6 +4,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
+	"sort"
 	"strings"
 )
 
@@ -45,7 +46,18 @@ func Has_Column_IsDeleted(Table1 *types.Table) bool {
 func Has_ColumnType_Time(Table1 *types.Table) bool {
 	Otvet := false
 
-	for _, Column1 := range Table1.MapColumns {
+	//сортировка по названию колонок
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("Table1.MapColumns[key1] = false")
+		}
 		SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
 		if ok == false {
 			log.Panic("GetMappings() ", Column1.Type, " error: not found")

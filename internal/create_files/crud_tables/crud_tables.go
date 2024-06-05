@@ -381,7 +381,19 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 
 	TextOmit := ""
 	NullableCount := 0
-	for _, Column1 := range Table1.MapColumns {
+
+	//сортировка по названию колонок
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("Table1.MapColumns[key1] = false")
+		}
 		ColumnName := Column1.Name
 		ColumnNameGo := Column1.NameGo
 		TypeGo := Column1.TypeGo
@@ -605,7 +617,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 func FindTextUpdateEveryColumn(TextCrudUpdateFunc string, Table1 *types.Table) string {
 	Otvet := ""
 
-	//сортировка по названию таблиц
+	//сортировка по названию колонок
 	keys := make([]string, 0, len(Table1.MapColumns))
 	for k := range Table1.MapColumns {
 		keys = append(keys, k)
@@ -774,7 +786,7 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 func FindTextUpdateEveryColumnTest(TextCrudUpdateFunc string, Table1 *types.Table) string {
 	Otvet := ""
 
-	//сортировка по названию таблиц
+	//сортировка по названию колонок
 	keys := make([]string, 0, len(Table1.MapColumns))
 	for k := range Table1.MapColumns {
 		keys = append(keys, k)

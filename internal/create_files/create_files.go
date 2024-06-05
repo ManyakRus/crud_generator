@@ -138,7 +138,18 @@ func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
 	Otvet := ""
 	Type := ""
 
-	for _, Column1 := range Table1.MapColumns {
+	//сортировка по названию колонок
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("Table1.MapColumns[key1] = false")
+		}
 		if Column1.IsPrimaryKey == true {
 			return Column1.NameGo, Column1.TypeGo
 		}
@@ -152,7 +163,18 @@ func FindPrimaryKeyNameType(Table1 *types.Table) (string, string) {
 	Otvet := ""
 	Type := ""
 
-	for _, Column1 := range Table1.MapColumns {
+	//сортировка по названию колонок
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("Table1.MapColumns[key1] = false")
+		}
 		if Column1.IsPrimaryKey == true {
 			return Column1.Name, Column1.Type
 		}
@@ -165,7 +187,18 @@ func FindPrimaryKeyNameType(Table1 *types.Table) (string, string) {
 func FindPrimaryKeyColumn(Table1 *types.Table) (Column1 *types.Column) {
 	var Otvet *types.Column
 
-	for _, Column1 := range Table1.MapColumns {
+	//сортировка по названию колонок
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("Table1.MapColumns[key1] = false")
+		}
 		if Column1.IsPrimaryKey == true {
 			return Column1
 		}
@@ -178,7 +211,7 @@ func FindPrimaryKeyColumn(Table1 *types.Table) (Column1 *types.Column) {
 func FindPrimaryKeyColumns(Table1 *types.Table) []*types.Column {
 	Otvet := make([]*types.Column, 0)
 
-	//сортировка по названию таблиц
+	//сортировка по названию колонок
 	keys := make([]string, 0, len(Table1.MapColumns))
 	for k := range Table1.MapColumns {
 		keys = append(keys, k)
@@ -186,7 +219,10 @@ func FindPrimaryKeyColumns(Table1 *types.Table) []*types.Column {
 	sort.Strings(keys)
 
 	for _, key1 := range keys {
-		Column1, _ := Table1.MapColumns[key1]
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("Table1.MapColumns[key1] = false")
+		}
 		if Column1.IsPrimaryKey == true {
 			Otvet = append(Otvet, Column1)
 		}
