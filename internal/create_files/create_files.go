@@ -347,7 +347,7 @@ func ReplacePrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variable
 		TextOtvetIDID = TextOtvetIDID + "\t" + VariableName + "." + Column1.NameGo + " = " + Column1.NameGo + "\n"
 		RequestColumnName := FindRequestColumnName(Table1, Column1)
 		TextIDRequestID = TextIDRequestID + "\t" + Column1.NameGo + " := Request." + RequestColumnName + "\n"
-		TextM := ConvertColumnToAlias(Otvet, Table1, Column1, "m")
+		TextM := FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m")
 		TextRequestIDmID = TextRequestIDmID + "\t" + VariableName + "." + RequestColumnName + " = " + TextM + "\n"
 		TextInt64ID := FindTextConvertGolangTypeToProtobufType(Table1, Column1, "")
 		TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
@@ -439,9 +439,12 @@ func ReplacePrimaryKeyM_ID1(Text string, Table1 *types.Table) string {
 		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
 		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", Alias+"("+ColumnNamePK+")")
 	} else {
+		DefaultValue := FindTextDefaultValue(ColumnTypeGoPK)
+		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", "m."+ColumnNamePK+" == "+DefaultValue)
 		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", "m."+ColumnNamePK+"")
 		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
 		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", "ID")
+		Otvet = strings.ReplaceAll(Otvet, " ID=0", " "+ColumnNamePK+"="+DefaultValue)
 	}
 
 	return Otvet
@@ -1785,7 +1788,7 @@ func FindTextConvertGolangTypeToProtobufType(Table1 *types.Table, Column1 *types
 		return Otvet
 	}
 
-	Otvet = VariableName + Column1.NameGo
+	Otvet = VariableName + "." + Column1.NameGo
 
 	//TableName := Table1.Name
 	//IDName := Column1.Name
@@ -1804,21 +1807,21 @@ func FindTextConvertGolangTypeToProtobufType(Table1 *types.Table, Column1 *types
 	//преобразуем alias в обычный тип, и дату в timestamp
 	switch Column1.TypeGo {
 	case "time.Time":
-		Otvet = "timestamppb.New(" + VariableName + Column1.NameGo + ")"
+		Otvet = "timestamppb.New(" + VariableName + "." + Column1.NameGo + ")"
 	case "string":
-		Otvet = "string(" + VariableName + Column1.NameGo + ")"
+		Otvet = "string(" + VariableName + "." + Column1.NameGo + ")"
 	case "int64":
-		Otvet = "int64(" + VariableName + Column1.NameGo + ")"
+		Otvet = "int64(" + VariableName + "." + Column1.NameGo + ")"
 	case "int32":
-		Otvet = "int32(" + VariableName + Column1.NameGo + ")"
+		Otvet = "int32(" + VariableName + "." + Column1.NameGo + ")"
 	case "bool":
-		Otvet = "bool(" + VariableName + Column1.NameGo + ")"
+		Otvet = "bool(" + VariableName + "." + Column1.NameGo + ")"
 	case "float32":
-		Otvet = "float32(" + VariableName + Column1.NameGo + ")"
+		Otvet = "float32(" + VariableName + "." + Column1.NameGo + ")"
 	case "float64":
-		Otvet = "float64(" + VariableName + Column1.NameGo + ")"
+		Otvet = "float64(" + VariableName + "." + Column1.NameGo + ")"
 	case "uuid.UUID":
-		Otvet = VariableName + Column1.NameGo + ".String()"
+		Otvet = VariableName + "." + Column1.NameGo + ".String()"
 	}
 
 	return Otvet

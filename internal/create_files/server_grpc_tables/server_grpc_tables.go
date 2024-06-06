@@ -527,7 +527,7 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	//замена ID на PrimaryKey
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
 
-	//ColumnNameGolang := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m.")
+	//ColumnNameGolang := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m")
 
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update", ModelName+"_"+FuncName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
@@ -685,7 +685,7 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
 	_, TextRequestField, TextRequestFieldGolang, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request2.")
-	TextModelColumnName := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m.")
+	TextModelColumnName := create_files.FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m")
 	TextRequestID := create_files.FindTextProtobufRequest_ManyPK(Table1)
 
 	//Postgres_ID_Test = ID Minimum
