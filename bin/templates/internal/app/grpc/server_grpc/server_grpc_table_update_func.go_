@@ -22,12 +22,12 @@ func (s *ServerGRPC) LawsuitStatusType_Update(ctx context.Context, Request *grpc
 	defer ctxCancelFunc()
 
 	//запрос в БД
-	value := Request.FieldName
 	db := postgres_gorm.GetConnection()
 	ID := Request.ID
+	ColumnName := Request.FieldName
 	m := &lawsuit_status_types.LawsuitStatusType{}
 	m.ID = AliasFromInt(ID)
-	m.ColumnName = value
+	m.ColumnName = ColumnName
 	err = crud_lawsuit_status_types.Update_ColumnName_ctx(ctx, db, m)
 	if err != nil {
 		return &Otvet, err

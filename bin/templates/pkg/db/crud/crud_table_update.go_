@@ -39,7 +39,7 @@ func UpdateManyFields_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_ty
 	}
 
 	if IntFromAlias(m.ID) == 0 {
-		err = errors.New(m.TableNameDB() + " UpdateManyFields() error: ID=0")
+		err = errors.New(m.TableNameDB() + ` UpdateManyFields() error: ID=0`)
 		return err
 	}
 

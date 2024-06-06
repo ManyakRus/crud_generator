@@ -274,6 +274,8 @@ func ReplacePrimaryKeyOtvetID1(Text string, Table1 *types.Table) string {
 		OtvetColumnName = Alias + "(" + OtvetColumnName + ")"
 	}
 
+	Otvet = strings.ReplaceAll(Otvet, "Otvet.ID = AliasFromInt(ID)", "Otvet."+ColumnNamePK+" = "+ColumnNamePK)
+
 	//заменим int64(Otvet.ID) на Otvet.ID
 	if mini_func.IsNumberType(ColumnTypeGoPK) == true {
 		Otvet = strings.ReplaceAll(Otvet, "int64(Otvet.ID)", OtvetColumnName)
@@ -346,10 +348,15 @@ func ReplacePrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variable
 		}
 		TextOtvetIDID = TextOtvetIDID + "\t" + VariableName + "." + Column1.NameGo + " = " + Column1.NameGo + "\n"
 		RequestColumnName := FindRequestColumnName(Table1, Column1)
-		TextIDRequestID = TextIDRequestID + "\t" + Column1.NameGo + " := Request." + RequestColumnName + "\n"
-		TextM := FindTextConvertGolangTypeToProtobufType(Table1, Column1, "m")
+		Value, GolangCode := ConvertProtobufTypeToGolangType(Table1, Column1, "Request.")
+		if GolangCode == "" {
+			TextIDRequestID = TextIDRequestID + "\t" + Column1.NameGo + " := " + Value + "\n"
+		} else {
+			TextIDRequestID = TextIDRequestID + "\t" + GolangCode + "\n"
+		}
+		TextM := ConvertGolangTypeToProtobufType(Table1, Column1, "m")
 		TextRequestIDmID = TextRequestIDmID + "\t" + VariableName + "." + RequestColumnName + " = " + TextM + "\n"
-		TextInt64ID := FindTextConvertGolangTypeToProtobufType(Table1, Column1, "")
+		TextInt64ID := ConvertGolangTypeToProtobufType(Table1, Column1, "")
 		TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
 		TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
 
@@ -359,10 +366,12 @@ func ReplacePrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variable
 	}
 
 	Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = AliasFromInt(ID)", TextOtvetIDID)
-	Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = IntFromAlias(m.ID)", TextRequestIDmID)
+	Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = ProtoFromInt(m.ID)", TextRequestIDmID)
 	Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = int64(ID)", TextRequestIDInt64ID)
 	Otvet = strings.ReplaceAll(Otvet, "\tOtvet.ID = "+VariableName+".ID\n", TextOtvetIDmID)
 	Otvet = strings.ReplaceAll(Otvet, " IntFromAlias("+VariableName+".ID) == 0", TextMID0)
+	//Value := ConvertGolangTypeToProtobufType(Table1, ColumnPK, "m")
+	//Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
 
 	//заменим ID := Request.ID
 	Otvet = strings.ReplaceAll(Otvet, "\tID := Request.ID\n", TextIDRequestID)
@@ -402,6 +411,7 @@ func ReplacePrimaryKeyM_ID1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	ColumnNamePK, ColumnTypeGoPK := FindPrimaryKeyNameTypeGo(Table1)
+	ColumnPK := FindPrimaryKeyColumn(Table1)
 
 	//заменим ID-Alias на ID
 	TableName := Table1.Name
@@ -432,6 +442,8 @@ func ReplacePrimaryKeyM_ID1(Text string, Table1 *types.Table) string {
 	//Otvet = strings.ReplaceAll(Otvet, " = m.ID", " = "+OtvetColumnName)
 	Otvet = strings.ReplaceAll(Otvet, ", m.ID,", ", "+OtvetColumnName+",")
 	//Otvet = strings.ReplaceAll(Otvet, "(m.ID)", "("+OtvetColumnName+")")
+	Value := ConvertColumnToAlias(Table1, ColumnPK, "")
+	Otvet = strings.ReplaceAll(Otvet, "m.ID = AliasFromInt(ID)", "m."+ColumnNamePK+" = "+Value)
 
 	//Alias преобразуем в int64, и наоборот
 	if Alias != "" {
@@ -441,10 +453,14 @@ func ReplacePrimaryKeyM_ID1(Text string, Table1 *types.Table) string {
 	} else {
 		DefaultValue := FindTextDefaultValue(ColumnTypeGoPK)
 		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", "m."+ColumnNamePK+" == "+DefaultValue)
-		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", "m."+ColumnNamePK+"")
+		//Value := ConvertGolangTypeToProtobufType(Table1, ColumnPK, "m")
+		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", "m."+ColumnNamePK) //не protobuf
+		Value := ConvertGolangTypeToProtobufType(Table1, ColumnPK, "m")
+		Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
 		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
 		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", "ID")
 		Otvet = strings.ReplaceAll(Otvet, " ID=0", " "+ColumnNamePK+"="+DefaultValue)
+		Otvet = strings.ReplaceAll(Otvet, "(m.ID)", "(m."+ColumnNamePK+")")
 	}
 
 	return Otvet
@@ -1637,9 +1653,9 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 		{
 			TextRequestProtoName = "String"
 			RequestFieldName = "String" + sNumber
-			GolangLine = "value, err := uuid.Parse(" + VariableName + "" + RequestFieldName + ")" + `
+			GolangLine = Column1.NameGo + ", err := uuid.Parse(" + VariableName + "" + RequestFieldName + ")" + `
 	if Request.` + RequestFieldName + ` == "" {
-		value = uuid.Nil
+		` + Column1.NameGo + ` = uuid.Nil
 		err = nil
 	}
 	if err != nil {
@@ -1744,8 +1760,14 @@ func ConvertIDToAlias_OtvetID(Text string, Table1 *types.Table) string {
 }
 
 // ConvertColumnToAlias - заменяет "Otvet.ID = ID" на "Otvet.ID = alias.Name(ID)"
-func ConvertColumnToAlias(Text string, Table1 *types.Table, Column1 *types.Column, VariableName string) string {
-	Otvet := VariableName + "." + Column1.NameGo
+func ConvertColumnToAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+	Otvet := ""
+
+	Dot := ""
+	if VariableName != "" {
+		Dot = "."
+	}
+	Otvet = VariableName + Dot + Column1.NameGo
 
 	TableName := Table1.Name
 	IDName := Column1.Name
@@ -1758,10 +1780,10 @@ func ConvertColumnToAlias(Text string, Table1 *types.Table, Column1 *types.Colum
 		return Otvet
 	}
 
-	Otvet = TextConvert + "(" + VariableName + "." + Column1.NameGo + ")"
+	Otvet = TextConvert + "(" + VariableName + Dot + Column1.NameGo + ")"
 
 	//добавим испорт
-	Text = CheckAndAddImportAlias(Text)
+	//Text = CheckAndAddImportAlias(Text)
 
 	return Otvet
 }
@@ -1780,57 +1802,47 @@ func DeleteCommentFromString(TextFrom string) string {
 	return Otvet
 }
 
-// FindTextConvertGolangTypeToProtobufType - возвращает имя переменной +  имя колонки, преобразованное в тип protobuf
-func FindTextConvertGolangTypeToProtobufType(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+// ConvertGolangTypeToProtobufType - возвращает имя переменной +  имя колонки, преобразованное в тип protobuf
+func ConvertGolangTypeToProtobufType(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := ""
 
 	if Column1 == nil {
 		return Otvet
 	}
 
-	Otvet = VariableName + "." + Column1.NameGo
-
-	//TableName := Table1.Name
-	//IDName := Column1.Name
-
-	////alias в Int64
-	//TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
-	//if ok == true {
-	//	Otvet = TextConvert + "(" + VariableName + Column1.NameGo + ")"
-	//}
-
-	//time.Time в timestamppb
-	//if Column1.TypeGo == "time.Time" {
-	//	Otvet = "timestamppb.New(" + VariableName + Column1.NameGo + ")"
-	//}
+	Dot := ""
+	if VariableName != "" {
+		Dot = "."
+	}
+	Otvet = VariableName + Dot + Column1.NameGo
 
 	//преобразуем alias в обычный тип, и дату в timestamp
 	switch Column1.TypeGo {
 	case "time.Time":
-		Otvet = "timestamppb.New(" + VariableName + "." + Column1.NameGo + ")"
+		Otvet = "timestamppb.New(" + VariableName + Dot + Column1.NameGo + ")"
 	case "string":
-		Otvet = "string(" + VariableName + "." + Column1.NameGo + ")"
+		Otvet = "string(" + VariableName + Dot + Column1.NameGo + ")"
 	case "int64":
-		Otvet = "int64(" + VariableName + "." + Column1.NameGo + ")"
+		Otvet = "int64(" + VariableName + Dot + Column1.NameGo + ")"
 	case "int32":
-		Otvet = "int32(" + VariableName + "." + Column1.NameGo + ")"
+		Otvet = "int32(" + VariableName + Dot + Column1.NameGo + ")"
 	case "bool":
-		Otvet = "bool(" + VariableName + "." + Column1.NameGo + ")"
+		Otvet = "bool(" + VariableName + Dot + Column1.NameGo + ")"
 	case "float32":
-		Otvet = "float32(" + VariableName + "." + Column1.NameGo + ")"
+		Otvet = "float32(" + VariableName + Dot + Column1.NameGo + ")"
 	case "float64":
-		Otvet = "float64(" + VariableName + "." + Column1.NameGo + ")"
+		Otvet = "float64(" + VariableName + Dot + Column1.NameGo + ")"
 	case "uuid.UUID":
-		Otvet = VariableName + "." + Column1.NameGo + ".String()"
+		Otvet = VariableName + Dot + Column1.NameGo + ".String()"
 	}
 
 	return Otvet
 }
 
-// FindTextConvertProtobufTypeToGolangType - возвращает имя переменной +  имя колонки, преобразованное в тип golang из protobuf
-func FindTextConvertProtobufTypeToGolangType(Table1 *types.Table, Column1 *types.Column, VariableName string) (string, string) {
-	Otvet := VariableName + Column1.NameGo
-	GolangCode := ""
+// ConvertProtobufTypeToGolangType - возвращает имя переменной +  имя колонки, преобразованное в тип golang из protobuf
+func ConvertProtobufTypeToGolangType(Table1 *types.Table, Column1 *types.Column, VariableName string) (VariableColumn string, GolangCode string) {
+	VariableColumn = VariableName + Column1.NameGo
+	//GolangCode := ""
 
 	TableName := Table1.Name
 	IDName := Column1.Name
@@ -1841,52 +1853,52 @@ func FindTextConvertProtobufTypeToGolangType(Table1 *types.Table, Column1 *types
 	//alias в Int64
 	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
 	if ok == true {
-		Otvet = TextConvert + "(" + VariableName + Column1.NameGo + ")"
-		return Otvet, GolangCode
+		VariableColumn = TextConvert + "(" + VariableName + Column1.NameGo + ")"
+		return VariableColumn, GolangCode
 	}
 
 	//time.Time в timestamppb
 	switch Column1.TypeGo {
 	case "time.Time":
 		{
-			Otvet = VariableName + Column1.NameGo + ".AsTime()"
-			return Otvet, GolangCode
+			VariableColumn = VariableName + Column1.NameGo + ".AsTime()"
+			return VariableColumn, GolangCode
 		}
 	case "uuid.UUID":
 		{
-			Otvet = "uuid.FromBytes([]byte(" + VariableName + RequestColumnName + "))"
-			GolangCode = `ID, err := uuid.FromBytes([]byte(Request.` + RequestColumnName + `))
+			VariableColumn = "uuid.FromBytes([]byte(" + VariableName + RequestColumnName + "))"
+			GolangCode = Column1.NameGo + `, err := uuid.FromBytes([]byte(Request.` + RequestColumnName + `))
 	if err != nil {
 		return &Otvet, err
 	}
 `
-			return Otvet, GolangCode
+			return VariableColumn, GolangCode
 		}
 	}
 	//if Column1.TypeGo == "time.Time" {
-	//	Otvet = VariableName + Column1.NameGo + ".AsTime()"
-	//	return Otvet
+	//	VariableColumn = VariableName + Column1.NameGo + ".AsTime()"
+	//	return VariableColumn
 	//}
 
 	////преобразуем alias в обычный тип, и дату в timestamp
 	//switch Column1.TypeGo {
 	//case "time.Time":
-	//	Otvet = "timestamppb.New(" + VariableName + Column1.NameGo + ")"
+	//	VariableColumn = "timestamppb.New(" + VariableName + Column1.NameGo + ")"
 	//case "string":
-	//	Otvet = "string(" + VariableName + Column1.NameGo + ")"
+	//	VariableColumn = "string(" + VariableName + Column1.NameGo + ")"
 	//case "int64":
-	//	Otvet = "int64(" + VariableName + Column1.NameGo + ")"
+	//	VariableColumn = "int64(" + VariableName + Column1.NameGo + ")"
 	//case "int32":
-	//	Otvet = "int32(" + VariableName + Column1.NameGo + ")"
+	//	VariableColumn = "int32(" + VariableName + Column1.NameGo + ")"
 	//case "bool":
-	//	Otvet = "bool(" + VariableName + Column1.NameGo + ")"
+	//	VariableColumn = "bool(" + VariableName + Column1.NameGo + ")"
 	//case "float32":
-	//	Otvet = "float32(" + VariableName + Column1.NameGo + ")"
+	//	VariableColumn = "float32(" + VariableName + Column1.NameGo + ")"
 	//case "float64":
-	//	Otvet = "float64(" + VariableName + Column1.NameGo + ")"
+	//	VariableColumn = "float64(" + VariableName + Column1.NameGo + ")"
 	//}
 
-	return Otvet, GolangCode
+	return VariableColumn, GolangCode
 }
 
 // FindTextEqualEmpty - находит текст сравнение с пустым значением
@@ -2323,7 +2335,7 @@ func ReplaceTextRequestID_PrimaryKey1(Text string, Table1 *types.Table, TextRequ
 
 	TextRequestID, TextID := FindTextProtobufRequest(Table1)
 
-	_, GolangCode := FindTextConvertProtobufTypeToGolangType(Table1, PrimaryKeyColumn, "Request.")
+	_, GolangCode := ConvertProtobufTypeToGolangType(Table1, PrimaryKeyColumn, "Request.")
 	if GolangCode != "" {
 		Otvet = strings.ReplaceAll(Otvet, "ID := "+TextRequest+".ID", GolangCode)
 		Otvet = strings.ReplaceAll(Otvet, TextRequest+".ID = ", TextRequest+"."+TextID+" = ")
@@ -2367,7 +2379,7 @@ func ReplaceIDtoID1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
-	OtvetColumnName := FindTextConvertGolangTypeToProtobufType(Table1, PrimaryKeyColumn, "")
+	OtvetColumnName := ConvertGolangTypeToProtobufType(Table1, PrimaryKeyColumn, "")
 	if OtvetColumnName == "" {
 		return Otvet
 	}
@@ -2390,7 +2402,7 @@ func FindTextIDMany(Table1 *types.Table) (TextNames, TextNamesTypes, TextProtoNa
 	//Comma := ""
 	//MassPrimaryKey := FindPrimaryKeyColumns(Table1)
 	//for _, PrimaryKey1 := range MassPrimaryKey {
-	//	OtvetColumnName := FindTextConvertGolangTypeToProtobufType(Table1, PrimaryKey1, "")
+	//	OtvetColumnName := ConvertGolangTypeToProtobufType(Table1, PrimaryKey1, "")
 	//	if OtvetColumnName == "" {
 	//		continue
 	//	}
@@ -2418,7 +2430,7 @@ func FindTextID_VariableName_Many(Table1 *types.Table, VariableName string) (Tex
 	Comma := ""
 	MassPrimaryKey := FindPrimaryKeyColumns(Table1)
 	for _, PrimaryKey1 := range MassPrimaryKey {
-		OtvetColumnName := FindTextConvertGolangTypeToProtobufType(Table1, PrimaryKey1, "")
+		OtvetColumnName := ConvertGolangTypeToProtobufType(Table1, PrimaryKey1, "")
 		if OtvetColumnName == "" {
 			continue
 		}

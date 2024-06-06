@@ -152,11 +152,6 @@ func CreateFiles(Table1 *types.Table) error {
 		}
 	}
 
-	//создание текста
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
-
 	//TextDB = create_files.DeleteFuncFind_byExtID(TextDB, Table1)
 	//TextDB = create_files.DeleteFuncFind_byExtIDCtx(TextDB, Table1)
 	TextDB = AddTextOmit(TextDB, Table1)
@@ -168,6 +163,11 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = create_files.ReplaceCacheRemove_ManyPK(TextDB, Table1)
 
 	TextDB = create_files.ReplacePrimaryKeyM_ID(TextDB, Table1)
+
+	//создание текста
+	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
 	//замена импортов на новые URL
 	TextDB = create_files.ReplaceServiceURLImports(TextDB)
@@ -894,12 +894,16 @@ func CreateFilesCache(Table1 *types.Table) error {
 	sCACHE_ELEMENTS_COUNT := micro.StringFromInt64(CACHE_ELEMENTS_COUNT)
 	TextCache = create_files.FillVariable(TextCache, constants.TEXT_CACHE_SIZE_1000, sCACHE_ELEMENTS_COUNT)
 
+	ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+
 	//тип ID кэша
 	if Table1.PrimaryKeyColumnsCount == 1 {
 		_, ColumnTypeGo := create_files.FindPrimaryKeyNameTypeGo(Table1)
 		TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU["+ColumnTypeGo)
-		TextCache = strings.ReplaceAll(TextCache, "ID int64", "ID "+ColumnTypeGo)
+		TextCache = strings.ReplaceAll(TextCache, "ID int64", ColumnPK.NameGo+" "+ColumnTypeGo)
 		TextCache = create_files.ReplacePrimaryKeyOtvetID(TextCache, Table1)
+		TextCache = strings.ReplaceAll(TextCache, "(ID)", ColumnPK.NameGo)
+		TextCache = strings.ReplaceAll(TextCache, ", ID)", ", "+ColumnPK.NameGo+")")
 	} else {
 		TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU[string")
 		TextCache = create_files.ReplacePrimaryKeyOtvetID_Many(TextCache, Table1)
