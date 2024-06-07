@@ -127,10 +127,15 @@ func CreateFiles(Table1 *types.Table) error {
 		CrudTableURL := create_files.FindCrudTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
 
-		TextGRPCServer = ReplaceIDRequestID_1PK(TextGRPCServer, Table1)
+		if Table1.PrimaryKeyColumnsCount == 1 {
+			TextGRPCServer = ReplaceIDRequestID_1PK(TextGRPCServer, Table1)
+		}
 
-		//замена ID на PrimaryKey
+		//замена "m.ID = AliasFromInt(ID)"
 		TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
+
+		//замена "ID := Request.ID"
+		TextGRPCServer = create_files.ReplacePrimaryKeyOtvetID(TextGRPCServer, Table1)
 
 		//замена RequestId{}
 		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
@@ -522,7 +527,8 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	_, _, TextRequestFieldGolang, TextGolangLine := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
 	//if Table1.PrimaryKeyColumnsCount > 1 {
 	TextRequest := create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
-	ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+	//ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+	IsPrimaryKey := create_files.IsPrimaryKeyColumn(Table1, Column1)
 
 	//замена ID на PrimaryKey
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
@@ -532,7 +538,7 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update", ModelName+"_"+FuncName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	if Column1 == ColumnPK {
+	if IsPrimaryKey == true {
 		Otvet = strings.ReplaceAll(Otvet, "\tColumnName := Request.FieldName\n", "")
 	} else if TextGolangLine != "" {
 		Otvet = strings.ReplaceAll(Otvet, "ColumnName := Request.FieldName", TextGolangLine)
@@ -780,16 +786,17 @@ func CreateFilesCache(Table1 *types.Table) error {
 
 	}
 
+	TextGRPCServer = create_files.ReplacePrimaryKeyOtvetID(TextGRPCServer, Table1)
+
+	TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
+
 	if Table1.PrimaryKeyColumnsCount == 1 {
 	} else {
-		TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
 		TextIDMany := ", ID)"
 		TextIDMany = create_files.ReplaceIDtoID_Many(TextIDMany, Table1)
 		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "(ID)", "("+Table1.Name+".StringIdentifier"+TextIDMany+")")
-		TextGRPCServer = create_files.ReplaceIDtoID_Many(TextGRPCServer, Table1)
-		//замена ID на PrimaryKey
-
 	}
+	TextGRPCServer = create_files.ReplaceIDtoID_Many(TextGRPCServer, Table1)
 
 	//замена RequestId{}
 	TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
