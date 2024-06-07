@@ -1849,6 +1849,26 @@ func ConvertGolangTypeToProtobufType(Table1 *types.Table, Column1 *types.Column,
 	return Otvet
 }
 
+// ConvertVariableToProtobufType - возвращает имя переменной +  имя колонки, преобразованное в тип protobuf
+func ConvertVariableToProtobufType(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+	Otvet := ""
+
+	if Column1 == nil {
+		return Otvet
+	}
+
+	Otvet = VariableName
+
+	switch Column1.TypeGo {
+	case "time.Time":
+		Otvet = "timestamppb.New(" + VariableName + ")"
+	case "uuid.UUID":
+		Otvet = VariableName + ".String()"
+	}
+
+	return Otvet
+}
+
 // ConvertProtobufTypeToGolangType - возвращает имя переменной +  имя колонки, преобразованное в тип golang из protobuf
 func ConvertProtobufTypeToGolangType(Table1 *types.Table, Column1 *types.Column, VariableName string) (VariableColumn string, GolangCode string) {
 	RequestColumnName := FindRequestColumnName(Table1, Column1)
@@ -2179,16 +2199,16 @@ func FindTextIDMinimum(Column1 *types.Column) string {
 func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	if Table1.PrimaryKeyColumnsCount == 1 {
-		PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
-		if PrimaryKeyColumn == nil {
-			return Otvet
-		}
-
-		Otvet = Replace_Model_ID_Test1(Otvet, Table1, PrimaryKeyColumn)
-	} else {
-		Otvet = Replace_Model_ID_Test_ManyPK(Otvet, Table1)
-	}
+	//if Table1.PrimaryKeyColumnsCount == 1 {
+	//	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	//	if PrimaryKeyColumn == nil {
+	//		return Otvet
+	//	}
+	//
+	//	Otvet = Replace_Model_ID_Test1(Otvet, Table1, PrimaryKeyColumn)
+	//} else {
+	Otvet = Replace_Model_ID_Test_ManyPK(Otvet, Table1)
+	//}
 
 	return Otvet
 }
@@ -2215,7 +2235,8 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	TextNew = ""
 	for _, Column1 := range MassPK {
 		Name := strings.ToUpper(Column1.NameGo)
-		Text1 := Table1.NameGo + "_" + Name + "_Test"
+		VariableName := Table1.NameGo + "_" + Name + "_Test"
+		Text1 := ConvertVariableToProtobufType(Table1, Column1, VariableName)
 		RequestColumnName := FindRequestColumnName(Table1, Column1)
 		TextNew = TextNew + "\tRequest." + RequestColumnName + " = " + Text1 + "\n"
 	}
@@ -2226,7 +2247,8 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	TextNew = ""
 	for _, Column1 := range MassPK {
 		Name := strings.ToUpper(Column1.NameGo)
-		Text1 := Table1.NameGo + "_" + Name + "_Test"
+		VariableName := Table1.NameGo + "_" + Name + "_Test"
+		Text1 := ConvertVariableToProtobufType(Table1, Column1, VariableName)
 		RequestColumnName := FindRequestColumnName(Table1, Column1)
 		TextNew = TextNew + "\tRequest2." + RequestColumnName + " = " + Text1 + "\n"
 	}
@@ -2521,30 +2543,30 @@ func ReplaceOtvetIDEqual0(Text string, Table1 *types.Table) string {
 func ReplaceModelIDEqual1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	if Table1.PrimaryKeyColumnsCount == 1 {
-		Otvet = ReplaceModelIDEqual1_1(Otvet, Table1)
-	} else {
-		Otvet = ReplaceModelIDEqual1_ManyPK(Otvet, Table1)
-	}
+	//if Table1.PrimaryKeyColumnsCount == 1 {
+	//	Otvet = ReplaceModelIDEqual1_1(Otvet, Table1)
+	//} else {
+	Otvet = ReplaceModelIDEqual1_ManyPK(Otvet, Table1)
+	//}
 
 	return Otvet
 }
 
-// ReplaceModelIDEqual1 - заменяет Otvet.ID = -1
-func ReplaceModelIDEqual1_1(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
-	if PrimaryKeyColumn == nil {
-		return Otvet
-	}
-
-	Value := FindNegativeValue(PrimaryKeyColumn.TypeGo)
-
-	Otvet = strings.ReplaceAll(Otvet, "m.ID = -1", "m.ID = "+Value)
-
-	return Otvet
-}
+//// ReplaceModelIDEqual1 - заменяет Otvet.ID = -1
+//func ReplaceModelIDEqual1_1(Text string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+//	if PrimaryKeyColumn == nil {
+//		return Otvet
+//	}
+//
+//	Value := FindNegativeValue(PrimaryKeyColumn.TypeGo)
+//
+//	Otvet = strings.ReplaceAll(Otvet, "m.ID = -1", "m.ID = "+Value)
+//
+//	return Otvet
+//}
 
 // ReplaceModelIDEqual1_ManyPK - заменяет m.ID = -1
 func ReplaceModelIDEqual1_ManyPK(Text string, Table1 *types.Table) string {
