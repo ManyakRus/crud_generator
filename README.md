@@ -71,5 +71,8 @@ Source code in Golang language.
 Tested on Linux Ubuntu
 Readme from 11/14/2023
 
+![modules](https://github.com/ManyakRus/crud_generator/assets/30662875/304a41fa-a84c-40c4-9566-e5d65a381175)
+
+
 Made by Alexander Nikitin
 https://github.com/ManyakRus/crud_generator
