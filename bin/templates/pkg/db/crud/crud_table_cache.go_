@@ -47,7 +47,7 @@ func ReadFromCache_ctx(ctx context.Context, db *gorm.DB, ID int64) (lawsuit_stat
 	var err error
 
 	// поищем сначала в кэше
-	Identifier := (ID)
+	Identifier := int64(ID)
 	Otvet, ok := cache.Get(Identifier)
 	if ok {
 		return Otvet, nil

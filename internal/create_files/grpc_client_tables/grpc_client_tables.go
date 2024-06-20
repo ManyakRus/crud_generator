@@ -146,6 +146,9 @@ func CreateFiles(Table1 *types.Table) error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
 
 		//замена ID на PrimaryKey
+		//TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)
+
+		//замена ID на PrimaryKey
 		TextGRPCClient = create_files.ReplacePrimaryKeyM_ID(TextGRPCClient, Table1)
 
 		//замена RequestId{}

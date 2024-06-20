@@ -61,5 +61,5 @@ const TEXT_CACHE_REMOVE = "cache.Remove("
 const SERVER_GRPC_TABLE_CACHE_FILENAME = "server_grpc_table_cache.go_"
 const SERVER_GRPC_TABLE_CACHE_TEST_FILENAME = "server_grpc_table_cache_test.go_"
 
-const TEXT_OTVET_ID_ALIAS = "Otvet.ID = ID"
+const TEXT_OTVET_ID_ALIAS = "Otvet.ID = AliasFromInt(ID)" //"Otvet.ID = ID"
 const TEXT_CACHE_SIZE_1000 = "CACHE_SIZE"

@@ -160,9 +160,12 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = ReplaceText_is_deleted_deleted_at(TextDB, Table1)
 	TextDB = create_files.DeleteImportModel(TextDB)
 
-	TextDB = create_files.ReplaceCacheRemove_ManyPK(TextDB, Table1)
+	TextDB = create_files.ReplaceCacheRemove(TextDB, Table1)
 
 	TextDB = create_files.ReplacePrimaryKeyM_ID(TextDB, Table1)
+
+	//id := m.ID
+	TextDB = create_files.ReplaceColumnNamePK(TextDB, Table1)
 
 	//создание текста
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
@@ -651,7 +654,9 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	FuncName := "Update_" + ColumnName
 	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1)
 
-	Otvet = create_files.ReplaceCacheRemove_ManyPK(Otvet, Table1)
+	ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+
+	Otvet = create_files.ReplaceCacheRemove(Otvet, Table1)
 
 	//запись null в nullable колонки
 	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
@@ -682,7 +687,7 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
 	//Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	//Otvet = strings.ReplaceAll(Otvet, "m.ID", "m."+ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", "m."+ColumnPK.NameGo)
 
 	//внешние ключи заменяем 0 на null
 	TextEqualEmpty := create_files.FindTextEqualEmpty(Column1, "Value")
@@ -902,14 +907,14 @@ func CreateFilesCache(Table1 *types.Table) error {
 		TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU["+ColumnTypeGo)
 		TextCache = strings.ReplaceAll(TextCache, "ID int64", ColumnPK.NameGo+" "+ColumnTypeGo)
 		TextCache = create_files.ReplacePrimaryKeyOtvetID(TextCache, Table1)
-		TextCache = strings.ReplaceAll(TextCache, "(ID)", ColumnPK.NameGo)
+		TextCache = strings.ReplaceAll(TextCache, "int64(ID)", ColumnPK.NameGo)
 		TextCache = strings.ReplaceAll(TextCache, ", ID)", ", "+ColumnPK.NameGo+")")
 	} else {
 		TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU[string")
 		TextCache = create_files.ReplacePrimaryKeyOtvetID_Many(TextCache, Table1)
 		TextIDMany := "(ID)"
 		TextIDMany = create_files.ReplaceIDtoID_Many(TextIDMany, Table1)
-		TextCache = strings.ReplaceAll(TextCache, "(ID)", "("+Table1.Name+".StringIdentifier"+TextIDMany+")")
+		TextCache = strings.ReplaceAll(TextCache, "int64(ID)", "("+Table1.Name+".StringIdentifier"+TextIDMany+")")
 		TextCache = create_files.ReplaceIDtoID_Many(TextCache, Table1)
 	}
 

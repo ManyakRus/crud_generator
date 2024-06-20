@@ -241,6 +241,8 @@ func CreateFilesTest(Table1 *types.Table) error {
 		//добавим импорт uuid
 		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
 
+		//
+		TextGRPCServer = create_files.ReplaceOtvetIDEqual0(TextGRPCServer, Table1)
 	}
 
 	//создание текста
@@ -466,7 +468,6 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
 		TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
-		TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 		//замена RequestId{}
 		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
@@ -475,6 +476,8 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
 
 	}
+
+	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	//удаление пустого импорта
 	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
@@ -786,23 +789,27 @@ func CreateFilesCache(Table1 *types.Table) error {
 
 	}
 
+	//замена RequestId{}
+	TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+
 	TextGRPCServer = create_files.ReplacePrimaryKeyOtvetID(TextGRPCServer, Table1)
 
 	TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
 
 	if Table1.PrimaryKeyColumnsCount == 1 {
+		//ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
 	} else {
 		TextIDMany := ", ID)"
 		TextIDMany = create_files.ReplaceIDtoID_Many(TextIDMany, Table1)
-		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "(ID)", "("+Table1.Name+".StringIdentifier"+TextIDMany+")")
+		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "int64(ID)", "("+Table1.Name+".StringIdentifier"+TextIDMany+")")
 	}
 	TextGRPCServer = create_files.ReplaceIDtoID_Many(TextGRPCServer, Table1)
 
-	//замена RequestId{}
-	TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
-
 	//добавим импорт uuid
 	TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+
+	//добавим импорт alias
+	TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
 
 	//создание текста
 	ModelName := Table1.NameGo
