@@ -534,6 +534,7 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	IsPrimaryKey := create_files.IsPrimaryKeyColumn(Table1, Column1)
 
 	//замена ID на PrimaryKey
+	Otvet = create_files.ReplacePrimaryKeyOtvetID(Otvet, Table1)
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
 
 	//ColumnNameGolang := create_files.ConvertGolangTypeToProtobufType(Table1, Column1, "m")
@@ -789,6 +790,8 @@ func CreateFilesCache(Table1 *types.Table) error {
 
 	}
 
+	//TextGRPCServer = create_files.ReplaceIntFromProtoRequest(TextGRPCServer, Table1)
+
 	//замена RequestId{}
 	TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
 
@@ -797,11 +800,13 @@ func CreateFilesCache(Table1 *types.Table) error {
 	TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
 
 	if Table1.PrimaryKeyColumnsCount == 1 {
+		ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "ReplaceManyID(ID)", ColumnPK.NameGo)
 		//ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
 	} else {
-		TextIDMany := ", ID)"
+		TextIDMany := "ReplaceManyID(ID)"
 		TextIDMany = create_files.ReplaceIDtoID_Many(TextIDMany, Table1)
-		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "int64(ID)", "("+Table1.Name+".StringIdentifier"+TextIDMany+")")
+		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "ReplaceManyID(ID)", TextIDMany)
 	}
 	TextGRPCServer = create_files.ReplaceIDtoID_Many(TextGRPCServer, Table1)
 

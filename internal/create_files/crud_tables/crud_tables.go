@@ -167,6 +167,9 @@ func CreateFiles(Table1 *types.Table) error {
 	//id := m.ID
 	TextDB = create_files.ReplaceColumnNamePK(TextDB, Table1)
 
+	//"ReplaceColumnNameM(m.ID)"
+	//TextDB = create_files.ReplaceColumnNameM(TextDB, Table1)
+
 	//создание текста
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
@@ -890,7 +893,7 @@ func CreateFilesCache(Table1 *types.Table) error {
 	}
 
 	//alias
-	TextCache = create_files.ConvertIDToAlias_OtvetID(TextCache, Table1)
+	TextCache = create_files.ReplaceIDToAlias_OtvetID(TextCache, Table1)
 
 	//const CACHE_SIZE = 1000
 	CACHE_ELEMENTS_COUNT_MAX := config.Settings.CACHE_ELEMENTS_COUNT_MAX
