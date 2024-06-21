@@ -259,6 +259,24 @@ func ReplacePrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
+// FindTextEqual0 - возвращает текст сравнения с нулевым значением
+func FindTextEqual0(Column1 *types.Column) string {
+	Otvet := " == 0"
+
+	switch Column1.TypeGo {
+	case "string":
+		Otvet = ` == ""`
+	case "uuid.UUID":
+		Otvet = ` == uuid.Nil`
+	case "time.Time":
+		Otvet = `.IsZero() == true`
+	case "bool":
+		Otvet = ` == false`
+	}
+
+	return Otvet
+}
+
 // ReplacePrimaryKeyOtvetID1 - заменяет "Otvet.ID" на название колонки PrimaryKey
 func ReplacePrimaryKeyOtvetID1(Text string, Table1 *types.Table) string {
 	Otvet := Text
@@ -441,69 +459,70 @@ func ReplacePrimaryKeyM_ManyPK(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// ReplacePrimaryKeyM_ID1 - заменяет "m.ID" на название колонки PrimaryKey
-func ReplacePrimaryKeyM_ID1(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	ColumnNamePK, ColumnTypeGoPK := FindPrimaryKeyNameTypeGo(Table1)
-	ColumnPK := FindPrimaryKeyColumn(Table1)
-
-	//заменим ID-Alias на ID
-	TableName := Table1.Name
-	IDName, _ := FindPrimaryKeyNameType(Table1)
-	Alias, _ := types.MapConvertID[TableName+"."+IDName]
-	OtvetColumnName := "m." + ColumnNamePK
-	//if ok == true {
-	//	OtvetColumnName = Alias + "(" + OtvetColumnName + ")"
-	//}
-
-	//заменим int64(m.ID) на m.ID
-	if mini_func.IsNumberType(ColumnTypeGoPK) == true {
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
-	} else if ColumnTypeGoPK == "string" {
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+" == \"\"")
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+" != \"\"")
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
-	} else if ColumnTypeGoPK == "uuid.UUID" || ColumnTypeGoPK == "uuid.NullUUID" {
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+" == uuid.Nil")
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+" != uuid.Nil")
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName+".String()")
-	} else if ColumnTypeGoPK == "time.Time" {
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+".IsZero() == true")
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+".IsZero() == false")
-		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
-	}
-	//Otvet = strings.ReplaceAll(Otvet, "m.ID = ", OtvetColumnName+" = ")
-	//Otvet = strings.ReplaceAll(Otvet, " = m.ID", " = "+OtvetColumnName)
-	Otvet = strings.ReplaceAll(Otvet, ", m.ID,", ", "+OtvetColumnName+",")
-	//Otvet = strings.ReplaceAll(Otvet, "(m.ID)", "("+OtvetColumnName+")")
-	Value := ConvertColumnToAlias(Table1, ColumnPK, "")
-	Otvet = strings.ReplaceAll(Otvet, "m.ID = AliasFromInt(ID)", "m."+ColumnNamePK+" = "+Value)
-
-	Otvet = strings.ReplaceAll(Otvet, "\tm2.ID = ", "\tm2."+ColumnNamePK+" = ")
-
-	//Alias преобразуем в int64, и наоборот
-	if Alias != "" {
-		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", ColumnTypeGoPK+"(m."+ColumnNamePK+")")
-		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
-		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", Alias+"("+ColumnNamePK+")")
-		Value := ConvertGolangTypeToProtobufType(Table1, ColumnPK, "m")
-		Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
-	} else {
-		DefaultValue := FindTextDefaultValue(ColumnTypeGoPK)
-		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", "m."+ColumnNamePK+" == "+DefaultValue)
-		//Value := ConvertGolangTypeToProtobufType(Table1, ColumnPK, "m")
-		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", "m."+ColumnNamePK) //не protobuf
-		Value := ConvertGolangTypeToProtobufType(Table1, ColumnPK, "m")
-		Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
-		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
-		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", "ID")
-		Otvet = strings.ReplaceAll(Otvet, " ID=0", " "+ColumnNamePK+"="+DefaultValue)
-		Otvet = strings.ReplaceAll(Otvet, "(m.ID)", "(m."+ColumnNamePK+")")
-	}
-
-	return Otvet
-}
+//// ReplacePrimaryKeyM_ID1 - заменяет "m.ID" на название колонки PrimaryKey
+//func ReplacePrimaryKeyM_ID1(Text string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	ColumnNamePK, ColumnTypeGoPK := FindPrimaryKeyNameTypeGo(Table1)
+//	ColumnPK := FindPrimaryKeyColumn(Table1)
+//
+//	//заменим ID-Alias на ID
+//	TableName := Table1.Name
+//	IDName, _ := FindPrimaryKeyNameType(Table1)
+//	Alias, _ := types.MapConvertID[TableName+"."+IDName]
+//	OtvetColumnName := "m." + ColumnNamePK
+//	//if ok == true {
+//	//	OtvetColumnName = Alias + "(" + OtvetColumnName + ")"
+//	//}
+//
+//	//заменим int64(m.ID) на m.ID
+//	if mini_func.IsNumberType(ColumnTypeGoPK) == true {
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
+//	} else if ColumnTypeGoPK == "string" {
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+" == \"\"")
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+" != \"\"")
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
+//	} else if ColumnTypeGoPK == "uuid.UUID" || ColumnTypeGoPK == "uuid.NullUUID" {
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+" == uuid.Nil")
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+" != uuid.Nil")
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName+".String()")
+//	} else if ColumnTypeGoPK == "time.Time" {
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+".IsZero() == true")
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+".IsZero() == false")
+//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
+//	}
+//	//Otvet = strings.ReplaceAll(Otvet, "m.ID = ", OtvetColumnName+" = ")
+//	//Otvet = strings.ReplaceAll(Otvet, " = m.ID", " = "+OtvetColumnName)
+//	Otvet = strings.ReplaceAll(Otvet, ", m.ID,", ", "+OtvetColumnName+",")
+//	//Otvet = strings.ReplaceAll(Otvet, "(m.ID)", "("+OtvetColumnName+")")
+//	Value := ConvertColumnToAlias(Table1, ColumnPK, "")
+//	Otvet = strings.ReplaceAll(Otvet, "m.ID = AliasFromInt(ID)", "m."+ColumnNamePK+" = "+Value)
+//
+//	Otvet = strings.ReplaceAll(Otvet, "\tm2.ID = ", "\tm2."+ColumnNamePK+" = ")
+//
+//	//Alias преобразуем в int64, и наоборот
+//	if Alias != "" {
+//		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", ColumnTypeGoPK+"(m."+ColumnNamePK+")")
+//		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", ColumnTypeGoPK+"(m."+ColumnNamePK+")")
+//		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
+//		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", Alias+"("+ColumnNamePK+")")
+//		Value := ConvertGolangTypeToProtobufType(Table1, ColumnPK, "m")
+//		Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
+//	} else {
+//		DefaultValue := FindTextDefaultValue(ColumnTypeGoPK)
+//		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", "m."+ColumnNamePK+" == "+DefaultValue)
+//		//Value := ConvertGolangTypeToProtobufType(Table1, ColumnPK, "m")
+//		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", "m."+ColumnNamePK) //не protobuf
+//		Value := ConvertGolangTypeToProtobufType(Table1, ColumnPK, "m")
+//		Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
+//		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
+//		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", "ID")
+//		Otvet = strings.ReplaceAll(Otvet, " ID=0", " "+ColumnNamePK+"="+DefaultValue)
+//		Otvet = strings.ReplaceAll(Otvet, "(m.ID)", "(m."+ColumnNamePK+")")
+//	}
+//
+//	return Otvet
+//}
 
 // ReplaceColumnNamePK - заменяет "ColumnNamePK" на текст имя колонки
 func ReplaceColumnNamePK(Text string, Table1 *types.Table) string {

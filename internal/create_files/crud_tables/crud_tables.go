@@ -657,7 +657,7 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	FuncName := "Update_" + ColumnName
 	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1)
 
-	ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+	//ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
 
 	Otvet = create_files.ReplaceCacheRemove(Otvet, Table1)
 
@@ -690,7 +690,11 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
 	//Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", "m."+ColumnPK.NameGo)
+	TextIntFromAlias := create_files.ConvertFromAlias(Table1, Column1, "m")
+	//DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
+	TextEqual0 := create_files.FindTextEqual0(Column1)
+	Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", TextIntFromAlias+TextEqual0)
+	Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", TextIntFromAlias)
 
 	//внешние ключи заменяем 0 на null
 	TextEqualEmpty := create_files.FindTextEqualEmpty(Column1, "Value")
