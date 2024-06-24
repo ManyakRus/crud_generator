@@ -1,4 +1,4 @@
-// Read - изменяет 1 поле ColumnName в базе данных
+// Read - изменяет 1 поле ColumnNameField в базе данных
 func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
@@ -12,7 +12,7 @@ func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	return err
 }
 
-// Read_ctx - изменяет 1 поле ColumnName в базе данных
+// Read_ctx - изменяет 1 поле ColumnNameField в базе данных
 // с учётом контекста и соединения к БД
 func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
@@ -24,7 +24,7 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 
 	//ID не должен быть =0
 	if IntFromAlias(m.ID) == 0 {
-		err = errors.New(m.TableNameDB()+` Read() error: ID=0`)
+		err = errors.New(m.TableNameDB()+` Read() error: ColumnNamePK=0`)
 		return err
 	}
 
@@ -33,15 +33,15 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 
 	//
 	var tx *gorm.DB
-	Value := m.ColumnName
+	Value := m.ColumnNameField
 	if Value == 0 {
-		tx = db.Model(&m).Update("ColumnName", gorm.Expr("NULL"))
+		tx = db.Model(&m).Update("ColumnNameField", gorm.Expr("NULL"))
 	} else {
-		tx = db.Model(&m).Update("ColumnName", Value)
+		tx = db.Model(&m).Update("ColumnNameField", Value)
 	}
 	err = tx.Error
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Read() id: %v, error: %v", IntFromAlias(m.ID), err)
+		err = fmt.Errorf(m.TableNameDB()+" Read() id: %v, error: %w", m.ColumnNamePK, err)
 		return err
 	}
 

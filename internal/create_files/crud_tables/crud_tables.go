@@ -652,6 +652,8 @@ func FindTextUpdateEveryColumn(TextCrudUpdateFunc string, Table1 *types.Table) s
 func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextCrudUpdateFunc
 
+	ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
@@ -661,15 +663,17 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 
 	Otvet = create_files.ReplaceCacheRemove(Otvet, Table1)
 
+	Otvet = create_files.ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "m")
+
 	//запись null в nullable колонки
 	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
 	} else {
 		TextFind := `	if Value == 0 {
-		tx = db.Model(&m).Update("ColumnName", gorm.Expr("NULL"))
+		tx = db.Model(&m).Update("ColumnNameField", gorm.Expr("NULL"))
 	} else {
-		tx = db.Model(&m).Update("ColumnName", Value)
+		tx = db.Model(&m).Update("ColumnNameField", Value)
 	}`
-		TextReplace := `	tx = db.Model(&m).Update("ColumnName", Value)`
+		TextReplace := `	tx = db.Model(&m).Update("ColumnNameField", Value)`
 		Otvet = strings.ReplaceAll(Otvet, TextFind, TextReplace)
 	}
 
@@ -686,15 +690,17 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
-	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnNamePK", ColumnPK.NameGo)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnNameField", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
 	//Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	TextIntFromAlias := create_files.ConvertFromAlias(Table1, Column1, "m")
+	//TextIntFromAlias := create_files.ConvertFromAlias(Table1, Column1, "m")
 	//DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
-	TextEqual0 := create_files.FindTextEqual0(Column1)
-	Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", TextIntFromAlias+TextEqual0)
-	Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", TextIntFromAlias)
+
+	//TextEqual0 := create_files.FindTextEqual0(Column1)
+	//Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", TextIntFromAlias+TextEqual0)
+	//Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", TextIntFromAlias)
 
 	//внешние ключи заменяем 0 на null
 	TextEqualEmpty := create_files.FindTextEqualEmpty(Column1, "Value")
