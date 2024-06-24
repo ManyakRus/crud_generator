@@ -240,7 +240,7 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	TextAutoUpdateTime := ""
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		if ColumnNameLowerCase == "created_at" {
-			TextAutoCreateTime = ";autoCreateTime"
+			TextAutoCreateTime = ";autoCreateTime;<-:create;"
 			TextDefaultValue = ""
 		}
 
