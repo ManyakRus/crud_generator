@@ -335,8 +335,19 @@ func Is_NotNeedUpdate_Сolumn(Column1 *types.Column) bool {
 
 	Otvet = Is_Column_CommonStruct(Column1) || Is_Column_GroupsStruct(Column1) || Is_Column_ExtLinksStruct(Column1)
 
-	if strings.HasPrefix(Column1.Name, "DELETED_") == true {
+	if Is_Need_Сolumn(Column1) == false {
 		Otvet = true
+	}
+
+	return Otvet
+}
+
+// Is_Need_Сolumn - возвращает true если эта колонка не нужна
+func Is_Need_Сolumn(Column1 *types.Column) bool {
+	Otvet := true
+
+	if strings.HasPrefix(Column1.Name, "DELETED_") == true {
+		Otvet = false
 	}
 
 	return Otvet

@@ -200,6 +200,10 @@ type ` + ModelNameWithPrefix + ` struct {
 			continue
 		}
 
+		if create_files.Is_Need_Сolumn(Column1) == false {
+			continue
+		}
+
 		var TextColumn string
 		TextModel, TextColumn = FindTextColumn(TextModel, Table1, Column1)
 		Otvet = Otvet + TextColumn + "\n"
