@@ -11,7 +11,7 @@ func TestMapOmit_from_MassOmit(t *testing.T) {
 		MassOmit := []string{}
 		result := MapOmit_from_MassOmit(MassOmit)
 		if len(result) != 0 {
-			t.Errorf("Expected an empty map, but got %v", result)
+			t.Errorf("Expected an empty map, but got %w", result)
 		}
 	})
 

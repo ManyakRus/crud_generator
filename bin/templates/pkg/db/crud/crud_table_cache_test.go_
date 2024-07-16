@@ -20,13 +20,13 @@ func TestReadFromCache(t *testing.T) {
 	m1.ID = Postgres_ID_Test
 	err = Crud_DB{}.Read(&m1)
 	if err != nil {
-		t.Errorf("TestReadFromCache() error:t %v", err)
+		t.Errorf("TestReadFromCache() error:t %w", err)
 	}
 
 	//читаем из Кеша
 	m2, err := Crud_DB{}.ReadFromCache(Postgres_ID_Test)
 	if err != nil {
-		t.Errorf("TestReadFromCache() error:t %v", err)
+		t.Errorf("TestReadFromCache() error: %w", err)
 	}
 
 	//сравниваем

@@ -49,7 +49,7 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 	tx := db.First(m)
 	err = tx.Error
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Read() ColumnNamePK: %v, error: %v", m.ColumnNamePK, err)
+		err = fmt.Errorf(m.TableNameDB()+" Read() ColumnNamePK: %v, error: %w", m.ColumnNamePK, err)
 	}
 
 	return err
@@ -206,7 +206,7 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 	tx = tx.Updates(MapOmit)
 	err = tx.Error
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Create_Update() ColumnNamePK: %v, error: %v", m.ColumnNamePK, err)
+		err = fmt.Errorf(m.TableNameDB()+" Create_Update() ColumnNamePK: %v, error: %w", m.ColumnNamePK, err)
 	}
 
 	return err
@@ -247,7 +247,7 @@ func Restore_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsu
 
 	err = Save_ctx(ctx, db, &m2)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Restore() ColumnNamePK: %v, error: %v", ColumnNamePK, err)
+		err = fmt.Errorf(m.TableNameDB()+" Restore() ColumnNamePK: %v, error: %w", ColumnNamePK, err)
 	}
 
 	return err
@@ -293,7 +293,7 @@ func Find_ByExtID_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.
 	tx := db.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).First(m)
 	err = tx.Error
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Find_ByExtID() ExtID: %v, ConnectionID: %v, error: %v", m.ExtID, m.ConnectionID, err)
+		err = fmt.Errorf(m.TableNameDB()+" Find_ByExtID() ExtID: %v, ConnectionID: %v, error: %w", m.ExtID, m.ConnectionID, err)
 	}
 
 	return err
@@ -329,7 +329,7 @@ func Delete_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 	tx := db.Delete(m)
 	err = tx.Error
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Delete() ColumnNamePK: %v, error: %v", m.ColumnNamePK, err)
+		err = fmt.Errorf(m.TableNameDB()+" Delete() ColumnNamePK: %v, error: %w", m.ColumnNamePK, err)
 	}
 
 	return err

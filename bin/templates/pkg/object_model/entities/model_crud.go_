@@ -27,7 +27,7 @@ type ICrud_LawsuitStatusType interface {
 	UpdateManyFields(*LawsuitStatusType, []string) error
 }
 
-// TableName - возвращает имя таблицы в БД
+// TableNameDB - возвращает имя таблицы в БД
 func (m LawsuitStatusType) TableNameDB() string {
 	return "lawsuit_status_types"
 }
