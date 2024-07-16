@@ -328,7 +328,7 @@ func DeleteFuncFind_byExtID(Text, ModelName string, Table1 *types.Table) string 
 	Otvet := Text
 
 	//если есть обе колонки - ничего не делаем
-	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
+	ok := create_files.Has_Column_ExtID_ConnectionID_Int64(Table1)
 	if ok == true {
 		return Otvet
 	}
@@ -372,7 +372,7 @@ func DeleteFuncTestFind_byExtID(Text, ModelName string, Table1 *types.Table) str
 	Otvet := Text
 
 	//если есть обе колонки - ничего не делаем
-	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
+	ok := create_files.Has_Column_ExtID_ConnectionID_Int64(Table1)
 	if ok == true {
 		return Otvet
 	}

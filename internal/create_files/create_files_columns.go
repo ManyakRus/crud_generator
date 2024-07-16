@@ -8,19 +8,29 @@ import (
 	"strings"
 )
 
-// Has_Column_ExtID_ConnectionID - возвращает true если есть поля ExtId и ConnectionID
-func Has_Column_ExtID_ConnectionID(Table1 *types.Table) bool {
+// Has_Column_ExtID_ConnectionID_Int64 - возвращает true если есть поля ExtId и ConnectionID, если они int64
+func Has_Column_ExtID_ConnectionID_Int64(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["ext_id"]
+	Column1, ok := Table1.MapColumns["ext_id"]
 	if ok == false {
 		return Otvet
 	}
 
 	//
-	_, ok = Table1.MapColumns["connection_id"]
+	if Column1.TypeGo != "int64" {
+		return Otvet
+	}
+
+	//
+	Column1, ok = Table1.MapColumns["connection_id"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "int64" {
 		return Otvet
 	}
 
@@ -28,13 +38,18 @@ func Has_Column_ExtID_ConnectionID(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_IsDeleted - возвращает true если есть поле is_deleted
-func Has_Column_IsDeleted(Table1 *types.Table) bool {
+// Has_Column_IsDeleted_Bool - возвращает true если есть поле is_deleted
+func Has_Column_IsDeleted_Bool(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["is_deleted"]
+	Column1, ok := Table1.MapColumns["is_deleted"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "bool" {
 		return Otvet
 	}
 
@@ -286,7 +301,7 @@ func Has_Column_Description_String(Table1 *types.Table) bool {
 func Has_Columns_CommonStruct(Table1 *types.Table) bool {
 	Otvet := false
 
-	Otvet = Has_Column_ExtID_Int64(Table1) && Has_Column_CreatedAt_Time(Table1) && Has_Column_ModifiedAt_Time(Table1) && Has_Column_DeletedAt_Time(Table1) && Has_Column_IsDeleted(Table1) && Has_Column_ID_Int64(Table1)
+	Otvet = Has_Column_ExtID_Int64(Table1) && Has_Column_CreatedAt_Time(Table1) && Has_Column_ModifiedAt_Time(Table1) && Has_Column_DeletedAt_Time(Table1) && Has_Column_IsDeleted_Bool(Table1) && Has_Column_ID_Int64(Table1)
 
 	return Otvet
 }

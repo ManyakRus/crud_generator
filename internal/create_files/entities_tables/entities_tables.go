@@ -463,7 +463,7 @@ func DeleteFromInterfaceDelete(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
-	if create_files.Has_Column_IsDeleted(Table1) == true {
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
 		return Otvet
 	}
 
@@ -479,7 +479,7 @@ func DeleteFromInterfaceRestore(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
-	if create_files.Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true && config.Settings.HAS_IS_DELETED == true {
 		return Otvet
 	}
 
@@ -495,7 +495,7 @@ func DeleteFromInterfaceFind_ByExtID(TextModel string, Table1 *types.Table) stri
 	Otvet := TextModel
 
 	//проверим есть ли колонки ExtID и ConnectionID
-	if create_files.Has_Column_ExtID_ConnectionID(Table1) == true {
+	if create_files.Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
 		return Otvet
 	}
 

@@ -281,7 +281,7 @@ func DeleteFuncDelete(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
-	if create_files.Has_Column_IsDeleted(Table1) == true {
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
 		return Otvet
 	}
 
@@ -296,7 +296,7 @@ func DeleteFuncRestore(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
-	if create_files.Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true && config.Settings.HAS_IS_DELETED == true {
 		return Otvet
 	}
 
@@ -339,7 +339,7 @@ func DeleteFuncFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//если есть обе колонки - ничего не делаем
-	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
+	ok := create_files.Has_Column_ExtID_ConnectionID_Int64(Table1)
 	if ok == true {
 		return Otvet
 	}
@@ -356,7 +356,7 @@ func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
-	if create_files.Has_Column_IsDeleted(Table1) == true {
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
 		return Otvet
 	}
 
@@ -371,7 +371,7 @@ func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
-	if create_files.Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true && config.Settings.HAS_IS_DELETED == true {
 		return Otvet
 	}
 
@@ -386,7 +386,7 @@ func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//если есть обе колонки - ничего не делаем
-	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
+	ok := create_files.Has_Column_ExtID_ConnectionID_Int64(Table1)
 	if ok == true {
 		return Otvet
 	}

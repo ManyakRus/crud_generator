@@ -144,11 +144,11 @@ func FindTextProtoTable1(TextProto string, Table1 *types.Table) string {
 	Otvet = Otvet + FindTextCreate(TextProto, ModelName)
 	Otvet = Otvet + FindTextUpdate(TextProto, ModelName)
 	Otvet = Otvet + FindTextSave(TextProto, ModelName)
-	if create_files.Has_Column_ExtID_ConnectionID(Table1) == true {
+	if create_files.Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
 		Otvet = Otvet + FindTextFindByExtId(TextProto, ModelName)
 	}
 
-	if create_files.Has_Column_IsDeleted(Table1) == true {
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
 		Otvet = Otvet + FindTextDelete(TextProto, Table1)
 
 		if config.Settings.HAS_IS_DELETED == true {

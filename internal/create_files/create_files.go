@@ -1351,7 +1351,7 @@ func DeleteFuncDelete(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted(Table1) == true {
+	if Has_Column_IsDeleted_Bool(Table1) == true {
 		return Otvet
 	}
 
@@ -1366,7 +1366,7 @@ func DeleteFuncRestore(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+	if Has_Column_IsDeleted_Bool(Table1) == true && config.Settings.HAS_IS_DELETED == true {
 		return Otvet
 	}
 
@@ -1381,7 +1381,7 @@ func DeleteFuncFind_byExtID(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверка есть ли колонки ExtID и ConnectionID
-	if Has_Column_ExtID_ConnectionID(Table1) == true {
+	if Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
 		return Otvet
 	}
 
@@ -1396,7 +1396,7 @@ func DeleteFuncDeleteCtx(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted(Table1) == true {
+	if Has_Column_IsDeleted_Bool(Table1) == true {
 		return Otvet
 	}
 
@@ -1411,7 +1411,7 @@ func DeleteFuncRestoreCtx(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+	if Has_Column_IsDeleted_Bool(Table1) == true && config.Settings.HAS_IS_DELETED == true {
 		return Otvet
 	}
 
@@ -1426,7 +1426,7 @@ func DeleteFuncFind_byExtIDCtx(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверка есть ли колонки ExtID и ConnectionID
-	if Has_Column_ExtID_ConnectionID(Table1) == true {
+	if Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
 		return Otvet
 	}
 
@@ -1441,7 +1441,7 @@ func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted(Table1) == true {
+	if Has_Column_IsDeleted_Bool(Table1) == true {
 		return Otvet
 	}
 
@@ -1456,7 +1456,7 @@ func DeleteFuncReadFromCache(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted(Table1) == true {
+	if Has_Column_IsDeleted_Bool(Table1) == true {
 		return Otvet
 	}
 
@@ -1471,7 +1471,7 @@ func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted(Table1) == true && config.Settings.HAS_IS_DELETED == true {
+	if Has_Column_IsDeleted_Bool(Table1) == true && config.Settings.HAS_IS_DELETED == true {
 		return Otvet
 	}
 
@@ -1486,7 +1486,7 @@ func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверка есть ли колонки ExtID и ConnectionID
-	if Has_Column_ExtID_ConnectionID(Table1) == true {
+	if Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
 		return Otvet
 	}
 

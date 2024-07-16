@@ -150,6 +150,9 @@ func CreateFiles(Table1 *types.Table) error {
 			//исправление Save()
 			TextDB = strings.ReplaceAll(TextDB, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
 		}
+
+		//
+		TextDB = Replace_ExtID_equal0_string(TextDB, Table1)
 	}
 
 	//TextDB = create_files.DeleteFuncFind_byExtID(TextDB, Table1)
@@ -348,7 +351,7 @@ func CreateFilesTest(Table1 *types.Table) error {
 //	Otvet := Text
 //
 //	//если есть обе колонки - ничего не делаем
-//	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
+//	ok := create_files.Has_Column_ExtID_ConnectionID_Int64(Table1)
 //	if ok == true {
 //		return Otvet
 //	}
@@ -364,7 +367,7 @@ func CreateFilesTest(Table1 *types.Table) error {
 //	Otvet := Text
 //
 //	//если есть обе колонки - ничего не делаем
-//	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
+//	ok := create_files.Has_Column_ExtID_ConnectionID_Int64(Table1)
 //	if ok == true {
 //		return Otvet
 //	}
@@ -1038,4 +1041,20 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 	err = os.WriteFile(FilenameReadyCache, []byte(TextCache), constants.FILE_PERMISSIONS)
 
 	return err
+}
+
+// Replace_ExtID_equal0_string - заменяет "ExtID == 0 " на "ExtID == "" "
+func Replace_ExtID_equal0_string(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
+
+	Column1, ok := Table1.MapColumns["ext_id"]
+	if ok == false {
+		return Otvet
+	}
+	TypeGo := Column1.TypeGo
+	if TypeGo == "string" {
+		Otvet = strings.ReplaceAll(Otvet, "ExtID == 0 ", `ExtID == "" `)
+	}
+
+	return Otvet
 }
