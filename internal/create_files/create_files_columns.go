@@ -71,12 +71,18 @@ func Has_ColumnType_Time(Table1 *types.Table) bool {
 	return Otvet
 }
 
-func Has_Column_ID(Table1 *types.Table) bool {
+// Has_Column_ID_Int64 - возвращает true если есть поле id типа int64
+func Has_Column_ID_Int64(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["id"]
+	Column1, ok := Table1.MapColumns["id"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "int64" {
 		return Otvet
 	}
 
@@ -84,13 +90,18 @@ func Has_Column_ID(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_ExtID - возвращает true если есть поле ext_id
-func Has_Column_ExtID(Table1 *types.Table) bool {
+// Has_Column_ExtID_Int64 - возвращает true если есть поле ext_id типа int64
+func Has_Column_ExtID_Int64(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["ext_id"]
+	Column1, ok := Table1.MapColumns["ext_id"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "int64" {
 		return Otvet
 	}
 
@@ -98,13 +109,18 @@ func Has_Column_ExtID(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_CreatedAt - возвращает true если есть поле created_at
-func Has_Column_CreatedAt(Table1 *types.Table) bool {
+// Has_Column_CreatedAt_Time - возвращает true если есть поле created_at
+func Has_Column_CreatedAt_Time(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["created_at"]
+	Column1, ok := Table1.MapColumns["created_at"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "time.Time" {
 		return Otvet
 	}
 
@@ -112,13 +128,18 @@ func Has_Column_CreatedAt(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_ModifiedAt - возвращает true если есть поле modified_at
-func Has_Column_ModifiedAt(Table1 *types.Table) bool {
+// Has_Column_ModifiedAt_Time - возвращает true если есть поле modified_at
+func Has_Column_ModifiedAt_Time(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["modified_at"]
+	Column1, ok := Table1.MapColumns["modified_at"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "time.Time" {
 		return Otvet
 	}
 
@@ -126,13 +147,18 @@ func Has_Column_ModifiedAt(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_DeletedAt - возвращает true если есть поле deleted_at
-func Has_Column_DeletedAt(Table1 *types.Table) bool {
+// Has_Column_DeletedAt_Time - возвращает true если есть поле deleted_at
+func Has_Column_DeletedAt_Time(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["deleted_at"]
+	Column1, ok := Table1.MapColumns["deleted_at"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "time.Time" {
 		return Otvet
 	}
 
@@ -140,13 +166,18 @@ func Has_Column_DeletedAt(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_TableNameID - возвращает true если есть поле table_name_id
-func Has_Column_TableNameID(Table1 *types.Table) bool {
+// Has_Column_TableNameID_Int64 - возвращает true если есть поле table_name_id
+func Has_Column_TableNameID_Int64(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["table_name_id"]
+	Column1, ok := Table1.MapColumns["table_name_id"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "int64" {
 		return Otvet
 	}
 
@@ -154,13 +185,18 @@ func Has_Column_TableNameID(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_TableRowID - возвращает true если есть поле table_row_id
-func Has_Column_TableRowID(Table1 *types.Table) bool {
+// Has_Column_TableRowID_Int64 - возвращает true если есть поле table_row_id
+func Has_Column_TableRowID_Int64(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["table_row_id"]
+	Column1, ok := Table1.MapColumns["table_row_id"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "int64" {
 		return Otvet
 	}
 
@@ -168,13 +204,18 @@ func Has_Column_TableRowID(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_IsGroup - возвращает true если есть поле is_group
-func Has_Column_IsGroup(Table1 *types.Table) bool {
+// Has_Column_IsGroup_Bool - возвращает true если есть поле is_group
+func Has_Column_IsGroup_Bool(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["is_group"]
+	Column1, ok := Table1.MapColumns["is_group"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "bool" {
 		return Otvet
 	}
 
@@ -182,13 +223,18 @@ func Has_Column_IsGroup(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_ParentID - возвращает true если есть поле parent_id
-func Has_Column_ParentID(Table1 *types.Table) bool {
+// Has_Column_ParentID_Int64 - возвращает true если есть поле parent_id
+func Has_Column_ParentID_Int64(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["parent_id"]
+	Column1, ok := Table1.MapColumns["parent_id"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "int64" {
 		return Otvet
 	}
 
@@ -196,13 +242,18 @@ func Has_Column_ParentID(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_Name - возвращает true если есть поле name
-func Has_Column_Name(Table1 *types.Table) bool {
+// Has_Column_Name_String - возвращает true если есть поле name
+func Has_Column_Name_String(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["name"]
+	Column1, ok := Table1.MapColumns["name"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "string" {
 		return Otvet
 	}
 
@@ -210,13 +261,18 @@ func Has_Column_Name(Table1 *types.Table) bool {
 	return Otvet
 }
 
-// Has_Column_Description - возвращает true если есть поле description
-func Has_Column_Description(Table1 *types.Table) bool {
+// Has_Column_Description_String - возвращает true если есть поле description
+func Has_Column_Description_String(Table1 *types.Table) bool {
 	Otvet := false
 
 	//
-	_, ok := Table1.MapColumns["description"]
+	Column1, ok := Table1.MapColumns["description"]
 	if ok == false {
+		return Otvet
+	}
+
+	//
+	if Column1.TypeGo != "string" {
 		return Otvet
 	}
 
@@ -230,7 +286,7 @@ func Has_Column_Description(Table1 *types.Table) bool {
 func Has_Columns_CommonStruct(Table1 *types.Table) bool {
 	Otvet := false
 
-	Otvet = Has_Column_ExtID(Table1) && Has_Column_CreatedAt(Table1) && Has_Column_ModifiedAt(Table1) && Has_Column_DeletedAt(Table1) && Has_Column_IsDeleted(Table1) && Has_Column_ID(Table1)
+	Otvet = Has_Column_ExtID_Int64(Table1) && Has_Column_CreatedAt_Time(Table1) && Has_Column_ModifiedAt_Time(Table1) && Has_Column_DeletedAt_Time(Table1) && Has_Column_IsDeleted(Table1) && Has_Column_ID_Int64(Table1)
 
 	return Otvet
 }
@@ -239,7 +295,7 @@ func Has_Columns_CommonStruct(Table1 *types.Table) bool {
 func Has_Columns_NameStruct(Table1 *types.Table) bool {
 	Otvet := false
 
-	Otvet = Has_Column_Name(Table1) && Has_Column_Description(Table1)
+	Otvet = Has_Column_Name_String(Table1) && Has_Column_Description_String(Table1)
 
 	return Otvet
 }
@@ -248,7 +304,7 @@ func Has_Columns_NameStruct(Table1 *types.Table) bool {
 func Has_Columns_Groups(Table1 *types.Table) bool {
 	Otvet := false
 
-	Otvet = Has_Column_IsGroup(Table1) && Has_Column_ParentID(Table1)
+	Otvet = Has_Column_IsGroup_Bool(Table1) && Has_Column_ParentID_Int64(Table1)
 
 	return Otvet
 }
@@ -257,7 +313,7 @@ func Has_Columns_Groups(Table1 *types.Table) bool {
 func Has_Columns_ExtLink(Table1 *types.Table) bool {
 	Otvet := false
 
-	Otvet = Has_Column_TableNameID(Table1) && Has_Column_TableRowID(Table1)
+	Otvet = Has_Column_TableNameID_Int64(Table1) && Has_Column_TableRowID_Int64(Table1)
 
 	return Otvet
 }
