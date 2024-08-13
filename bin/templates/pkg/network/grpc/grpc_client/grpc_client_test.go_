@@ -1,23 +1,14 @@
 package grpc_client
 
 import (
-	"errors"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
+	"github.com/ManyakRus/starter/config_main"
 	"testing"
 )
 
-func TestIsRecordNotFound(t *testing.T) {
-
-	err := errors.New(db_constants.TEXT_RECORD_NOT_FOUND + " !")
-	Otvet := IsRecordNotFound(err)
-	if Otvet != true {
-		t.Error("TestIsRecordNotFound() error: false")
+func TestFillSettings(t *testing.T) {
+	config_main.LoadEnvTest()
+	err := FillSettings()
+	if err != nil {
+		t.Error("FillSettings() error: ", err)
 	}
-
-	err = errors.New("rpc error: code = Unknown desc = record not found")
-	Otvet = IsRecordNotFound(err)
-	if Otvet != true {
-		t.Error("TestIsRecordNotFound() error: false")
-	}
-
 }

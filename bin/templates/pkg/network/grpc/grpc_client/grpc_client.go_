@@ -8,16 +8,16 @@ import (
 	"github.com/ManyakRus/starter/port_checker"
 	"github.com/ManyakRus/starter/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client_func"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"
-	"strings"
 	"sync"
 	"time"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
 )
 
 // SettingsINI - тип структуры для хранения настроек подключени
@@ -32,14 +32,15 @@ var Settings SettingsINI
 // Conn - подключение к серверу GRPC
 var Conn *grpc.ClientConn
 
-// Client - подключение к клиенту GRPC
-var Client grpc_proto.SyncServiceClient
-
 // mutex_Connect - защита от многопоточности Reconnect()
 var mutex_Connect = &sync.Mutex{}
 
 // NeedReconnect - флаг необходимости переподключения
 var NeedReconnect bool
+
+// Объект с функцией Connect_GRPC_NRPC()
+type Object_Connect_GRPC_NRPC struct {
+}
 
 // Connect - подключается к серверу GRPC, при ошибке вызывает панику
 func Connect() {
@@ -65,6 +66,10 @@ func Connect_err() error {
 	defer mutex_Connect.Unlock()
 
 	//
+	grpc_client_func.Func_Connect_GRPC_NRPC = Object_Connect_GRPC_NRPC{}
+	crud_starter.InitCrudTransport_GRPC()
+
+	//
 	if Settings.SYNC_SERVICE_HOST == "" {
 		err = FillSettings()
 		if err != nil {
@@ -78,7 +83,7 @@ func Connect_err() error {
 		return err
 	}
 
-	Client = grpc_proto.NewSyncServiceClient(Conn)
+	grpc_client_func.Client = grpc_proto.NewSyncServiceClient(Conn)
 
 	grpc_nrpc.NeedNRPC = false
 
@@ -176,23 +181,6 @@ func CloseConnection_err() error {
 	return err
 }
 
-// IsRecordNotFound - возвращает true если ошибка = "record not found"
-func IsRecordNotFound(err error) bool {
-	Otvet := false
-
-	if err == nil {
-		return Otvet
-	}
-
-	TextErr := err.Error()
-	pos1 := strings.Index(TextErr, db_constants.TEXT_RECORD_NOT_FOUND)
-	if pos1 >= 0 {
-		Otvet = true
-	}
-
-	return Otvet
-}
-
 // ping_go - делает пинг каждые 60 секунд, и реконнект
 func ping_go() {
 
@@ -242,26 +230,14 @@ func SetTimeoutSeconds(seconds int) {
 }
 
 // Connect_GRPC_NRPC - подключается к серверу GRPC или NRPC, при ошибке вызывает панику
-func Connect_GRPC_NRPC() {
+func (Object_Connect_GRPC_NRPC) Connect_GRPC_NRPC() {
 	if grpc_nrpc.NeedNRPC == true {
 		if nrpc_client.Client == nil {
 			nrpc_client.Connect()
 		}
 	} else {
-		if Client == nil {
+		if grpc_client_func.Client == nil {
 			Connect()
 		}
 	}
-}
-
-// IsErrorModelVersion - возвращает true если ошибка TEXT_ERROR_MODEL_VERSION
-func IsErrorModelVersion(err error) bool {
-	Otvet := false
-
-	sError := err.Error()
-	if strings.Contains(sError, grpc_constants.TEXT_ERROR_MODEL_VERSION) == true {
-		Otvet = true
-	}
-
-	return Otvet
 }

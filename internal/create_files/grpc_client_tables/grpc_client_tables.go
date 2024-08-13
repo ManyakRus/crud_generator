@@ -195,7 +195,7 @@ func CreateFilesTest(Table1 *types.Table) error {
 
 	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + "grpc_client_table_test.go_"
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile()
+	DirReadyTable := DirReadyGRPCClient + "grpc_" + TableName + micro.SeparatorFile() + "tests" + micro.SeparatorFile()
 	FilenameReadyGRPCClient := DirReadyTable + "grpc_" + TableName + "_test.go"
 
 	//создадим папку готовых файлов
@@ -563,7 +563,7 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	DirReadyGRPC_Client := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + micro.SeparatorFile()
 
 	FilenameTemplateGRPC_ClientFunc := DirTemplatesGRPC_Client + constants.GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME
-	DirReadyTable := DirReadyGRPC_Client
+	DirReadyTable := DirReadyGRPC_Client + "tests" + micro.SeparatorFile()
 	FilenameReadyGRPC_ClientUpdate := DirReadyTable + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_update_test.go"
 
 	//создадим папку готовых файлов
@@ -819,7 +819,7 @@ func CreateFiles_GRPC_Client_Cache_Test(Table1 *types.Table) error {
 
 	FilenameTemplateCache := DirTemplatesCache + config.Settings.TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyCache + "grpc_" + TableName + micro.SeparatorFile()
+	DirReadyTable := DirReadyCache + "grpc_" + TableName + micro.SeparatorFile() + "tests" + micro.SeparatorFile()
 	FilenameReadyCache := DirReadyTable + "grpc_" + TableName + "_cache_test.go"
 
 	//создадим папку готовых файлов
