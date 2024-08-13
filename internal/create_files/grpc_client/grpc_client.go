@@ -68,8 +68,8 @@ func CreateGRPCClient() error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ProtoURL)
 
 		//constants db
-		DBConstantsURL := create_files.FindDBConstantsURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, DBConstantsURL)
+		//DBConstantsURL := create_files.FindDBConstantsURL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, DBConstantsURL)
 
 		//grpc_nrpc
 		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
@@ -78,6 +78,14 @@ func CreateGRPCClient() error {
 		//nrpc_client
 		NRPC_CLIENT_URL := create_files.FindNRPC_Client_URL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_CLIENT_URL)
+
+		//grpc_client_func
+		GRPC_CLIENT_FUNC_URL := create_files.Find_grpc_client_func_URL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_CLIENT_FUNC_URL)
+
+		//CRUD_STARTER_URL
+		CRUD_STARTER_URL := create_files.FindCrudStarterURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, CRUD_STARTER_URL)
 
 		//constants GRPC
 		RepositoryGRPCConstantsURL := create_files.FindGRPCConstantsURL()

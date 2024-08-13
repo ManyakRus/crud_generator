@@ -29,6 +29,7 @@ type SettingsINI struct {
 	TEMPLATE_FOLDERNAME_NRPC_SERVER                  string
 	TEMPLATE_FOLDERNAME_NRPC_CLIENT                  string
 	TEMPLATE_FOLDERNAME_GRPC_NRPC                    string
+	TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC             string
 	TEMPLATE_SERVICE_NAME                            string
 	TEMPLATE_FOLDERNAME_CRUD_STARTER                 string
 	TEMPLATE_FOLDERNAME_ALIAS                        string
@@ -519,6 +520,11 @@ func FillSettings() {
 	Name = "SINGULAR_TABLE_NAMES"
 	s = Getenv(Name, true)
 	Settings.SINGULAR_TABLE_NAMES = BoolFromString(s)
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC = s
 
 }
 

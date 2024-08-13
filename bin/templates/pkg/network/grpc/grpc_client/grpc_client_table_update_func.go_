@@ -3,7 +3,7 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	// подключение
-	grpc_client.Connect_GRPC_NRPC()
+	grpc_client_func.Func_Connect_GRPC_NRPC.Connect_GRPC_NRPC()
 
 	// подготовка запроса
 	var versionModel = crud.GetVersionModel()
@@ -21,10 +21,10 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	if grpc_nrpc.NeedNRPC == true {
 		_, err = nrpc_client.Client.LawsuitStatusType_Update(Request)
 	} else {
-		_, err = grpc_client.Client.LawsuitStatusType_Update(ctx, Request)
+		_, err = grpc_client_func.Client.LawsuitStatusType_Update(ctx, Request)
 	}
 	if err != nil {
-		if grpc_client.IsErrorModelVersion(err) == true {
+		if grpc_client_func.IsErrorModelVersion(err) == true {
 			log.Panic(err)
 		}
 		return err

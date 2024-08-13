@@ -72,11 +72,17 @@ func CreateNRPCClient() error {
 		//GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
 		//TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPC_NRPC_URL)
 
-		DBConstantsURL := create_files.FindDBConstantsURL()
-		TextNRPCClient = create_files.AddImport(TextNRPCClient, DBConstantsURL)
+		//DBConstantsURL := create_files.FindDBConstantsURL()
+		//TextNRPCClient = create_files.AddImport(TextNRPCClient, DBConstantsURL)
 
 		NRPCConstantsURL := create_files.FindNRPCConstantsURL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, NRPCConstantsURL)
+
+		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPC_NRPC_URL)
+
+		GRPC_func_URL := create_files.Find_grpc_client_func_URL()
+		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPC_func_URL)
 
 	}
 

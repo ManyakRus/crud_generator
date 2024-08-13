@@ -846,6 +846,15 @@ func Find_GRPC_NRPC_URL() string {
 	return Otvet
 }
 
+// Find_grpc_client_func_URL - возвращает URL репозитория с пакетом "grpc_client_func"
+func Find_grpc_client_func_URL() string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC
+
+	return Otvet
+}
+
 // FindCalcStructVersionURL - возвращает URL репозитория с пакетом "calc_struct_version"
 func FindCalcStructVersionURL() string {
 	Otvet := ""

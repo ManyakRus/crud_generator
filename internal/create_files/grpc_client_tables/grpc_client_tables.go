@@ -126,9 +126,13 @@ func CreateFiles(Table1 *types.Table) error {
 		RepositoryModelURL := create_files.FindModelTableURL(TableName)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryModelURL)
 
-		//grpc client
-		RepositoryGRPCClientlURL := create_files.FindGRPClientURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCClientlURL)
+		////grpc client
+		//RepositoryGRPCClientlURL := create_files.FindGRPClientURL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCClientlURL)
+
+		//grpc client func
+		GRPCClientFuncURL := create_files.Find_grpc_client_func_URL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPCClientFuncURL)
 
 		//nrpc client
 		RepositoryNRPCClientlURL := create_files.FindNRPClientURL()
@@ -431,8 +435,12 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		ProtoURL := create_files.FindProtoURL()
 		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ProtoURL)
 
-		GRPCClientURL := create_files.FindGRPClientURL()
-		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCClientURL)
+		//GRPCClientURL := create_files.FindGRPClientURL()
+		//TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCClientURL)
+
+		//grpc client func
+		GRPCClientFuncURL := create_files.Find_grpc_client_func_URL()
+		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCClientFuncURL)
 
 		GRPCConstantsURL := create_files.FindGRPCConstantsURL()
 		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCConstantsURL)
@@ -762,8 +770,12 @@ func CreateFiles_GRPC_Client_Cache(Table1 *types.Table) error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryModelURL)
 
 		//grpc client
-		RepositoryGRPCClientlURL := create_files.FindGRPClientURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCClientlURL)
+		//RepositoryGRPCClientlURL := create_files.FindGRPClientURL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCClientlURL)
+
+		//grpc client func
+		GRPCClientFuncURL := create_files.Find_grpc_client_func_URL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPCClientFuncURL)
 
 		//nrpc client
 		RepositoryNRPCClientlURL := create_files.FindNRPClientURL()

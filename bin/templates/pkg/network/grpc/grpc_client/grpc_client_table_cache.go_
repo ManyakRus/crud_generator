@@ -19,7 +19,7 @@ func (crud Crud_GRPC) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatu
 	var err error
 
 	// подключение
-	grpc_client.Connect_GRPC_NRPC()
+	grpc_client_func.Func_Connect_GRPC_NRPC.Connect_GRPC_NRPC()
 
 	// подготовка запроса
 	var versionModel = crud.GetVersionModel()
@@ -37,10 +37,10 @@ func (crud Crud_GRPC) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatu
 	if grpc_nrpc.NeedNRPC == true {
 		Response, err = nrpc_client.Client.LawsuitStatusType_ReadFromCache(Request)
 	} else {
-		Response, err = grpc_client.Client.LawsuitStatusType_ReadFromCache(ctx, Request)
+		Response, err = grpc_client_func.Client.LawsuitStatusType_ReadFromCache(ctx, Request)
 	}
 	if err != nil {
-		if grpc_client.IsErrorModelVersion(err) == true {
+		if grpc_client_func.IsErrorModelVersion(err) == true {
 			log.Panic(err)
 		}
 		return Otvet, err
