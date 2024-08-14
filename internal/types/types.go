@@ -51,3 +51,9 @@ var MapModelCrudDeleteFunctions = make(map[string]string, 0)
 
 // MapRenameFunctions - карта функций которые будут переименованый в файлах crud
 var MapRenameFunctions = make(map[string][]ReplaceStruct, 0)
+
+// MapFindBy - карта функций которые будут созданы для поиска 1 строки в таблице
+var MapFindBy = make(map[string][]string, 0)
+
+// MapFindMassBy - карта функций которые будут созданы для поиска много строк в таблице
+var MapFindMassBy = make(map[string][]string, 0)

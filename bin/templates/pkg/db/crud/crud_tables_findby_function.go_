@@ -1,0 +1,28 @@
+// FindBy_FieldNamesWithUnderline - находит запись в БД по FieldNamesWithPlus
+func (crud Crud_DB) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	ctxMain := context.Background()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	db := postgres_gorm.GetConnection()
+
+	err = FindBy_FieldNamesWithUnderline_ctx(ctx, db, m)
+
+	return err
+}
+
+// FindBy_FieldNamesWithUnderline_ctx - находит запись в БД по FieldNamesWithPlus
+func FindBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	tx := db.WithContext(ctx)
+
+	tx := tx.Where("ColumnName = ?", m.FieldName)
+	tx = tx.First(m)
+	err = tx.Error
+
+	return err
+}
+

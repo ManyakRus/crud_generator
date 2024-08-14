@@ -23,6 +23,8 @@ func LoadConfigsAll() {
 	LoadConvertID()
 	LoadMapModelCrudDeleteFunctions()
 	LoadCrudFunctionsRename()
+	LoadFindBy()
+	LoadFindMassBy()
 }
 
 // LoadMappings - загружает маппинг ТипБД = ТипGolang, из файла .json
@@ -198,6 +200,50 @@ func LoadCrudFunctionsRename() {
 	//json в map
 	//var MapServiceURL2 = make(map[string]string)
 	err = json.Unmarshal(bytes, &types.MapRenameFunctions)
+	if err != nil {
+		log.Panic("Unmarshal() error: ", err)
+	}
+
+}
+
+// LoadFindBy - загружает из файла .json список функций FindBy которые надо создать
+func LoadFindBy() {
+	dir := micro.ProgramDir_bin()
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + config.Settings.TEMPLATES_FINDBY_FILENAME
+
+	var err error
+
+	//чтение файла
+	bytes, err := os.ReadFile(FileName)
+	if err != nil {
+		TextError := fmt.Sprint("ReadFile() error: ", err)
+		log.Panic(TextError)
+	}
+
+	//json в map
+	err = json.Unmarshal(bytes, &types.MapFindBy)
+	if err != nil {
+		log.Panic("Unmarshal() error: ", err)
+	}
+
+}
+
+// LoadFindMassBy - загружает из файла .json список функций FindMassBy которые надо создать
+func LoadFindMassBy() {
+	dir := micro.ProgramDir_bin()
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + config.Settings.TEMPLATES_FINDMASSBY_FILENAME
+
+	var err error
+
+	//чтение файла
+	bytes, err := os.ReadFile(FileName)
+	if err != nil {
+		TextError := fmt.Sprint("ReadFile() error: ", err)
+		log.Panic(TextError)
+	}
+
+	//json в map
+	err = json.Unmarshal(bytes, &types.MapFindMassBy)
 	if err != nil {
 		log.Panic("Unmarshal() error: ", err)
 	}

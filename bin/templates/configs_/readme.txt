@@ -10,11 +10,13 @@ example:
 
 
 
+------------------------------------------------------------------------
 mapping.json
 Mapping Postgres types to Golang types
 
 
 
+------------------------------------------------------------------------
 name_replace.json
 Mapping database field name = golang field name
 For tables file. 
@@ -27,6 +29,7 @@ example:
 }
 
 
+------------------------------------------------------------------------
 nullable.json
 List of golang field names, which need change 0 to null.
 true = need change 0 to null
@@ -38,6 +41,7 @@ example:
 }
 
 
+------------------------------------------------------------------------
 model_crud_delete_functions.json
 Mapping postgres tables to golang function name,
 this functions will be deleted from model crud files.
@@ -48,6 +52,7 @@ example:
 
 
 
+------------------------------------------------------------------------
 crud_functions_rename.json 
 TableName:{old:"",new:""}
 example:
@@ -58,4 +63,25 @@ example:
 	"new":"create_update_ctx_original"
 	}
 	]
+}
+
+------------------------------------------------------------------------
+findby_functions.json
+Need for automatic create functions searching 1 row in table filtered by column_name
+Fill "TableName":["column_name"]
+Fill "TableName":["column_name","column2_name"]
+example:
+{
+      "lawsuits": ["contract_id"]
+}
+
+
+------------------------------------------------------------------------
+findmassby_function.json
+Need for automatic create functions searching many rows in table filtered by column_name
+Fill "TableName":["column_name"]
+Fill "TableName":["column_name","column2_name"]
+example:
+{
+      "lawsuits": ["contract_id"]
 }

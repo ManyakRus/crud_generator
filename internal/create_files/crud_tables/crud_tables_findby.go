@@ -1,0 +1,292 @@
+package crud_tables
+
+import (
+	"github.com/ManyakRus/crud_generator/internal/config"
+	"github.com/ManyakRus/crud_generator/internal/constants"
+	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/types"
+	"github.com/ManyakRus/starter/log"
+	"github.com/ManyakRus/starter/micro"
+	"os"
+	"strings"
+)
+
+// CreateFilesFindBy - создаёт 1 файл в папке crud
+func CreateFilesFindBy(Table1 *types.Table) error {
+	var err error
+
+	if len(types.MapFindBy) == 0 {
+		return err
+	}
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
+	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
+
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDBY_FILENAME
+	TableName := strings.ToLower(Table1.Name)
+	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD + TableName
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_findby.go"
+
+	//создадим каталог
+	ok, err := micro.FileExists(DirReadyTable)
+	if ok == false {
+		err = os.MkdirAll(DirReadyTable, 0777)
+		if err != nil {
+			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
+		}
+	}
+
+	//загрузим шаблон файла
+	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
+	}
+	TextCrud := string(bytes)
+
+	//загрузим шаблон файла функции
+	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_FILENAME
+	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
+	}
+	TextTemplatedFunction := string(bytes)
+
+	//заменим имя пакета на новое
+	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
+
+	ModelName := Table1.NameGo
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+
+		ConstantsURL := create_files.FindDBConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
+
+	}
+
+	//создание функций
+	TextCrudFunc := CreateFilesFindByTable(Table1, TextTemplatedFunction)
+	if TextCrudFunc == "" {
+		return err
+	}
+	TextCrud = TextCrud + TextCrudFunc
+
+	//создание текста
+	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
+
+	//замена импортов на новые URL
+	TextCrud = create_files.ReplaceServiceURLImports(TextCrud)
+
+	//uuid
+	TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
+
+	//alias
+	TextCrud = create_files.CheckAndAddImportAlias(TextCrud)
+
+	//удаление пустого импорта
+	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+
+	//удаление пустых строк
+	TextCrud = create_files.DeleteEmptyLines(TextCrud)
+
+	//запись файла
+	err = os.WriteFile(FilenameReady, []byte(TextCrud), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// CreateFilesFindByTable - создаёт текст всех функций
+func CreateFilesFindByTable(Table1 *types.Table, TextTemplateFunction string) string {
+	Otvet := ""
+
+	for TableName1, MassColumns1 := range types.MapFindBy {
+		if TableName1 != Table1.Name {
+			continue
+		}
+		Otvet1 := CreateFilesFindByTable1(Table1, TextTemplateFunction, MassColumns1)
+		Otvet = Otvet + Otvet1
+	}
+
+	return Otvet
+}
+
+// CreateFilesFindByTable1 - создаёт текст всех функций
+func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
+	Otvet := TextTemplateFunction
+
+	//
+	FieldNamesWithUnderline := ""
+
+	//
+	FieldNamesWithComma := ""
+
+	//
+	TextFind := "\t" + `tx := tx.Where("ColumnName = ?", m.FieldName)` + "\n"
+	TextWhere := ""
+	Underline := ""
+	Plus := ""
+	for _, ColumnName1 := range MassColumns1 {
+		Column1, ok := Table1.MapColumns[ColumnName1]
+		if ok == false {
+			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
+		}
+		TextWhere = TextWhere + "\t" + `tx := tx.Where("` + ColumnName1 + ` = ?", m.` + Column1.NameGo + `)` + "\n"
+		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
+		Underline = "_"
+		Plus = "+"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextWhere)
+	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
+	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
+
+	return Otvet
+}
+
+// CreateFilesFindByTest - создаёт 1 файл в папке crud
+func CreateFilesFindByTest(Table1 *types.Table) error {
+	var err error
+
+	if len(types.MapFindBy) == 0 {
+		return err
+	}
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
+	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
+
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDBY_FILENAME
+	TableName := strings.ToLower(Table1.Name)
+	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD + TableName
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_findby_test.go"
+
+	//создадим каталог
+	ok, err := micro.FileExists(DirReadyTable)
+	if ok == false {
+		err = os.MkdirAll(DirReadyTable, 0777)
+		if err != nil {
+			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
+		}
+	}
+
+	//загрузим шаблон файла
+	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
+	}
+	TextCrud := string(bytes)
+
+	//загрузим шаблон файла функции
+	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME
+	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
+	}
+	TextTemplatedFunction := string(bytes)
+
+	//заменим имя пакета на новое
+	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
+
+	ModelName := Table1.NameGo
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+
+	}
+
+	//создание функций
+	TextCrudFunc := CreateFilesFindByTestTable(Table1, TextTemplatedFunction)
+	if TextCrudFunc == "" {
+		return err
+	}
+	TextCrud = TextCrud + TextCrudFunc
+
+	//создание текста
+	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
+
+	//замена импортов на новые URL
+	TextCrud = create_files.ReplaceServiceURLImports(TextCrud)
+
+	//uuid
+	TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
+
+	//alias
+	TextCrud = create_files.CheckAndAddImportAlias(TextCrud)
+
+	//удаление пустого импорта
+	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+
+	//удаление пустых строк
+	TextCrud = create_files.DeleteEmptyLines(TextCrud)
+
+	//запись файла
+	err = os.WriteFile(FilenameReady, []byte(TextCrud), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// CreateFilesFindByTestTable - создаёт текст всех функций
+func CreateFilesFindByTestTable(Table1 *types.Table, TextTemplateFunction string) string {
+	Otvet := ""
+
+	for TableName1, MassColumns1 := range types.MapFindBy {
+		if TableName1 != Table1.Name {
+			continue
+		}
+		Otvet1 := CreateFilesFindByTestTable1(Table1, TextTemplateFunction, MassColumns1)
+		Otvet = Otvet + Otvet1
+	}
+
+	return Otvet
+}
+
+// CreateFilesFindByTestTable1 - создаёт текст всех функций
+func CreateFilesFindByTestTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
+	Otvet := TextTemplateFunction
+
+	//
+	FieldNamesWithUnderline := ""
+
+	//
+	TextAssignFind := "\t" + `Otvet.FieldName = 0` + "\n"
+	TextAssign := ""
+	TextFieldName_TEST := ""
+
+	Underline := ""
+	Comma := ""
+	for _, ColumnName1 := range MassColumns1 {
+		Column1, ok := Table1.MapColumns[ColumnName1]
+		if ok == false {
+			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
+		}
+		DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
+		TextAssign = TextAssign + "\t" + `Otvet.` + Column1.NameGo + ` = ` + DefaultValue + "\n"
+		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue
+
+		Underline = "_"
+		Comma = ", "
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextAssignFind, TextAssign)
+	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
+	Otvet = strings.ReplaceAll(Otvet, "FieldNames_TEST", TextFieldName_TEST)
+
+	return Otvet
+}
