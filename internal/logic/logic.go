@@ -11,6 +11,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/env_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/generation_code_sh"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client"
+	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client_func"
 	"github.com/ManyakRus/crud_generator/internal/create_files/grpc_client_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/main_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/makefile"
@@ -195,6 +196,13 @@ func StartFillAll() error {
 
 	//constants
 	err = constants_file.CreateAllFiles()
+	if err != nil {
+		//log.Error("env_file.CreateAllFiles() error: ", err)
+		return err
+	}
+
+	//grpc_client_func
+	err = grpc_client_func.CreateAllFiles()
 	if err != nil {
 		//log.Error("env_file.CreateAllFiles() error: ", err)
 		return err

@@ -74,6 +74,12 @@ TEMPLATE_FOLDERNAME_GRPC_CLIENT="pkg/network/grpc/grpc_client"
 #TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC - folder name for create "grpc_client_func.go" files
 TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC="pkg/network/grpc/grpc_client_func"
 
+#TEMPLATE_GRPC_CLIENT_FUNC_FILENAME - file name for create "grpc_client_func.go" files
+TEMPLATE_GRPC_CLIENT_FUNC_FILENAME="grpc_client_func.go_"
+
+#TEMPLATE_GRPC_CLIENT_FUNC_TEST_FILENAME - file name for create "grpc_client_func_test.go" files
+TEMPLATE_GRPC_CLIENT_FUNC_TEST_FILENAME="grpc_client_func_test.go_"
+
 
 
 #TEMPLATE_FOLDERNAME_NRPC_SERVER - folder name for create nrpc server files
