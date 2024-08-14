@@ -2,19 +2,15 @@ The service implements synchronous data exchange.
 
 Service for exchanging data with Postgres SQL database
 Data exchange is done using different methods:
-1. Commands in NATS for reading, changing, etc.
-2. DB CRUD operations - direct exchange with the database
+1. DB CRUD operations - direct exchange with the database
     (each table model has methods Read(), Update(), Create(), Save(), Delete(), Restore())
-3. GRPC - exchange with the database using the GRPC protocol
+2. GRPC - exchange with the database using the GRPC protocol
     (the client service that needs to exchange with the database connects to the sync_exchange server service, the latter exchanges with the database)
-4. NRPC - exchange with the database using the NRPC protocol
+3. NRPC - exchange with the database using the NRPC protocol
     (the client service that needs to exchange with the database connects to the NATS service, which sends commands to the sync_exchange server, the latter exchanges with the database)
 
-Before starting CRUD operations, you must specify the transport over which the exchange will take place (CRUD, GRPC, NRPC)
-using one of the commands:
+Before starting CRUD operations, with a direct connection to the DB, you must specify the transport through which the exchange will take place (not necessary for GRPC, NRPC) using the command:
 InitCrudTransport_DB()
-InitCrudTransport_GRPC()
-InitCrudTransport_NRPC()
 from module
 "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
 
@@ -37,7 +33,7 @@ Also, to get started, the environment variables must be filled in:
     BUS_LOCAL_HOST=
     BUS_LOCAL_PORT=
 
-For NRPC (GRPC) it is advisable to connect there first and disconnect at the end
+For NRPC (and GRPC) it is advisable to connect there first and disconnect at the end
 nrpc_client.Connect()
 defer nrpc_client.CloseConnection()
 otherwise, the code will still connect there and will not disconnect at the end of the microservice.
