@@ -67,21 +67,15 @@ example:
 
 ------------------------------------------------------------------------
 findby_functions.json
-Need for automatic create functions searching 1 row in table filtered by column_name
-Fill "TableName":["column_name"]
-Fill "TableName":["column_name","column2_name"]
+Need for automatic create functions searching 1 row in table filtered by column_name, 
 example:
-{
-      "lawsuits": ["contract_id"]
-}
+[{"Table":"table_name1","Columns":["column_name1"]}]
+[{"Table":"table_name1","Columns":["column_name1","column_name2"]}]
 
 
 ------------------------------------------------------------------------
 findmassby_function.json
-Need for automatic create functions searching many rows in table filtered by column_name
-Fill "TableName":["column_name"]
-Fill "TableName":["column_name","column2_name"]
+Need for automatic create functions searching many rows in table filtered by column_name, 
 example:
-{
-      "lawsuits": ["contract_id"]
-}
+[{"Table":"table_name1","Columns":["column_name1"]}]
+[{"Table":"table_name1","Columns":["column_name1","column_name2"]}]

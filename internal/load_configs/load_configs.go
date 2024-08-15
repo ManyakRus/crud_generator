@@ -220,8 +220,14 @@ func LoadFindBy() {
 		log.Panic(TextError)
 	}
 
+	//MassFindBy1 := types.TableNameColumnNames{}
+	//MassFindBy1.TableName = "TableName"
+	//MassFindBy1.MassColumnNames = []string{"ColumnName"}
+	//types.MassFindBy = append(types.MassFindBy, MassFindBy1)
+	//bytes, _ = json.Marshal(types.MassFindBy) //удалить
+
 	//json в map
-	err = json.Unmarshal(bytes, &types.MapFindBy)
+	err = json.Unmarshal(bytes, &types.MassFindBy)
 	if err != nil {
 		log.Panic("Unmarshal() error: ", err)
 	}
@@ -243,7 +249,7 @@ func LoadFindMassBy() {
 	}
 
 	//json в map
-	err = json.Unmarshal(bytes, &types.MapFindMassBy)
+	err = json.Unmarshal(bytes, &types.MassFindMassBy)
 	if err != nil {
 		log.Panic("Unmarshal() error: ", err)
 	}

@@ -9,7 +9,7 @@ func TestFindBy_FieldNamesWithUnderline(t *testing.T) {
 	Otvet.FieldName = 0
 	err := crud.FindBy_FieldNamesWithUnderline(&Otvet)
 	if err != nil {
-		t.Log("crud_"+TableName+"_test.TestFindBy_FieldNamesWithUnderline() FieldNamesWithUnderline=", FieldNames_TEST, " error: ", err)
+		t.Log("crud_"+TableName+"_test.TestFindBy_FieldNamesWithUnderline() FieldNamesWithComma:", FieldNamesDefault, " error: ", err)
 	}
 }
 

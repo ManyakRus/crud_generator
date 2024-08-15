@@ -81,15 +81,31 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 				}
 			}
 
+			//
 			err = CreateFilesFindBy(Table1)
 			if err != nil {
 				log.Error("CreateFilesFindBy() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 
+			//
 			err = CreateFilesFindByTest(Table1)
 			if err != nil {
 				log.Error("CreateFilesFindByTest() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			//
+			err = CreateFilesFindMassBy(Table1)
+			if err != nil {
+				log.Error("CreateFilesFindMassBy() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			//
+			err = CreateFilesFindMassByTest(Table1)
+			if err != nil {
+				log.Error("CreateFilesFindMassByTest() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 		}

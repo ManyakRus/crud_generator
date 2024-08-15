@@ -11,11 +11,11 @@ import (
 	"strings"
 )
 
-// CreateFilesFindBy - создаёт 1 файл в папке crud
-func CreateFilesFindBy(Table1 *types.Table) error {
+// CreateFilesFindMassBy - создаёт 1 файл в папке crud
+func CreateFilesFindMassBy(Table1 *types.Table) error {
 	var err error
 
-	if len(types.MassFindBy) == 0 {
+	if len(types.MassFindMassBy) == 0 {
 		return err
 	}
 
@@ -26,10 +26,10 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDBY_FILENAME
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD + TableName
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_findby.go"
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_findmassby.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -48,7 +48,7 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	TextCrud := string(bytes)
 
 	//загрузим шаблон файла функции
-	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_FILENAME
+	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_FILENAME
 	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
@@ -72,7 +72,7 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextCrudFunc := CreateFilesFindByTable(Table1, TextTemplatedFunction)
+	TextCrudFunc := CreateFilesFindMassByTable(Table1, TextTemplatedFunction)
 	if TextCrudFunc == "" {
 		return err
 	}
@@ -104,34 +104,36 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesFindByTable - создаёт текст всех функций
-func CreateFilesFindByTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFilesFindMassByTable - создаёт текст всех функций
+func CreateFilesFindMassByTable(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
-	for _, TableColumns1 := range types.MassFindBy {
+	for _, TableColumns1 := range types.MassFindMassBy {
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesFindByTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFilesFindMassByTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesFindByTable1 - создаёт текст всех функций
-func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
+// CreateFilesFindMassByTable1 - создаёт текст всех функций
+func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
 	Otvet := TextTemplateFunction
 
 	//
 	FieldNamesWithUnderline := ""
 	FieldNamesWithComma := ""
-	TextWhere := ""
+	ColumnNamesWithComma := ""
 
 	//
 	TextFind := "\t" + `tx = tx.Where("ColumnName = ?", m.FieldName)` + "\n"
+	TextWhere := ""
 	Underline := ""
 	Plus := ""
+	Comma := ""
 	for _, ColumnName1 := range MassColumns1 {
 		Column1, ok := Table1.MapColumns[ColumnName1]
 		if ok == false {
@@ -140,21 +142,25 @@ func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, M
 		TextWhere = TextWhere + "\t" + `tx = tx.Where("` + ColumnName1 + ` = ?", m.` + Column1.NameGo + `)` + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
+		ColumnNamesWithComma = ColumnNamesWithComma + Comma + Column1.Name
+
 		Underline = "_"
 		Plus = "+"
+		Comma = ", "
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextWhere)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnNamesWithComma", ColumnNamesWithComma)
 
 	return Otvet
 }
 
-// CreateFilesFindByTest - создаёт 1 файл в папке crud
-func CreateFilesFindByTest(Table1 *types.Table) error {
+// CreateFilesFindMassByTest - создаёт 1 файл в папке crud
+func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	var err error
 
-	if len(types.MassFindBy) == 0 {
+	if len(types.MassFindMassBy) == 0 {
 		return err
 	}
 
@@ -165,10 +171,10 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDBY_FILENAME
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD + TableName
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_findby_test.go"
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_findmassby_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -187,7 +193,7 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 	TextCrud := string(bytes)
 
 	//загрузим шаблон файла функции
-	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME
+	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_TEST_FILENAME
 	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
@@ -208,7 +214,7 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextCrudFunc := CreateFilesFindByTestTable(Table1, TextTemplatedFunction)
+	TextCrudFunc := CreateFilesFindMassByTestTable(Table1, TextTemplatedFunction)
 	if TextCrudFunc == "" {
 		return err
 	}
@@ -240,23 +246,23 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesFindByTestTable - создаёт текст всех функций
-func CreateFilesFindByTestTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFilesFindMassByTestTable - создаёт текст всех функций
+func CreateFilesFindMassByTestTable(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
-	for _, TableColumns1 := range types.MassFindBy {
+	for _, TableColumns1 := range types.MassFindMassBy {
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesFindByTestTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFilesFindMassByTestTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesFindByTestTable1 - создаёт текст всех функций
-func CreateFilesFindByTestTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
+// CreateFilesFindMassByTestTable1 - создаёт текст всех функций
+func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
 	Otvet := TextTemplateFunction
 
 	//

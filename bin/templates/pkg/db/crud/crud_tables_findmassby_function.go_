@@ -1,0 +1,31 @@
+// FindMassBy_FieldNamesWithUnderline - находит запись в БД по FieldNamesWithPlus
+func (crud Crud_DB) FindMassBy_FieldNamesWithUnderline(m *lawsuit_status_types.LawsuitStatusType) ([]lawsuit_status_types.LawsuitStatusType, error) {
+	Otvet := make([]files.File, 0)
+	var err error
+
+	ctxMain := context.Background()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	db := postgres_gorm.GetConnection()
+
+	Otvet, err = FindMassBy_FieldNamesWithUnderline_ctx(ctx, db, m)
+
+	return Otvet, err
+}
+
+// FindMassBy_FieldNamesWithUnderline_ctx - находит запись в БД по FieldNamesWithPlus
+func FindMassBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) ([]lawsuit_status_types.LawsuitStatusType, error) {
+	var err error
+	Otvet := make([]files.File, 0)
+
+	tx := db.WithContext(ctx)
+
+	tx = tx.Where("ColumnName = ?", m.FieldName)
+	tx = tx.Order("ColumnNamesWithComma")
+	tx = tx.Find(m)
+	err = tx.Error
+
+	return Otvet, err
+}
+
