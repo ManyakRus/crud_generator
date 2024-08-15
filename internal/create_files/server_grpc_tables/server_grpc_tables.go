@@ -81,6 +81,33 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 				}
 			}
 
+			//
+			err = CreateFilesFindBy(Table1)
+			if err != nil {
+				log.Error("CreateFilesFindBy() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			//
+			err = CreateFilesFindByTest(Table1)
+			if err != nil {
+				log.Error("CreateFilesFindByTest() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			//
+			err = CreateFilesFindMassBy(Table1)
+			if err != nil {
+				log.Error("CreateFilesFindMassBy() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			//
+			err = CreateFilesFindMassByTest(Table1)
+			if err != nil {
+				log.Error("CreateFilesFindMassByTest() table: ", Table1.Name, " error: ", err)
+				return err
+			}
 		}
 	}
 	return err
@@ -537,7 +564,7 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	Otvet = create_files.ReplacePrimaryKeyOtvetID(Otvet, Table1)
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
 
-	//ColumnNameGolang := create_files.ConvertGolangTypeToProtobufType(Table1, Column1, "m")
+	//ColumnNameGolang := create_files.ConvertGolangVariableToProtobufVariable(Table1, Column1, "m")
 
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update", ModelName+"_"+FuncName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
@@ -716,7 +743,7 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
 	_, TextRequestField, TextRequestFieldGolang, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request2.")
-	TextModelColumnName := create_files.ConvertGolangTypeToProtobufType(Table1, Column1, "m")
+	TextModelColumnName := create_files.ConvertGolangVariableToProtobufVariable(Column1, "m")
 	TextRequestID := create_files.FindTextProtobufRequest_ManyPK(Table1)
 
 	//Postgres_ID_Test = ID Minimum

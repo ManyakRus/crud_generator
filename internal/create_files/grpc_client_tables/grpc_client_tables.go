@@ -540,7 +540,7 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
 
 	//
-	ColumnNameGolang := create_files.ConvertGolangTypeToProtobufType(Table1, Column1, "m")
+	ColumnNameGolang := create_files.ConvertGolangVariableToProtobufVariable(Column1, "m")
 
 	_, IDTypeGo := create_files.FindPrimaryKeyNameTypeGo(Table1)
 
