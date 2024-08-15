@@ -28,7 +28,7 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 
 	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + config.Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyGRPCServer + "server_grpc_" + TableName
+	DirReadyTable := DirReadyGRPCServer
 	FilenameReady := DirReadyTable + micro.SeparatorFile() + "server_grpc_" + TableName + "_findmassby.go"
 
 	//создадим каталог
@@ -123,38 +123,47 @@ func CreateFilesFindMassByTable(Table1 *types.Table, TextTemplateFunction string
 }
 
 // CreateFilesFindMassByTable1 - создаёт текст всех функций
-func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
+func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
 	Otvet := TextTemplateFunction
 
 	//
 	FieldNamesWithUnderline := ""
 	FieldNamesWithComma := ""
-	ColumnNamesWithComma := ""
+	TextAssign := ""
+
+	MassColumns := create_files.FindMassColumns_from_MassColumnsString(Table1, MassColumnsString)
 
 	//
-	TextFind := "\t" + `tx = tx.Where("ColumnName = ?", m.FieldName)` + "\n"
-	TextWhere := ""
+	TextFind := "\t" + `Model.FieldName = Request.RequestFieldName` + "\n"
 	Underline := ""
 	Plus := ""
-	Comma := ""
-	for _, ColumnName1 := range MassColumns1 {
+	RequestName := "Request_"
+	for _, ColumnName1 := range MassColumnsString {
 		Column1, ok := Table1.MapColumns[ColumnName1]
 		if ok == false {
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
-		TextWhere = TextWhere + "\t" + `tx = tx.Where("` + ColumnName1 + ` = ?", m.` + Column1.NameGo + `)` + "\n"
+		//RequestFieldName := create_files.FindRequestFieldName_FromMass(Column1, MassColumns)
+		TextRequest, TextRequestCode := create_files.ConvertProtobufVariableToGolangVariable_with_MassColumns(Column1, MassColumns, "Request.")
+		if TextRequestCode != "" {
+			TextAssign = TextAssign + TextRequestCode + "\n"
+		} else {
+			TextAssign = TextAssign + "\t" + "Model." + Column1.NameGo + " = " + TextRequest + "\n"
+		}
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
-		ColumnNamesWithComma = ColumnNamesWithComma + Comma + Column1.Name
+
+		ProtoTypeName := create_files.ConvertGolangTypeNameToProtobufFieldName(Column1.TypeGo)
+		RequestName = RequestName + Underline + ProtoTypeName
 
 		Underline = "_"
 		Plus = "+"
-		Comma = ", "
 	}
-	Otvet = strings.ReplaceAll(Otvet, TextFind, TextWhere)
+
+	Otvet = strings.ReplaceAll(Otvet, "RequestName", RequestName)
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextAssign)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
-	Otvet = strings.ReplaceAll(Otvet, "ColumnNamesWithComma", ColumnNamesWithComma)
 
 	return Otvet
 }
@@ -176,7 +185,7 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 
 	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + config.Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyGRPCServer + "server_grpc_" + TableName
+	DirReadyTable := DirReadyGRPCServer
 	FilenameReady := DirReadyTable + micro.SeparatorFile() + "server_grpc_" + TableName + "_findmassby_test.go"
 
 	//создадим каталог
@@ -271,7 +280,7 @@ func CreateFilesFindMassByTestTable(Table1 *types.Table, TextTemplateFunction st
 }
 
 // CreateFilesFindMassByTestTable1 - создаёт текст всех функций
-func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
+func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
 	Otvet := TextTemplateFunction
 
 	//
@@ -279,19 +288,22 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 	FieldNamesWithComma := ""
 
 	//
-	TextAssignFind := "\t" + `Otvet.FieldName = 0` + "\n"
+	TextAssignFind := "\t" + `Request.RequestFieldName = 0` + "\n"
 	TextAssign := ""
 	TextFieldName_TEST := ""
 
+	MassColumns := create_files.FindMassColumns_from_MassColumnsString(Table1, MassColumnsString)
+
 	Underline := ""
 	Comma := ""
-	for _, ColumnName1 := range MassColumns1 {
+	for _, ColumnName1 := range MassColumnsString {
 		Column1, ok := Table1.MapColumns[ColumnName1]
 		if ok == false {
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
 		DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
-		TextAssign = TextAssign + "\t" + `Otvet.` + Column1.NameGo + ` = ` + DefaultValue + "\n"
+		RequestFieldName := create_files.FindRequestFieldName_FromMass(Column1, MassColumns)
+		TextAssign = TextAssign + "\t" + `Request.` + RequestFieldName + ` = ` + DefaultValue + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
 		TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue

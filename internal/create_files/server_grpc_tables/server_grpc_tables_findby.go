@@ -137,6 +137,7 @@ func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, M
 	TextFind := "\t" + `Model.FieldName = Request.RequestFieldName` + "\n"
 	Underline := ""
 	Plus := ""
+	RequestName := "Request_"
 	for _, ColumnName1 := range MassColumnsString {
 		Column1, ok := Table1.MapColumns[ColumnName1]
 		if ok == false {
@@ -151,9 +152,15 @@ func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, M
 		}
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
+
+		ProtoTypeName := create_files.ConvertGolangTypeNameToProtobufFieldName(Column1.TypeGo)
+		RequestName = RequestName + Underline + ProtoTypeName
+
 		Underline = "_"
 		Plus = "+"
 	}
+
+	Otvet = strings.ReplaceAll(Otvet, "RequestName", RequestName)
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextAssign)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
@@ -273,7 +280,7 @@ func CreateFilesFindByTestTable(Table1 *types.Table, TextTemplateFunction string
 }
 
 // CreateFilesFindByTestTable1 - создаёт текст всех функций
-func CreateFilesFindByTestTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
+func CreateFilesFindByTestTable1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
 	Otvet := TextTemplateFunction
 
 	//
@@ -285,11 +292,11 @@ func CreateFilesFindByTestTable1(Table1 *types.Table, TextTemplateFunction strin
 	TextAssign := ""
 	TextFieldName_TEST := ""
 
-	MassColumns := create_files.FindMassColumns_from_MassColumnsString(Table1, MassColumns1)
+	MassColumns := create_files.FindMassColumns_from_MassColumnsString(Table1, MassColumnsString)
 
 	Underline := ""
 	Comma := ""
-	for _, ColumnName1 := range MassColumns1 {
+	for _, ColumnName1 := range MassColumnsString {
 		Column1, ok := Table1.MapColumns[ColumnName1]
 		if ok == false {
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")

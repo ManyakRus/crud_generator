@@ -1,4 +1,4 @@
-// LawsuitStatusType_FindMassByFieldNamesWithUnderline - находит массив lawsuit_status_types в БД по FieldNamesWithPlus
+// LawsuitStatusType_FindMassBy_FieldNamesWithUnderline - находит массив lawsuit_status_types в БД по FieldNamesWithPlus
 func (s *ServerGRPC) LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(ctx context.Context, Request *grpc_proto.RequestName) (*grpc_proto.ResponseMass, error) {
 	var Otvet grpc_proto.ResponseMass
 	var err error
@@ -15,7 +15,7 @@ func (s *ServerGRPC) LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(ctx co
 	db := postgres_gorm.GetConnection()
 	Model := &lawsuit_status_types.LawsuitStatusType{}
 	Model.FieldName = Request.RequestFieldName
-	Mass, err := crud_files.FindMassBy_FieldNamesWithUnderline_ctx(ctx, db, Model)
+	Mass, err := crud_lawsuit_status_types.FindMassBy_FieldNamesWithUnderline_ctx(ctx, db, Model)
 	if err != nil {
 		return &Otvet, err
 	}
