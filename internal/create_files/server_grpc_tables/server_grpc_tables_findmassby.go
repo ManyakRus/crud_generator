@@ -29,7 +29,7 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + config.Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCServer
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + "server_grpc_" + TableName + "_findmassby.go"
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_SERVER_GRPC + TableName + "_findmassby.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -186,7 +186,7 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + config.Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCServer
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + "server_grpc_" + TableName + "_findmassby_test.go"
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_SERVER_GRPC + TableName + "_findmassby_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)

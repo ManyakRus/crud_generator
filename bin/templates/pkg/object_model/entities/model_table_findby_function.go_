@@ -1,0 +1,11 @@
+// FindBy_FieldNamesWithUnderline - находит запись по FieldNamesWithPlus
+func (m *LawsuitStatusType) FindBy_FieldNamesWithUnderline() error {
+	if Crud_manual_LawsuitStatusType == nil {
+		return db_constants.ErrorCrudIsNotInit
+	}
+
+	err := Crud_LawsuitStatusType.FindBy_FieldNamesWithUnderline(m)
+
+	return err
+}
+

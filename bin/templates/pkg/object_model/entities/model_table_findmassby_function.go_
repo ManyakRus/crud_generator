@@ -1,0 +1,12 @@
+// FindMassBy_FieldNamesWithUnderline - находит запись по FieldNamesWithPlus
+func (m *LawsuitStatusType) FindMassBy_FieldNamesWithUnderline() ([]LawsuitStatusType, error) {
+	Otvet := make([]LawsuitStatusType, 0)
+	if Crud_manual_LawsuitStatusType == nil {
+		return Otvet, db_constants.ErrorCrudIsNotInit
+	}
+
+	Otvet, err := Crud_LawsuitStatusType.FindMassBy_FieldNamesWithUnderline(m)
+
+	return Otvet, err
+}
+

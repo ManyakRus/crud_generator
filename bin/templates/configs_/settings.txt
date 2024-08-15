@@ -321,3 +321,17 @@ TEMPLATES_GRPC_SERVER_FINDMASSBY_TEST_FILENAME="server_grpc_table_findmassby_tes
 #TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_TEST_FILENAME - short filename of "server_grpc_table_findmassby_test.go_" file
 TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_TEST_FILENAME="server_grpc_table_findmassby_function_test.go_"
 
+
+#TEMPLATES_MODEL_FINDBY_FILENAME - short filename of "model_table_findby.go_" file
+TEMPLATES_MODEL_FINDBY_FILENAME="model_table_findby.go_"
+
+#TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME - short filename of "model_table_findby_function.go_" file
+TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME="model_table_findby_function.go_"
+
+#TEMPLATES_MODEL_FINDMASSBY_FILENAME - short filename of "model_table_findmassby.go_" file
+TEMPLATES_MODEL_FINDMASSBY_FILENAME="model_table_findmassby.go_"
+
+#TEMPLATES_MODEL_FINDMASSBY_FUNCTION_FILENAME - short filename of "model_table_findmassby_function.go_" file
+TEMPLATES_MODEL_FINDMASSBY_FUNCTION_FILENAME="model_table_findmassby_function.go_"
+
+

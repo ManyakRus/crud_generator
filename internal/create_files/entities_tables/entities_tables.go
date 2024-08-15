@@ -40,6 +40,21 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 				log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
 				return err
 			}
+
+			//
+			err = CreateFilesFindBy(Table1)
+			if err != nil {
+				log.Error("CreateFilesFindBy() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			//
+			err = CreateFilesFindMassBy(Table1)
+			if err != nil {
+				log.Error("CreateFilesFindMassBy() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
 		}
 	}
 
@@ -206,6 +221,11 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 		//добавим импорт fmt
 		TextModel = create_files.CheckAndAddImportFmt(TextModel)
 
+		//
+		TextModel = AddInterfacesFindBy(TextModel, Table1)
+
+		//
+		TextModel = AddInterfacesFindMassBy(TextModel, Table1)
 	}
 
 	//
