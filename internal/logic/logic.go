@@ -2,6 +2,7 @@ package logic
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
+	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/create_files/alias"
 	"github.com/ManyakRus/crud_generator/internal/create_files/constants_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
@@ -25,6 +26,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/tables_tables"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/postgres"
+	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 )
@@ -45,6 +47,14 @@ func StartFillAll() error {
 		log.Error("FillMapTable()error: len(MapAll) == 0")
 		return err
 	}
+
+	//
+	Mass1 := create_files.FindMassTableColumns(MapAll, types.MassFindBy_String)
+	types.MassFindBy = Mass1
+
+	//
+	Mass1 = create_files.FindMassTableColumns(MapAll, types.MassFindMassBy_String)
+	types.MassFindMassBy = Mass1
 
 	//копируем все файлы
 	dir := micro.ProgramDir_bin()

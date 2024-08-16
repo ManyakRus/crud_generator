@@ -88,6 +88,12 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		TextProtoNew = TextProtoNew + FindTextProtoTable1_UpdateManyFields(TextProto, Table1)
 		TextProtoNew = TextProtoNew + FindTextProtoTable1_UpdateEveryColumn(TextProto, Table1)
 
+		//добавим текст FindBy
+		TextProtoNew = TextProtoNew + FindText_FindBy(TextProto, Table1)
+
+		//добавим текст FindMassBy
+		TextProtoNew = TextProtoNew + FindText_FindMassBy(TextProto, Table1)
+
 		if config.Settings.NEED_CREATE_CACHE_API == true {
 			TextProtoNew = TextProtoNew + FindTextProtoTable1_Cache(TextProto, Table1)
 		}
@@ -692,6 +698,38 @@ message ` + TextRequest + ` {
 	return Otvet
 }
 
+// AddTextMessageRequestID_Columns - в текст .proto добавляет message из присланных колонок
+func AddTextMessageRequestID_Columns(Text string, Columns []*types.Column) string {
+	Otvet := Text
+
+	TextRequest := "Request_" + create_files.FindRequestFieldNames_FromMass(Columns)
+
+	//найдём уже есть message
+	TextFind := "message " + TextRequest + " {"
+	pos1 := strings.Index(Otvet, TextFind)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	TextMessage := `
+// ` + TextRequest + ` - параметры запроса на сервер
+message ` + TextRequest + ` {
+    uint32 VersionModel= 1; //версия структуры модели`
+
+	////
+	//for _, Column1 := range Columns {
+	//	ProtoType := create_files.ConvertGolangTypeNameToProtobufTypeName(Column1.Type)
+	//	ProtoName := create_files.FindRequestFieldName_FromMass(Column1, Columns)
+	//	TextMessage = TextMessage + ``
+	//}
+
+	TextMessage = TextMessage + `
+}`
+	Otvet = Otvet + "\n" + TextMessage
+
+	return Otvet
+}
+
 // AddTextMessageRequestID - возвращает текст в .proto для таблицы
 func AddTextMessageRequestID(TextProto string, Table1 *types.Table) string {
 	Otvet := TextProto //"\n\t//\n"
@@ -714,6 +752,92 @@ func AddTextMessageRequestID(TextProto string, Table1 *types.Table) string {
 
 		Otvet = AddTextMessageRequestID_ColumnType_ManyPK(Otvet, Table1, Column1)
 	}
+
+	return Otvet
+}
+
+// FindText_FindBy - добавляет текст FindBy
+func FindText_FindBy(TextProto string, Table1 *types.Table) string {
+	Otvet := ""
+
+	for _, TableColumns1 := range types.MassFindBy {
+		if TableColumns1.Table.Name != Table1.Name {
+			continue
+		}
+
+		Text1 := FindText_FindBy1(TableColumns1)
+
+		//проверим такой текст уже есть
+		pos1 := strings.Index(TextProto, Text1)
+		if pos1 >= 0 {
+			continue
+		}
+
+		//
+		Otvet = Otvet + Text1
+	}
+
+	return Otvet
+}
+
+// FindText_FindBy1 - находит текст FindBy
+func FindText_FindBy1(TableColumns1 types.TableColumns) string {
+	Otvet := "\n\t rpc "
+
+	TextFields := ""
+	TextRequest := ""
+	Underline := ""
+	for _, Column1 := range TableColumns1.Columns {
+		TextFields = TextFields + Underline + Column1.NameGo
+		TextRequest1 := create_files.FindRequestFieldName_FromMass(Column1, TableColumns1.Columns)
+		TextRequest = TextRequest + Underline + TextRequest1
+		Underline = "_"
+	}
+
+	Otvet = Otvet + TableColumns1.Table.NameGo + "_FindBy_" + TextFields + "(" + TextRequest + ") returns (Response)\n"
+
+	return Otvet
+}
+
+// FindText_FindMassBy - добавляет текст FindBy
+func FindText_FindMassBy(TextProto string, Table1 *types.Table) string {
+	Otvet := ""
+
+	for _, TableColumns1 := range types.MassFindBy {
+		if TableColumns1.Table.Name != Table1.Name {
+			continue
+		}
+
+		Text1 := FindText_FindMassBy1(TableColumns1)
+
+		//проверим такой текст уже есть
+		pos1 := strings.Index(TextProto, Text1)
+		if pos1 >= 0 {
+			continue
+		}
+
+		//
+		Otvet = Otvet + Text1
+	}
+
+	return Otvet
+}
+
+// FindText_FindMassBy1 - находит текст FindBy
+func FindText_FindMassBy1(TableColumns1 types.TableColumns) string {
+	Otvet := "\n\t rpc "
+
+	TextFields := ""
+	TextRequest := ""
+	Underline := ""
+	for _, Column1 := range TableColumns1.Columns {
+		TextFields = TextFields + Underline + Column1.NameGo
+		TextRequest1 := create_files.FindRequestFieldName_FromMass(Column1, TableColumns1.Columns)
+		TextRequest = TextRequest + Underline + TextRequest1
+		Underline = "_"
+	}
+
+	Otvet = Otvet + TableColumns1.Table.NameGo + "_FindMassBy_" + TextFields + "(" + TextRequest + ") returns (ResponseMass)\n"
 
 	return Otvet
 }

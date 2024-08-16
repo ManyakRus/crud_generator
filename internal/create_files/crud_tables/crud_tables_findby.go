@@ -15,7 +15,7 @@ import (
 func CreateFilesFindBy(Table1 *types.Table) error {
 	var err error
 
-	if len(types.MassFindBy) == 0 {
+	if len(types.MassFindBy_String) == 0 {
 		return err
 	}
 
@@ -108,7 +108,7 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 func CreateFilesFindByTable(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
-	for _, TableColumns1 := range types.MassFindBy {
+	for _, TableColumns1 := range types.MassFindBy_String {
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
@@ -154,7 +154,7 @@ func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, M
 func CreateFilesFindByTest(Table1 *types.Table) error {
 	var err error
 
-	if len(types.MassFindBy) == 0 {
+	if len(types.MassFindBy_String) == 0 {
 		return err
 	}
 
@@ -244,7 +244,7 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 func CreateFilesFindByTestTable(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
-	for _, TableColumns1 := range types.MassFindBy {
+	for _, TableColumns1 := range types.MassFindBy_String {
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}

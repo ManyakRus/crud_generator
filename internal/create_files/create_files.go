@@ -2992,6 +2992,25 @@ func FindMassColumns_from_MassColumnsString(Table1 *types.Table, MassColumnsStri
 	return Otvet
 }
 
+// FindMassTableColumns - преобразует TableColumns_String в TableColumns
+func FindMassTableColumns(MapAll map[string]*types.Table, MassTableColumns_String []types.TableColumns_String) []types.TableColumns {
+	Otvet := make([]types.TableColumns, len(MassTableColumns_String))
+
+	for _, TableColumns_string1 := range MassTableColumns_String {
+		Table1, ok := MapAll[TableColumns_string1.TableName]
+		if ok == false {
+			log.Panic(" Error: not found table: ", TableColumns_string1.TableName)
+		}
+		Columns1 := FindMassColumns_from_MassColumnsString(Table1, TableColumns_string1.MassColumnNames)
+		TableColumns1 := types.TableColumns{}
+		TableColumns1.Table = Table1
+		TableColumns1.Columns = Columns1
+		Otvet = append(Otvet, TableColumns1)
+	}
+
+	return Otvet
+}
+
 // ConvertProtobufVariableToGolangVariable_with_MassColumns - возвращает имя переменной +  имя колонки, преобразованное в тип golang из protobuf
 func ConvertProtobufVariableToGolangVariable_with_MassColumns(Column *types.Column, MassColumns []*types.Column, VariableName string) (VariableField string, GolangCode string) {
 	RequestFieldName := FindRequestFieldName_FromMass(Column, MassColumns)
@@ -3016,4 +3035,21 @@ func ConvertProtobufVariableToGolangVariable_with_MassColumns(Column *types.Colu
 	}
 
 	return VariableField, GolangCode
+}
+
+// FindRequestFieldNames_FromMass - возвращает строку с именами колонок для Protobuf
+func FindRequestFieldNames_FromMass(MassColumns []*types.Column) string {
+	Otvet := ""
+
+	TextFields := ""
+	TextRequest := ""
+	Underline := ""
+	for _, Column1 := range MassColumns {
+		TextFields = TextFields + Underline + Column1.NameGo
+		TextRequest1 := FindRequestFieldName_FromMass(Column1, MassColumns)
+		TextRequest = TextRequest + Underline + TextRequest1
+		Underline = "_"
+	}
+
+	return Otvet
 }
