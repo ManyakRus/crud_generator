@@ -816,7 +816,7 @@ func FindText_FindMassBy(TextProto string, Table1 *types.Table) (string, string)
 	Otvet := TextProto
 
 	Otvet2 := ""
-	for _, TableColumns1 := range types.MassFindBy {
+	for _, TableColumns1 := range types.MassFindMassBy {
 		if TableColumns1.Table.Name != Table1.Name {
 			continue
 		}

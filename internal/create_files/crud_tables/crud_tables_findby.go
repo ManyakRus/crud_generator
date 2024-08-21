@@ -165,7 +165,7 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDBY_FILENAME
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDBY_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD + TableName
 	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_findby_test.go"

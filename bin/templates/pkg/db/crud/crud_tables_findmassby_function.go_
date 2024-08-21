@@ -1,6 +1,6 @@
 // FindMassBy_FieldNamesWithUnderline - находит запись в БД по FieldNamesWithPlus
 func (crud Crud_DB) FindMassBy_FieldNamesWithUnderline(m *lawsuit_status_types.LawsuitStatusType) ([]lawsuit_status_types.LawsuitStatusType, error) {
-	Otvet := make([]files.File, 0)
+	Otvet := make([]lawsuit_status_types.LawsuitStatusType, 0)
 	var err error
 
 	ctxMain := context.Background()
@@ -17,7 +17,7 @@ func (crud Crud_DB) FindMassBy_FieldNamesWithUnderline(m *lawsuit_status_types.L
 // FindMassBy_FieldNamesWithUnderline_ctx - находит запись в БД по FieldNamesWithPlus
 func FindMassBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) ([]lawsuit_status_types.LawsuitStatusType, error) {
 	var err error
-	Otvet := make([]files.File, 0)
+	Otvet := make([]lawsuit_status_types.LawsuitStatusType, 0)
 
 	tx := db.WithContext(ctx)
 

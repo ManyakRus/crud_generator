@@ -28,8 +28,8 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 
 	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + config.Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyGRPCClient
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_findmassby.go"
+	DirReadyTable := DirReadyGRPCClient + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + micro.SeparatorFile()
+	FilenameReady := DirReadyTable + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_findmassby.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -103,6 +103,9 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 
 	//alias
 	TextGRPCClient = create_files.CheckAndAddImportAlias(TextGRPCClient)
+
+	//time
+	TextGRPCClient = create_files.CheckAndAddImportTime_FromText(TextGRPCClient)
 
 	//удаление пустого импорта
 	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
@@ -187,10 +190,10 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	DirTemplatesGRPCClient := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyGRPCClient := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 
-	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + config.Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FILENAME
+	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + config.Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyGRPCClient
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + micro.SeparatorFile() + "tests" + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_findmassby_test.go"
+	DirReadyTable := DirReadyGRPCClient + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + micro.SeparatorFile() + "tests" + micro.SeparatorFile()
+	FilenameReady := DirReadyTable + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_findmassby_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -226,6 +229,15 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ModelTableURL)
+
+		GRPCClient_func_URL := create_files.Find_GRPCClient_func_URL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPCClient_func_URL)
+
+		GRPClientURL := create_files.FindGRPClientURL()
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientURL)
+
+		GRPClientTableURL := create_files.FindGRPCClientTableURL(Table1.Name)
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientTableURL)
 	}
 
 	//создание функций

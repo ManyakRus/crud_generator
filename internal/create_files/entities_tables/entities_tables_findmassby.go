@@ -63,8 +63,8 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
-		TextModel = create_files.AddImport(TextModel, ModelTableURL)
+		//ModelTableURL := create_files.FindModelTableURL(TableName)
+		//TextModel = create_files.AddImport(TextModel, ModelTableURL)
 
 		ConstantsURL := create_files.FindDBConstantsURL()
 		TextModel = create_files.AddImport(TextModel, ConstantsURL)

@@ -8,12 +8,9 @@ func Test_server_LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(t *testing
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
-	Otvet, err := server1.LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(ctx, &Request)
+	_, err := server1.LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(ctx, &Request)
 	if err != nil {
 		t.Log("Test_server_LawsuitStatusType_FindMassBy_FieldNamesWithUnderline() error: ", err)
-	}
-	if Otvet.ModelString == "" {
-		t.Log("Test_server_LawsuitStatusType_FindMassBy_FieldNamesWithUnderline() error: ModelString=''")
 	}
 }
 

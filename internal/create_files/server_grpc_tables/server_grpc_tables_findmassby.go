@@ -183,7 +183,7 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 
-	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + config.Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME
+	FilenameTemplateGRPCServer := DirTemplatesGRPCServer + config.Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCServer
 	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_SERVER_GRPC + TableName + "_findmassby_test.go"
@@ -294,6 +294,7 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 
 	MassColumns := create_files.FindMassColumns_from_MassColumnsString(Table1, MassColumnsString)
 
+	RequestName := "Request_"
 	Underline := ""
 	Comma := ""
 	for _, ColumnName1 := range MassColumnsString {
@@ -308,10 +309,14 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 		FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
 		TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue
 
+		ProtoTypeName := create_files.ConvertGolangTypeNameToProtobufFieldName(Column1.TypeGo)
+		RequestName = RequestName + Underline + ProtoTypeName
+
 		Underline = "_"
 		Comma = ", "
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextAssignFind, TextAssign)
+	Otvet = strings.ReplaceAll(Otvet, "RequestName", RequestName)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithComma", FieldNamesWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesDefault", TextFieldName_TEST)
