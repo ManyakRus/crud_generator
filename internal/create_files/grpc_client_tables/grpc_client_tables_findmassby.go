@@ -190,7 +190,7 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	FilenameTemplateGRPCClient := DirTemplatesGRPCClient + config.Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCClient
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_findmassby_test.go"
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + micro.SeparatorFile() + "tests" + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_findmassby_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -285,11 +285,11 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 	FieldNamesWithComma := ""
 
 	//
-	TextAssignFind := "\t" + `Request.RequestFieldName = 0` + "\n"
+	TextAssignFind := "\t" + `Model1.FieldName = 0` + "\n"
 	TextAssign := ""
 	TextFieldName_TEST := ""
 
-	MassColumns := create_files.FindMassColumns_from_MassColumnsString(Table1, MassColumnsString)
+	//MassColumns := create_files.FindMassColumns_from_MassColumnsString(Table1, MassColumnsString)
 
 	Underline := ""
 	Comma := ""
@@ -299,8 +299,8 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
 		DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
-		RequestFieldName := create_files.FindRequestFieldName_FromMass(Column1, MassColumns)
-		TextAssign = TextAssign + "\t" + `Request` + RequestFieldName + ` = ` + DefaultValue + "\n"
+		//RequestFieldName := create_files.FindRequestFieldName_FromMass(Column1, MassColumns)
+		TextAssign = TextAssign + "\t" + `Model1.` + Column1.NameGo + ` = ` + DefaultValue + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
 		TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue
