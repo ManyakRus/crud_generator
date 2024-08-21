@@ -2,32 +2,48 @@ The crud_generator application is designed to automatically generate source code
 in golang language to perform CRUD operations.
 A completely ready-made microservice is created that can be launched immediately.
 
-For each table in the Postgres SQL database, files will be created to perform crud operations:
-- Create(), Read(), Update(), Delete() (or Delete() + Restore(), if there is an is_deleted field)
-- Save() - creating a new record when ID=0, or updating a record when ID<>0
+For each table in the Postgres SQL database, functions will be automatic created to perform crud operations:
+- Create()
+- Read()
+- Update()
+- Delete() (or Delete() + Restore(), if there is an is_deleted field)
+- Save() - creating a new record when ID is empty, or updating a record when ID is not empty
 - ReadFromCache() - reading from cache or database
 - Update_ColumnName() - changing only one column with the name ColumnName,
 separate function for each column of each table
+- UpdateManyFields() - change several columns listed in an array
+- FindBy_ColumnName() - search for a record by one or more columns (if you fill in the findby_functions.json file)
+- FindMassBy_ColumnName() - search for multiple records by one or more columns (if you fill in the findmassby_functions.json file)
 
 files are generated:
 1. table - struct structure with all fields from the database, and gorm + json annotations
-   Tables with fields in the database must be created manually in advance.
-   The code generator will find all the tables and their fields in the database and use them.
-2. model - struct structure, including table, with crud operations functions
-2. crud - files for performing crud operations, exchange with the database,
-   as well as files with tests
-3. grpc server - files for performing crud operations over the network, using the GRPC protocol,
-   as well as files with tests
-4. grpc client - client files for using GRPC by third-party services,
-   as well as files with tests
-5. nrpc server - files for performing crud operations over the network, using the NRPC protocol (via the NATS message broker),
-   as well as files with tests
-6. nrpc client - client files for use by NRPC third-party services,
-   as well as files with tests
-7. crud_starter - a file with functions for switching to the desired protocol db or grpc or nrpc
-8. main.go and other .go files
-9. Makefile - script launch configuration file
-10. .env - file for filling in the microservice configuration (database connection parameters, etc.)
+Tables with fields in the database must be created manually in advance.
+The code generator will find all the tables and their fields in the database and use them.
+
+2. entities - struct structure, including table, with crud operations functions
+
+3. crud - files for performing crud operations, exchange with the database,
+as well as files with tests
+
+4. grpc server - files for performing crud operations over the network, using the GRPC protocol,
+as well as files with tests
+
+5. grpc client - client files for using GRPC by third-party services,
+as well as files with tests
+
+6. nrpc server - files for performing crud operations over the network, using the NRPC protocol (via the NATS message broker),
+as well as files with tests
+
+7. nrpc client - client files for use by NRPC third-party services,
+as well as files with tests
+
+8. crud_starter - a file with functions for switching to the desired protocol db or grpc or nrpc
+
+9. main.go and other .go files
+
+10. Makefile - script launch configuration file
+
+11. .env - file for filling in the microservice configuration (database connection parameters, etc.)
 
 
 Code templates are stored in the bin/templates folder.
@@ -64,7 +80,7 @@ Start microservice:
 
 
 P.S.
-I generated myself 350,000 lines of code, from 70 tables in the database, for my service.
+I generated myself 420,000 lines of code, from 70 tables in the database, for my service.
 
 
 Source code in Golang language.
