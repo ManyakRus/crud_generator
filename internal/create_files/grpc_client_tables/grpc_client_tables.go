@@ -79,6 +79,21 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			}
 
 		}
+
+		//
+		err = CreateFilesFindBy(Table1)
+		if err != nil {
+			log.Error("CreateFilesFindBy() table: ", Table1.Name, " error: ", err)
+			return err
+		}
+
+		//
+		err = CreateFilesFindMassBy(Table1)
+		if err != nil {
+			log.Error("CreateFilesFindMassBy() table: ", Table1.Name, " error: ", err)
+			return err
+		}
+
 	}
 
 	return err
@@ -131,7 +146,7 @@ func CreateFiles(Table1 *types.Table) error {
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCClientlURL)
 
 		//grpc client func
-		GRPCClientFuncURL := create_files.Find_grpc_client_func_URL()
+		GRPCClientFuncURL := create_files.Find_GRPCClient_func_URL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPCClientFuncURL)
 
 		//nrpc client
@@ -439,7 +454,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 		//TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCClientURL)
 
 		//grpc client func
-		GRPCClientFuncURL := create_files.Find_grpc_client_func_URL()
+		GRPCClientFuncURL := create_files.Find_GRPCClient_func_URL()
 		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPCClientFuncURL)
 
 		GRPCConstantsURL := create_files.FindGRPCConstantsURL()
@@ -774,7 +789,7 @@ func CreateFiles_GRPC_Client_Cache(Table1 *types.Table) error {
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCClientlURL)
 
 		//grpc client func
-		GRPCClientFuncURL := create_files.Find_grpc_client_func_URL()
+		GRPCClientFuncURL := create_files.Find_GRPCClient_func_URL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPCClientFuncURL)
 
 		//nrpc client

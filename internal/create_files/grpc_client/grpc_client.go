@@ -80,7 +80,7 @@ func CreateGRPCClient() error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_CLIENT_URL)
 
 		//grpc_client_func
-		GRPC_CLIENT_FUNC_URL := create_files.Find_grpc_client_func_URL()
+		GRPC_CLIENT_FUNC_URL := create_files.Find_GRPCClient_func_URL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_CLIENT_FUNC_URL)
 
 		//CRUD_STARTER_URL

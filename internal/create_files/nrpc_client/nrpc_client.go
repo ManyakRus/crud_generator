@@ -81,7 +81,7 @@ func CreateNRPCClient() error {
 		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPC_NRPC_URL)
 
-		GRPC_func_URL := create_files.Find_grpc_client_func_URL()
+		GRPC_func_URL := create_files.Find_GRPCClient_func_URL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPC_func_URL)
 
 	}

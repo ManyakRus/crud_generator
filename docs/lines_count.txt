@@ -1,9 +1,7 @@
 Name      	Level	Lines count	Functions count
-.         	1	792417	30025
-bin       	2	777203	29506
 cmd       	2	46	3
 docs      	2	0	0
 examples  	2	599	26
-internal  	2	10825	343
+internal  	2	15305	456
 pkg       	2	3744	147
 scripts   	2	0	0

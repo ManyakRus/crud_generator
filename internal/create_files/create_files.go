@@ -846,8 +846,8 @@ func Find_GRPC_NRPC_URL() string {
 	return Otvet
 }
 
-// Find_grpc_client_func_URL - возвращает URL репозитория с пакетом "grpc_client_func"
-func Find_grpc_client_func_URL() string {
+// Find_GRPCClient_func_URL - возвращает URL репозитория с пакетом "grpc_client_func"
+func Find_GRPCClient_func_URL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC
@@ -2889,7 +2889,7 @@ func FindRequestFieldName_FromMass(Column *types.Column, MassColumns []*types.Co
 	Number := 0
 	for _, Column1 := range MassColumns {
 		TypeProto1 := ConvertGolangTypeNameToProtobufTypeName(Column1.TypeGo)
-		if TypeProto == TypeProto1 {
+		if TypeProto == TypeProto1 && Column != Column1 {
 			Number = Number + 1
 		}
 
@@ -2901,7 +2901,9 @@ func FindRequestFieldName_FromMass(Column *types.Column, MassColumns []*types.Co
 	Suffix := "_" + strconv.Itoa(Number)
 
 	Otvet = ConvertGolangTypeNameToProtobufFieldName(Column.Type)
-	Otvet = Otvet + Suffix
+	if Number > 1 {
+		Otvet = Otvet + Suffix
+	}
 
 	return Otvet
 }
@@ -3036,6 +3038,14 @@ func ConvertProtobufVariableToGolangVariable_with_MassColumns(Column *types.Colu
 
 	return VariableField, GolangCode
 }
+
+//// ConvertGolangVariableToProtobufVariable_with_MassColumns - преобразованное в тип protobuf из golang
+//func ConvertGolangVariableToProtobufVariable_with_MassColumns(Column *types.Column, MassColumns []*types.Column) string {
+//	Otvet := ""
+//
+//	Otvet = FindRequestFieldName_FromMass(Column, MassColumns)
+//	return Otvet
+//}
 
 // FindRequestFieldNames_FromMass - возвращает строку с именами колонок для Protobuf
 func FindRequestFieldNames_FromMass(MassColumns []*types.Column) string {
