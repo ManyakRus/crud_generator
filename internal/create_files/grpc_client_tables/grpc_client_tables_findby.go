@@ -153,7 +153,8 @@ func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, M
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
 		TextRequest := create_files.FindRequestFieldName_FromMass(Column1, MassColumns)
-		TextAssign = TextAssign + "\tRequest." + TextRequest + " = m." + Column1.NameGo + "\n"
+		ValueM := create_files.ConvertGolangVariableToProtobufVariable(Table1, Column1, "m")
+		TextAssign = TextAssign + "\tRequest." + TextRequest + " = " + ValueM + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
 
