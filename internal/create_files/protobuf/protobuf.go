@@ -89,10 +89,12 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		TextProtoNew = TextProtoNew + FindTextProtoTable1_UpdateEveryColumn(TextProto, Table1)
 
 		//добавим текст FindBy
-		TextProtoNew = TextProtoNew + FindText_FindBy(TextProto, Table1)
+		TextProto, TextProtoNew1 := FindText_FindBy(TextProto, Table1)
+		TextProtoNew = TextProtoNew + TextProtoNew1
 
 		//добавим текст FindMassBy
-		TextProtoNew = TextProtoNew + FindText_FindMassBy(TextProto, Table1)
+		TextProto, TextProtoNew1 = FindText_FindMassBy(TextProto, Table1)
+		TextProtoNew = TextProtoNew + TextProtoNew1
 
 		if config.Settings.NEED_CREATE_CACHE_API == true {
 			TextProtoNew = TextProtoNew + FindTextProtoTable1_Cache(TextProto, Table1)
@@ -533,8 +535,8 @@ func AddTextMessageRequestID1(Text string, Table1 *types.Table) string {
 	TextMessage := `
 // ` + TextRequest + ` - параметры запроса на сервер
 message ` + TextRequest + ` {
-    uint32 VersionModel= 1; //версия структуры модели
-    ` + ProtobufTypePK + ` ` + TextFieldName + `   = 2; // id записи в БД
+    uint32 VersionModel = 1; //версия структуры модели
+    ` + ProtobufTypePK + ` ` + TextFieldName + ` = 2; // id записи в БД
 }
 `
 
@@ -612,8 +614,8 @@ func AddTextMessageRequestID_ColumnType1(Text string, Table1 *types.Table, Colum
 	TextMessage := `
 // ` + TextRequest + ` - параметры запроса на сервер
 message ` + TextRequest + ` {
-    uint32 VersionModel= 1; //версия структуры модели
-    ` + ProtobufTypePK + ` ` + FieldNamePK + `   = 2; // id записи в БД
+    uint32 VersionModel = 1; //версия структуры модели
+    ` + ProtobufTypePK + ` ` + FieldNamePK + ` = 2; // id записи в БД
     ` + ProtobufTypeColumn + ` ` + FieldName + ` = 3; // значение поиска
 }
 `
@@ -646,7 +648,7 @@ func AddTextMessageRequestID_ColumnType_ManyPK(Text string, Table1 *types.Table,
 	TextMessage := `
 // ` + TextRequest + ` - параметры запроса на сервер
 message ` + TextRequest + ` {
-    uint32 VersionModel= 1; //версия структуры модели`
+    uint32 VersionModel = 1; //версия структуры модели`
 
 	//заполним строки про PrimaryKey
 	isPrimaryKey := false
@@ -670,7 +672,7 @@ message ` + TextRequest + ` {
 
 		//добавим message
 		TextMessage = TextMessage + `
-    ` + ProtobufTypePK + ` ` + FieldNamePK + `   = ` + sNumber + `; //id записи в БД`
+    ` + ProtobufTypePK + ` ` + FieldNamePK + ` = ` + sNumber + `; //id записи в БД`
 	}
 
 	//заполним строку про Column1
@@ -714,14 +716,15 @@ func AddTextMessageRequestID_Columns(Text string, Columns []*types.Column) strin
 	TextMessage := `
 // ` + TextRequest + ` - параметры запроса на сервер
 message ` + TextRequest + ` {
-    uint32 VersionModel= 1; //версия структуры модели`
+    uint32 VersionModel = 1; //версия структуры модели`
 
-	////
-	//for _, Column1 := range Columns {
-	//	ProtoType := create_files.ConvertGolangTypeNameToProtobufTypeName(Column1.Type)
-	//	ProtoName := create_files.FindRequestFieldName_FromMass(Column1, Columns)
-	//	TextMessage = TextMessage + ``
-	//}
+	//
+	for i, Column1 := range Columns {
+		ProtoType := create_files.ConvertGolangTypeNameToProtobufTypeName(Column1.Type)
+		ProtoName := create_files.FindRequestFieldName_FromMass(Column1, Columns)
+		TextMessage = TextMessage + `
+		` + ProtoType + ` ` + ProtoName + ` = ` + strconv.Itoa(i+2) + `; //значение поиска`
+	}
 
 	TextMessage = TextMessage + `
 }`
@@ -756,10 +759,11 @@ func AddTextMessageRequestID(TextProto string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// FindText_FindBy - добавляет текст FindBy
-func FindText_FindBy(TextProto string, Table1 *types.Table) string {
-	Otvet := ""
+// FindText_FindBy - возвращает TextProto и текст FindBy
+func FindText_FindBy(TextProto string, Table1 *types.Table) (string, string) {
+	Otvet := TextProto
 
+	Otvet2 := ""
 	for _, TableColumns1 := range types.MassFindBy {
 		if TableColumns1.Table.Name != Table1.Name {
 			continue
@@ -767,42 +771,51 @@ func FindText_FindBy(TextProto string, Table1 *types.Table) string {
 
 		Text1 := FindText_FindBy1(TableColumns1)
 
-		//проверим такой текст уже есть
+		//проверим такой текст функции уже есть
 		pos1 := strings.Index(TextProto, Text1)
 		if pos1 >= 0 {
 			continue
 		}
 
+		//добавим message
+		TextMess := AddTextMessageRequestID_Columns(TextProto, TableColumns1.Columns)
+		//проверим такой текст message уже есть
+		pos1 = strings.Index(TextProto, TextMess)
+		if pos1 < 0 {
+			Otvet = Otvet + "\n" + TextMess
+		}
+
 		//
-		Otvet = Otvet + Text1
+		Otvet2 = Otvet2 + Text1
 	}
 
-	return Otvet
+	return Otvet, Otvet2
 }
 
 // FindText_FindBy1 - находит текст FindBy
 func FindText_FindBy1(TableColumns1 types.TableColumns) string {
-	Otvet := "\n\t rpc "
+	Otvet := "\n\trpc "
 
 	TextFields := ""
-	TextRequest := ""
+	TextRequest := "Request_"
 	Underline := ""
 	for _, Column1 := range TableColumns1.Columns {
 		TextFields = TextFields + Underline + Column1.NameGo
-		TextRequest1 := create_files.FindRequestFieldName_FromMass(Column1, TableColumns1.Columns)
+		TextRequest1 := create_files.ConvertGolangTypeNameToProtobufFieldName(Column1.TypeGo)
 		TextRequest = TextRequest + Underline + TextRequest1
 		Underline = "_"
 	}
 
-	Otvet = Otvet + TableColumns1.Table.NameGo + "_FindBy_" + TextFields + "(" + TextRequest + ") returns (Response)\n"
+	Otvet = Otvet + TableColumns1.Table.NameGo + "_FindBy_" + TextFields + "(" + TextRequest + ") returns (Response) {}\n"
 
 	return Otvet
 }
 
 // FindText_FindMassBy - добавляет текст FindBy
-func FindText_FindMassBy(TextProto string, Table1 *types.Table) string {
-	Otvet := ""
+func FindText_FindMassBy(TextProto string, Table1 *types.Table) (string, string) {
+	Otvet := TextProto
 
+	Otvet2 := ""
 	for _, TableColumns1 := range types.MassFindBy {
 		if TableColumns1.Table.Name != Table1.Name {
 			continue
@@ -816,28 +829,36 @@ func FindText_FindMassBy(TextProto string, Table1 *types.Table) string {
 			continue
 		}
 
+		//добавим message
+		TextMess := AddTextMessageRequestID_Columns(TextProto, TableColumns1.Columns)
+		//проверим такой текст message уже есть
+		pos1 = strings.Index(TextProto, TextMess)
+		if pos1 < 0 {
+			Otvet = Otvet + "\n" + TextMess
+		}
+
 		//
-		Otvet = Otvet + Text1
+		Otvet2 = Otvet2 + Text1
 	}
 
-	return Otvet
+	return Otvet, Otvet2
 }
 
 // FindText_FindMassBy1 - находит текст FindBy
 func FindText_FindMassBy1(TableColumns1 types.TableColumns) string {
-	Otvet := "\n\t rpc "
+	Otvet := "\n\trpc "
 
 	TextFields := ""
-	TextRequest := ""
+	TextRequest := "Request_"
 	Underline := ""
 	for _, Column1 := range TableColumns1.Columns {
 		TextFields = TextFields + Underline + Column1.NameGo
-		TextRequest1 := create_files.FindRequestFieldName_FromMass(Column1, TableColumns1.Columns)
+		TextRequest1 := create_files.ConvertGolangTypeNameToProtobufFieldName(Column1.TypeGo)
 		TextRequest = TextRequest + Underline + TextRequest1
 		Underline = "_"
 	}
 
-	Otvet = Otvet + TableColumns1.Table.NameGo + "_FindMassBy_" + TextFields + "(" + TextRequest + ") returns (ResponseMass)\n"
+	Otvet = Otvet + TableColumns1.Table.NameGo + "_FindMassBy_" + TextFields + "(" + TextRequest + ") returns (ResponseMass) {}\n"
 
 	return Otvet
 }

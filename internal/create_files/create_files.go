@@ -2994,7 +2994,7 @@ func FindMassColumns_from_MassColumnsString(Table1 *types.Table, MassColumnsStri
 
 // FindMassTableColumns - преобразует TableColumns_String в TableColumns
 func FindMassTableColumns(MapAll map[string]*types.Table, MassTableColumns_String []types.TableColumns_String) []types.TableColumns {
-	Otvet := make([]types.TableColumns, len(MassTableColumns_String))
+	Otvet := make([]types.TableColumns, 0)
 
 	for _, TableColumns_string1 := range MassTableColumns_String {
 		Table1, ok := MapAll[TableColumns_string1.TableName]
