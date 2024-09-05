@@ -2413,9 +2413,9 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	for _, Column1 := range MassPK {
 		Name := strings.ToUpper(Column1.NameGo)
 		VariableName := Table1.NameGo + "_" + Name + "_Test"
-		Text1 := ConvertGolangVariableToProtobufVariable(Table1, Column1, VariableName)
+		//Text1 := ConvertGolangVariableToProtobufVariable(Table1, Column1, VariableName)
 		RequestColumnName := FindRequestFieldName(Table1, Column1)
-		TextNew = TextNew + "\tRequest." + RequestColumnName + " = " + Text1 + "\n"
+		TextNew = TextNew + "\tRequest." + RequestColumnName + " = " + VariableName + "\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 
@@ -2425,9 +2425,9 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	for _, Column1 := range MassPK {
 		Name := strings.ToUpper(Column1.NameGo)
 		VariableName := Table1.NameGo + "_" + Name + "_Test"
-		Text1 := ConvertGolangVariableToProtobufVariable(Table1, Column1, VariableName)
+		//Text1 := ConvertGolangVariableToProtobufVariable(Table1, Column1, VariableName)
 		RequestColumnName := FindRequestFieldName(Table1, Column1)
-		TextNew = TextNew + "\tRequest2." + RequestColumnName + " = " + Text1 + "\n"
+		TextNew = TextNew + "\tRequest2." + RequestColumnName + " = " + VariableName + "\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 
@@ -3035,7 +3035,8 @@ func FindMassTableColumns(MapAll map[string]*types.Table, MassTableColumns_Strin
 	for _, TableColumns_string1 := range MassTableColumns_String {
 		Table1, ok := MapAll[TableColumns_string1.TableName]
 		if ok == false {
-			log.Panic(" Error: not found table: ", TableColumns_string1.TableName)
+			log.Warn(" Error: not found table: ", TableColumns_string1.TableName)
+			continue
 		}
 		Columns1 := FindMassColumns_from_MassColumnsString(Table1, TableColumns_string1.MassColumnNames)
 		TableColumns1 := types.TableColumns{}

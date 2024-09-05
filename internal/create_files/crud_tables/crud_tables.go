@@ -221,6 +221,9 @@ func CreateFiles(Table1 *types.Table) error {
 	//переименование функций
 	TextDB = RenameFunctions(TextDB, Table1)
 
+	//импорт "fmt"
+	TextDB = create_files.CheckAndAddImportFmt(TextDB)
+
 	//удаление пустых строк
 	TextDB = create_files.DeleteEmptyLines(TextDB)
 
@@ -601,10 +604,10 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextCrudUpdateFunc, Table1)
 
-	// пустой файл не нужен
-	if TextUpdateEveryColumn == "" {
-		return err
-	}
+	//// пустой файл не нужен
+	//if TextUpdateEveryColumn == "" {
+	//	return err
+	//}
 
 	TextCrud = TextCrud + TextUpdateEveryColumn
 	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
@@ -640,6 +643,9 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//удаление пустого импорта
 	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+
+	//импорт "fmt"
+	TextCrud = create_files.CheckAndAddImportFmt(TextCrud)
 
 	//удаление пустых строк
 	TextCrud = create_files.DeleteEmptyLines(TextCrud)
@@ -808,11 +814,14 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextCrudUpdateFunc, Table1)
-	// пустой файл не нужен
-	if TextUpdateEveryColumn == "" {
-		return err
-	}
+	//// пустой файл не нужен
+	//if TextUpdateEveryColumn == "" {
+	//	return err
+	//}
+
 	TextCrud = TextCrud + TextUpdateEveryColumn
+
+	TextCrud = create_files.CheckAndAddImportFmt(TextCrud)
 
 	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
 

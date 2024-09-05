@@ -488,10 +488,10 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPC_Client_UpdateFunc, Table1)
-	// пустой файл не нужен
-	if TextUpdateEveryColumn == "" {
-		return err
-	}
+	//// пустой файл не нужен
+	//if TextUpdateEveryColumn == "" {
+	//	return err
+	//}
 
 	//ModelName := Table1.NameGo
 	//TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
@@ -661,10 +661,11 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPC_Client_UpdateFunc, Table1)
-	// пустой файл не нужен
-	if TextUpdateEveryColumn == "" {
-		return err
-	}
+	//// пустой файл не нужен
+	//if TextUpdateEveryColumn == "" {
+	//	return err
+	//}
+
 	//ModelName := Table1.NameGo
 	//TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	//TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
