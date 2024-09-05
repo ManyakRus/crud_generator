@@ -1,0 +1,184 @@
+package server_grpc_tables
+
+import (
+	"github.com/ManyakRus/crud_generator/internal/config"
+	"github.com/ManyakRus/crud_generator/internal/constants"
+	"github.com/ManyakRus/crud_generator/internal/create_files"
+	"github.com/ManyakRus/crud_generator/internal/folders"
+	"github.com/ManyakRus/crud_generator/internal/types"
+	"github.com/ManyakRus/starter/log"
+	"github.com/ManyakRus/starter/micro"
+	"os"
+	"strings"
+)
+
+// CreateFilesCache - создаёт 1 файл в папке grpc_server
+func CreateFilesCache(Table1 *types.Table) error {
+	var err error
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+
+	FilenameTemplateCache := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_CACHE_FILENAME
+	TableName := strings.ToLower(Table1.Name)
+	DirReadyTable := DirReadyGRPCServer
+	FilenameReadyCache := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_cache.go"
+
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
+	bytes, err := os.ReadFile(FilenameTemplateCache)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCache, " error: ", err)
+	}
+	TextGRPCServer := string(bytes)
+
+	//заменим имя пакета на новое
+	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
+
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+
+		DBConstantsURL := create_files.FindDBConstantsURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, DBConstantsURL)
+
+		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
+
+	}
+
+	//TextGRPCServer = create_files.ReplaceIntFromProtoRequest(TextGRPCServer, Table1)
+
+	//замена RequestId{}
+	TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+
+	TextGRPCServer = create_files.ReplacePrimaryKeyOtvetID(TextGRPCServer, Table1)
+
+	TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
+
+	if Table1.PrimaryKeyColumnsCount == 1 {
+		ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "ReplaceManyID(ID)", ColumnPK.NameGo)
+		//ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+	} else {
+		TextIDMany := "ReplaceManyID(ID)"
+		TextIDMany = create_files.ReplaceIDtoID_Many(TextIDMany, Table1)
+		TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "ReplaceManyID(ID)", TextIDMany)
+	}
+	TextGRPCServer = create_files.ReplaceIDtoID_Many(TextGRPCServer, Table1)
+
+	//добавим импорт uuid
+	TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+
+	//добавим импорт alias
+	TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
+
+	//создание текста
+	ModelName := Table1.NameGo
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+
+	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
+	//	TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
+	//}
+
+	//удаление пустого импорта
+	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+
+	return err
+}
+
+// CreateFilesCacheTest - создаёт 1 файл в папке grpc_server
+func CreateFilesCacheTest(Table1 *types.Table) error {
+	var err error
+
+	//чтение файлов
+	DirBin := micro.ProgramDir_bin()
+	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
+	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
+
+	FilenameTemplateCache := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_CACHE_TEST_FILENAME
+	TableName := strings.ToLower(Table1.Name)
+	DirReadyTable := DirReadyGRPCServer
+	FilenameReadyCache := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_cache_test.go"
+
+	//создадим папку готовых файлов
+	folders.CreateFolder(DirReadyTable)
+
+	bytes, err := os.ReadFile(FilenameTemplateCache)
+	if err != nil {
+		log.Panic("ReadFile() ", FilenameTemplateCache, " error: ", err)
+	}
+	TextGRPCServer := string(bytes)
+
+	//заменим имя пакета на новое
+	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+
+	//заменим импорты
+	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+
+		ModelTableURL := create_files.FindModelTableURL(TableName)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
+
+		ProtoURL := create_files.FindProtoURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
+
+		CrudStarterURL := create_files.FindCrudStarterURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
+
+		ConstantsURL := create_files.FindConstantsURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
+
+		//замена "postgres_gorm.Connect_WithApplicationName("
+		TextGRPCServer = create_files.ReplaceConnect_WithApplicationName(TextGRPCServer)
+
+		//Postgres_ID_Test = ID Minimum
+		TextGRPCServer = create_files.Replace_Model_ID_Test(TextGRPCServer, Table1)
+
+		//замена RequestId{}
+		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+
+		//добавим импорт uuid
+		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+
+	}
+
+	//создание текста
+	ModelName := Table1.NameGo
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+
+	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
+	//	TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
+	//}
+
+	//удаление пустого импорта
+	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+
+	//SkipNow()
+	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)
+
+	//запись файла
+	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+
+	return err
+}
