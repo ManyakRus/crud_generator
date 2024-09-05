@@ -248,6 +248,9 @@ func CreateFilesTest(Table1 *types.Table) error {
 		ConstantsURL := create_files.FindConstantsURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
 
+		GRPClientTableURL := create_files.FindGRPCClientTableURL(Table1.Name)
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, GRPClientTableURL)
+
 		TextGRPCServer = create_files.CheckAndAddImport(TextGRPCServer, "encoding/json")
 
 		//замена "postgres_gorm.Connect_WithApplicationName("
@@ -485,10 +488,10 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc, Table1)
-	// пустой файл не нужен
-	if TextUpdateEveryColumn == "" {
-		return err
-	}
+	//// пустой файл не нужен
+	//if TextUpdateEveryColumn == "" {
+	//	return err
+	//}
 
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
 
@@ -674,10 +677,11 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
-	// пустой файл не нужен
-	if TextUpdateEveryColumn == "" {
-		return err
-	}
+	//// пустой файл не нужен
+	//if TextUpdateEveryColumn == "" {
+	//	return err
+	//}
+
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
 
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer

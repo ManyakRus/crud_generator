@@ -3,6 +3,7 @@ package grpc_lawsuit_status_types
 import (
 	"github.com/ManyakRus/starter/config_main"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"testing"
 )
@@ -12,7 +13,7 @@ const Postgres_ID_Test = 0
 
 func TestGetVersionModel(t *testing.T) {
 
-	crud := Crud_GRPC{}
+	crud := grpc_lawsuit_status_types.Crud_GRPC{}
 	Otvet := crud.GetVersionModel()
 	if Otvet == 0 {
 		t.Error("TestGetVersionModel() error: Otvet =0")
@@ -24,7 +25,7 @@ func TestRead(t *testing.T) {
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
-	crud := Crud_GRPC{}
+	crud := grpc_lawsuit_status_types.Crud_GRPC{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
@@ -46,7 +47,7 @@ func TestCreate(t *testing.T) {
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = -1
 
-	crud := Crud_GRPC{}
+	crud := grpc_lawsuit_status_types.Crud_GRPC{}
 	err := crud.Create(&Otvet)
 
 	if err == nil {
@@ -63,7 +64,7 @@ func TestUpdate(t *testing.T) {
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = 0
 
-	crud := Crud_GRPC{}
+	crud := grpc_lawsuit_status_types.Crud_GRPC{}
 	err := crud.Update(&Otvet)
 
 	if err == nil {
@@ -80,7 +81,7 @@ func TestSave(t *testing.T) {
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
-	crud := Crud_GRPC{}
+	crud := grpc_lawsuit_status_types.Crud_GRPC{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
@@ -105,7 +106,7 @@ func TestDelete(t *testing.T) {
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
-	crud := Crud_GRPC{}
+	crud := grpc_lawsuit_status_types.Crud_GRPC{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
@@ -153,7 +154,7 @@ func TestFindByExtID(t *testing.T) {
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
-	crud := Crud_GRPC{}
+	crud := grpc_lawsuit_status_types.Crud_GRPC{}
 	Otvet1 := lawsuit_status_types.LawsuitStatusType{}
 	Otvet1.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet1)

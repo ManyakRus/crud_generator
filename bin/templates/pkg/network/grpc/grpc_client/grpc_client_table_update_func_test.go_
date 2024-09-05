@@ -4,7 +4,7 @@ func TestCrud_GRPC_Update(t *testing.T) {
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
-	crud := Crud_GRPC{}
+	crud := grpc_lawsuit_status_types.Crud_GRPC{}
 
 	//прочитаем из БД
 	m := lawsuit_status_types.LawsuitStatusType{}

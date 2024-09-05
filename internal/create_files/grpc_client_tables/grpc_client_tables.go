@@ -253,6 +253,12 @@ func CreateFilesTest(Table1 *types.Table) error {
 		ModelTableName := create_files.FindModelTableURL(TableName)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ModelTableName)
 
+		GRPClientTableURL := create_files.FindGRPCClientTableURL(Table1.Name)
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientTableURL)
+
+		//GRPClientFuncURL := create_files.Find_GRPCClient_func_URL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientFuncURL)
+
 		//Postgres_ID_Test = ID Minimum
 		TextGRPCClient = create_files.Replace_Postgres_ID_Test(TextGRPCClient, Table1)
 
@@ -650,6 +656,12 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 		//TextGRPC_Client = create_files.ConvertRequestIdToAlias(TextGRPC_Client, Table1)
 
+		GRPClientTableURL := create_files.FindGRPCClientTableURL(Table1.Name)
+		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPClientTableURL)
+
+		//GRPClientFuncURL := create_files.Find_GRPCClient_func_URL()
+		//TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPClientFuncURL)
+
 		TextGRPC_Client = create_files.Replace_Postgres_ID_Test(TextGRPC_Client, Table1)
 
 		TextGRPC_Client = create_files.ReplacePrimaryKeyOtvetID(TextGRPC_Client, Table1)
@@ -902,6 +914,12 @@ func CreateFiles_GRPC_Client_Cache_Test(Table1 *types.Table) error {
 		////constants GRPC
 		//RepositoryGRPCConstantsURL := create_files.FindGRPCConstantsURL()
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCConstantsURL)
+
+		GRPClientTableURL := create_files.FindGRPCClientTableURL(Table1.Name)
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientTableURL)
+
+		//GRPClientFuncURL := create_files.Find_GRPCClient_func_URL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientFuncURL)
 
 		// замена ID на PrimaryKey
 		TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)

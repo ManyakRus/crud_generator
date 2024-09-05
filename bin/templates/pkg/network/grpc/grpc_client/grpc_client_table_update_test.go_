@@ -13,7 +13,7 @@ func TestCrud_GRPC_UpdateManyFields(t *testing.T) {
 	defer grpc_client.CloseConnection()
 
 	//прочитаем из БД
-	crud := Crud_GRPC{}
+	crud := grpc_lawsuit_status_types.Crud_GRPC{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
