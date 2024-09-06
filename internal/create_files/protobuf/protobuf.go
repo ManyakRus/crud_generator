@@ -78,7 +78,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		}
 
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
+		err1 := create_files.IsGood_Table(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue
@@ -121,7 +121,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	TextProto = TextProto[:PosStart] + TextProtoNew + TextProto[PosStart:]
 
 	//
-	TextProto = create_files.DeleteEmptyLines(TextProto)
+	TextProto = create_files.Delete_EmptyLines(TextProto)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyProto, []byte(TextProto), constants.FILE_PERMISSIONS)
@@ -146,12 +146,12 @@ func AddTextMessageRequestID1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//найдём текст RequestID
-	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	PrimaryKeyColumn := create_files.Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet
 	}
 
-	TextRequest, TextFieldName := create_files.FindTextProtobufRequest(Table1)
+	TextRequest, TextFieldName := create_files.FindText_ProtobufRequest(Table1)
 
 	//найдём уже есть message
 	TextFind := "message " + TextRequest + " {"
@@ -187,7 +187,7 @@ func AddTextMessageRequestID_ManyPK(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//найдём текст RequestID
-	PrimaryKeyColumns := create_files.FindPrimaryKeyColumns(Table1)
+	PrimaryKeyColumns := create_files.Find_PrimaryKeyColumns(Table1)
 	if len(PrimaryKeyColumns) == 0 {
 		return Otvet
 	}
@@ -215,14 +215,14 @@ func AddTextMessageRequestID_ColumnType1(Text string, Table1 *types.Table, Colum
 	Otvet := Text
 
 	//найдём текст RequestID
-	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	PrimaryKeyColumn := create_files.Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet
 	}
 	//
-	_, FieldNamePK := create_files.FindTextProtobufRequest(Table1)
+	_, FieldNamePK := create_files.FindText_ProtobufRequest(Table1)
 
-	TextRequest, FieldName, _, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "_")
+	TextRequest, FieldName, _, _ := create_files.FindText_ProtobufRequest_ID_Type(Table1, Column1, "_")
 
 	//найдём уже есть message
 	TextFind := "message " + TextRequest + " {"
@@ -267,13 +267,13 @@ func AddTextMessageRequestID_ColumnType_ManyPK(Text string, Table1 *types.Table,
 	Otvet := Text
 
 	//найдём текст RequestID
-	PrimaryKeyColumns := create_files.FindPrimaryKeyColumns(Table1)
+	PrimaryKeyColumns := create_files.Find_PrimaryKeyColumns(Table1)
 	if len(PrimaryKeyColumns) == 0 {
 		return Otvet
 	}
 	//
 
-	TextRequest := create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
+	TextRequest := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
 
 	//найдём уже есть message
 	TextFind := "message " + TextRequest + " {"
@@ -305,7 +305,7 @@ message ` + TextRequest + ` {
 			return Otvet
 		}
 		ProtobufTypePK := MappingPK.ProtobufType
-		_, FieldNamePK, _, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, ColumnPK1, "")
+		_, FieldNamePK, _, _ := create_files.FindText_ProtobufRequest_ID_Type(Table1, ColumnPK1, "")
 
 		//добавим message
 		TextMessage = TextMessage + `
@@ -322,7 +322,7 @@ message ` + TextRequest + ` {
 			return Otvet
 		}
 		ProtobufTypeColumn := Mapping1.ProtobufType
-		_, FieldName, _, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "")
+		_, FieldName, _, _ := create_files.FindText_ProtobufRequest_ID_Type(Table1, Column1, "")
 		Number = Number + 1
 		sNumber := strconv.Itoa(Number)
 
@@ -341,7 +341,7 @@ message ` + TextRequest + ` {
 func AddTextMessageRequestID_Columns(Text string, Columns []*types.Column) string {
 	Otvet := Text
 
-	TextRequest := "Request_" + create_files.FindRequestFieldNames_FromMass(Columns)
+	TextRequest := "Request_" + create_files.Find_RequestFieldNames_FromMass(Columns)
 
 	//найдём уже есть message
 	TextFind := "message " + TextRequest + " {"
@@ -357,8 +357,8 @@ message ` + TextRequest + ` {
 
 	//
 	for i, Column1 := range Columns {
-		ProtoType := create_files.ConvertGolangTypeNameToProtobufTypeName(Column1.Type)
-		ProtoName := create_files.FindRequestFieldName_FromMass(Column1, Columns)
+		ProtoType := create_files.Convert_GolangTypeNameToProtobufTypeName(Column1.Type)
+		ProtoName := create_files.Find_RequestFieldName_FromMass(Column1, Columns)
 		TextMessage = TextMessage + `
 		` + ProtoType + ` ` + ProtoName + ` = ` + strconv.Itoa(i+2) + `; //значение поиска`
 	}

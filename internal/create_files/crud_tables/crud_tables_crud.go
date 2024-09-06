@@ -47,85 +47,90 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB := string(bytes)
 
 	//заменим имя пакета на новое
-	TextDB = create_files.ReplacePackageName(TextDB, DirReadyTable)
+	TextDB = create_files.Replace_PackageName(TextDB, DirReadyTable)
 
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextDB = create_files.DeleteTemplateRepositoryImports(TextDB)
+		TextDB = create_files.Delete_TemplateRepositoryImports(TextDB)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextDB = create_files.AddImport(TextDB, ModelTableURL)
 
-		ConstantsURL := create_files.FindDBConstantsURL()
+		ConstantsURL := create_files.Find_DBConstantsURL()
 		TextDB = create_files.AddImport(TextDB, ConstantsURL)
 
-		CrudFunctionsURL := create_files.FindCrudFunctionsURL()
+		CrudFunctionsURL := create_files.Find_CrudFunctionsURL()
 		TextDB = create_files.AddImport(TextDB, CrudFunctionsURL)
 
 		//удалим лишние функции
-		TextDB = create_files.DeleteFuncDelete(TextDB, Table1)
-		TextDB = create_files.DeleteFuncRestore(TextDB, Table1)
-		TextDB = create_files.DeleteFuncFind_byExtID(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_Delete(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_Restore(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_Find_byExtID(TextDB, Table1)
 
 		//удалим лишние функции ctx
-		TextDB = create_files.DeleteFuncDeleteCtx(TextDB, Table1)
-		TextDB = create_files.DeleteFuncRestoreCtx(TextDB, Table1)
-		TextDB = create_files.DeleteFuncFind_byExtIDCtx(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_DeleteCtx(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_RestoreCtx(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_Find_byExtIDCtx(TextDB, Table1)
 
 		//кэш
 		if config.Settings.NEED_CREATE_CACHE_API == true {
 			//исправление Save()
-			TextDB = strings.ReplaceAll(TextDB, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
+			TextDB = create_files.CommentLineInText(TextDB, constants.TEXT_CACHE_REMOVE)
+			//TextDB = strings.ReplaceAll(TextDB, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
 		}
 
 		//
 		TextDB = Replace_ExtID_equal0_string(TextDB, Table1)
 	}
 
-	//TextDB = create_files.DeleteFuncFind_byExtID(TextDB, Table1)
-	//TextDB = create_files.DeleteFuncFind_byExtIDCtx(TextDB, Table1)
+	//TextDB = create_files.DeleteFunc_Find_byExtID(TextDB, Table1)
+	//TextDB = create_files.DeleteFunc_Find_byExtIDCtx(TextDB, Table1)
 	TextDB = AddTextOmit(TextDB, Table1)
 	TextDB = ReplaceText_modified_at(TextDB, Table1)
 	TextDB = ReplaceText_created_at(TextDB, Table1)
 	TextDB = ReplaceText_is_deleted_deleted_at(TextDB, Table1)
 	TextDB = create_files.DeleteImportModel(TextDB)
 
-	TextDB = create_files.ReplaceCacheRemove(TextDB, Table1)
+	TextDB = ReplaceCacheRemove(TextDB, Table1)
 
-	TextDB = create_files.ReplacePrimaryKeyM_ID(TextDB, Table1)
+	TextDB = ReplacePrimaryKeyM_ID(TextDB, Table1)
 
 	//id := m.ID
-	TextDB = create_files.ReplaceColumnNamePK(TextDB, Table1)
+	TextDB = ReplaceColumnNamePK(TextDB, Table1)
 
-	//"ReplaceColumnNameM(m.ID)"
-	//TextDB = create_files.ReplaceColumnNameM(TextDB, Table1)
+	//"Replace_ColumnNameM(m.ID)"
+	//TextDB = create_files.Replace_ColumnNameM(TextDB, Table1)
 
 	//создание текста
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+	TextDB = create_files.Replace_TemplateModel_to_Model(TextDB, Table1.NameGo)
+	TextDB = create_files.Replace_TemplateTableName_to_TableName(TextDB, Table1.Name)
+	TextDB = create_files.AddText_ModuleGenerated(TextDB)
+
+	//TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
 	//замена импортов на новые URL
-	TextDB = create_files.ReplaceServiceURLImports(TextDB)
+	TextDB = create_files.Replace_RepositoryImportsURL(TextDB)
 
 	//uuid
-	TextDB = create_files.CheckAndAddImportUUID_FromText(TextDB)
+	TextDB = create_files.CheckAndAdd_ImportUUID_FromText(TextDB)
 
 	//alias
-	TextDB = create_files.CheckAndAddImportAlias(TextDB)
+	TextDB = create_files.CheckAndAdd_ImportAlias(TextDB)
 
 	//удаление пустого импорта
-	TextDB = create_files.DeleteEmptyImport(TextDB)
+	TextDB = create_files.Delete_EmptyImport(TextDB)
 
 	//переименование функций
 	TextDB = RenameFunctions(TextDB, Table1)
 
 	//импорт "fmt"
-	TextDB = create_files.CheckAndAddImportFmt(TextDB)
+	TextDB = create_files.CheckAndAdd_ImportFmt(TextDB)
 
 	//удаление пустых строк
-	TextDB = create_files.DeleteEmptyLines(TextDB)
+	TextDB = create_files.Delete_EmptyLines(TextDB)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -160,60 +165,64 @@ func CreateFilesTest(Table1 *types.Table) error {
 	TextDB := string(bytes)
 
 	//заменим имя пакета на новое
-	TextDB = create_files.ReplacePackageName(TextDB, DirReadyTable)
+	TextDB = create_files.Replace_PackageName(TextDB, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextDB = create_files.DeleteTemplateRepositoryImports(TextDB)
+		TextDB = create_files.Delete_TemplateRepositoryImports(TextDB)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextDB = create_files.AddImport(TextDB, ModelTableURL)
 
-		ConstantsURL := create_files.FindConstantsURL()
+		ConstantsURL := create_files.Find_ConstantsURL()
 		TextDB = create_files.AddImport(TextDB, ConstantsURL)
 
 		//удалим лишние функции
-		TextDB = create_files.DeleteFuncTestDelete(TextDB, Table1)
-		TextDB = create_files.DeleteFuncTestRestore(TextDB, Table1)
-		TextDB = create_files.DeleteFuncTestFind_byExtID(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_TestDelete(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_TestRestore(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_TestFind_byExtID(TextDB, Table1)
 
 		//Postgres_ID_Test = ID Minimum
 		TextDB = create_files.Replace_Postgres_ID_Test(TextDB, Table1)
 
 		//замена ID на PrimaryKey
-		TextDB = create_files.ReplacePrimaryKeyOtvetID(TextDB, Table1)
+		TextDB = create_files.Replace_PrimaryKeyOtvetID(TextDB, Table1)
 
 		//добавим импорт uuid
-		TextDB = create_files.CheckAndAddImportUUID_FromText(TextDB)
+		TextDB = create_files.CheckAndAdd_ImportUUID_FromText(TextDB)
 
 		//замена "postgres_gorm.Connect_WithApplicationName("
-		TextDB = create_files.ReplaceConnect_WithApplicationName(TextDB)
+		TextDB = create_files.Replace_Connect_WithApplicationName(TextDB)
 
 	}
 
 	//создание текста
-	ModelName := Table1.NameGo
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+	TextDB = create_files.Replace_TemplateModel_to_Model(TextDB, Table1.NameGo)
+	TextDB = create_files.Replace_TemplateTableName_to_TableName(TextDB, Table1.Name)
+	TextDB = create_files.AddText_ModuleGenerated(TextDB)
+
+	//ModelName := Table1.NameGo
+	//TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextDB = create_files.DeleteFuncTestDelete(TextDB, Table1)
-		TextDB = create_files.DeleteFuncTestRestore(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_TestDelete(TextDB, Table1)
+		TextDB = create_files.DeleteFunc_TestRestore(TextDB, Table1)
 	}
-	TextDB = create_files.DeleteFuncTestFind_byExtID(TextDB, Table1)
+	TextDB = create_files.DeleteFunc_TestFind_byExtID(TextDB, Table1)
 
 	//SkipNow() если нет строк в БД
 	TextDB = create_files.AddSkipNow(TextDB, Table1)
 
 	//замена импортов на новые URL
-	TextDB = create_files.ReplaceServiceURLImports(TextDB)
+	TextDB = create_files.Replace_RepositoryImportsURL(TextDB)
 
 	//удаление пустого импорта
-	TextDB = create_files.DeleteEmptyImport(TextDB)
+	TextDB = create_files.Delete_EmptyImport(TextDB)
 
 	//удаление пустых строк
-	TextDB = create_files.DeleteEmptyLines(TextDB)
+	TextDB = create_files.Delete_EmptyLines(TextDB)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -367,6 +376,76 @@ func Replace_ExtID_equal0_string(TextDB string, Table1 *types.Table) string {
 	if TypeGo == "string" {
 		Otvet = strings.ReplaceAll(Otvet, "ExtID == 0 ", `ExtID == "" `)
 	}
+
+	return Otvet
+}
+
+// ReplacePrimaryKeyM_ID - заменяет "Otvet.ID" на название колонки PrimaryKey
+func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	VariableName := "m"
+
+	//сортировка по названию таблиц
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	TextOtvetIDAliasID := ""
+	TextIfMId := ""
+	TextIfMIdNot0 := ""
+	TextM2ID := ""
+	TextIDRequestID := ""
+	TextOtvetIDID := ""
+	TextRequestIDmID := ""
+	TextRequestIDInt64ID := ""
+	TextOtvetIDmID := ""
+	TextMID0 := ""
+	TextOR := ""
+	for _, key1 := range keys {
+		Column1, _ := Table1.MapColumns[key1]
+		if Column1.IsPrimaryKey != true {
+			continue
+		}
+		TextOtvetIDID = TextOtvetIDID + "\t" + VariableName + "." + Column1.NameGo + " = " + Column1.NameGo + "\n"
+		RequestColumnName := create_files.Find_RequestFieldName(Table1, Column1)
+		Value, GolangCode := create_files.Convert_ProtobufVariableToGolangVariable(Table1, Column1, "Request.")
+		if GolangCode == "" {
+			TextIDRequestID = TextIDRequestID + "\t" + Column1.NameGo + " := " + Value + "\n"
+		} else {
+			TextIDRequestID = TextIDRequestID + "\t" + GolangCode + "\n"
+		}
+		TextM := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
+		TextRequestIDmID = TextRequestIDmID + "\t" + VariableName + "." + RequestColumnName + " = " + TextM + "\n"
+		TextInt64ID := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "")
+		TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
+		TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
+
+		DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
+
+		TextM2ID = TextM2ID + "\t" + "m2." + Column1.NameGo + " = " + "m." + Column1.NameGo + "\n"
+		TextIfMId = TextIfMId + TextOR + "m." + Column1.NameGo + " == " + DefaultValue
+		TextIfMIdNot0 = TextIfMIdNot0 + TextOR + "m." + Column1.NameGo + " != " + DefaultValue
+
+		TextMID0 = TextMID0 + TextOR + " (" + VariableName + "." + Column1.NameGo + " == " + DefaultValue + ")"
+		TextAlias := create_files.Convert_IDToAlias(Table1, Column1, Column1.NameGo)
+		TextOtvetIDAliasID = TextOtvetIDAliasID + "\t" + VariableName + "." + Column1.NameGo + " = " + TextAlias + "\n"
+		TextOR = " || "
+	}
+
+	//Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = AliasFromInt(ID)", TextOtvetIDAliasID)
+	//Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = ProtoFromInt(m.ID)", TextRequestIDmID)
+	//Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = int64(ID)", TextRequestIDInt64ID)
+	//Otvet = strings.ReplaceAll(Otvet, "\tOtvet.ID = "+VariableName+".ID\n", TextOtvetIDmID)
+	//Otvet = strings.ReplaceAll(Otvet, " IntFromAlias("+VariableName+".ID) == 0", TextMID0)
+	Otvet = strings.ReplaceAll(Otvet, "\tm2.ID = int64(m.ID)", TextM2ID)
+	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", TextIfMId)
+	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", TextIfMIdNot0)
+
+	//заменим ID := Request.ID
+	//Otvet = strings.ReplaceAll(Otvet, "\tID := Request.ID\n", TextIDRequestID)
 
 	return Otvet
 }

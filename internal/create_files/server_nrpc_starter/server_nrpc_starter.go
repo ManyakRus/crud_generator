@@ -51,17 +51,17 @@ func CreateServerGRPCStarter() error {
 	TextNRPCStarter := string(bytes)
 
 	//заменим имя пакета на новое
-	TextNRPCStarter = create_files.ReplacePackageName(TextNRPCStarter, DirReadyServerNRPC)
+	TextNRPCStarter = create_files.Replace_PackageName(TextNRPCStarter, DirReadyServerNRPC)
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextNRPCStarter = create_files.DeleteTemplateRepositoryImports(TextNRPCStarter)
+		TextNRPCStarter = create_files.Delete_TemplateRepositoryImports(TextNRPCStarter)
 
 		//Proto URL
-		RepositoryProtoURL := create_files.FindProtoURL()
+		RepositoryProtoURL := create_files.Find_ProtoURL()
 		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, RepositoryProtoURL)
 
 		//server grpc URL
-		RepositoryServerGRPCURL := create_files.FindGRPCServerURL()
+		RepositoryServerGRPCURL := create_files.Find_GRPCServerURL()
 		TextNRPCStarter = create_files.AddImport(TextNRPCStarter, RepositoryServerGRPCURL)
 	}
 
@@ -83,7 +83,7 @@ func CreateServerGRPCStarter() error {
 	TextNRPCStarter = TextNRPCStarter[:pos1+2] + TextAfterImport
 
 	//удаление пустого импорта
-	TextNRPCStarter = create_files.DeleteEmptyImport(TextNRPCStarter)
+	TextNRPCStarter = create_files.Delete_EmptyImport(TextNRPCStarter)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextNRPCStarter), constants.FILE_PERMISSIONS)

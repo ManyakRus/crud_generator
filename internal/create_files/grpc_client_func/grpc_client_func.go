@@ -41,7 +41,7 @@ func CreateFileGRPCClientFunc() error {
 	DirTemplatesGRPCClientFunc := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC + micro.SeparatorFile()
 	DirReadyGRPCClientFunc := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC + micro.SeparatorFile()
 	FilenameReadyGRPCClientFunc := DirReadyGRPCClientFunc + config.Settings.TEMPLATE_GRPC_CLIENT_FUNC_FILENAME
-	FilenameReadyGRPCClientFunc = create_files.DeleteLastUnderline(FilenameReadyGRPCClientFunc)
+	FilenameReadyGRPCClientFunc = create_files.Delete_LastUnderline(FilenameReadyGRPCClientFunc)
 	FilenameTemplateGRPCClientFunc := DirTemplatesGRPCClientFunc + config.Settings.TEMPLATE_GRPC_CLIENT_FUNC_FILENAME
 
 	ok, err := micro.FileExists(FilenameTemplateGRPCClientFunc)
@@ -69,18 +69,18 @@ func CreateFileGRPCClientFunc() error {
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCClientFunc = create_files.DeleteTemplateRepositoryImports(TextGRPCClientFunc)
+		TextGRPCClientFunc = create_files.Delete_TemplateRepositoryImports(TextGRPCClientFunc)
 
 		//
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.Find_ProtoURL()
 		TextGRPCClientFunc = create_files.AddImport(TextGRPCClientFunc, ProtoURL)
 
 		//
-		DBConstantsURL := create_files.FindDBConstantsURL()
+		DBConstantsURL := create_files.Find_DBConstantsURL()
 		TextGRPCClientFunc = create_files.AddImport(TextGRPCClientFunc, DBConstantsURL)
 
 		//
-		GRPCConstantsURL := create_files.FindGRPCConstantsURL()
+		GRPCConstantsURL := create_files.Find_GRPCConstantsURL()
 		TextGRPCClientFunc = create_files.AddImport(TextGRPCClientFunc, GRPCConstantsURL)
 
 	}
@@ -101,7 +101,7 @@ func CreateFileGRPCClientFuncTest() error {
 	DirTemplatesGRPCClientFunc := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC + micro.SeparatorFile()
 	DirReadyGRPCClientFunc := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC + micro.SeparatorFile()
 	FilenameReadyGRPCClientFunc := DirReadyGRPCClientFunc + config.Settings.TEMPLATE_GRPC_CLIENT_FUNC_TEST_FILENAME
-	FilenameReadyGRPCClientFunc = create_files.DeleteLastUnderline(FilenameReadyGRPCClientFunc)
+	FilenameReadyGRPCClientFunc = create_files.Delete_LastUnderline(FilenameReadyGRPCClientFunc)
 	FilenameTemplateGRPCClientFunc := DirTemplatesGRPCClientFunc + config.Settings.TEMPLATE_GRPC_CLIENT_FUNC_TEST_FILENAME
 
 	ok, err := micro.FileExists(FilenameTemplateGRPCClientFunc)
@@ -129,10 +129,10 @@ func CreateFileGRPCClientFuncTest() error {
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCClientFunc = create_files.DeleteTemplateRepositoryImports(TextGRPCClientFunc)
+		TextGRPCClientFunc = create_files.Delete_TemplateRepositoryImports(TextGRPCClientFunc)
 
 		//
-		DBConstantsURL := create_files.FindDBConstantsURL()
+		DBConstantsURL := create_files.Find_DBConstantsURL()
 		TextGRPCClientFunc = create_files.AddImport(TextGRPCClientFunc, DBConstantsURL)
 
 	}

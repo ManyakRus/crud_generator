@@ -50,7 +50,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextCrud = TextCrud + "\n"
 
 	//заменим имя пакета на новое
-	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
+	TextCrud = create_files.Replace_PackageName(TextCrud, DirReadyTable)
 	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
 	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
@@ -67,16 +67,16 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
+		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
 
-		DBConstantsURL := create_files.FindDBConstantsURL()
+		DBConstantsURL := create_files.Find_DBConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, DBConstantsURL)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		TextCrud = create_files.CheckAndAddImportGorm_FromText(TextCrud)
-		//TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
+		TextCrud = create_files.CheckAndAdd_ImportGorm_FromText(TextCrud)
+		//TextCrud = create_files.Convert_RequestIdToAlias(TextCrud, Table1)
 		//добавим импорт uuid
 	}
 
@@ -89,19 +89,19 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//TextCrud = RenameFunctions(TextCrud, Table1)
 
 	//заменяет "m.ID" на название колонки PrimaryKey
-	TextCrud = create_files.ReplacePrimaryKeyM_ID(TextCrud, Table1)
+	TextCrud = create_files.Replace_PrimaryKeyM_ID(TextCrud, Table1)
 
 	//добавим импорт uuid
-	TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
+	TextCrud = create_files.CheckAndAdd_ImportUUID_FromText(TextCrud)
 
 	//удаление пустого импорта
-	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+	TextCrud = create_files.Delete_EmptyImport(TextCrud)
 
 	//импорт "fmt"
-	TextCrud = create_files.CheckAndAddImportFmt(TextCrud)
+	TextCrud = create_files.CheckAndAdd_ImportFmt(TextCrud)
 
 	//удаление пустых строк
-	TextCrud = create_files.DeleteEmptyLines(TextCrud)
+	TextCrud = create_files.Delete_EmptyLines(TextCrud)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyCrudUpdateFunc, []byte(TextCrud), constants.FILE_PERMISSIONS)
@@ -142,18 +142,18 @@ func FindTextUpdateEveryColumn(TextCrudUpdateFunc string, Table1 *types.Table) s
 func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextCrudUpdateFunc
 
-	ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+	ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
 
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1)
+	TextRequest, TextRequestFieldName := create_files.FindText_ProtobufRequest(Table1)
 
-	//ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+	//ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
 
-	Otvet = create_files.ReplaceCacheRemove(Otvet, Table1)
+	Otvet = ReplaceCacheRemove(Otvet, Table1)
 
-	Otvet = create_files.ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "m")
+	Otvet = create_files.Replace_PrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "m")
 
 	//запись null в nullable колонки
 	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
@@ -177,8 +177,12 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	Otvet = strings.ReplaceAll(Otvet, " Read ", " "+FuncName+" ")
 	Otvet = strings.ReplaceAll(Otvet, " Read(", " "+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, `"Read()`, `"`+FuncName+"()")
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+
+	Otvet = create_files.Replace_TemplateModel_to_Model(Otvet, Table1.NameGo)
+	Otvet = create_files.Replace_TemplateTableName_to_TableName(Otvet, Table1.Name)
+
+	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnNamePK", ColumnPK.NameGo)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnNameField", ColumnName)
@@ -186,14 +190,14 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
 	//Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	//TextIntFromAlias := create_files.ConvertFromAlias(Table1, Column1, "m")
-	//DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
+	//DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
 
-	//TextEqual0 := create_files.FindTextEqual0(Column1)
+	//TextEqual0 := create_files.FindText_Equal0(Column1)
 	//Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", TextIntFromAlias+TextEqual0)
 	//Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", TextIntFromAlias)
 
 	//внешние ключи заменяем 0 на null
-	TextEqualEmpty := create_files.FindTextEqualEmpty(Column1, "Value")
+	TextEqualEmpty := create_files.FindText_EqualEmpty(Column1, "Value")
 	Otvet = strings.ReplaceAll(Otvet, "Value == 0", TextEqualEmpty)
 	//if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
 	//	Otvet = strings.ReplaceAll(Otvet, "0==1 && ", "")
@@ -239,29 +243,29 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	TextCrud = TextCrud + "\n"
 
 	//заменим имя пакета на новое
-	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
+	TextCrud = create_files.Replace_PackageName(TextCrud, DirReadyTable)
 	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
 	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
+		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
 		//Postgres_ID_Test = ID Minimum
 		TextCrud = create_files.Replace_Postgres_ID_Test(TextCrud, Table1)
 
-		TextCrud = create_files.ReplacePrimaryKeyM_ID(TextCrud, Table1)
-		TextCrud = create_files.ReplacePrimaryKeyOtvetID(TextCrud, Table1)
-		//TextCrud = create_files.ConvertRequestIdToAlias(TextCrud, Table1)
+		TextCrud = create_files.Replace_PrimaryKeyM_ID(TextCrud, Table1)
+		TextCrud = create_files.Replace_PrimaryKeyOtvetID(TextCrud, Table1)
+		//TextCrud = create_files.Convert_RequestIdToAlias(TextCrud, Table1)
 
-		ConstantsURL := create_files.FindConstantsURL()
+		ConstantsURL := create_files.Find_ConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
 
 		//замена "postgres_gorm.Connect_WithApplicationName("
-		TextCrud = create_files.ReplaceConnect_WithApplicationName(TextCrud)
+		TextCrud = create_files.Replace_Connect_WithApplicationName(TextCrud)
 
 	}
 
@@ -274,7 +278,7 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 	TextCrud = TextCrud + TextUpdateEveryColumn
 
-	TextCrud = create_files.CheckAndAddImportFmt(TextCrud)
+	TextCrud = create_files.CheckAndAdd_ImportFmt(TextCrud)
 
 	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
 
@@ -282,10 +286,10 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	TextCrud = create_files.AddSkipNow(TextCrud, Table1)
 
 	//удаление пустого импорта
-	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+	TextCrud = create_files.Delete_EmptyImport(TextCrud)
 
 	//удаление пустых строк
-	TextCrud = create_files.DeleteEmptyLines(TextCrud)
+	TextCrud = create_files.Delete_EmptyLines(TextCrud)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyCrudUpdate, []byte(TextCrud), constants.FILE_PERMISSIONS)
@@ -326,20 +330,20 @@ func FindTextUpdateEveryColumnTest(TextCrudUpdateFunc string, Table1 *types.Tabl
 func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextCrudUpdateFunc
 
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindTextProtobufRequest(Table1)
-	DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
+	TextRequest, TextRequestFieldName := create_files.FindText_ProtobufRequest(Table1)
+	DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
 
 	//Postgres_ID_Test = ID Minimum
 	Otvet = create_files.Replace_Postgres_ID_Test(Otvet, Table1)
 
-	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
-	Otvet = create_files.ReplacePrimaryKeyOtvetID(Otvet, Table1)
+	Otvet = create_files.Replace_PrimaryKeyM_ID(Otvet, Table1)
+	Otvet = create_files.Replace_PrimaryKeyOtvetID(Otvet, Table1)
 
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)

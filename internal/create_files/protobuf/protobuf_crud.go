@@ -150,12 +150,12 @@ func TextRead(Table1 *types.Table) string {
 	Otvet := ""
 
 	ModelName := Table1.NameGo
-	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	PrimaryKeyColumn := create_files.Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet
 	}
 
-	TextRequest, _ := create_files.FindTextProtobufRequest(Table1)
+	TextRequest, _ := create_files.FindText_ProtobufRequest(Table1)
 	Otvet = "rpc " + ModelName + "_Read(" + TextRequest + ") returns (Response) {}"
 
 	return Otvet
@@ -187,12 +187,12 @@ func TextDelete(Table1 *types.Table) string {
 	Otvet := ""
 
 	ModelName := Table1.NameGo
-	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	PrimaryKeyColumn := create_files.Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet
 	}
 
-	TextRequest, _ := create_files.FindTextProtobufRequest(Table1)
+	TextRequest, _ := create_files.FindText_ProtobufRequest(Table1)
 	Otvet = "rpc " + ModelName + "_Delete(" + TextRequest + ") returns (Response) {}"
 
 	return Otvet
@@ -203,12 +203,12 @@ func TextRestore(Table1 *types.Table) string {
 	Otvet := ""
 
 	ModelName := Table1.NameGo
-	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	PrimaryKeyColumn := create_files.Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet
 	}
 
-	TextRequest, _ := create_files.FindTextProtobufRequest(Table1)
+	TextRequest, _ := create_files.FindText_ProtobufRequest(Table1)
 	Otvet = "rpc " + ModelName + "_Restore(" + TextRequest + ") returns (Response) {}"
 
 	return Otvet

@@ -66,8 +66,8 @@ func TextUpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
 	TextRequest := ""
 	//TypeGo := Column1.TypeGo
 
-	TextRequest = create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
-	//TextRequest, _, _, _ = create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "")
+	TextRequest = create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
+	//TextRequest, _, _, _ = create_files.FindText_ProtobufRequest_ID_Type(Table1, Column1, "")
 	ColumnName := Column1.NameGo
 
 	Otvet = "rpc " + ModelName + "_Update_" + ColumnName + "(" + TextRequest + ") returns (ResponseEmpty) {}"

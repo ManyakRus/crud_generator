@@ -34,18 +34,18 @@ func CreateGRPCClient() error {
 	TextGRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	TextGRPCClient = create_files.ReplacePackageName(TextGRPCClient, DirReadyClientGRPC)
+	TextGRPCClient = create_files.Replace_PackageName(TextGRPCClient, DirReadyClientGRPC)
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
+		TextGRPCClient = create_files.Delete_TemplateRepositoryImports(TextGRPCClient)
 
 		//grpc_proto
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.Find_ProtoURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ProtoURL)
 
 		//constants db
-		//DBConstantsURL := create_files.FindDBConstantsURL()
+		//DBConstantsURL := create_files.Find_DBConstantsURL()
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, DBConstantsURL)
 
 		//grpc_nrpc
@@ -53,7 +53,7 @@ func CreateGRPCClient() error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
 
 		//nrpc_client
-		NRPC_CLIENT_URL := create_files.FindNRPC_Client_URL()
+		NRPC_CLIENT_URL := create_files.Find_NRPC_Client_URL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_CLIENT_URL)
 
 		//grpc_client_func
@@ -61,17 +61,17 @@ func CreateGRPCClient() error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_CLIENT_FUNC_URL)
 
 		//CRUD_STARTER_URL
-		CRUD_STARTER_URL := create_files.FindCrudStarterURL()
+		CRUD_STARTER_URL := create_files.Find_CrudStarterURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, CRUD_STARTER_URL)
 
 		//constants GRPC
-		RepositoryGRPCConstantsURL := create_files.FindGRPCConstantsURL()
+		RepositoryGRPCConstantsURL := create_files.Find_GRPCConstantsURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCConstantsURL)
 
 	}
 
 	//добавим импорт uuid
-	TextGRPCClient = create_files.CheckAndAddImportUUID_FromText(TextGRPCClient)
+	TextGRPCClient = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCClient)
 
 	//заменим имя сервиса на новое
 	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
@@ -86,7 +86,7 @@ func CreateGRPCClient() error {
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
 	//удаление пустого импорта
-	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
+	TextGRPCClient = create_files.Delete_EmptyImport(TextGRPCClient)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
@@ -117,13 +117,13 @@ func CreateGRPCClientTest() error {
 	TextGRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	TextGRPCClient = create_files.ReplacePackageName(TextGRPCClient, DirReadyClientGRPC)
+	TextGRPCClient = create_files.Replace_PackageName(TextGRPCClient, DirReadyClientGRPC)
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
+		TextGRPCClient = create_files.Delete_TemplateRepositoryImports(TextGRPCClient)
 
-		//DBConstantsURL := create_files.FindDBConstantsURL()
+		//DBConstantsURL := create_files.Find_DBConstantsURL()
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, DBConstantsURL)
 
 	}
@@ -141,7 +141,7 @@ func CreateGRPCClientTest() error {
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
 	//удаление пустого импорта
-	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
+	TextGRPCClient = create_files.Delete_EmptyImport(TextGRPCClient)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)

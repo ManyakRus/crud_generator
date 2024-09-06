@@ -38,19 +38,19 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCServer := string(bytes)
 
 	//заменим имя пакета на новое
-	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+	TextGRPCServer = create_files.Replace_PackageName(TextGRPCServer, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+		TextGRPCServer = create_files.Delete_TemplateRepositoryImports(TextGRPCServer)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.Find_ProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		CrudTableURL := create_files.Find_CrudTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
 
 		if Table1.PrimaryKeyColumnsCount == 1 {
@@ -58,19 +58,19 @@ func CreateFiles(Table1 *types.Table) error {
 		}
 
 		//замена "m.ID = AliasFromInt(ID)"
-		TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.Replace_PrimaryKeyM_ID(TextGRPCServer, Table1)
 
 		//замена "ID := Request.ID"
-		TextGRPCServer = create_files.ReplacePrimaryKeyOtvetID(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.Replace_PrimaryKeyOtvetID(TextGRPCServer, Table1)
 
 		//замена RequestId{}
-		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.ReplaceText_RequestID_PrimaryKey(TextGRPCServer, Table1)
 
 		//замена int64(ID) на ID
-		TextGRPCServer = create_files.ReplaceIDtoID(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.Replace_IDtoID(TextGRPCServer, Table1)
 
 		//добавим импорт uuid
-		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+		TextGRPCServer = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCServer)
 
 		//удалим лишние функции
 		TextGRPCServer = DeleteFuncDelete(TextGRPCServer, Table1)
@@ -79,17 +79,21 @@ func CreateFiles(Table1 *types.Table) error {
 	}
 
 	//создание текста
-	ModelName := Table1.NameGo
-	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
+	TextGRPCServer = create_files.Replace_TemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
+	TextGRPCServer = create_files.AddText_ModuleGenerated(TextGRPCServer)
+
+	//ModelName := Table1.NameGo
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.Convert_RequestIdToAlias(TextGRPCServer, Table1)
 	}
 
 	//удаление пустого импорта
-	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+	TextGRPCServer = create_files.Delete_EmptyImport(TextGRPCServer)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
@@ -123,7 +127,7 @@ func CreateFilesTest(Table1 *types.Table) error {
 	TextGRPCServer := string(bytes)
 
 	//заменим имя пакета на новое
-	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+	TextGRPCServer = create_files.Replace_PackageName(TextGRPCServer, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -133,24 +137,24 @@ func CreateFilesTest(Table1 *types.Table) error {
 		TextGRPCServer = DeleteFuncTestFind_byExtID(TextGRPCServer, Table1)
 
 		//добавим импорты
-		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+		TextGRPCServer = create_files.Delete_TemplateRepositoryImports(TextGRPCServer)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.Find_ProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-		CrudStarterURL := create_files.FindCrudStarterURL()
+		CrudStarterURL := create_files.Find_CrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
-		ConstantsURL := create_files.FindConstantsURL()
+		ConstantsURL := create_files.Find_ConstantsURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
 
-		TextGRPCServer = create_files.CheckAndAddImport(TextGRPCServer, "encoding/json")
+		TextGRPCServer = create_files.CheckAndAdd_Import(TextGRPCServer, "encoding/json")
 
 		//замена "postgres_gorm.Connect_WithApplicationName("
-		TextGRPCServer = create_files.ReplaceConnect_WithApplicationName(TextGRPCServer)
+		TextGRPCServer = create_files.Replace_Connect_WithApplicationName(TextGRPCServer)
 
 		if Table1.PrimaryKeyColumnsCount > 1 {
 		}
@@ -159,23 +163,27 @@ func CreateFilesTest(Table1 *types.Table) error {
 		TextGRPCServer = create_files.Replace_Model_ID_Test(TextGRPCServer, Table1)
 
 		//замена RequestId{}
-		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.ReplaceText_RequestID_PrimaryKey(TextGRPCServer, Table1)
 
 		//замена Otvet.ID = -1
-		TextGRPCServer = create_files.ReplaceModelIDEqual1(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.Replace_ModelIDEqual1(TextGRPCServer, Table1)
 
 		//добавим импорт uuid
-		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+		TextGRPCServer = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCServer)
 
 		//
-		TextGRPCServer = create_files.ReplaceOtvetIDEqual0(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.Replace_OtvetIDEqual0(TextGRPCServer, Table1)
 	}
 
 	//создание текста
-	ModelName := Table1.NameGo
-	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
+	TextGRPCServer = create_files.Replace_TemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
+	TextGRPCServer = create_files.AddText_ModuleGenerated(TextGRPCServer)
+
+	//ModelName := Table1.NameGo
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	//Postgres_ID_Test = ID Minimum
 	//if Table1.IDMinimum != "" {
@@ -184,17 +192,17 @@ func CreateFilesTest(Table1 *types.Table) error {
 	//}
 
 	// замена ID на PrimaryKey
-	TextGRPCServer = create_files.ReplacePrimaryKeyOtvetID(TextGRPCServer, Table1)
-	TextGRPCServer = create_files.ReplacePrimaryKeyM_ID(TextGRPCServer, Table1)
+	TextGRPCServer = create_files.Replace_PrimaryKeyOtvetID(TextGRPCServer, Table1)
+	TextGRPCServer = create_files.Replace_PrimaryKeyM_ID(TextGRPCServer, Table1)
 
 	//SkipNow()
 	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)
 
 	//замена импортов на новые URL
-	//TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
+	//TextGRPCServer = create_files.Replace_RepositoryImportsURL(TextGRPCServer)
 
 	//удаление пустого импорта
-	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+	TextGRPCServer = create_files.Delete_EmptyImport(TextGRPCServer)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCServer, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
@@ -232,8 +240,8 @@ func DeleteFuncRestore(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-//// DeleteFuncDeleteCtx - удаляет функцию Delete_ctx()
-//func DeleteFuncDeleteCtx(Text, ModelName string, Table1 *types.Table) string {
+//// DeleteFunc_DeleteCtx - удаляет функцию Delete_ctx()
+//func DeleteFunc_DeleteCtx(Text, ModelName string, Table1 *types.Table) string {
 //	Otvet := Text
 //
 //	_, ok := Table1.MapColumns["is_deleted"]
@@ -246,8 +254,8 @@ func DeleteFuncRestore(Text string, Table1 *types.Table) string {
 //	return Otvet
 //}
 //
-//// DeleteFuncRestoreCtx - удаляет функцию Restore_ctx()
-//func DeleteFuncRestoreCtx(Text, ModelName string, Table1 *types.Table) string {
+//// DeleteFunc_RestoreCtx - удаляет функцию Restore_ctx()
+//func DeleteFunc_RestoreCtx(Text, ModelName string, Table1 *types.Table) string {
 //	Otvet := Text
 //
 //	_, ok := Table1.MapColumns["is_deleted"]

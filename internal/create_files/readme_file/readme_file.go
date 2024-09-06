@@ -44,7 +44,7 @@ func CreateReadmeMD() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesReadmeFile := DirTemplates
 	DirReadyReadmeFile := DirReady
-	filename := create_files.DeleteLastUnderline(config.Settings.TEMPLATES_README_MD_FILENAME)
+	filename := create_files.Delete_LastUnderline(config.Settings.TEMPLATES_README_MD_FILENAME)
 	FilenameTemplateReadmeFile := DirTemplatesReadmeFile + config.Settings.TEMPLATES_README_MD_FILENAME
 	FilenameReadyReadmeFile := DirReadyReadmeFile + filename
 
@@ -59,7 +59,7 @@ func CreateReadmeMD() error {
 
 	//заменим URL
 	CrudStarterURLOld := "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
-	CrudStarterURL := create_files.FindCrudStarterURL()
+	CrudStarterURL := create_files.Find_CrudStarterURL()
 	TextReadmeFile = strings.ReplaceAll(TextReadmeFile, CrudStarterURLOld, CrudStarterURL)
 
 	//запись файла
@@ -82,7 +82,7 @@ func CreateReadmeRus() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesReadmeFile := DirTemplates
 	DirReadyReadmeFile := DirReady
-	filename := create_files.DeleteLastUnderline(config.Settings.TEMPLATES_README_RUS_FILENAME)
+	filename := create_files.Delete_LastUnderline(config.Settings.TEMPLATES_README_RUS_FILENAME)
 	FilenameTemplateReadmeFile := DirTemplatesReadmeFile + config.Settings.TEMPLATES_README_RUS_FILENAME
 	FilenameReadyReadmeFile := DirReadyReadmeFile + filename
 
@@ -97,7 +97,7 @@ func CreateReadmeRus() error {
 
 	//заменим URL
 	CrudStarterURLOld := "gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
-	CrudStarterURL := create_files.FindCrudStarterURL()
+	CrudStarterURL := create_files.Find_CrudStarterURL()
 	TextReadmeFile = strings.ReplaceAll(TextReadmeFile, CrudStarterURLOld, CrudStarterURL)
 
 	//запись файла

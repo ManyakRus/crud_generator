@@ -48,7 +48,7 @@ func FindText_FindBy1(TableColumns1 types.TableColumns) string {
 	Underline := ""
 	for _, Column1 := range TableColumns1.Columns {
 		TextFields = TextFields + Underline + Column1.NameGo
-		TextRequest1 := create_files.ConvertGolangTypeNameToProtobufFieldName(Column1.TypeGo)
+		TextRequest1 := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
 		TextRequest = TextRequest + Underline + TextRequest1
 		Underline = "_"
 	}

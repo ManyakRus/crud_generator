@@ -84,10 +84,10 @@ func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
 	}
 
 	//замена импортов на новые URL
-	TextCrudStarter = create_files.ReplaceServiceURLImports(TextCrudStarter)
+	TextCrudStarter = create_files.Replace_RepositoryImportsURL(TextCrudStarter)
 
 	//удаление пустого импорта
-	TextCrudStarter = create_files.DeleteEmptyImport(TextCrudStarter)
+	TextCrudStarter = create_files.Delete_EmptyImport(TextCrudStarter)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), constants.FILE_PERMISSIONS)
@@ -119,7 +119,7 @@ import (`
 		}
 
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
+		err1 := create_files.IsGood_Table(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue
@@ -209,7 +209,7 @@ func InitCrudTransport_DB() {`
 		}
 
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
+		err1 := create_files.IsGood_Table(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue
@@ -257,7 +257,7 @@ func InitCrudTransport_GRPC() {`
 		}
 
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
+		err1 := create_files.IsGood_Table(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue
@@ -304,7 +304,7 @@ func InitCrudTransport_NRPC() {`
 		}
 
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
+		err1 := create_files.IsGood_Table(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue
@@ -375,10 +375,10 @@ func CreateFileCrudStarter_manual(MapAll map[string]*types.Table) error {
 	}
 
 	//замена импортов на новые URL
-	TextCrudStarter = create_files.ReplaceServiceURLImports(TextCrudStarter)
+	TextCrudStarter = create_files.Replace_RepositoryImportsURL(TextCrudStarter)
 
 	//удаление пустого импорта
-	TextCrudStarter = create_files.DeleteEmptyImport(TextCrudStarter)
+	TextCrudStarter = create_files.Delete_EmptyImport(TextCrudStarter)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), constants.FILE_PERMISSIONS)
@@ -409,7 +409,7 @@ func initCrudTransport_manual_DB() {`
 		}
 
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
+		err1 := create_files.IsGood_Table(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue
@@ -456,7 +456,7 @@ func initCrudTransport_manual_GRPC() {`
 		}
 
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
+		err1 := create_files.IsGood_Table(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue
@@ -502,7 +502,7 @@ func initCrudTransport_manual_NRPC() {`
 		}
 
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
+		err1 := create_files.IsGood_Table(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue

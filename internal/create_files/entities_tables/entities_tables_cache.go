@@ -14,7 +14,7 @@ func AddFunctionStringIdentifier(TextModel string, Table1 *types.Table) string {
 		return Otvet
 	}
 
-	_, TextNamesTypes, _ := create_files.FindTextIDMany(Table1)
+	_, TextNamesTypes, _ := create_files.FindText_IDMany(Table1)
 
 	Text := `
 // StringIdentifier - возвращает строковое представление PrimaryKey
@@ -34,7 +34,7 @@ func StringIdentifier(` + TextNamesTypes + `) string {
 		if Column1.IsPrimaryKey == false {
 			continue
 		}
-		TextConvert := create_files.FindTextConvertToString(Column1, Column1.NameGo)
+		TextConvert := create_files.FindText_ConvertToString(Column1, Column1.NameGo)
 		Text = Text + "\tOtvet = Otvet + " + `"_" + ` + TextConvert + "\n"
 	}
 

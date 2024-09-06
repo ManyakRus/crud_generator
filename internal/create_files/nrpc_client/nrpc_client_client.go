@@ -34,25 +34,25 @@ func CreateNRPCClient() error {
 	TextNRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	TextNRPCClient = create_files.ReplacePackageName(TextNRPCClient, DirReadyClientNRPC)
+	TextNRPCClient = create_files.Replace_PackageName(TextNRPCClient, DirReadyClientNRPC)
 
 	//добавим комментарий
 	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextNRPCClient = create_files.DeleteTemplateRepositoryImports(TextNRPCClient)
+		TextNRPCClient = create_files.Delete_TemplateRepositoryImports(TextNRPCClient)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.Find_ProtoURL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, ProtoURL)
 
 		//GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
 		//TextNRPCClient = create_files.AddImport(TextNRPCClient, GRPC_NRPC_URL)
 
-		//DBConstantsURL := create_files.FindDBConstantsURL()
+		//DBConstantsURL := create_files.Find_DBConstantsURL()
 		//TextNRPCClient = create_files.AddImport(TextNRPCClient, DBConstantsURL)
 
-		NRPCConstantsURL := create_files.FindNRPCConstantsURL()
+		NRPCConstantsURL := create_files.Find_NRPCConstantsURL()
 		TextNRPCClient = create_files.AddImport(TextNRPCClient, NRPCConstantsURL)
 
 		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
@@ -76,7 +76,7 @@ func CreateNRPCClient() error {
 	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
 	//удаление пустого импорта
-	TextNRPCClient = create_files.DeleteEmptyImport(TextNRPCClient)
+	TextNRPCClient = create_files.Delete_EmptyImport(TextNRPCClient)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
@@ -107,16 +107,16 @@ func CreateNRPCClientTest() error {
 	TextNRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	TextNRPCClient = create_files.ReplacePackageName(TextNRPCClient, DirReadyClientNRPC)
+	TextNRPCClient = create_files.Replace_PackageName(TextNRPCClient, DirReadyClientNRPC)
 
 	//добавим комментарий
 	TextNRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextNRPCClient
 
 	//добавим импорты
 	//if config.Settings.USE_DEFAULT_TEMPLATE == true {
-	//	TextNRPCClient = create_files.DeleteTemplateRepositoryImports(TextNRPCClient)
+	//	TextNRPCClient = create_files.Delete_TemplateRepositoryImports(TextNRPCClient)
 	//
-	//	DBConstantsURL := create_files.FindDBConstantsURL()
+	//	DBConstantsURL := create_files.Find_DBConstantsURL()
 	//	TextNRPCClient = create_files.AddImport(TextNRPCClient, DBConstantsURL)
 	//}
 
@@ -133,7 +133,7 @@ func CreateNRPCClientTest() error {
 	TextNRPCClient = strings.ReplaceAll(TextNRPCClient, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
 	//удаление пустого импорта
-	TextNRPCClient = create_files.DeleteEmptyImport(TextNRPCClient)
+	TextNRPCClient = create_files.Delete_EmptyImport(TextNRPCClient)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)

@@ -81,33 +81,33 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	TextModel := string(bytes)
 
 	//заменим имя пакета на новое
-	TextModel = create_files.ReplacePackageName(TextModel, DirReadyModel)
+	TextModel = create_files.Replace_PackageName(TextModel, DirReadyModel)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+		TextModel = create_files.Delete_TemplateRepositoryImports(TextModel)
 
-		TableURL := create_files.FindTableNameURL(TableName)
+		TableURL := create_files.Find_TableNameURL(TableName)
 		TextModel = create_files.AddImport(TextModel, TableURL)
 	}
 
-	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
-	TextModel = create_files.ReplaceModelAndTableName(TextModel, Table1)
+	TextModel = create_files.CheckAndAdd_ImportTime_FromText(TextModel)
+	TextModel = create_files.Replace_ModelAndTableName(TextModel, Table1)
 
 	//замена импортов на новые URL
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		Comment := create_files.FindModelComment(Table1)
+		Comment := create_files.Find_ModelComment(Table1)
 		TextTemplate := "// " + ModelName
 		TextModel = strings.ReplaceAll(TextModel, TextTemplate, Comment)
 
-		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+		TextModel = create_files.Delete_TemplateRepositoryImports(TextModel)
 
-		TableNameURL := create_files.FindTableNameURL(TableName)
+		TableNameURL := create_files.Find_TableNameURL(TableName)
 		TextModel = create_files.AddImport(TextModel, TableNameURL)
 	}
 
 	//удаление пустого импорта
-	TextModel = create_files.DeleteEmptyImport(TextModel)
+	TextModel = create_files.Delete_EmptyImport(TextModel)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
@@ -119,7 +119,7 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
 	var err error
 
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
 
 	TableName := strings.ToLower(Table1.Name)
 	FilenameTemplateModel := DirTemplatesModel + "model_crud.go_"
@@ -133,22 +133,22 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 	TextModel := string(bytes)
 
 	//заменим имя пакета на новое
-	TextModel = create_files.ReplacePackageName(TextModel, DirReadyModel)
+	TextModel = create_files.Replace_PackageName(TextModel, DirReadyModel)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+		TextModel = create_files.Delete_TemplateRepositoryImports(TextModel)
 
-		TableURL := create_files.FindCalcStructVersionURL()
+		TableURL := create_files.Find_CalcStructVersionURL()
 		TextModel = create_files.AddImport(TextModel, TableURL)
 
-		DBConstantsURL := create_files.FindDBConstantsURL()
+		DBConstantsURL := create_files.Find_DBConstantsURL()
 		TextModel = create_files.AddImport(TextModel, DBConstantsURL)
 
 		//удалим лишние функции
-		TextModel = create_files.DeleteFuncDelete(TextModel, Table1)
-		TextModel = create_files.DeleteFuncRestore(TextModel, Table1)
-		TextModel = create_files.DeleteFuncFind_byExtID(TextModel, Table1)
+		TextModel = create_files.DeleteFunc_Delete(TextModel, Table1)
+		TextModel = create_files.DeleteFunc_Restore(TextModel, Table1)
+		TextModel = create_files.DeleteFunc_Find_byExtID(TextModel, Table1)
 
 		//удалим лишние функции из интерфейса
 		TextModel = DeleteFromInterfaceDelete(TextModel, Table1)
@@ -158,21 +158,21 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 		//кэш
 		if config.Settings.NEED_CREATE_CACHE_API == false {
 			TextModel = DeleteFromInterfaceReadFromCache(TextModel, Table1)
-			TextModel = create_files.DeleteFuncReadFromCache(TextModel, Table1)
+			TextModel = create_files.DeleteFunc_ReadFromCache(TextModel, Table1)
 		}
-		TextModel = create_files.ReplaceIDtoID(TextModel, Table1)
+		TextModel = create_files.Replace_IDtoID(TextModel, Table1)
 
 		//
 		TextModel = AddFunctionStringIdentifier(TextModel, Table1)
 
 		//добавим импорт uuid
-		TextModel = create_files.CheckAndAddImportUUID_FromText(TextModel)
+		TextModel = create_files.CheckAndAdd_ImportUUID_FromText(TextModel)
 
 		//добавим импорт strconv
-		TextModel = create_files.CheckAndAddImportStrconv(TextModel)
+		TextModel = create_files.CheckAndAdd_ImportStrconv(TextModel)
 
 		//добавим импорт fmt
-		TextModel = create_files.CheckAndAddImportFmt(TextModel)
+		TextModel = create_files.CheckAndAdd_ImportFmt(TextModel)
 
 		//
 		TextModel = AddInterfacesFindBy(TextModel, Table1)
@@ -187,18 +187,22 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 	}
 
 	//создание текста
-	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
+	TextModel = create_files.Replace_TemplateModel_to_Model(TextModel, Table1.NameGo)
+	TextModel = create_files.Replace_TemplateTableName_to_TableName(TextModel, Table1.Name)
+	TextModel = create_files.AddText_ModuleGenerated(TextModel)
 
-	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
+	//TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
+
+	TextModel = create_files.CheckAndAdd_ImportTime_FromText(TextModel)
 	TextModel = create_files.DeleteImportModel(TextModel)
 
 	//замена импортов на новые URL
-	TextModel = create_files.ReplaceServiceURLImports(TextModel)
+	TextModel = create_files.Replace_RepositoryImportsURL(TextModel)
 
 	//удаление пустого импорта
-	TextModel = create_files.DeleteEmptyImport(TextModel)
+	TextModel = create_files.Delete_EmptyImport(TextModel)
 
 	//удаление функций
 	TextModel = DeleteFunctions(TextModel, TableName, types.MapModelCrudDeleteFunctions)
@@ -234,7 +238,7 @@ func FindTextModelStruct(TextModel string, Table1 *types.Table) (string, string,
 	var err error
 
 	TableName := Table1.Name
-	//ModelName = create_files.FindSingularName(TableName)
+	//ModelName = create_files.Find_SingularName(TableName)
 	//ModelName = create_files.FormatName(ModelName)
 	//Table1.NameGo = ModelName
 	COMMENT_MODEL_STRUCT := config.Settings.COMMENT_MODEL_STRUCT
@@ -317,7 +321,7 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	//Column1.TypeGo = Type_go
 	TextDefaultValue := ""
 	if Column1.IsPrimaryKey == false {
-		TextDefaultValue = create_files.FindTextDefaultGORMValue(Column1)
+		TextDefaultValue = create_files.FindText_DefaultGORMValue(Column1)
 	}
 	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)
 	Description := Column1.Description
@@ -484,7 +488,7 @@ func CreateFilesModel_manual(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	var err error
 
 	//
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
 
 	TableName := strings.ToLower(Table1.Name)
 	FilenameTemplateModel := DirTemplatesModel + constants.MODEL_TABLE_MANUAL_FILENAME
@@ -498,23 +502,25 @@ func CreateFilesModel_manual(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	TextModel := string(bytes)
 
 	//заменим имя пакета на новое
-	TextModel = create_files.ReplacePackageName(TextModel, DirReadyModel)
+	TextModel = create_files.Replace_PackageName(TextModel, DirReadyModel)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		//TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+		//TextModel = create_files.Delete_TemplateRepositoryImports(TextModel)
 	}
 
 	//создание текста
-	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	//TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
+	TextModel = create_files.Replace_TemplateModel_to_Model(TextModel, Table1.NameGo)
+	TextModel = create_files.Replace_TemplateTableName_to_TableName(TextModel, Table1.Name)
+
+	//TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	//замена импортов на новые URL
-	TextModel = create_files.ReplaceServiceURLImports(TextModel)
+	TextModel = create_files.Replace_RepositoryImportsURL(TextModel)
 
 	//удаление пустого импорта
-	TextModel = create_files.DeleteEmptyImport(TextModel)
+	TextModel = create_files.Delete_EmptyImport(TextModel)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)

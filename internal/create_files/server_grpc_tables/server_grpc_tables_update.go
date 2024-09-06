@@ -49,24 +49,24 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPCServer = TextGRPCServer + "\n"
 
 	//заменим имя пакета на новое
-	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+	TextGRPCServer = create_files.Replace_PackageName(TextGRPCServer, DirReadyTable)
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+		TextGRPCServer = create_files.Delete_TemplateRepositoryImports(TextGRPCServer)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.Find_ProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-		DBConstantsURL := create_files.FindDBConstantsURL()
+		DBConstantsURL := create_files.Find_DBConstantsURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, DBConstantsURL)
 
-		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		CrudTableURL := create_files.Find_CrudTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
 
 	}
@@ -81,24 +81,24 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
-		TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
+		TextGRPCServer = create_files.Convert_RequestIdToAlias(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.CheckAndAdd_ImportAlias(TextGRPCServer)
 
 		//замена RequestId{}
-		TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+		TextGRPCServer = create_files.ReplaceText_RequestID_PrimaryKey(TextGRPCServer, Table1)
 
 		//добавим импорт uuid
-		TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+		TextGRPCServer = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCServer)
 
 	}
 
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	//удаление пустого импорта
-	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+	TextGRPCServer = create_files.Delete_EmptyImport(TextGRPCServer)
 
 	//удаление пустых строк
-	TextGRPCServer = create_files.DeleteEmptyLines(TextGRPCServer)
+	TextGRPCServer = create_files.Delete_EmptyLines(TextGRPCServer)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCServerUpdateFunc, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
@@ -142,21 +142,25 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	_, _, TextRequestFieldGolang, TextGolangLine := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request.")
+	_, _, TextRequestFieldGolang, TextGolangLine := create_files.FindText_ProtobufRequest_ID_Type(Table1, Column1, "Request.")
 	//if Table1.PrimaryKeyColumnsCount > 1 {
-	TextRequest := create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
-	//ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+	TextRequest := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
+	//ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
 	IsPrimaryKey := create_files.IsPrimaryKeyColumn(Table1, Column1)
 
 	//замена ID на PrimaryKey
-	Otvet = create_files.ReplacePrimaryKeyOtvetID(Otvet, Table1)
-	Otvet = create_files.ReplacePrimaryKeyM_ID(Otvet, Table1)
+	Otvet = create_files.Replace_PrimaryKeyOtvetID(Otvet, Table1)
+	Otvet = create_files.Replace_PrimaryKeyM_ID(Otvet, Table1)
 
-	//ColumnNameGolang := create_files.ConvertGolangVariableToProtobufVariable(Table1, Column1, "m")
+	//ColumnNameGolang := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
 
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update", ModelName+"_"+FuncName)
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+
+	Otvet = create_files.Replace_TemplateModel_to_Model(Otvet, Table1.NameGo)
+	Otvet = create_files.Replace_TemplateTableName_to_TableName(Otvet, Table1.Name)
+
+	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	if IsPrimaryKey == true {
 		Otvet = strings.ReplaceAll(Otvet, "\tColumnName := Request.FieldName\n", "")
 	} else if TextGolangLine != "" {
@@ -178,8 +182,8 @@ func ReplaceIDRequestID_1PK(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//замена ID := Request.ID
-	ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
-	_, _, RequestFieldPK, GolangLinePK := create_files.FindTextProtobufRequest_ID_Type(Table1, ColumnPK, "Request.")
+	ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
+	_, _, RequestFieldPK, GolangLinePK := create_files.FindText_ProtobufRequest_ID_Type(Table1, ColumnPK, "Request.")
 
 	if GolangLinePK != "" {
 		Otvet = strings.ReplaceAll(Otvet, "ID := Request.ID", GolangLinePK)
@@ -226,31 +230,31 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	TextGRPCServer = TextGRPCServer + "\n"
 
 	//заменим имя пакета на новое
-	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+	TextGRPCServer = create_files.Replace_PackageName(TextGRPCServer, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+		TextGRPCServer = create_files.Delete_TemplateRepositoryImports(TextGRPCServer)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.Find_ProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-		//ModelURL := create_files.FindModelURL()
+		//ModelURL := create_files.Find_ModelURL()
 		//TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelURL)
 
-		CrudStarterURL := create_files.FindCrudStarterURL()
+		CrudStarterURL := create_files.Find_CrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
-		ConstantsURL := create_files.FindConstantsURL()
+		ConstantsURL := create_files.Find_ConstantsURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
 
 		//замена "postgres_gorm.Connect_WithApplicationName("
-		TextGRPCServer = create_files.ReplaceConnect_WithApplicationName(TextGRPCServer)
+		TextGRPCServer = create_files.Replace_Connect_WithApplicationName(TextGRPCServer)
 
-		//TextGRPCServer = create_files.ConvertRequestIdToAlias(TextGRPCServer, Table1)
+		//TextGRPCServer = create_files.Convert_RequestIdToAlias(TextGRPCServer, Table1)
 	}
 
 	//создание текста
@@ -272,22 +276,22 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	//замена RequestId{}
-	TextGRPCServer = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCServer, Table1)
+	TextGRPCServer = create_files.ReplaceText_RequestID_PrimaryKey(TextGRPCServer, Table1)
 
 	//добавим импорт uuid
-	TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+	TextGRPCServer = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCServer)
 
 	//Import Timestamp
-	TextGRPCServer = create_files.CheckAndAddImportTimestamp_FromText(TextGRPCServer)
+	TextGRPCServer = create_files.CheckAndAdd_ImportTimestamp_FromText(TextGRPCServer)
 
 	//SkipNow() если нет строк в БД
 	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)
 
 	//удаление пустого импорта
-	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+	TextGRPCServer = create_files.Delete_EmptyImport(TextGRPCServer)
 
 	//удаление пустых строк
-	TextGRPCServer = create_files.DeleteEmptyLines(TextGRPCServer)
+	TextGRPCServer = create_files.Delete_EmptyLines(TextGRPCServer)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCServerUpdate, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
@@ -331,9 +335,9 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
 	FuncName := "Update_" + ColumnName
-	_, TextRequestField, TextRequestFieldGolang, _ := create_files.FindTextProtobufRequest_ID_Type(Table1, Column1, "Request2.")
-	TextModelColumnName := create_files.ConvertGolangVariableToProtobufVariable(Table1, Column1, "m")
-	TextRequestID := create_files.FindTextProtobufRequest_ManyPK(Table1)
+	_, TextRequestField, TextRequestFieldGolang, _ := create_files.FindText_ProtobufRequest_ID_Type(Table1, Column1, "Request2.")
+	TextModelColumnName := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
+	TextRequestID := create_files.FindText_ProtobufRequest_ManyPK(Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	Otvet = create_files.Replace_Model_ID_Test(Otvet, Table1)
@@ -344,7 +348,7 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 
 	//if Table1.PrimaryKeyColumnsCount == 1 {
 	//} else {
-	TextRequestString := create_files.FindTextProtobufRequest_Column_ManyPK(Table1, Column1)
+	TextRequestString := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId{}", "grpc_proto."+TextRequestID+"{}")
 	//}
 
@@ -354,8 +358,12 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", TextModelColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update(", ModelName+"_"+FuncName+"(")
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+
+	Otvet = create_files.Replace_TemplateModel_to_Model(Otvet, Table1.NameGo)
+	Otvet = create_files.Replace_TemplateTableName_to_TableName(Otvet, Table1.Name)
+
+	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 
 	return Otvet
 }

@@ -56,17 +56,17 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	TextTemplatedFunction := string(bytes)
 
 	//заменим имя пакета на новое
-	TextModel = create_files.ReplacePackageName(TextModel, DirReadyTable)
+	TextModel = create_files.Replace_PackageName(TextModel, DirReadyTable)
 
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+		TextModel = create_files.Delete_TemplateRepositoryImports(TextModel)
 
-		//ModelTableURL := create_files.FindModelTableURL(TableName)
+		//ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		//TextModel = create_files.AddImport(TextModel, ModelTableURL)
 
-		ConstantsURL := create_files.FindDBConstantsURL()
+		ConstantsURL := create_files.Find_DBConstantsURL()
 		TextModel = create_files.AddImport(TextModel, ConstantsURL)
 
 	}
@@ -79,24 +79,28 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	TextModel = TextModel + TextModelFunc
 
 	//создание текста
-	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
+	TextModel = create_files.Replace_TemplateModel_to_Model(TextModel, Table1.NameGo)
+	TextModel = create_files.Replace_TemplateTableName_to_TableName(TextModel, Table1.Name)
+	TextModel = create_files.AddText_ModuleGenerated(TextModel)
+
+	//TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
 
 	//замена импортов на новые URL
-	TextModel = create_files.ReplaceServiceURLImports(TextModel)
+	TextModel = create_files.Replace_RepositoryImportsURL(TextModel)
 
 	//uuid
-	TextModel = create_files.CheckAndAddImportUUID_FromText(TextModel)
+	TextModel = create_files.CheckAndAdd_ImportUUID_FromText(TextModel)
 
 	//alias
-	TextModel = create_files.CheckAndAddImportAlias(TextModel)
+	TextModel = create_files.CheckAndAdd_ImportAlias(TextModel)
 
 	//удаление пустого импорта
-	TextModel = create_files.DeleteEmptyImport(TextModel)
+	TextModel = create_files.Delete_EmptyImport(TextModel)
 
 	//удаление пустых строк
-	TextModel = create_files.DeleteEmptyLines(TextModel)
+	TextModel = create_files.Delete_EmptyLines(TextModel)
 
 	//запись файла
 	err = os.WriteFile(FilenameReady, []byte(TextModel), constants.FILE_PERMISSIONS)

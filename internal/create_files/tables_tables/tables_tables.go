@@ -20,7 +20,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 	for _, Table1 := range MapAll {
 		//проверка имени таблицы "DELETED_"
-		err1 := create_files.IsGoodTableNamePrefix(Table1)
+		err1 := create_files.IsGood_TableNamePrefix(Table1)
 		if err1 != nil {
 			log.Warn("CreateFiles() table: ", Table1.Name, " warning: ", err)
 			continue
@@ -82,15 +82,18 @@ func CreateFilesTable_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTab
 	TextModel := string(bytes)
 
 	//заменим имя пакета на новое
-	TextModel = create_files.ReplacePackageName(TextModel, DirReadyTable)
+	TextModel = create_files.Replace_PackageName(TextModel, DirReadyTable)
 
 	//создание текста
 	TextModel, TextModelStruct, ModelName, err := FindTextModelStruct(TextModel, Table1)
 	TextModel = ReplaceModelStruct(TextModel, TextModelStruct)
 
 	//
-	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextModel = create_files.Replace_TemplateModel_to_Model(TextModel, Table1.NameGo)
+	TextModel = create_files.Replace_TemplateTableName_to_TableName(TextModel, Table1.Name)
+
+	//TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextModel = strings.ReplaceAll(TextModel, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	//TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
 
 	if config.Settings.HAS_IS_DELETED == true {
@@ -100,19 +103,19 @@ func CreateFilesTable_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTab
 	TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
 
 	//import time
-	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
+	TextModel = create_files.CheckAndAdd_ImportTime_FromText(TextModel)
 
 	//import uuid
-	TextModel = create_files.CheckAndAddImportUUID_FromText(TextModel)
+	TextModel = create_files.CheckAndAdd_ImportUUID_FromText(TextModel)
 
 	//
 	TextModel = create_files.DeleteImportModel(TextModel)
 
 	//замена импортов на новые URL
-	TextModel = create_files.ReplaceServiceURLImports(TextModel)
+	TextModel = create_files.Replace_RepositoryImportsURL(TextModel)
 
 	//удаление пустого импорта
-	TextModel = create_files.DeleteEmptyImport(TextModel)
+	TextModel = create_files.Delete_EmptyImport(TextModel)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
@@ -127,13 +130,13 @@ func FindTextModelStruct(TextModel string, Table1 *types.Table) (string, string,
 	var err error
 
 	TableName := Table1.Name
-	ModelName = create_files.FindSingularName(TableName)
+	ModelName = create_files.Find_SingularName(TableName)
 	ModelName = create_files.FormatName(ModelName)
 	Table1.NameGo = ModelName
 
 	//удалим старые импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+		TextModel = create_files.Delete_TemplateRepositoryImports(TextModel)
 	}
 
 	//	Otvet = `// ` + ModelName + ` - ` + COMMENT_MODEL_STRUCT + TableName + `: ` + Table1.Comment + `
@@ -142,7 +145,7 @@ func FindTextModelStruct(TextModel string, Table1 *types.Table) (string, string,
 
 	Prefix := micro.StringFromUpperCase(config.Settings.PREFIX_TABLE)
 	ModelNameWithPrefix := Prefix + ModelName
-	Otvet = create_files.FindModelNameComment(ModelNameWithPrefix, Table1)
+	Otvet = create_files.Find_ModelNameComment(ModelNameWithPrefix, Table1)
 	Otvet = Otvet + `
 type ` + ModelNameWithPrefix + ` struct {
 `
@@ -160,7 +163,7 @@ type ` + ModelNameWithPrefix + ` struct {
 	has_Columns_ExtLinks := create_files.Has_Columns_ExtLink(Table1)
 
 	// если у id есть alias то колонка id будет отдельно
-	ColumnIDName, _ := create_files.FindPrimaryKeyNameType(Table1)
+	ColumnIDName, _ := create_files.Find_PrimaryKeyNameType(Table1)
 	_, ok := types.MapConvertID[TableName+"."+ColumnIDName]
 	if ok == true {
 		has_Columns_CommonStruct = false
@@ -234,7 +237,7 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	//Column1.TypeGo = Type_go
 	TextDefaultValue := ""
 	if Column1.IsPrimaryKey == false {
-		TextDefaultValue = create_files.FindTextDefaultGORMValue(Column1)
+		TextDefaultValue = create_files.FindText_DefaultGORMValue(Column1)
 	}
 	TextPrimaryKey := FindTextPrimaryKey(Column1.IsPrimaryKey)
 	Description := Column1.Description

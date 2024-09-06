@@ -16,8 +16,8 @@ import (
 	"strings"
 )
 
-// FindSingularName - возвращает наименование в единственном числе
-func FindSingularName(s string) string {
+// Find_SingularName - возвращает наименование в единственном числе
+func Find_SingularName(s string) string {
 	var Otvet string
 
 	if s == "" {
@@ -133,8 +133,8 @@ func DeleteLineWithComment(Text, FuncName string) string {
 	return Otvet
 }
 
-// FindPrimaryKeyNameTypeGo - возвращает наименование и тип golang колонки PrimaryKey
-func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
+// Find_PrimaryKeyNameTypeGo - возвращает наименование и тип golang колонки PrimaryKey
+func Find_PrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
 	Otvet := ""
 	Type := ""
 
@@ -158,8 +158,8 @@ func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
 	return Otvet, Type
 }
 
-// FindPrimaryKeyNameType - возвращает наименование и тип БД колонки PrimaryKey
-func FindPrimaryKeyNameType(Table1 *types.Table) (string, string) {
+// Find_PrimaryKeyNameType - возвращает наименование и тип БД колонки PrimaryKey
+func Find_PrimaryKeyNameType(Table1 *types.Table) (string, string) {
 	Otvet := ""
 	Type := ""
 
@@ -183,8 +183,8 @@ func FindPrimaryKeyNameType(Table1 *types.Table) (string, string) {
 	return Otvet, Type
 }
 
-// FindPrimaryKeyColumn - возвращает Column для колонки PrimaryKey
-func FindPrimaryKeyColumn(Table1 *types.Table) (Column1 *types.Column) {
+// Find_PrimaryKeyColumn - возвращает Column для колонки PrimaryKey
+func Find_PrimaryKeyColumn(Table1 *types.Table) (Column1 *types.Column) {
 	var Otvet *types.Column
 
 	//сортировка по названию колонок
@@ -207,8 +207,8 @@ func FindPrimaryKeyColumn(Table1 *types.Table) (Column1 *types.Column) {
 	return Otvet
 }
 
-// FindPrimaryKeyColumns - возвращает несколько Column для колонки PrimaryKey
-func FindPrimaryKeyColumns(Table1 *types.Table) []*types.Column {
+// Find_PrimaryKeyColumns - возвращает несколько Column для колонки PrimaryKey
+func Find_PrimaryKeyColumns(Table1 *types.Table) []*types.Column {
 	Otvet := make([]*types.Column, 0)
 
 	//сортировка по названию колонок
@@ -231,8 +231,8 @@ func FindPrimaryKeyColumns(Table1 *types.Table) []*types.Column {
 	return Otvet
 }
 
-//// FindPrimaryKeyNameTypeGo - возвращает наименование и тип golang колонки PrimaryKey
-//func FindPrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
+//// Find_PrimaryKeyNameTypeGo - возвращает наименование и тип golang колонки PrimaryKey
+//func Find_PrimaryKeyNameTypeGo(Table1 *types.Table) (string, string) {
 //	Otvet := ""
 //	Type := ""
 //
@@ -245,22 +245,22 @@ func FindPrimaryKeyColumns(Table1 *types.Table) []*types.Column {
 //	return Otvet, Type
 //}
 
-// ReplacePrimaryKeyOtvetID - заменяет "Otvet.ID" на название колонки PrimaryKey
-func ReplacePrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
+// Replace_PrimaryKeyOtvetID - заменяет "Otvet.ID" на название колонки PrimaryKey
+func Replace_PrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//PrimaryKeyCount := Table1.PrimaryKeyColumnsCount
 	//if PrimaryKeyCount == 1 {
-	//	Otvet = ReplacePrimaryKeyOtvetID1(Otvet, Table1)
+	//	Otvet = Replace_PrimaryKeyOtvetID1(Otvet, Table1)
 	//} else {
-	Otvet = ReplacePrimaryKeyOtvetID_Many(Otvet, Table1)
+	Otvet = Replace_PrimaryKeyOtvetID_Many(Otvet, Table1)
 	//}
 
 	return Otvet
 }
 
-// FindTextEqual0 - возвращает текст сравнения с нулевым значением
-func FindTextEqual0(Column1 *types.Column) string {
+// FindText_Equal0 - возвращает текст сравнения с нулевым значением
+func FindText_Equal0(Column1 *types.Column) string {
 	Otvet := " == 0"
 
 	switch Column1.TypeGo {
@@ -277,16 +277,16 @@ func FindTextEqual0(Column1 *types.Column) string {
 	return Otvet
 }
 
-// ReplacePrimaryKeyOtvetID1 - заменяет "Otvet.ID" на название колонки PrimaryKey
-func ReplacePrimaryKeyOtvetID1(Text string, Table1 *types.Table) string {
+// Replace_PrimaryKeyOtvetID1 - заменяет "Otvet.ID" на название колонки PrimaryKey
+func Replace_PrimaryKeyOtvetID1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	ColumnNamePK, ColumnTypeGoPK := FindPrimaryKeyNameTypeGo(Table1)
-	ColumnPK := FindPrimaryKeyColumn(Table1)
+	ColumnNamePK, ColumnTypeGoPK := Find_PrimaryKeyNameTypeGo(Table1)
+	ColumnPK := Find_PrimaryKeyColumn(Table1)
 
 	//заменим ID-Alias на ID
 	TableName := Table1.Name
-	IDName, _ := FindPrimaryKeyNameType(Table1)
+	IDName, _ := Find_PrimaryKeyNameType(Table1)
 	Alias, ok := types.MapConvertID[TableName+"."+IDName]
 	OtvetColumnName := "Otvet." + ColumnNamePK
 	if ok == true {
@@ -327,7 +327,7 @@ func ReplacePrimaryKeyOtvetID1(Text string, Table1 *types.Table) string {
 		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", "ID")
 	}
 
-	Value, GolangCode := ConvertProtobufVariableToGolangVariable(Table1, ColumnPK, "Request.")
+	Value, GolangCode := Convert_ProtobufVariableToGolangVariable(Table1, ColumnPK, "Request.")
 	if GolangCode == "" {
 		TextNew := "\t" + ColumnPK.NameGo + " := " + Value + "\n"
 		Otvet = strings.ReplaceAll(Otvet, "\tID := Request.ID\n", TextNew)
@@ -336,7 +336,7 @@ func ReplacePrimaryKeyOtvetID1(Text string, Table1 *types.Table) string {
 		Otvet = strings.ReplaceAll(Otvet, "\tID := Request.ID\n", TextNew)
 	}
 
-	Value, GolangCode = ConvertProtobufTypeToGolangAlias(Table1, ColumnPK, "Request.")
+	Value, GolangCode = Convert_ProtobufTypeToGolangAlias(Table1, ColumnPK, "Request.")
 	if GolangCode == "" {
 		TextNew := "\t" + ColumnPK.NameGo + " := " + Value + "\n"
 		Otvet = strings.ReplaceAll(Otvet, "\tID := AliasFromProto(Request.ID)\n", TextNew)
@@ -348,21 +348,21 @@ func ReplacePrimaryKeyOtvetID1(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// ReplacePrimaryKeyOtvetID_Many - заменяет "Otvet.ID" на название колонки PrimaryKey
-func ReplacePrimaryKeyOtvetID_Many(Text string, Table1 *types.Table) string {
+// Replace_PrimaryKeyOtvetID_Many - заменяет "Otvet.ID" на название колонки PrimaryKey
+func Replace_PrimaryKeyOtvetID_Many(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	Otvet = ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "Otvet")
-	Otvet = ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "Request")
-	Otvet = ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "m")
+	Otvet = Replace_PrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "Otvet")
+	Otvet = Replace_PrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "Request")
+	Otvet = Replace_PrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "m")
 
-	Otvet = ReplacePrimaryKeyOtvetID1(Otvet, Table1) //для тестов
+	Otvet = Replace_PrimaryKeyOtvetID1(Otvet, Table1) //для тестов
 
 	return Otvet
 }
 
-// ReplacePrimaryKeyOtvetID_ManyPK1 - заменяет "Otvet.ID" на название колонки PrimaryKey
-func ReplacePrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, VariableName string) string {
+// Replace_PrimaryKeyOtvetID_ManyPK1 - заменяет "Otvet.ID" на название колонки PrimaryKey
+func Replace_PrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, VariableName string) string {
 	Otvet := Text
 
 	//сортировка по названию таблиц
@@ -389,27 +389,27 @@ func ReplacePrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variable
 			continue
 		}
 		TextOtvetIDID = TextOtvetIDID + "\t" + VariableName + "." + Column1.NameGo + " = " + Column1.NameGo + "\n"
-		RequestColumnName := FindRequestFieldName(Table1, Column1)
-		Value, GolangCode := ConvertProtobufVariableToGolangVariable(Table1, Column1, "Request.")
+		RequestColumnName := Find_RequestFieldName(Table1, Column1)
+		Value, GolangCode := Convert_ProtobufVariableToGolangVariable(Table1, Column1, "Request.")
 		if GolangCode == "" {
 			TextIDRequestID = TextIDRequestID + "\t" + Column1.NameGo + " := " + Value + "\n"
 		} else {
 			TextIDRequestID = TextIDRequestID + "\t" + GolangCode + "\n"
 		}
-		TextM := ConvertGolangVariableToProtobufVariable(Table1, Column1, "m")
+		TextM := Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
 		TextRequestIDmID = TextRequestIDmID + "\t" + VariableName + "." + RequestColumnName + " = " + TextM + "\n"
-		TextInt64ID := ConvertGolangVariableToProtobufVariable(Table1, Column1, "")
+		TextInt64ID := Convert_GolangVariableToProtobufVariable(Table1, Column1, "")
 		TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
 		TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
 
-		DefaultValue := FindTextDefaultValue(Column1.TypeGo)
+		DefaultValue := FindText_DefaultValue(Column1.TypeGo)
 
 		TextM2ID = TextM2ID + "\t" + "m2." + Column1.NameGo + " = " + "m." + Column1.NameGo + "\n"
 		TextIfMId = TextIfMId + TextOR + "m." + Column1.NameGo + " == " + DefaultValue
 		TextIfMIdNot0 = TextIfMIdNot0 + TextOR + "m." + Column1.NameGo + " != " + DefaultValue
 
 		TextMID0 = TextMID0 + TextOR + " (" + VariableName + "." + Column1.NameGo + " == " + DefaultValue + ")"
-		TextAlias := ConvertIDToAlias(Table1, Column1, Column1.NameGo)
+		TextAlias := Convert_IDToAlias(Table1, Column1, Column1.NameGo)
 		TextOtvetIDAliasID = TextOtvetIDAliasID + "\t" + VariableName + "." + Column1.NameGo + " = " + TextAlias + "\n"
 		TextOR = " || "
 	}
@@ -423,7 +423,7 @@ func ReplacePrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variable
 	Otvet = strings.ReplaceAll(Otvet, "\tm2.ID = int64(m.ID)", TextM2ID)
 	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", TextIfMId)
 	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", TextIfMIdNot0)
-	//Value := ConvertGolangVariableToProtobufVariable(Table1, ColumnPK, "m")
+	//Value := Convert_GolangVariableToProtobufVariable(Table1, ColumnPK, "m")
 	//Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
 
 	//заменим ID := Request.ID
@@ -432,26 +432,26 @@ func ReplacePrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variable
 	return Otvet
 }
 
-// ReplacePrimaryKeyM_ID - заменяет "m.ID" на название колонки PrimaryKey
-func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
+// Replace_PrimaryKeyM_ID - заменяет "m.ID" на название колонки PrimaryKey
+func Replace_PrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//PrimaryKeyCount := Table1.PrimaryKeyColumnsCount
 	//if PrimaryKeyCount == 1 {
 	//	Otvet = ReplacePrimaryKeyM_ID1(Otvet, Table1)
 	//} else {
-	Otvet = ReplacePrimaryKeyM_ManyPK(Otvet, Table1)
+	Otvet = Replace_PrimaryKeyM_ManyPK(Otvet, Table1)
 	//}
 
 	return Otvet
 }
 
-// ReplacePrimaryKeyM_ManyPK - заменяет "m.ID" на название колонки PrimaryKey
-func ReplacePrimaryKeyM_ManyPK(Text string, Table1 *types.Table) string {
+// Replace_PrimaryKeyM_ManyPK - заменяет "m.ID" на название колонки PrimaryKey
+func Replace_PrimaryKeyM_ManyPK(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	Otvet = ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "m")
-	Otvet = ReplacePrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "Request")
+	Otvet = Replace_PrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "m")
+	Otvet = Replace_PrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "Request")
 
 	//заменим int64(m.ID)
 	//Otvet = ReplacePrimaryKeyM_ID1(Otvet, Table1)
@@ -463,12 +463,12 @@ func ReplacePrimaryKeyM_ManyPK(Text string, Table1 *types.Table) string {
 //func ReplacePrimaryKeyM_ID1(Text string, Table1 *types.Table) string {
 //	Otvet := Text
 //
-//	ColumnNamePK, ColumnTypeGoPK := FindPrimaryKeyNameTypeGo(Table1)
-//	ColumnPK := FindPrimaryKeyColumn(Table1)
+//	ColumnNamePK, ColumnTypeGoPK := Find_PrimaryKeyNameTypeGo(Table1)
+//	ColumnPK := Find_PrimaryKeyColumn(Table1)
 //
 //	//заменим ID-Alias на ID
 //	TableName := Table1.Name
-//	IDName, _ := FindPrimaryKeyNameType(Table1)
+//	IDName, _ := Find_PrimaryKeyNameType(Table1)
 //	Alias, _ := types.MapConvertID[TableName+"."+IDName]
 //	OtvetColumnName := "m." + ColumnNamePK
 //	//if ok == true {
@@ -495,7 +495,7 @@ func ReplacePrimaryKeyM_ManyPK(Text string, Table1 *types.Table) string {
 //	//Otvet = strings.ReplaceAll(Otvet, " = m.ID", " = "+OtvetColumnName)
 //	Otvet = strings.ReplaceAll(Otvet, ", m.ID,", ", "+OtvetColumnName+",")
 //	//Otvet = strings.ReplaceAll(Otvet, "(m.ID)", "("+OtvetColumnName+")")
-//	Value := ConvertColumnToAlias(Table1, ColumnPK, "")
+//	Value := Convert_ColumnToAlias(Table1, ColumnPK, "")
 //	Otvet = strings.ReplaceAll(Otvet, "m.ID = AliasFromInt(ID)", "m."+ColumnNamePK+" = "+Value)
 //
 //	Otvet = strings.ReplaceAll(Otvet, "\tm2.ID = ", "\tm2."+ColumnNamePK+" = ")
@@ -506,14 +506,14 @@ func ReplacePrimaryKeyM_ManyPK(Text string, Table1 *types.Table) string {
 //		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", ColumnTypeGoPK+"(m."+ColumnNamePK+")")
 //		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
 //		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", Alias+"("+ColumnNamePK+")")
-//		Value := ConvertGolangVariableToProtobufVariable(Table1, ColumnPK, "m")
+//		Value := Convert_GolangVariableToProtobufVariable(Table1, ColumnPK, "m")
 //		Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
 //	} else {
-//		DefaultValue := FindTextDefaultValue(ColumnTypeGoPK)
+//		DefaultValue := FindText_DefaultValue(ColumnTypeGoPK)
 //		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", "m."+ColumnNamePK+" == "+DefaultValue)
-//		//Value := ConvertGolangVariableToProtobufVariable(Table1, ColumnPK, "m")
+//		//Value := Convert_GolangVariableToProtobufVariable(Table1, ColumnPK, "m")
 //		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", "m."+ColumnNamePK) //не protobuf
-//		Value := ConvertGolangVariableToProtobufVariable(Table1, ColumnPK, "m")
+//		Value := Convert_GolangVariableToProtobufVariable(Table1, ColumnPK, "m")
 //		Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
 //		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
 //		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", "ID")
@@ -523,16 +523,6 @@ func ReplacePrimaryKeyM_ManyPK(Text string, Table1 *types.Table) string {
 //
 //	return Otvet
 //}
-
-// ReplaceColumnNamePK - заменяет "ColumnNamePK" на текст имя колонки
-func ReplaceColumnNamePK(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	ColumnPK := FindPrimaryKeyColumn(Table1)
-	Otvet = strings.ReplaceAll(Otvet, "ColumnNamePK", ColumnPK.NameGo)
-
-	return Otvet
-}
 
 // ReplaceIntFromAlias - заменяет "m.ID" на текст m.ID или int64(m.ID)
 func ReplaceIntFromAlias(Text string, Table1 *types.Table, Column1 *types.Column, VariableName string) string {
@@ -566,7 +556,7 @@ func ConvertFromAlias(Table1 *types.Table, Column1 *types.Column, VariableName s
 func AddSkipNow(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	Columns := FindPrimaryKeyColumns(Table1)
+	Columns := Find_PrimaryKeyColumns(Table1)
 	if Columns == nil {
 		return Otvet
 	}
@@ -592,16 +582,16 @@ func AddSkipNow(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// IsGoodTable - возвращает ошибку если таблица неправильная
-func IsGoodTable(Table1 *types.Table) error {
+// IsGood_Table - возвращает ошибку если таблица неправильная
+func IsGood_Table(Table1 *types.Table) error {
 	var err error
 
-	err = IsGoodTableNamePrefix(Table1)
+	err = IsGood_TableNamePrefix(Table1)
 	if err != nil {
 		return err
 	}
 
-	err = IsGoodPrimaryKeyColumnsCount(Table1)
+	err = IsGood_PrimaryKeyColumnsCount(Table1)
 	if err != nil {
 		return err
 	}
@@ -609,8 +599,8 @@ func IsGoodTable(Table1 *types.Table) error {
 	return err
 }
 
-// IsGoodPrimaryKeyColumnsCount - возвращает ошибку если количество колонок PrimaryKey неправильное
-func IsGoodPrimaryKeyColumnsCount(Table1 *types.Table) error {
+// IsGood_PrimaryKeyColumnsCount - возвращает ошибку если количество колонок PrimaryKey неправильное
+func IsGood_PrimaryKeyColumnsCount(Table1 *types.Table) error {
 	var err error
 
 	if Table1.PrimaryKeyColumnsCount <= 0 {
@@ -621,8 +611,8 @@ func IsGoodPrimaryKeyColumnsCount(Table1 *types.Table) error {
 	return err
 }
 
-// IsGoodTableNamePrefix - возвращает ошибку если префикс таблицы = "DELETED_"
-func IsGoodTableNamePrefix(Table1 *types.Table) error {
+// IsGood_TableNamePrefix - возвращает ошибку если префикс таблицы = "DELETED_"
+func IsGood_TableNamePrefix(Table1 *types.Table) error {
 	var err error
 
 	TableName := Table1.Name
@@ -662,7 +652,7 @@ func Find_Template_DB_Foldername() string {
 func DeleteImportModel(s string) string {
 	Otvet := s
 
-	ModelURL := FindModelURL()
+	ModelURL := Find_ModelURL()
 	ImportName := micro.LastWord(ModelURL)
 
 	pos1 := strings.Index(Otvet, ImportName+".")
@@ -674,8 +664,8 @@ func DeleteImportModel(s string) string {
 	return Otvet
 }
 
-// FindModelURL - возвращает URL репозитория с пакетом "model"
-func FindModelURL() string {
+// Find_ModelURL - возвращает URL репозитория с пакетом "model"
+func Find_ModelURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_MODEL
@@ -683,8 +673,8 @@ func FindModelURL() string {
 	return Otvet
 }
 
-// FindGRPCServerURL - возвращает URL репозитория с пакетом "server_grpc"
-func FindGRPCServerURL() string {
+// Find_GRPCServerURL - возвращает URL репозитория с пакетом "server_grpc"
+func Find_GRPCServerURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER
@@ -693,7 +683,7 @@ func FindGRPCServerURL() string {
 }
 
 // FindGRPCClientURL - возвращает URL репозитория с пакетом "client_grpc"
-func FindGRPClientURL() string {
+func Find_GRPClientURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT
@@ -701,8 +691,8 @@ func FindGRPClientURL() string {
 	return Otvet
 }
 
-// FindNRPClientURL - возвращает URL репозитория с пакетом "client_nrpc"
-func FindNRPClientURL() string {
+// Find_NRPClientURL - возвращает URL репозитория с пакетом "client_nrpc"
+func Find_NRPClientURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT
@@ -710,8 +700,8 @@ func FindNRPClientURL() string {
 	return Otvet
 }
 
-// FindGRPCConstantsURL - возвращает URL репозитория с пакетом "client_grpc"
-func FindGRPCConstantsURL() string {
+// Find_GRPCConstantsURL - возвращает URL репозитория с пакетом "client_grpc"
+func Find_GRPCConstantsURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC + "/" + "grpc_constants"
@@ -719,8 +709,8 @@ func FindGRPCConstantsURL() string {
 	return Otvet
 }
 
-// FindNRPCServerlURL - возвращает URL репозитория с пакетом "server_nrpc"
-func FindNRPCServerlURL() string {
+// Find_NRPCServerlURL - возвращает URL репозитория с пакетом "server_nrpc"
+func Find_NRPCServerlURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER
@@ -728,8 +718,8 @@ func FindNRPCServerlURL() string {
 	return Otvet
 }
 
-// FindProtobufURL - возвращает URL репозитория с файлом .proto
-func FindProtobufURL() string {
+// Find_ProtobufURL - возвращает URL репозитория с файлом .proto
+func Find_ProtobufURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO
@@ -737,8 +727,8 @@ func FindProtobufURL() string {
 	return Otvet
 }
 
-// FindTablesURL - возвращает URL репозитория с пакетом "tables"
-func FindTablesURL() string {
+// Find_TablesURL - возвращает URL репозитория с пакетом "tables"
+func Find_TablesURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_TABLES
@@ -746,8 +736,8 @@ func FindTablesURL() string {
 	return Otvet
 }
 
-// FindTableNameURL - возвращает URL репозитория с пакетом "tables" + TableName
-func FindTableNameURL(TableName string) string {
+// Find_TableNameURL - возвращает URL репозитория с пакетом "tables" + TableName
+func Find_TableNameURL(TableName string) string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_TABLES + "/" + config.Settings.PREFIX_TABLE + TableName
@@ -755,8 +745,8 @@ func FindTableNameURL(TableName string) string {
 	return Otvet
 }
 
-// FindProtoURL - возвращает URL репозитория с пакетом "grpc_proto"
-func FindProtoURL() string {
+// Find_ProtoURL - возвращает URL репозитория с пакетом "grpc_proto"
+func Find_ProtoURL() string {
 	Otvet := ""
 
 	TEMPLATE_FOLDERNAME_GRPC_PROTO := strings.ToLower(config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO)
@@ -765,8 +755,8 @@ func FindProtoURL() string {
 	return Otvet
 }
 
-// FindModelTableURL - возвращает URL репозитория model для таблицы TableName
-func FindModelTableURL(TableName string) string {
+// Find_ModelTableURL - возвращает URL репозитория model для таблицы TableName
+func Find_ModelTableURL(TableName string) string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_MODEL + "/" + TableName
@@ -774,8 +764,8 @@ func FindModelTableURL(TableName string) string {
 	return Otvet
 }
 
-// FindCrudFuncURL - возвращает URL репозитория crud_func
-func FindCrudFuncURL(string) string {
+// Find_CrudFuncURL - возвращает URL репозитория crud_func
+func Find_CrudFuncURL(string) string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_CRUD_FUNC_FOLDERNAME
@@ -783,8 +773,8 @@ func FindCrudFuncURL(string) string {
 	return Otvet
 }
 
-// FindGRPCClientTableURL - возвращает URL репозитория grpc_client для таблицы TableName
-func FindGRPCClientTableURL(TableName string) string {
+// Find_GRPCClientTableURL - возвращает URL репозитория grpc_client для таблицы TableName
+func Find_GRPCClientTableURL(TableName string) string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + "/" + config.Settings.PREFIX_CLIENT_GRPC + TableName
@@ -792,8 +782,8 @@ func FindGRPCClientTableURL(TableName string) string {
 	return Otvet
 }
 
-// FindCrudStarterTableURL - возвращает URL репозитория crud_starter для таблицы TableName
-func FindCrudStarterTableURL(TableName string) string {
+// Find_CrudStarterTableURL - возвращает URL репозитория crud_starter для таблицы TableName
+func Find_CrudStarterTableURL(TableName string) string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + "/" + constants.STARTER_TABLES_PREFIX + TableName
@@ -801,8 +791,8 @@ func FindCrudStarterTableURL(TableName string) string {
 	return Otvet
 }
 
-// FindCrudTableURL - возвращает URL репозитория crud для таблицы TableName
-func FindCrudTableURL(TableName string) string {
+// Find_CrudTableURL - возвращает URL репозитория crud для таблицы TableName
+func Find_CrudTableURL(TableName string) string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD + "/" + constants.CRUD_TABLES_FREFIX + TableName
@@ -810,8 +800,8 @@ func FindCrudTableURL(TableName string) string {
 	return Otvet
 }
 
-// FindNRPC_Client_URL - возвращает URL репозитория с пакетом "nrpc_client"
-func FindNRPC_Client_URL() string {
+// Find_NRPC_Client_URL - возвращает URL репозитория с пакетом "nrpc_client"
+func Find_NRPC_Client_URL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT
@@ -819,8 +809,8 @@ func FindNRPC_Client_URL() string {
 	return Otvet
 }
 
-// FindDBConstantsURL - возвращает URL репозитория с пакетом db "db_constants"
-func FindDBConstantsURL() string {
+// Find_DBConstantsURL - возвращает URL репозитория с пакетом db "db_constants"
+func Find_DBConstantsURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_DB + "/" + "db_constants"
@@ -828,8 +818,8 @@ func FindDBConstantsURL() string {
 	return Otvet
 }
 
-// FindConstantsURL - возвращает URL репозитория с пакетом pkg "constants"
-func FindConstantsURL() string {
+// Find_ConstantsURL - возвращает URL репозитория с пакетом pkg "constants"
+func Find_ConstantsURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CONSTANTS
@@ -837,8 +827,8 @@ func FindConstantsURL() string {
 	return Otvet
 }
 
-// FindNRPCConstantsURL - возвращает URL репозитория с пакетом db "constants"
-func FindNRPCConstantsURL() string {
+// Find_NRPCConstantsURL - возвращает URL репозитория с пакетом db "constants"
+func Find_NRPCConstantsURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_NRPC + "/" + "nrpc_constants"
@@ -846,8 +836,8 @@ func FindNRPCConstantsURL() string {
 	return Otvet
 }
 
-// FindCrudStarterURL - возвращает URL репозитория с пакетом "crud_starter"
-func FindCrudStarterURL() string {
+// Find_CrudStarterURL - возвращает URL репозитория с пакетом "crud_starter"
+func Find_CrudStarterURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER
@@ -873,8 +863,8 @@ func Find_GRPCClient_func_URL() string {
 	return Otvet
 }
 
-// FindCalcStructVersionURL - возвращает URL репозитория с пакетом "calc_struct_version"
-func FindCalcStructVersionURL() string {
+// Find_CalcStructVersionURL - возвращает URL репозитория с пакетом "calc_struct_version"
+func Find_CalcStructVersionURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_DB + "/" + "calc_struct_version"
@@ -882,8 +872,8 @@ func FindCalcStructVersionURL() string {
 	return Otvet
 }
 
-// FindCrudFunctionsURL - возвращает URL репозитория с пакетом crud_functions
-func FindCrudFunctionsURL() string {
+// Find_CrudFunctionsURL - возвращает URL репозитория с пакетом crud_functions
+func Find_CrudFunctionsURL() string {
 	Otvet := ""
 
 	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDER_CRUD_FUNCTIONS
@@ -891,8 +881,8 @@ func FindCrudFunctionsURL() string {
 	return Otvet
 }
 
-// FindTextDefaultGORMValue - возвращает значение по умолчанию для столбца Column1 для тегов в GORM
-func FindTextDefaultGORMValue(Column1 *types.Column) string {
+// FindText_DefaultGORMValue - возвращает значение по умолчанию для столбца Column1 для тегов в GORM
+func FindText_DefaultGORMValue(Column1 *types.Column) string {
 	var Otvet string
 
 	ColumnName := Column1.Name
@@ -927,8 +917,8 @@ func FindTextDefaultGORMValue(Column1 *types.Column) string {
 	return Otvet
 }
 
-// FindTextDefaultValue - возвращает golang значение по умолчанию для типа
-func FindTextDefaultValue(Type_go string) string {
+// FindText_DefaultValue - возвращает golang значение по умолчанию для типа
+func FindText_DefaultValue(Type_go string) string {
 	var Otvet string
 
 	switch Type_go {
@@ -947,8 +937,8 @@ func FindTextDefaultValue(Type_go string) string {
 	return Otvet
 }
 
-// FindTextDefaultValueSQL - возвращает значение по умолчанию для типа
-func FindTextDefaultValueSQL(Type_go string) string {
+// FindText_DefaultValueSQL - возвращает значение по умолчанию для типа
+func FindText_DefaultValueSQL(Type_go string) string {
 	var Otvet string
 
 	switch Type_go {
@@ -1012,8 +1002,8 @@ func AddImport(Text, RepositoryURL string) string {
 	return Otvet
 }
 
-// CheckAndAddImport - добавляет URL в секцию Import, если его там нет, если он нужен
-func CheckAndAddImport(Text, URL string) string {
+// CheckAndAdd_Import - добавляет URL в секцию Import, если его там нет, если он нужен
+func CheckAndAdd_Import(Text, URL string) string {
 	Otvet := Text
 
 	//проверим используется или нет
@@ -1028,8 +1018,8 @@ func CheckAndAddImport(Text, URL string) string {
 	return Otvet
 }
 
-// AddImportTime - добавляет пакет в секцию Import, если его там нет
-func AddImportTime(Text string) string {
+// AddImport_Time - добавляет пакет в секцию Import, если его там нет
+func AddImport_Time(Text string) string {
 	Otvet := Text
 
 	RepositoryURL := `time`
@@ -1038,28 +1028,28 @@ func AddImportTime(Text string) string {
 	return Otvet
 }
 
-// CheckAndAddImportStrconv - добавляет пакет в секцию Import, если его там нет
-func CheckAndAddImportStrconv(Text string) string {
+// CheckAndAdd_ImportStrconv - добавляет пакет в секцию Import, если его там нет
+func CheckAndAdd_ImportStrconv(Text string) string {
 	Otvet := Text
 
 	RepositoryURL := `strconv`
-	Otvet = CheckAndAddImport(Text, RepositoryURL)
+	Otvet = CheckAndAdd_Import(Text, RepositoryURL)
 
 	return Otvet
 }
 
-// CheckAndAddImportFmt - добавляет пакет fmt в секцию Import, если его там нет
-func CheckAndAddImportFmt(Text string) string {
+// CheckAndAdd_ImportFmt - добавляет пакет fmt в секцию Import, если его там нет
+func CheckAndAdd_ImportFmt(Text string) string {
 	Otvet := Text
 
 	RepositoryURL := `fmt`
-	Otvet = CheckAndAddImport(Text, RepositoryURL)
+	Otvet = CheckAndAdd_Import(Text, RepositoryURL)
 
 	return Otvet
 }
 
-// AddImportUUID - добавляет пакет в секцию Import, если его там нет
-func AddImportUUID(Text string) string {
+// AddImport_UUID - добавляет пакет в секцию Import, если его там нет
+func AddImport_UUID(Text string) string {
 	Otvet := Text
 
 	//если уже есть импорт
@@ -1083,8 +1073,8 @@ func AddImportUUID(Text string) string {
 	return Otvet
 }
 
-// AddImportGorm - добавляет пакет в секцию Import, если его там нет
-func AddImportGorm(Text string) string {
+// AddImport_Gorm - добавляет пакет в секцию Import, если его там нет
+func AddImport_Gorm(Text string) string {
 	Otvet := Text
 
 	//если уже есть импорт
@@ -1108,8 +1098,8 @@ func AddImportGorm(Text string) string {
 	return Otvet
 }
 
-// AddImportTimestamp - добавляет покет в секцию Import, если его там нет
-func AddImportTimestamp(Text string) string {
+// AddImport_Timestamp - добавляет покет в секцию Import, если его там нет
+func AddImport_Timestamp(Text string) string {
 	Otvet := Text
 
 	RepositoryURL := `google.golang.org/protobuf/types/known/timestamppb`
@@ -1133,8 +1123,8 @@ func AddImportTimestamp(Text string) string {
 	return Otvet
 }
 
-// CheckAndAddImportAlias - добавляет покет в секцию Alias, если его там нет
-func CheckAndAddImportAlias(TextModel string) string {
+// CheckAndAdd_ImportAlias - добавляет покет в секцию Alias, если его там нет
+func CheckAndAdd_ImportAlias(TextModel string) string {
 	Otvet := TextModel
 
 	//если уже есть импорт
@@ -1162,8 +1152,8 @@ func CheckAndAddImportAlias(TextModel string) string {
 	return Otvet
 }
 
-// CheckAndAddImportTime_FromTable - добавляет пакет "time" в секцию Import, если его там нет
-func CheckAndAddImportTime_FromTable(TextModel string, Table1 *types.Table) string {
+// CheckAndAdd_ImportTime_FromTable - добавляет пакет "time" в секцию Import, если его там нет
+func CheckAndAdd_ImportTime_FromTable(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	HasTimeColumn := Has_ColumnType_Time(Table1)
@@ -1171,13 +1161,13 @@ func CheckAndAddImportTime_FromTable(TextModel string, Table1 *types.Table) stri
 		return Otvet
 	}
 
-	Otvet = AddImportTime(Otvet)
+	Otvet = AddImport_Time(Otvet)
 
 	return Otvet
 }
 
-// CheckAndAddImportTime_FromText - добавляет пакет "time" в секцию Import, если его там нет
-func CheckAndAddImportTime_FromText(Text string) string {
+// CheckAndAdd_ImportTime_FromText - добавляет пакет "time" в секцию Import, если его там нет
+func CheckAndAdd_ImportTime_FromText(Text string) string {
 	Otvet := Text
 
 	pos1 := strings.Index(Text, " time.")
@@ -1185,13 +1175,13 @@ func CheckAndAddImportTime_FromText(Text string) string {
 		return Otvet
 	}
 
-	Otvet = AddImportTime(Otvet)
+	Otvet = AddImport_Time(Otvet)
 
 	return Otvet
 }
 
-// CheckAndAddImportUUID_FromText - добавляет пакет "uuid" в секцию Import, если его там нет
-func CheckAndAddImportUUID_FromText(Text string) string {
+// CheckAndAdd_ImportUUID_FromText - добавляет пакет "uuid" в секцию Import, если его там нет
+func CheckAndAdd_ImportUUID_FromText(Text string) string {
 	Otvet := Text
 
 	pos1 := strings.Index(Text, "uuid.")
@@ -1199,13 +1189,13 @@ func CheckAndAddImportUUID_FromText(Text string) string {
 		return Otvet
 	}
 
-	Otvet = AddImportUUID(Otvet)
+	Otvet = AddImport_UUID(Otvet)
 
 	return Otvet
 }
 
-// CheckAndAddImportGorm_FromText - добавляет пакет "gorm.io/gorm" в секцию Import, если его там нет
-func CheckAndAddImportGorm_FromText(Text string) string {
+// CheckAndAdd_ImportGorm_FromText - добавляет пакет "gorm.io/gorm" в секцию Import, если его там нет
+func CheckAndAdd_ImportGorm_FromText(Text string) string {
 	Otvet := Text
 
 	pos1 := strings.Index(Text, `"gorm.io/gorm"`)
@@ -1213,13 +1203,13 @@ func CheckAndAddImportGorm_FromText(Text string) string {
 		return Otvet
 	}
 
-	Otvet = AddImportGorm(Otvet)
+	Otvet = AddImport_Gorm(Otvet)
 
 	return Otvet
 }
 
-// CheckAndAddImportTimestamp_FromText - добавляет пакет "time" в секцию Import, если его там нет
-func CheckAndAddImportTimestamp_FromText(Text string) string {
+// CheckAndAdd_ImportTimestamp_FromText - добавляет пакет "time" в секцию Import, если его там нет
+func CheckAndAdd_ImportTimestamp_FromText(Text string) string {
 	Otvet := Text
 
 	pos1 := strings.Index(Text, " timestamppb.")
@@ -1227,13 +1217,13 @@ func CheckAndAddImportTimestamp_FromText(Text string) string {
 		return Otvet
 	}
 
-	Otvet = AddImportTimestamp(Otvet)
+	Otvet = AddImport_Timestamp(Otvet)
 
 	return Otvet
 }
 
-// DeleteTemplateRepositoryImports - удаляет импорты репозитория шаблона
-func DeleteTemplateRepositoryImports(Text string) string {
+// Delete_TemplateRepositoryImports - удаляет импорты репозитория шаблона
+func Delete_TemplateRepositoryImports(Text string) string {
 	Otvet := Text
 
 	if config.Settings.TEMPLATE_REPOSITORY_URL == "" {
@@ -1262,13 +1252,13 @@ func DeleteTemplateRepositoryImports(Text string) string {
 
 	Otvet = Otvet[:pos1-1] + Otvet[pos1+posEnd+1:]
 
-	Otvet = DeleteTemplateRepositoryImports(Otvet)
+	Otvet = Delete_TemplateRepositoryImports(Otvet)
 
 	return Otvet
 }
 
-// ReplaceServiceURLImports - заменяет URL репозитория шаблона на URL репозитория сервиса
-func ReplaceServiceURLImports(Text string) string {
+// Replace_RepositoryImportsURL - заменяет URL репозитория шаблона на URL репозитория сервиса
+func Replace_RepositoryImportsURL(Text string) string {
 	Otvet := Text
 
 	if config.Settings.SERVICE_REPOSITORY_URL == "" {
@@ -1297,8 +1287,8 @@ func ReplaceServiceURLImports(Text string) string {
 	return Otvet
 }
 
-// ReplaceModelAndTableName - заменяет имя модели и имя таблицы в шаблоне на новые
-func ReplaceModelAndTableName(TextModel string, Table1 *types.Table) string {
+// Replace_ModelAndTableName - заменяет имя модели и имя таблицы в шаблоне на новые
+func Replace_ModelAndTableName(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
@@ -1307,8 +1297,8 @@ func ReplaceModelAndTableName(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// FindModelComment - возвращает комментарий для модели
-func FindModelComment(Table1 *types.Table) string {
+// Find_ModelComment - возвращает комментарий для модели
+func Find_ModelComment(Table1 *types.Table) string {
 	Otvet := ""
 
 	TableName := Table1.Name
@@ -1320,8 +1310,8 @@ func FindModelComment(Table1 *types.Table) string {
 	return Otvet
 }
 
-// FindModelNameComment - возвращает комментарий для названия модели
-func FindModelNameComment(ModelName string, Table1 *types.Table) string {
+// Find_ModelNameComment - возвращает комментарий для названия модели
+func Find_ModelNameComment(ModelName string, Table1 *types.Table) string {
 	Otvet := ""
 
 	TableName := Table1.Name
@@ -1333,8 +1323,8 @@ func FindModelNameComment(ModelName string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// ReplacePackageName - заменяет имя пакета в шаблоне на новое
-func ReplacePackageName(Text, PackageName string) string {
+// Replace_PackageName - заменяет имя пакета в шаблоне на новое
+func Replace_PackageName(Text, PackageName string) string {
 	Otvet := Text
 
 	//найдём имя каталога, это будет имя пакета
@@ -1361,8 +1351,8 @@ func ReplacePackageName(Text, PackageName string) string {
 	return Otvet
 }
 
-// DeleteEmptyImport - удаляет пустой импорт
-func DeleteEmptyImport(Text string) string {
+// Delete_EmptyImport - удаляет пустой импорт
+func Delete_EmptyImport(Text string) string {
 	Otvet := Text
 
 	sFind := `import (
@@ -1373,8 +1363,8 @@ func DeleteEmptyImport(Text string) string {
 	return Otvet
 }
 
-// DeleteFuncDelete - удаляет функцию Delete()
-func DeleteFuncDelete(TextModel string, Table1 *types.Table) string {
+// DeleteFunc_Delete - удаляет функцию Delete()
+func DeleteFunc_Delete(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
@@ -1388,8 +1378,8 @@ func DeleteFuncDelete(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncRestore - удаляет функцию Restore()
-func DeleteFuncRestore(TextModel string, Table1 *types.Table) string {
+// DeleteFunc_Restore - удаляет функцию Restore()
+func DeleteFunc_Restore(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
@@ -1403,8 +1393,8 @@ func DeleteFuncRestore(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncFind_byExtID(TextModel string, Table1 *types.Table) string {
+// DeleteFunc_Find_byExtID - удаляет функцию Find_ByExtID()
+func DeleteFunc_Find_byExtID(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверка есть ли колонки ExtID и ConnectionID
@@ -1418,8 +1408,8 @@ func DeleteFuncFind_byExtID(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncDeleteCtx - удаляет функцию Delete_ctx()
-func DeleteFuncDeleteCtx(TextModel string, Table1 *types.Table) string {
+// DeleteFunc_DeleteCtx - удаляет функцию Delete_ctx()
+func DeleteFunc_DeleteCtx(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
@@ -1433,8 +1423,8 @@ func DeleteFuncDeleteCtx(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncRestoreCtx - удаляет функцию Restore_ctx()
-func DeleteFuncRestoreCtx(TextModel string, Table1 *types.Table) string {
+// DeleteFunc_RestoreCtx - удаляет функцию Restore_ctx()
+func DeleteFunc_RestoreCtx(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
@@ -1448,8 +1438,8 @@ func DeleteFuncRestoreCtx(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncFind_byExtIDCtx - удаляет функцию Find_ByExtID_ctx()
-func DeleteFuncFind_byExtIDCtx(TextModel string, Table1 *types.Table) string {
+// DeleteFunc_Find_byExtIDCtx - удаляет функцию Find_ByExtID_ctx()
+func DeleteFunc_Find_byExtIDCtx(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверка есть ли колонки ExtID и ConnectionID
@@ -1463,8 +1453,8 @@ func DeleteFuncFind_byExtIDCtx(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncTestDelete - удаляет функцию Delete()
-func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
+// DeleteFunc_TestDelete - удаляет функцию Delete()
+func DeleteFunc_TestDelete(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
@@ -1478,8 +1468,8 @@ func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncReadFromCache - удаляет функцию ReadFromCache()
-func DeleteFuncReadFromCache(TextModel string, Table1 *types.Table) string {
+// DeleteFunc_ReadFromCache - удаляет функцию ReadFromCache()
+func DeleteFunc_ReadFromCache(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
@@ -1493,8 +1483,8 @@ func DeleteFuncReadFromCache(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncTestRestore - удаляет функцию Restore()
-func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
+// DeleteFunc_TestRestore - удаляет функцию Restore()
+func DeleteFunc_TestRestore(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
@@ -1508,8 +1498,8 @@ func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
+// DeleteFunc_Find_byExtID - удаляет функцию Find_ByExtID()
+func DeleteFunc_TestFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверка есть ли колонки ExtID и ConnectionID
@@ -1524,8 +1514,8 @@ func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteEmptyLines - удаляет пустые строки
-func DeleteEmptyLines(Text string) string {
+// Delete_EmptyLines - удаляет пустые строки
+func Delete_EmptyLines(Text string) string {
 	Otvet := Text
 	Otvet = strings.ReplaceAll(Otvet, "\n\n\n", "\n\n")
 	Otvet = strings.ReplaceAll(Otvet, "\n//\n\n", "\n\n")
@@ -1535,7 +1525,7 @@ func DeleteEmptyLines(Text string) string {
 	//Otvet = strings.ReplaceAll(Otvet, "}\n\n", "}\n")
 	pos1 := strings.Index(Otvet, "\n\n\n")
 	if pos1 >= 0 {
-		Otvet = DeleteEmptyLines(Otvet)
+		Otvet = Delete_EmptyLines(Otvet)
 	}
 
 	//удалим последние 2 пустые строки
@@ -1547,8 +1537,8 @@ func DeleteEmptyLines(Text string) string {
 	return Otvet
 }
 
-// DeleteLastUnderline - удаляет последний символ подчёркивания
-func DeleteLastUnderline(s string) string {
+// Delete_LastUnderline - удаляет последний символ подчёркивания
+func Delete_LastUnderline(s string) string {
 	Otvet := s
 	if s == "" {
 		return Otvet
@@ -1559,8 +1549,8 @@ func DeleteLastUnderline(s string) string {
 	return Otvet
 }
 
-// FindLastGoodPos - возвращает позицию последнего нахождения, с новой строки
-func FindLastGoodPos(s, TextFind string) int {
+// Find_LastGoodPos - возвращает позицию последнего нахождения, с новой строки
+func Find_LastGoodPos(s, TextFind string) int {
 	Otvet := -1
 	pos1 := strings.LastIndex(s, TextFind)
 	if pos1 < 0 {
@@ -1587,16 +1577,16 @@ func AddInterfaceFunction(s, TextAdd string) string {
 
 	//найдём начало интефейса
 	sFind := " interface {"
-	pos1 = FindLastGoodPos(Otvet, sFind)
+	pos1 = Find_LastGoodPos(Otvet, sFind)
 	if pos1 < 0 {
-		log.Error("FindLastGoodPos() error: not found: ", sFind)
+		log.Error("Find_LastGoodPos() error: not found: ", sFind)
 		return Otvet
 	}
 
 	s2 := Otvet[pos1:]
 	pos2 := strings.Index(s2, "\n}")
 	if pos2 < 0 {
-		log.Error("FindLastGoodPos() error: not found: \\n")
+		log.Error("Find_LastGoodPos() error: not found: \\n")
 		return Otvet
 	}
 	PosStart := pos1 + pos2
@@ -1606,26 +1596,26 @@ func AddInterfaceFunction(s, TextAdd string) string {
 	return Otvet
 }
 
-// FindTextProtobufRequest - возвращает "RequestID" и "ID" - имя message из .proto, в зависимости от типа, а также название поля
-func FindTextProtobufRequest(Table1 *types.Table) (OtvetRequestType string, OtvetRequestName string) {
+// FindText_ProtobufRequest - возвращает "RequestID" и "ID" - имя message из .proto, в зависимости от типа, а также название поля
+func FindText_ProtobufRequest(Table1 *types.Table) (OtvetRequestType string, OtvetRequestName string) {
 
 	if Table1.PrimaryKeyColumnsCount == 1 {
-		OtvetRequestType, OtvetRequestName = FindTextProtobufRequest1(Table1)
+		OtvetRequestType, OtvetRequestName = FindText_ProtobufRequest1(Table1)
 	} else {
-		OtvetRequestType = FindTextProtobufRequest_ManyPK(Table1)
+		OtvetRequestType = FindText_ProtobufRequest_ManyPK(Table1)
 	}
 
 	return OtvetRequestType, OtvetRequestName
 }
 
-// FindTextProtobufRequest1 - возвращает "RequestID" и "ID" - имя message из .proto, в зависимости от типа, а также название поля
-func FindTextProtobufRequest1(Table1 *types.Table) (OtvetRequestType string, OtvetRequestName string) {
+// FindText_ProtobufRequest1 - возвращает "RequestID" и "ID" - имя message из .proto, в зависимости от типа, а также название поля
+func FindText_ProtobufRequest1(Table1 *types.Table) (OtvetRequestType string, OtvetRequestName string) {
 	//OtvetRequestType := ""
 	//OtvetRequestName := ""
 
 	TextRequest := "Request_"
 
-	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	PrimaryKeyColumn := Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return "", ""
 	}
@@ -1653,31 +1643,31 @@ func FindTextProtobufRequest1(Table1 *types.Table) (OtvetRequestType string, Otv
 	return OtvetRequestType, OtvetRequestName
 }
 
-// FindTextProtobufRequest_ManyPK - возвращает "RequestID" и "ID" - имя message из .proto, в зависимости от типа, а также название поля
-func FindTextProtobufRequest_ManyPK(Table1 *types.Table) string {
+// FindText_ProtobufRequest_ManyPK - возвращает "RequestID" и "ID" - имя message из .proto, в зависимости от типа, а также название поля
+func FindText_ProtobufRequest_ManyPK(Table1 *types.Table) string {
 	Otvet := "Request"
 
-	MassPrimaryKeyColumns := FindPrimaryKeyColumns(Table1)
+	MassPrimaryKeyColumns := Find_PrimaryKeyColumns(Table1)
 
 	if len(MassPrimaryKeyColumns) == 0 {
 		return Otvet
 	}
 
-	Otvet = FindTextProtobufRequest_Column_ManyPK(Table1, MassPrimaryKeyColumns[0])
+	Otvet = FindText_ProtobufRequest_Column_ManyPK(Table1, MassPrimaryKeyColumns[0])
 
 	//for _, ColumnPK1 := range MassPrimaryKeyColumns {
-	//	Type1, _, _, _ := FindTextProtobufRequest_ID_Type(Table1, ColumnPK1, "")
+	//	Type1, _, _, _ := FindText_ProtobufRequest_ID_Type(Table1, ColumnPK1, "")
 	//	Otvet = Otvet + Type1
 	//}
 
 	return Otvet
 }
 
-// FindTextProtobufRequest_Column_ManyPK - возвращает "RequestID" и "ID" - имя message из .proto, в зависимости от типа, а также название поля
-func FindTextProtobufRequest_Column_ManyPK(Table1 *types.Table, Column1 *types.Column) string {
+// FindText_ProtobufRequest_Column_ManyPK - возвращает "RequestID" и "ID" - имя message из .proto, в зависимости от типа, а также название поля
+func FindText_ProtobufRequest_Column_ManyPK(Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := "Request"
 
-	MassPrimaryKeyColumns := FindPrimaryKeyColumns(Table1)
+	MassPrimaryKeyColumns := Find_PrimaryKeyColumns(Table1)
 
 	if len(MassPrimaryKeyColumns) == 0 {
 		return Otvet
@@ -1688,25 +1678,25 @@ func FindTextProtobufRequest_Column_ManyPK(Table1 *types.Table, Column1 *types.C
 		if Column1 == ColumnPK1 {
 			IsPrimaryKey = true
 		}
-		Type1, _, _, _ := FindTextProtobufRequest_ID_Type(Table1, ColumnPK1, "")
+		Type1, _, _, _ := FindText_ProtobufRequest_ID_Type(Table1, ColumnPK1, "")
 		Otvet = Otvet + Type1
 	}
 
 	if IsPrimaryKey == false {
-		Type1, _, _, _ := FindTextProtobufRequest_ID_Type(Table1, Column1, "")
+		Type1, _, _, _ := FindText_ProtobufRequest_ID_Type(Table1, Column1, "")
 		Otvet = Otvet + Type1
 	}
 
 	return Otvet
 }
 
-// FindTextProtobufRequest_ID_Type - возвращает имя message из .proto для двух параметров ID + Type,в зависимости от типа, а также название поля
+// FindText_ProtobufRequest_ID_Type - возвращает имя message из .proto для двух параметров ID + Type,в зависимости от типа, а также название поля
 // возвращает:
 // RequestName - имя message из .proto
 // TextRequestFieldName - название поля в Request
 // TextRequestFieldGolang - название поля в Request с преобразованием в тип гоу
 // TextGolangLine - замена всей строки в го
-func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column, VariableName string) (RequestName string, RequestFieldName string, RequestFieldGolang string, GolangLine string) {
+func FindText_ProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column, VariableName string) (RequestName string, RequestFieldName string, RequestFieldGolang string, GolangLine string) {
 	//RequestName := "RequestId"
 	//RequestFieldName := "ID"
 	//RequestFieldGolang := "ID"
@@ -1717,7 +1707,7 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 	ColumnName := Column1.Name
 
 	//найдём тип колонки PrimaryKey
-	PrimaryKeyColumns := FindPrimaryKeyColumns(Table1)
+	PrimaryKeyColumns := Find_PrimaryKeyColumns(Table1)
 	if len(PrimaryKeyColumns) == 0 {
 		return "", "", "", ""
 	}
@@ -1747,7 +1737,7 @@ func FindTextProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column,
 		sNumber = "_" + sNumber
 	}
 
-	//RequestName, _ = FindTextProtobufRequest(Table1)
+	//RequestName, _ = FindText_ProtobufRequest(Table1)
 
 	TextRequestProtoName := ""
 
@@ -1831,12 +1821,12 @@ func IsStringOrUUID(TypeGo string) bool {
 	return false
 }
 
-// ConvertRequestIdToAlias - заменяет ID на Alias
-func ConvertRequestIdToAlias(Text string, Table1 *types.Table) string {
+// Convert_RequestIdToAlias - заменяет ID на Alias
+func Convert_RequestIdToAlias(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	TableName := Table1.Name
-	IDName, _ := FindPrimaryKeyNameType(Table1)
+	IDName, _ := Find_PrimaryKeyNameType(Table1)
 	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
 	if ok == false {
 		return Otvet
@@ -1847,17 +1837,17 @@ func ConvertRequestIdToAlias(Text string, Table1 *types.Table) string {
 		return Otvet
 	}
 
-	Otvet = CheckAndAddImportAlias(Otvet)
+	Otvet = CheckAndAdd_ImportAlias(Otvet)
 
 	return Otvet
 }
 
-// ReplaceIDToAlias_OtvetID - заменяет "Otvet.ID = ID" на "Otvet.ID = alias.Name(ID)"
-func ReplaceIDToAlias_OtvetID(Text string, Table1 *types.Table) string {
+// Replace_IDToAlias_OtvetID - заменяет "Otvet.ID = ID" на "Otvet.ID = alias.Name(ID)"
+func Replace_IDToAlias_OtvetID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	TableName := Table1.Name
-	IDName, _ := FindPrimaryKeyNameType(Table1)
+	IDName, _ := Find_PrimaryKeyNameType(Table1)
 	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
 	if ok == false {
 		return Otvet
@@ -1877,13 +1867,13 @@ func ReplaceIDToAlias_OtvetID(Text string, Table1 *types.Table) string {
 	//	return Otvet
 	//}
 
-	Otvet = CheckAndAddImportAlias(Otvet)
+	Otvet = CheckAndAdd_ImportAlias(Otvet)
 
 	return Otvet
 }
 
-// ConvertIDToAlias - заменяет "ID" на "alias.Name(ID)"
-func ConvertIDToAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+// Convert_IDToAlias - заменяет "ID" на "alias.Name(ID)"
+func Convert_IDToAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := VariableName
 
 	TableName := Table1.Name
@@ -1901,8 +1891,8 @@ func ConvertIDToAlias(Table1 *types.Table, Column1 *types.Column, VariableName s
 	return Otvet
 }
 
-// ConvertColumnToAlias - заменяет "Otvet.ID = ID" на "Otvet.ID = alias.Name(ID)"
-func ConvertColumnToAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+// Convert_ColumnToAlias - заменяет "Otvet.ID = ID" на "Otvet.ID = alias.Name(ID)"
+func Convert_ColumnToAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := ""
 
 	Dot := ""
@@ -1925,7 +1915,7 @@ func ConvertColumnToAlias(Table1 *types.Table, Column1 *types.Column, VariableNa
 	Otvet = TextConvert + "(" + VariableName + Dot + Column1.NameGo + ")"
 
 	//добавим испорт
-	//Text = CheckAndAddImportAlias(Text)
+	//Text = CheckAndAdd_ImportAlias(Text)
 
 	return Otvet
 }
@@ -1944,8 +1934,8 @@ func DeleteCommentFromString(TextFrom string) string {
 	return Otvet
 }
 
-// ConvertGolangVariableToProtobufVariable - возвращает имя переменной +  имя колонки, преобразованное в тип protobuf
-func ConvertGolangVariableToProtobufVariable(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+// Convert_GolangVariableToProtobufVariable - возвращает имя переменной +  имя колонки, преобразованное в тип protobuf
+func Convert_GolangVariableToProtobufVariable(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := ""
 
 	if Column1 == nil {
@@ -2026,9 +2016,9 @@ func ConvertGolangVariableToProtobufVariable(Table1 *types.Table, Column1 *types
 //	return Otvet
 //}
 
-// ConvertProtobufVariableToGolangVariable - возвращает имя переменной +  имя колонки, преобразованное в тип golang из protobuf
-func ConvertProtobufVariableToGolangVariable(Table1 *types.Table, Column1 *types.Column, VariableName string) (VariableColumn string, GolangCode string) {
-	RequestColumnName := FindRequestFieldName(Table1, Column1)
+// Convert_ProtobufVariableToGolangVariable - возвращает имя переменной +  имя колонки, преобразованное в тип golang из protobuf
+func Convert_ProtobufVariableToGolangVariable(Table1 *types.Table, Column1 *types.Column, VariableName string) (VariableColumn string, GolangCode string) {
+	RequestColumnName := Find_RequestFieldName(Table1, Column1)
 	VariableColumn = VariableName + RequestColumnName
 	//time.Time в timestamppb
 	switch Column1.TypeGo {
@@ -2052,9 +2042,9 @@ func ConvertProtobufVariableToGolangVariable(Table1 *types.Table, Column1 *types
 	return VariableColumn, GolangCode
 }
 
-// ConvertProtobufTypeToGolangAlias - возвращает имя переменной +  имя колонки, преобразованное в тип golang(alias) из protobuf
-func ConvertProtobufTypeToGolangAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) (VariableColumn string, GolangCode string) {
-	RequestColumnName := FindRequestFieldName(Table1, Column1)
+// Convert_ProtobufTypeToGolangAlias - возвращает имя переменной +  имя колонки, преобразованное в тип golang(alias) из protobuf
+func Convert_ProtobufTypeToGolangAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) (VariableColumn string, GolangCode string) {
+	RequestColumnName := Find_RequestFieldName(Table1, Column1)
 	VariableColumn = VariableName + RequestColumnName
 	//GolangCode := ""
 
@@ -2090,11 +2080,11 @@ func ConvertProtobufTypeToGolangAlias(Table1 *types.Table, Column1 *types.Column
 	return VariableColumn, GolangCode
 }
 
-// FindTextEqualEmpty - находит текст сравнение с пустым значением
-func FindTextEqualEmpty(Column1 *types.Column, VariableName string) string {
+// FindText_EqualEmpty - находит текст сравнение с пустым значением
+func FindText_EqualEmpty(Column1 *types.Column, VariableName string) string {
 	Otvet := ""
 
-	DefaultValue := FindTextDefaultValue(Column1.TypeGo)
+	DefaultValue := FindText_DefaultValue(Column1.TypeGo)
 	Otvet = VariableName + " == " + DefaultValue
 
 	if DefaultValue == "time.Time{}" {
@@ -2172,7 +2162,7 @@ func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//if Table1.PrimaryKeyColumnsCount == 1 {
-	//	ColumnPK := FindPrimaryKeyColumn(Table1)
+	//	ColumnPK := Find_PrimaryKeyColumn(Table1)
 	//	if ColumnPK == nil {
 	//		return Otvet
 	//	}
@@ -2195,7 +2185,7 @@ func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 func Replace_Postgres_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	MassPK := FindPrimaryKeyColumns(Table1)
+	MassPK := Find_PrimaryKeyColumns(Table1)
 	if len(MassPK) == 0 {
 		return Otvet
 	}
@@ -2212,7 +2202,7 @@ func Replace_Postgres_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	TextFind = "\tOtvet.ID = Postgres_ID_Test\n"
 	TextNew = ""
 	for _, PrimaryKey1 := range MassPK {
-		Text1 := FindTextVariableEqual_ColumnName_Test(PrimaryKey1, "Otvet."+PrimaryKey1.NameGo)
+		Text1 := FindText_VariableEqual_ColumnName_Test(PrimaryKey1, "Otvet."+PrimaryKey1.NameGo)
 		TextNew = TextNew + "\t" + Text1 + "\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
@@ -2221,7 +2211,7 @@ func Replace_Postgres_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	TextFind = "\tm.ID = Postgres_ID_Test\n"
 	TextNew = ""
 	for _, PrimaryKey1 := range MassPK {
-		Text1 := FindTextVariableEqual_ColumnName_Test(PrimaryKey1, "m."+PrimaryKey1.NameGo)
+		Text1 := FindText_VariableEqual_ColumnName_Test(PrimaryKey1, "m."+PrimaryKey1.NameGo)
 		TextNew = TextNew + "\t" + Text1 + "\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
@@ -2230,7 +2220,7 @@ func Replace_Postgres_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	TextFind = "\tm1.ID = Postgres_ID_Test\n"
 	TextNew = ""
 	for _, PrimaryKey1 := range MassPK {
-		Text1 := FindTextVariableEqual_ColumnName_Test(PrimaryKey1, "m1."+PrimaryKey1.NameGo)
+		Text1 := FindText_VariableEqual_ColumnName_Test(PrimaryKey1, "m1."+PrimaryKey1.NameGo)
 		TextNew = TextNew + "\t" + Text1 + "\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
@@ -2240,7 +2230,7 @@ func Replace_Postgres_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	TextNew = "ReadFromCache("
 	Comma := ""
 	for _, PrimaryKey1 := range MassPK {
-		Name := FindTextColumnNameTest(PrimaryKey1)
+		Name := FindText_ColumnNameTest(PrimaryKey1)
 		TextNew = TextNew + Comma + Name
 		Comma = ", "
 	}
@@ -2260,30 +2250,30 @@ func Replace_Postgres_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	PrimaryKey1 := MassPK[0]
 	Otvet = strings.ReplaceAll(Otvet, " Otvet.ID ", " Otvet."+PrimaryKey1.NameGo+" ")
 	Otvet = strings.ReplaceAll(Otvet, " Otvet.ID)", " Otvet."+PrimaryKey1.NameGo+")")
-	Name := FindTextColumnNameTest(PrimaryKey1)
+	Name := FindText_ColumnNameTest(PrimaryKey1)
 	Otvet = strings.ReplaceAll(Otvet, "Postgres_ID_Test", Name)
 
 	return Otvet
 }
 
-// FindTextColumnNameTest - находит имя переменной для тестов
-func FindTextColumnNameTest(Column1 *types.Column) string {
+// FindText_ColumnNameTest - находит имя переменной для тестов
+func FindText_ColumnNameTest(Column1 *types.Column) string {
 	Otvet := ""
 	Otvet = strings.ToUpper(Column1.NameGo) + "_Test"
 	return Otvet
 }
 
-// FindTextNameTest_ManyPK - находит текст "ID, ID" для тестов
-func FindTextNameTest_ManyPK(Table1 *types.Table) string {
+// FindText_NameTest_ManyPK - находит текст "ID, ID" для тестов
+func FindText_NameTest_ManyPK(Table1 *types.Table) string {
 	Otvet := ""
 
-	MassPK := FindPrimaryKeyColumns(Table1)
+	MassPK := Find_PrimaryKeyColumns(Table1)
 	if len(MassPK) == 0 {
 		return Otvet
 	}
 
 	for _, PrimaryKey1 := range MassPK {
-		Otvet = Otvet + FindTextColumnNameTest(PrimaryKey1) + ", "
+		Otvet = Otvet + FindText_ColumnNameTest(PrimaryKey1) + ", "
 	}
 	Otvet = strings.TrimSuffix(Otvet, ", ")
 
@@ -2297,11 +2287,11 @@ func Replace_Postgres_ID_Test1(Text string, Table1 *types.Table, PrimaryKeyColum
 	TextFind := "const Postgres_ID_Test = 0"
 	IDMinimum := PrimaryKeyColumn.IDMinimum
 	if IDMinimum == "" {
-		IDMinimum = FindTextDefaultValue(PrimaryKeyColumn.TypeGo)
+		IDMinimum = FindText_DefaultValue(PrimaryKeyColumn.TypeGo)
 	}
 
-	Name := FindTextColumnNameTest(PrimaryKeyColumn)
-	sIDMinimum := FindTextIDMinimum(PrimaryKeyColumn)
+	Name := FindText_ColumnNameTest(PrimaryKeyColumn)
+	sIDMinimum := FindText_IDMinimum(PrimaryKeyColumn)
 	switch PrimaryKeyColumn.TypeGo {
 	case "uuid.UUID":
 		{
@@ -2324,12 +2314,12 @@ func Replace_Postgres_ID_Test1(Text string, Table1 *types.Table, PrimaryKeyColum
 	return Otvet
 }
 
-// FindTextVariableEqual_ColumnName_Test - возвращает текст для присваивания переменной IDMinimum
-func FindTextVariableEqual_ColumnName_Test(Column1 *types.Column, VariableName string) string {
+// FindText_VariableEqual_ColumnName_Test - возвращает текст для присваивания переменной IDMinimum
+func FindText_VariableEqual_ColumnName_Test(Column1 *types.Column, VariableName string) string {
 	Otvet := ""
 
-	//TextValue := FindTextIDMinimum(Column1)
-	TextValue := FindTextColumnNameTest(Column1)
+	//TextValue := FindText_IDMinimum(Column1)
+	TextValue := FindText_ColumnNameTest(Column1)
 
 	IDMinimum := Column1.IDMinimum
 	switch Column1.TypeGo {
@@ -2350,13 +2340,13 @@ func FindTextVariableEqual_ColumnName_Test(Column1 *types.Column, VariableName s
 	return Otvet
 }
 
-// FindTextIDMinimum - возвращает текст для IDMinimum, в зависимости от типа
-func FindTextIDMinimum(Column1 *types.Column) string {
+// FindText_IDMinimum - возвращает текст для IDMinimum, в зависимости от типа
+func FindText_IDMinimum(Column1 *types.Column) string {
 	Otvet := ""
 
 	IDMinimum := Column1.IDMinimum
 	if IDMinimum == "" {
-		IDMinimum = FindTextDefaultValue(Column1.TypeGo)
+		IDMinimum = FindText_DefaultValue(Column1.TypeGo)
 	}
 
 	switch Column1.TypeGo {
@@ -2386,7 +2376,7 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//if Table1.PrimaryKeyColumnsCount == 1 {
-	//	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	//	PrimaryKeyColumn := Find_PrimaryKeyColumn(Table1)
 	//	if PrimaryKeyColumn == nil {
 	//		return Otvet
 	//	}
@@ -2403,7 +2393,7 @@ func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
 func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	MassPK := FindPrimaryKeyColumns(Table1)
+	MassPK := Find_PrimaryKeyColumns(Table1)
 	if len(MassPK) == 0 {
 		return Otvet
 	}
@@ -2422,8 +2412,8 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	for _, Column1 := range MassPK {
 		Name := strings.ToUpper(Column1.NameGo)
 		VariableName := Table1.NameGo + "_" + Name + "_Test"
-		//Text1 := ConvertGolangVariableToProtobufVariable(Table1, Column1, VariableName)
-		RequestColumnName := FindRequestFieldName(Table1, Column1)
+		//Text1 := Convert_GolangVariableToProtobufVariable(Table1, Column1, VariableName)
+		RequestColumnName := Find_RequestFieldName(Table1, Column1)
 		TextNew = TextNew + "\tRequest." + RequestColumnName + " = " + VariableName + "\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
@@ -2434,8 +2424,8 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	for _, Column1 := range MassPK {
 		Name := strings.ToUpper(Column1.NameGo)
 		VariableName := Table1.NameGo + "_" + Name + "_Test"
-		//Text1 := ConvertGolangVariableToProtobufVariable(Table1, Column1, VariableName)
-		RequestColumnName := FindRequestFieldName(Table1, Column1)
+		//Text1 := Convert_GolangVariableToProtobufVariable(Table1, Column1, VariableName)
+		RequestColumnName := Find_RequestFieldName(Table1, Column1)
 		TextNew = TextNew + "\tRequest2." + RequestColumnName + " = " + VariableName + "\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
@@ -2453,12 +2443,12 @@ func Replace_Model_ID_Test1(Text string, Table1 *types.Table, Column1 *types.Col
 
 	IDMinimum := Column1.IDMinimum
 	if IDMinimum == "" {
-		IDMinimum = FindTextDefaultValue(Column1.TypeGo)
+		IDMinimum = FindText_DefaultValue(Column1.TypeGo)
 	}
 	DefaultModelName := config.Settings.TEXT_TEMPLATE_MODEL
 
 	ModelName := Table1.NameGo
-	Name := FindTextColumnNameTest(Column1)
+	Name := FindText_ColumnNameTest(Column1)
 	switch Column1.TypeGo {
 	case "uuid.UUID":
 		{
@@ -2482,54 +2472,54 @@ func Replace_Model_ID_Test1(Text string, Table1 *types.Table, Column1 *types.Col
 	return Otvet
 }
 
-// ReplaceTextRequestID_and_Column - заменяет RequestId{} на RequestString{}
-func ReplaceTextRequestID_and_Column(Text string, Table1 *types.Table, Column1 *types.Column) string {
+// ReplaceText_RequestID_and_Column - заменяет RequestId{} на RequestString{}
+func ReplaceText_RequestID_and_Column(Text string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := Text
 
 	//TypeGo := Column1.TypeGo
 
-	TextRequestID, _, _, _ := FindTextProtobufRequest_ID_Type(Table1, Column1, "Request")
+	TextRequestID, _, _, _ := FindText_ProtobufRequest_ID_Type(Table1, Column1, "Request")
 	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
 	//Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextID)
 
 	return Otvet
 }
 
-// ReplaceTextRequestID_PrimaryKey - заменяет RequestId{} на RequestString{}
-func ReplaceTextRequestID_PrimaryKey(Text string, Table1 *types.Table) string {
+// ReplaceText_RequestID_PrimaryKey - заменяет RequestId{} на RequestString{}
+func ReplaceText_RequestID_PrimaryKey(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//if Table1.PrimaryKeyColumnsCount == 1 {
 	//	TextRequest := "Request"
-	//	Otvet = ReplaceTextRequestID_PrimaryKey1(Otvet, Table1, TextRequest)
+	//	Otvet = ReplaceText_RequestID_PrimaryKey1(Otvet, Table1, TextRequest)
 	//
 	//	TextRequest = "Request2"
-	//	Otvet = ReplaceTextRequestID_PrimaryKey1(Otvet, Table1, TextRequest)
+	//	Otvet = ReplaceText_RequestID_PrimaryKey1(Otvet, Table1, TextRequest)
 	//} else {
 	TextRequest := "Request"
-	Otvet = ReplaceTextRequestID_PrimaryKey_ManyPK(Otvet, Table1, TextRequest)
+	Otvet = ReplaceText_RequestID_PrimaryKey_ManyPK(Otvet, Table1, TextRequest)
 
 	TextRequest = "Request2"
-	Otvet = ReplaceTextRequestID_PrimaryKey_ManyPK(Otvet, Table1, TextRequest)
+	Otvet = ReplaceText_RequestID_PrimaryKey_ManyPK(Otvet, Table1, TextRequest)
 	//}
 
 	return Otvet
 }
 
-// ReplaceTextRequestID_PrimaryKey1 - заменяет RequestId{} на RequestString{}
-func ReplaceTextRequestID_PrimaryKey1(Text string, Table1 *types.Table, VariableName string) string {
+// ReplaceText_RequestID_PrimaryKey1 - заменяет RequestId{} на RequestString{}
+func ReplaceText_RequestID_PrimaryKey1(Text string, Table1 *types.Table, VariableName string) string {
 	Otvet := Text
 
-	ColumnPK := FindPrimaryKeyColumn(Table1)
+	ColumnPK := Find_PrimaryKeyColumn(Table1)
 	if ColumnPK == nil {
 		return Otvet
 	}
 
 	//TypeGo := ColumnPK.TypeGo
 
-	TextRequestID, TextID := FindTextProtobufRequest(Table1)
+	TextRequestID, TextID := FindText_ProtobufRequest(Table1)
 
-	_, GolangCode := ConvertProtobufVariableToGolangVariable(Table1, ColumnPK, "Request.")
+	_, GolangCode := Convert_ProtobufVariableToGolangVariable(Table1, ColumnPK, "Request.")
 	if GolangCode != "" {
 		Otvet = strings.ReplaceAll(Otvet, "ID := "+VariableName+".ID", GolangCode)
 		Otvet = strings.ReplaceAll(Otvet, VariableName+".ID = ", VariableName+"."+TextID+" = ")
@@ -2544,11 +2534,11 @@ func ReplaceTextRequestID_PrimaryKey1(Text string, Table1 *types.Table, Variable
 	return Otvet
 }
 
-// ReplaceTextRequestID_PrimaryKey_ManyPK - заменяет RequestId{} на RequestString{}
-func ReplaceTextRequestID_PrimaryKey_ManyPK(Text string, Table1 *types.Table, TextRequest string) string {
+// ReplaceText_RequestID_PrimaryKey_ManyPK - заменяет RequestId{} на RequestString{}
+func ReplaceText_RequestID_PrimaryKey_ManyPK(Text string, Table1 *types.Table, TextRequest string) string {
 	Otvet := Text
 
-	TextRequestID := FindTextProtobufRequest_ManyPK(Table1)
+	TextRequestID := FindText_ProtobufRequest_ManyPK(Table1)
 
 	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
 	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*grpc_proto."+TextRequestID)
@@ -2556,25 +2546,25 @@ func ReplaceTextRequestID_PrimaryKey_ManyPK(Text string, Table1 *types.Table, Te
 	return Otvet
 }
 
-func ReplaceIDtoID(Text string, Table1 *types.Table) string {
+func Replace_IDtoID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	PrimaryKeyCount := Table1.PrimaryKeyColumnsCount
 	if PrimaryKeyCount == 1 {
-		Otvet = ReplaceIDtoID1(Otvet, Table1)
+		Otvet = Replace_IDtoID1(Otvet, Table1)
 	} else {
-		Otvet = ReplaceIDtoID_Many(Otvet, Table1)
+		Otvet = Replace_IDtoID_Many(Otvet, Table1)
 	}
 
 	return Otvet
 }
 
-// ReplaceIDtoID1 - заменяет int64(ID) на ID
-func ReplaceIDtoID1(Text string, Table1 *types.Table) string {
+// Replace_IDtoID1 - заменяет int64(ID) на ID
+func Replace_IDtoID1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
-	OtvetColumnName := ConvertGolangVariableToProtobufVariable(Table1, PrimaryKeyColumn, "")
+	PrimaryKeyColumn := Find_PrimaryKeyColumn(Table1)
+	OtvetColumnName := Convert_GolangVariableToProtobufVariable(Table1, PrimaryKeyColumn, "")
 	if OtvetColumnName == "" {
 		return Otvet
 	}
@@ -2586,18 +2576,18 @@ func ReplaceIDtoID1(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// FindTextIDMany - находит все PrimaryKey строкой
-func FindTextIDMany(Table1 *types.Table) (TextNames, TextNamesTypes, TextProtoNames string) {
+// FindText_IDMany - находит все PrimaryKey строкой
+func FindText_IDMany(Table1 *types.Table) (TextNames, TextNamesTypes, TextProtoNames string) {
 	//TextProtoNames := ""
 	//TextNamesTypes := ""
 	//TextNames := ""
 
-	TextNames, TextNamesTypes, TextProtoNames = FindTextID_VariableName_Many(Table1, "")
+	TextNames, TextNamesTypes, TextProtoNames = FindText_ID_VariableName_Many(Table1, "")
 
 	//Comma := ""
-	//MassPrimaryKey := FindPrimaryKeyColumns(Table1)
+	//MassPrimaryKey := Find_PrimaryKeyColumns(Table1)
 	//for _, PrimaryKey1 := range MassPrimaryKey {
-	//	OtvetColumnName := ConvertGolangVariableToProtobufVariable(Table1, PrimaryKey1, "")
+	//	OtvetColumnName := Convert_GolangVariableToProtobufVariable(Table1, PrimaryKey1, "")
 	//	if OtvetColumnName == "" {
 	//		continue
 	//	}
@@ -2612,8 +2602,8 @@ func FindTextIDMany(Table1 *types.Table) (TextNames, TextNamesTypes, TextProtoNa
 	return
 }
 
-// FindTextID_VariableName_Many - находит все PrimaryKey строкой
-func FindTextID_VariableName_Many(Table1 *types.Table, VariableName string) (TextNames, TextNamesTypes, TextProtoNames string) {
+// FindText_ID_VariableName_Many - находит все PrimaryKey строкой
+func FindText_ID_VariableName_Many(Table1 *types.Table, VariableName string) (TextNames, TextNamesTypes, TextProtoNames string) {
 	//TextProtoNames := ""
 	//TextNamesTypes := ""
 	//TextNames := ""
@@ -2623,9 +2613,9 @@ func FindTextID_VariableName_Many(Table1 *types.Table, VariableName string) (Tex
 		Dot = "."
 	}
 	Comma := ""
-	MassPrimaryKey := FindPrimaryKeyColumns(Table1)
+	MassPrimaryKey := Find_PrimaryKeyColumns(Table1)
 	for _, PrimaryKey1 := range MassPrimaryKey {
-		OtvetColumnName := ConvertGolangVariableToProtobufVariable(Table1, PrimaryKey1, "")
+		OtvetColumnName := Convert_GolangVariableToProtobufVariable(Table1, PrimaryKey1, "")
 		if OtvetColumnName == "" {
 			continue
 		}
@@ -2640,11 +2630,11 @@ func FindTextID_VariableName_Many(Table1 *types.Table, VariableName string) (Tex
 	return
 }
 
-// ReplaceIDtoID_Many - заменяет int64(ID) на ID, и остальные PrimaryKey
-func ReplaceIDtoID_Many(Text string, Table1 *types.Table) string {
+// Replace_IDtoID_Many - заменяет int64(ID) на ID, и остальные PrimaryKey
+func Replace_IDtoID_Many(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	TextNames, TextNamesTypes, TextProtoNames := FindTextIDMany(Table1)
+	TextNames, TextNamesTypes, TextProtoNames := FindText_IDMany(Table1)
 
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceManyID(ID)", TextNames)
 	Otvet = strings.ReplaceAll(Otvet, "int64(ID)", TextProtoNames)
@@ -2656,40 +2646,40 @@ func ReplaceIDtoID_Many(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// ReplaceOtvetIDEqual1 - заменяет Otvet.ID = -1
-func ReplaceOtvetIDEqual1(Text string, Table1 *types.Table) string {
+// Replace_OtvetIDEqual1 - заменяет Otvet.ID = -1
+func Replace_OtvetIDEqual1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//if Table1.PrimaryKeyColumnsCount == 1 {
-	//	Otvet = ReplaceOtvetIDEqual1_1(Text, Table1)
+	//	Otvet = Replace_OtvetIDEqual1_1(Text, Table1)
 	//} else {
-	Otvet = ReplaceOtvetIDEqual1_ManyPK(Text, Table1)
+	Otvet = Replace_OtvetIDEqual1_ManyPK(Text, Table1)
 	//}
 
 	return Otvet
 }
 
-// ReplaceOtvetIDEqual1_1 - заменяет Otvet.ID = -1
-func ReplaceOtvetIDEqual1_1(Text string, Table1 *types.Table) string {
+// Replace_OtvetIDEqual1_1 - заменяет Otvet.ID = -1
+func Replace_OtvetIDEqual1_1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+	PrimaryKeyColumn := Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet
 	}
 
-	Value := FindNegativeValue(PrimaryKeyColumn.TypeGo)
+	Value := Find_NegativeValue(PrimaryKeyColumn.TypeGo)
 
 	Otvet = strings.ReplaceAll(Otvet, "Otvet.ID = -1", "Otvet.ID = "+Value)
 
 	return Otvet
 }
 
-// ReplaceOtvetIDEqual1_ManyPK - заменяет Otvet.ID = -1
-func ReplaceOtvetIDEqual1_ManyPK(Text string, Table1 *types.Table) string {
+// Replace_OtvetIDEqual1_ManyPK - заменяет Otvet.ID = -1
+func Replace_OtvetIDEqual1_ManyPK(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	PrimaryKeyColumns := FindPrimaryKeyColumns(Table1)
+	PrimaryKeyColumns := Find_PrimaryKeyColumns(Table1)
 	if len(PrimaryKeyColumns) == 0 {
 		return Otvet
 	}
@@ -2697,7 +2687,7 @@ func ReplaceOtvetIDEqual1_ManyPK(Text string, Table1 *types.Table) string {
 	TextFind := "\tOtvet.ID = -1\n"
 	TextNew := ""
 	for _, ColumnPK1 := range PrimaryKeyColumns {
-		Value := FindNegativeValue(ColumnPK1.TypeGo)
+		Value := Find_NegativeValue(ColumnPK1.TypeGo)
 		TextNew = TextNew + "\tOtvet." + ColumnPK1.NameGo + " = " + Value + "\n"
 	}
 
@@ -2706,11 +2696,11 @@ func ReplaceOtvetIDEqual1_ManyPK(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// ReplaceOtvetIDEqual0 - заменяет Otvet.ID = -1
-func ReplaceOtvetIDEqual0(Text string, Table1 *types.Table) string {
+// Replace_OtvetIDEqual0 - заменяет Otvet.ID = -1
+func Replace_OtvetIDEqual0(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	ColumnsPK := FindPrimaryKeyColumns(Table1)
+	ColumnsPK := Find_PrimaryKeyColumns(Table1)
 	if len(ColumnsPK) == 0 {
 		return Otvet
 	}
@@ -2719,7 +2709,7 @@ func ReplaceOtvetIDEqual0(Text string, Table1 *types.Table) string {
 	TextFind := "\tOtvet.ID = 0\n"
 	TextNew := ""
 	for _, ColumnPK1 := range ColumnsPK {
-		Value := FindTextDefaultValue(ColumnPK1.TypeGo)
+		Value := FindText_DefaultValue(ColumnPK1.TypeGo)
 		TextNew = TextNew + "\tOtvet." + ColumnPK1.NameGo + " = " + Value + "\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
@@ -2727,7 +2717,7 @@ func ReplaceOtvetIDEqual0(Text string, Table1 *types.Table) string {
 	//
 	TextFind = " Otvet.ID == 0"
 	for _, ColumnPK1 := range ColumnsPK {
-		Value := FindTextDefaultValue(ColumnPK1.TypeGo)
+		Value := FindText_DefaultValue(ColumnPK1.TypeGo)
 		TextNew = " Otvet." + ColumnPK1.NameGo + " == " + Value + ""
 		Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 		break
@@ -2736,44 +2726,44 @@ func ReplaceOtvetIDEqual0(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// ReplaceModelIDEqual1 - заменяет Otvet.ID = -1
-func ReplaceModelIDEqual1(Text string, Table1 *types.Table) string {
+// Replace_ModelIDEqual1 - заменяет Otvet.ID = -1
+func Replace_ModelIDEqual1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//if Table1.PrimaryKeyColumnsCount == 1 {
 	//	Otvet = ReplaceModelIDEqual1_1(Otvet, Table1)
 	//} else {
-	Otvet = ReplaceModelIDEqual1_ManyPK(Otvet, Table1)
+	Otvet = Replace_ModelIDEqual1_ManyPK(Otvet, Table1)
 	//}
 
 	return Otvet
 }
 
-//// ReplaceModelIDEqual1 - заменяет Otvet.ID = -1
+//// Replace_ModelIDEqual1 - заменяет Otvet.ID = -1
 //func ReplaceModelIDEqual1_1(Text string, Table1 *types.Table) string {
 //	Otvet := Text
 //
-//	PrimaryKeyColumn := FindPrimaryKeyColumn(Table1)
+//	PrimaryKeyColumn := Find_PrimaryKeyColumn(Table1)
 //	if PrimaryKeyColumn == nil {
 //		return Otvet
 //	}
 //
-//	Value := FindNegativeValue(PrimaryKeyColumn.TypeGo)
+//	Value := Find_NegativeValue(PrimaryKeyColumn.TypeGo)
 //
 //	Otvet = strings.ReplaceAll(Otvet, "m.ID = -1", "m.ID = "+Value)
 //
 //	return Otvet
 //}
 
-// ReplaceModelIDEqual1_ManyPK - заменяет m.ID = -1
-func ReplaceModelIDEqual1_ManyPK(Text string, Table1 *types.Table) string {
+// Replace_ModelIDEqual1_ManyPK - заменяет m.ID = -1
+func Replace_ModelIDEqual1_ManyPK(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	TextFind := "\tm.ID = -1\n"
 	TextNew := ""
-	MassPrimaryKey := FindPrimaryKeyColumns(Table1)
+	MassPrimaryKey := Find_PrimaryKeyColumns(Table1)
 	for _, Column1 := range MassPrimaryKey {
-		Value := FindNegativeValue(Column1.TypeGo)
+		Value := Find_NegativeValue(Column1.TypeGo)
 		TextNew = TextNew + "\tm." + Column1.NameGo + " = " + Value + "\n"
 	}
 
@@ -2782,11 +2772,11 @@ func ReplaceModelIDEqual1_ManyPK(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// FindNegativeValue - возвращает -1 для числовых типов
-func FindNegativeValue(TypeGo string) string {
+// Find_NegativeValue - возвращает -1 для числовых типов
+func Find_NegativeValue(TypeGo string) string {
 	Otvet := ""
 
-	Otvet = FindTextDefaultValue(TypeGo)
+	Otvet = FindText_DefaultValue(TypeGo)
 	if mini_func.IsNumberType(TypeGo) == true {
 		Otvet = "-1"
 	}
@@ -2794,17 +2784,17 @@ func FindNegativeValue(TypeGo string) string {
 	return Otvet
 }
 
-// FindRequestFieldName - возвращает название колонки в Request
-func FindRequestFieldName(Table1 *types.Table, Column1 *types.Column) string {
+// Find_RequestFieldName - возвращает название колонки в Request
+func Find_RequestFieldName(Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := ""
 
-	_, Otvet, _, _ = FindTextProtobufRequest_ID_Type(Table1, Column1, "")
+	_, Otvet, _, _ = FindText_ProtobufRequest_ID_Type(Table1, Column1, "")
 
 	return Otvet
 }
 
-// ReplaceConnect_WithApplicationName - заменяет Connect_WithApplicationName() на Connect_WithApplicationName_SingularTableName()
-func ReplaceConnect_WithApplicationName(Text string) string {
+// Replace_Connect_WithApplicationName - заменяет Connect_WithApplicationName() на Connect_WithApplicationName_SingularTableName()
+func Replace_Connect_WithApplicationName(Text string) string {
 	Otvet := Text
 
 	if config.Settings.SINGULAR_TABLE_NAMES == false {
@@ -2817,8 +2807,8 @@ func ReplaceConnect_WithApplicationName(Text string) string {
 	return Otvet
 }
 
-// FindTextConvertToString - возвращает имя переменной +  имя колонки, преобразованное в тип string
-func FindTextConvertToString(Column1 *types.Column, VariableName string) string {
+// FindText_ConvertToString - возвращает имя переменной +  имя колонки, преобразованное в тип string
+func FindText_ConvertToString(Column1 *types.Column, VariableName string) string {
 	Otvet := ""
 
 	if Column1 == nil {
@@ -2845,46 +2835,6 @@ func FindTextConvertToString(Column1 *types.Column, VariableName string) string 
 	return Otvet
 }
 
-// ReplaceCacheRemove - заменяет cache.Remove(IntFromAlias(m.ID))
-func ReplaceCacheRemove(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	if Table1.PrimaryKeyColumnsCount == 1 {
-		Otvet = ReplaceCacheRemove_1PK(Otvet, Table1)
-	} else {
-		Otvet = ReplaceCacheRemove_ManyPK(Otvet, Table1)
-	}
-
-	return Otvet
-}
-
-// ReplaceCacheRemove1PK - заменяет cache.Remove(IntFromAlias(m.ID))
-func ReplaceCacheRemove_1PK(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	ColumnPK := FindPrimaryKeyColumn(Table1)
-	TextOld := "cache.Remove(IntFromAlias(m.ID))"
-	Value := ConvertFromAlias(Table1, ColumnPK, "m")
-	TextNew := "cache.Remove(" + Value + ")"
-	Otvet = strings.ReplaceAll(Otvet, TextOld, TextNew)
-
-	return Otvet
-}
-
-// ReplaceCacheRemove_ManyPK - заменяет cache.Remove(IntFromAlias(m.ID)) на cache.Remove(m.StringIdentifier())
-func ReplaceCacheRemove_ManyPK(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	if Table1.PrimaryKeyColumnsCount > 1 {
-		TextOld := "cache.Remove(IntFromAlias(m.ID))"
-		TextNames, _, _ := FindTextID_VariableName_Many(Table1, "m")
-		TextNew := "cache.Remove(" + Table1.Name + ".StringIdentifier(" + TextNames + "))"
-		Otvet = strings.ReplaceAll(Otvet, TextOld, TextNew)
-	}
-
-	return Otvet
-}
-
 // IsPrimaryKeyColumn - проверяет является ли колонка PrimaryKey
 func IsPrimaryKeyColumn(Table1 *types.Table, Column *types.Column) bool {
 	Otvet := false
@@ -2899,21 +2849,21 @@ func IsPrimaryKeyColumn(Table1 *types.Table, Column *types.Column) bool {
 	return Otvet
 }
 
-// ReplaceColumnNameM - заменяет "ReplaceColumnNameM(m.ID)" на "m.ID"
-func ReplaceColumnNameM(Text string, Column *types.Column) string {
+// Replace_ColumnNameM - заменяет "Replace_ColumnNameM(m.ID)" на "m.ID"
+func Replace_ColumnNameM(Text string, Column *types.Column) string {
 	Otvet := Text
 
 	TextNew := "m." + Column.Name
-	Otvet = strings.ReplaceAll(Otvet, "ReplaceColumnNameM(m.ID)", TextNew)
+	Otvet = strings.ReplaceAll(Otvet, "Replace_ColumnNameM(m.ID)", TextNew)
 
 	return Otvet
 }
 
-// ReplaceIntFromProtoRequest - заменяет "IntFromProto(Request.ID)" на "Request.ID"
-func ReplaceIntFromProtoRequest(Text string, Table1 *types.Table, Column *types.Column) string {
+// Replace_IntFromProtoRequest - заменяет "IntFromProto(Request.ID)" на "Request.ID"
+func Replace_IntFromProtoRequest(Text string, Table1 *types.Table, Column *types.Column) string {
 	Otvet := Text
 
-	Variable, Golang_code := ConvertProtobufVariableToGolangVariable(Table1, Column, "Request.")
+	Variable, Golang_code := Convert_ProtobufVariableToGolangVariable(Table1, Column, "Request.")
 	TextNew := "Request." + Variable
 	if Golang_code != "" {
 
@@ -2923,15 +2873,15 @@ func ReplaceIntFromProtoRequest(Text string, Table1 *types.Table, Column *types.
 	return Otvet
 }
 
-// FindRequestFieldName_FromMass - возвращает имя поля для Request protobuf
-func FindRequestFieldName_FromMass(Column *types.Column, MassColumns []*types.Column) string {
+// Find_RequestFieldName_FromMass - возвращает имя поля для Request protobuf
+func Find_RequestFieldName_FromMass(Column *types.Column, MassColumns []*types.Column) string {
 	Otvet := ""
 
-	TypeProto := ConvertGolangTypeNameToProtobufTypeName(Column.TypeGo)
+	TypeProto := Convert_GolangTypeNameToProtobufTypeName(Column.TypeGo)
 
 	Number := 0
 	for _, Column1 := range MassColumns {
-		TypeProto1 := ConvertGolangTypeNameToProtobufTypeName(Column1.TypeGo)
+		TypeProto1 := Convert_GolangTypeNameToProtobufTypeName(Column1.TypeGo)
 		if TypeProto == TypeProto1 && Column != Column1 {
 			Number = Number + 1
 		}
@@ -2943,7 +2893,7 @@ func FindRequestFieldName_FromMass(Column *types.Column, MassColumns []*types.Co
 	}
 	Suffix := "_" + strconv.Itoa(Number)
 
-	Otvet = ConvertGolangTypeNameToProtobufFieldName(Column.TypeGo)
+	Otvet = Convert_GolangTypeNameToProtobufFieldName(Column.TypeGo)
 	if Number > 1 {
 		Otvet = Otvet + Suffix
 	}
@@ -2951,8 +2901,8 @@ func FindRequestFieldName_FromMass(Column *types.Column, MassColumns []*types.Co
 	return Otvet
 }
 
-// ConvertGolangTypeNameToProtobufFieldName - возвращает имя поля для protobuf
-func ConvertGolangTypeNameToProtobufFieldName(TypeGo string) string {
+// Convert_GolangTypeNameToProtobufFieldName - возвращает имя поля для protobuf
+func Convert_GolangTypeNameToProtobufFieldName(TypeGo string) string {
 	Otvet := ""
 
 	switch TypeGo {
@@ -2989,8 +2939,8 @@ func ConvertGolangTypeNameToProtobufFieldName(TypeGo string) string {
 	return Otvet
 }
 
-// ConvertGolangTypeNameToProtobufTypeName - возвращает имя типа для protobuf
-func ConvertGolangTypeNameToProtobufTypeName(TypeGo string) string {
+// Convert_GolangTypeNameToProtobufTypeName - возвращает имя типа для protobuf
+func Convert_GolangTypeNameToProtobufTypeName(TypeGo string) string {
 	Otvet := ""
 
 	switch TypeGo {
@@ -3023,8 +2973,8 @@ func ConvertGolangTypeNameToProtobufTypeName(TypeGo string) string {
 	return Otvet
 }
 
-// FindMassColumns_from_MassColumnsString - преобразует массив строк названий колонок в массив столбцов
-func FindMassColumns_from_MassColumnsString(Table1 *types.Table, MassColumnsString []string) []*types.Column {
+// FindMass_Columns_from_MassColumnsString - преобразует массив строк названий колонок в массив столбцов
+func FindMass_Columns_from_MassColumnsString(Table1 *types.Table, MassColumnsString []string) []*types.Column {
 	Otvet := make([]*types.Column, len(MassColumnsString))
 
 	for i, ColumnName := range MassColumnsString {
@@ -3037,8 +2987,8 @@ func FindMassColumns_from_MassColumnsString(Table1 *types.Table, MassColumnsStri
 	return Otvet
 }
 
-// FindMassTableColumns - преобразует TableColumns_String в TableColumns
-func FindMassTableColumns(MapAll map[string]*types.Table, MassTableColumns_String []types.TableColumns_String) []types.TableColumns {
+// FindMass_TableColumns - преобразует TableColumns_String в TableColumns
+func FindMass_TableColumns(MapAll map[string]*types.Table, MassTableColumns_String []types.TableColumns_String) []types.TableColumns {
 	Otvet := make([]types.TableColumns, 0)
 
 	for _, TableColumns_string1 := range MassTableColumns_String {
@@ -3047,7 +2997,7 @@ func FindMassTableColumns(MapAll map[string]*types.Table, MassTableColumns_Strin
 			log.Warn(" Error: not found table: ", TableColumns_string1.TableName)
 			continue
 		}
-		Columns1 := FindMassColumns_from_MassColumnsString(Table1, TableColumns_string1.MassColumnNames)
+		Columns1 := FindMass_Columns_from_MassColumnsString(Table1, TableColumns_string1.MassColumnNames)
 		TableColumns1 := types.TableColumns{}
 		TableColumns1.Table = Table1
 		TableColumns1.Columns = Columns1
@@ -3057,9 +3007,9 @@ func FindMassTableColumns(MapAll map[string]*types.Table, MassTableColumns_Strin
 	return Otvet
 }
 
-// ConvertProtobufVariableToGolangVariable_with_MassColumns - возвращает имя переменной +  имя колонки, преобразованное в тип golang из protobuf
-func ConvertProtobufVariableToGolangVariable_with_MassColumns(Column *types.Column, MassColumns []*types.Column, VariableName string) (VariableField string, GolangCode string) {
-	RequestFieldName := FindRequestFieldName_FromMass(Column, MassColumns)
+// Convert_ProtobufVariableToGolangVariable_with_MassColumns - возвращает имя переменной +  имя колонки, преобразованное в тип golang из protobuf
+func Convert_ProtobufVariableToGolangVariable_with_MassColumns(Column *types.Column, MassColumns []*types.Column, VariableName string) (VariableField string, GolangCode string) {
+	RequestFieldName := Find_RequestFieldName_FromMass(Column, MassColumns)
 	VariableField = VariableName + RequestFieldName
 
 	switch Column.TypeGo {
@@ -3087,12 +3037,12 @@ func ConvertProtobufVariableToGolangVariable_with_MassColumns(Column *types.Colu
 //func ConvertGolangVariableToProtobufVariable_with_MassColumns(Column *types.Column, MassColumns []*types.Column) string {
 //	Otvet := ""
 //
-//	Otvet = FindRequestFieldName_FromMass(Column, MassColumns)
+//	Otvet = Find_RequestFieldName_FromMass(Column, MassColumns)
 //	return Otvet
 //}
 
-// FindRequestFieldNames_FromMass - возвращает строку с именами колонок для Protobuf
-func FindRequestFieldNames_FromMass(MassColumns []*types.Column) string {
+// Find_RequestFieldNames_FromMass - возвращает строку с именами колонок для Protobuf
+func Find_RequestFieldNames_FromMass(MassColumns []*types.Column) string {
 	Otvet := ""
 
 	TextFields := ""
@@ -3100,10 +3050,46 @@ func FindRequestFieldNames_FromMass(MassColumns []*types.Column) string {
 	Underline := ""
 	for _, Column1 := range MassColumns {
 		TextFields = TextFields + Underline + Column1.NameGo
-		TextRequest1 := FindRequestFieldName_FromMass(Column1, MassColumns)
+		TextRequest1 := Find_RequestFieldName_FromMass(Column1, MassColumns)
 		TextRequest = TextRequest + Underline + TextRequest1
 		Underline = "_"
 	}
+
+	return Otvet
+}
+
+// Replace_TemplateModel_to_Model - заменяет текст имя модели в шаблоне на имя модели новое
+func Replace_TemplateModel_to_Model(Text, ModelName string) string {
+	Otvet := Text
+
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+
+	return Otvet
+}
+
+// Replace_TemplateTableName_to_TableName - заменяет текст имя таблицы в шаблоне на имя таблицы новое
+func Replace_TemplateTableName_to_TableName(Text, ModelName string) string {
+	Otvet := Text
+
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+
+	return Otvet
+}
+
+// AddText_ModuleGenerated - добавляет текст: "Файл создан автоматически"
+func AddText_ModuleGenerated(Text string) string {
+	Otvet := Text
+
+	Otvet = config.Settings.TEXT_MODULE_GENERATED + Otvet
+
+	return Otvet
+}
+
+// CommentLineInText - закомментирует строку в коде, добавит // в начало
+func CommentLineInText(Text, TextFind string) string {
+	Otvet := Text
+
+	Otvet = strings.ReplaceAll(Otvet, `//`+TextFind, TextFind)
 
 	return Otvet
 }

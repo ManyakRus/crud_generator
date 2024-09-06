@@ -48,11 +48,11 @@ func CreateFileMain() error {
 
 	//
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextMain = create_files.DeleteTemplateRepositoryImports(TextMain)
+		TextMain = create_files.Delete_TemplateRepositoryImports(TextMain)
 
 		//GRPC
 		if config.Settings.NEED_CREATE_GRPC == true {
-			TextImport := create_files.FindGRPCServerURL()
+			TextImport := create_files.Find_GRPCServerURL()
 			TextMain = create_files.AddImport(TextMain, TextImport)
 		} else {
 			TextMain = strings.ReplaceAll(TextMain, "\n\tserver_grpc.Start()", "")
@@ -60,28 +60,28 @@ func CreateFileMain() error {
 
 		//NRPC
 		if config.Settings.NEED_CREATE_NRPC == true {
-			TextImport := create_files.FindNRPCServerlURL()
+			TextImport := create_files.Find_NRPCServerlURL()
 			TextMain = create_files.AddImport(TextMain, TextImport)
 		} else {
 			TextMain = strings.ReplaceAll(TextMain, "\n\tserver_nrpc.Start()", "")
 		}
 
-		URLCrudStarter := create_files.FindCrudStarterURL()
+		URLCrudStarter := create_files.Find_CrudStarterURL()
 		TextMain = create_files.AddImport(TextMain, URLCrudStarter)
 
-		ConstantsURL := create_files.FindConstantsURL()
+		ConstantsURL := create_files.Find_ConstantsURL()
 		TextMain = create_files.AddImport(TextMain, ConstantsURL)
 
 		//замена "postgres_gorm.Start("
-		TextMain = create_files.ReplaceConnect_WithApplicationName(TextMain)
+		TextMain = create_files.Replace_Connect_WithApplicationName(TextMain)
 
 	}
 
 	//замена импортов на новые URL
-	TextMain = create_files.ReplaceServiceURLImports(TextMain)
+	TextMain = create_files.Replace_RepositoryImportsURL(TextMain)
 
 	//удаление пустого импорта
-	TextMain = create_files.DeleteEmptyImport(TextMain)
+	TextMain = create_files.Delete_EmptyImport(TextMain)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyMain, []byte(TextMain), constants.FILE_PERMISSIONS)

@@ -35,7 +35,7 @@ func CreateFileConstants() error {
 	DirTemplatesConstants := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CONSTANTS + micro.SeparatorFile()
 	DirReadyConstants := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CONSTANTS + micro.SeparatorFile()
 	FilenameReadyConstants := DirReadyConstants + config.Settings.TEMPLATES_CONSTANTS_FILENAME
-	FilenameReadyConstants = create_files.DeleteLastUnderline(FilenameReadyConstants)
+	FilenameReadyConstants = create_files.Delete_LastUnderline(FilenameReadyConstants)
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyConstants)

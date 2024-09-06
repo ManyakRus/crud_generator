@@ -50,7 +50,7 @@ func CreateServerGRPCFunc() error {
 	TextGRPCFunc := string(bytes)
 
 	//заменим имя пакета на новое
-	TextGRPCFunc = create_files.ReplacePackageName(TextGRPCFunc, DirReadyServerGRPC)
+	TextGRPCFunc = create_files.Replace_PackageName(TextGRPCFunc, DirReadyServerGRPC)
 
 	////заменим имя сервиса на новое
 	//ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
@@ -66,14 +66,14 @@ func CreateServerGRPCFunc() error {
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCFunc = create_files.DeleteTemplateRepositoryImports(TextGRPCFunc)
+		TextGRPCFunc = create_files.Delete_TemplateRepositoryImports(TextGRPCFunc)
 
-		ConstantsURL := create_files.FindGRPCConstantsURL()
+		ConstantsURL := create_files.Find_GRPCConstantsURL()
 		TextGRPCFunc = create_files.AddImport(TextGRPCFunc, ConstantsURL)
 	}
 
 	//удаление пустого импорта
-	TextGRPCFunc = create_files.DeleteEmptyImport(TextGRPCFunc)
+	TextGRPCFunc = create_files.Delete_EmptyImport(TextGRPCFunc)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyServerGRPCFunc, []byte(TextGRPCFunc), constants.FILE_PERMISSIONS)

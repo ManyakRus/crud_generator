@@ -18,7 +18,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 	for _, Table1 := range MapAll {
 		//проверка что таблица нормальная
-		err1 := create_files.IsGoodTable(Table1)
+		err1 := create_files.IsGood_Table(Table1)
 		if err1 != nil {
 			log.Warn(err1)
 			continue
@@ -92,28 +92,32 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB := string(bytes)
 
 	//заменим имя пакета на новое
-	TextDB = create_files.ReplacePackageName(TextDB, DirReadyTable)
+	TextDB = create_files.Replace_PackageName(TextDB, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextDB = create_files.DeleteTemplateRepositoryImports(TextDB)
+		TextDB = create_files.Delete_TemplateRepositoryImports(TextDB)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextDB = create_files.AddImport(TextDB, ModelTableURL)
 
 	}
 
 	//создание текста
-	ModelName := Table1.NameGo
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+	TextDB = create_files.Replace_TemplateModel_to_Model(TextDB, Table1.NameGo)
+	TextDB = create_files.Replace_TemplateTableName_to_TableName(TextDB, Table1.Name)
+	TextDB = create_files.AddText_ModuleGenerated(TextDB)
+
+	//ModelName := Table1.NameGo
+	//TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
 	//замена импортов на новые URL
-	TextDB = create_files.ReplaceServiceURLImports(TextDB)
+	TextDB = create_files.Replace_RepositoryImportsURL(TextDB)
 
 	//удаление пустого импорта
-	TextDB = create_files.DeleteEmptyImport(TextDB)
+	TextDB = create_files.Delete_EmptyImport(TextDB)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -148,28 +152,32 @@ func CreateTestFiles(Table1 *types.Table) error {
 	TextDB := string(bytes)
 
 	//заменим имя пакета на новое
-	TextDB = create_files.ReplacePackageName(TextDB, DirReadyTable)
+	TextDB = create_files.Replace_PackageName(TextDB, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextDB = create_files.DeleteTemplateRepositoryImports(TextDB)
+		TextDB = create_files.Delete_TemplateRepositoryImports(TextDB)
 
-		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		CrudTableURL := create_files.Find_CrudTableURL(TableName)
 		TextDB = create_files.AddImport(TextDB, CrudTableURL)
 
 	}
 
 	//создание текста
-	ModelName := Table1.NameGo
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
+	TextDB = create_files.Replace_TemplateModel_to_Model(TextDB, Table1.NameGo)
+	TextDB = create_files.Replace_TemplateTableName_to_TableName(TextDB, Table1.Name)
+	TextDB = create_files.AddText_ModuleGenerated(TextDB)
+
+	//ModelName := Table1.NameGo
+	//TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextDB = strings.ReplaceAll(TextDB, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextDB = config.Settings.TEXT_MODULE_GENERATED + TextDB
 
 	//замена импортов на новые URL
-	TextDB = create_files.ReplaceServiceURLImports(TextDB)
+	TextDB = create_files.Replace_RepositoryImportsURL(TextDB)
 
 	//удаление пустого импорта
-	TextDB = create_files.DeleteEmptyImport(TextDB)
+	TextDB = create_files.Delete_EmptyImport(TextDB)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
@@ -209,28 +217,31 @@ func CreateFiles_manual(Table1 *types.Table) error {
 	TextManual := string(bytes)
 
 	//заменим имя пакета на новое
-	TextManual = create_files.ReplacePackageName(TextManual, DirReadyTable)
+	TextManual = create_files.Replace_PackageName(TextManual, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextManual = create_files.DeleteTemplateRepositoryImports(TextManual)
+		TextManual = create_files.Delete_TemplateRepositoryImports(TextManual)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextManual = create_files.AddImport(TextManual, ModelTableURL)
 
 	}
 
 	//создание текста
-	ModelName := Table1.NameGo
-	TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextManual = create_files.Replace_TemplateModel_to_Model(TextManual, Table1.NameGo)
+	TextManual = create_files.Replace_TemplateTableName_to_TableName(TextManual, Table1.Name)
+
+	//ModelName := Table1.NameGo
+	//TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextManual = TextManual
 
 	//замена импортов на новые URL
-	TextManual = create_files.ReplaceServiceURLImports(TextManual)
+	TextManual = create_files.Replace_RepositoryImportsURL(TextManual)
 
 	//удаление пустого импорта
-	TextManual = create_files.DeleteEmptyImport(TextManual)
+	TextManual = create_files.Delete_EmptyImport(TextManual)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), constants.FILE_PERMISSIONS)
@@ -270,33 +281,36 @@ func CreateFiles_manual_test(Table1 *types.Table) error {
 	TextManual := string(bytes)
 
 	//заменим имя пакета на новое
-	TextManual = create_files.ReplacePackageName(TextManual, DirReadyTable)
+	TextManual = create_files.Replace_PackageName(TextManual, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextManual = create_files.DeleteTemplateRepositoryImports(TextManual)
+		TextManual = create_files.Delete_TemplateRepositoryImports(TextManual)
 
 		//
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextManual = create_files.AddImport(TextManual, ModelTableURL)
 
 		//
-		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		CrudTableURL := create_files.Find_CrudTableURL(TableName)
 		TextManual = create_files.AddImport(TextManual, CrudTableURL)
 
 	}
 
 	//создание текста
-	ModelName := Table1.NameGo
-	TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextManual = TextManual
+	TextManual = create_files.Replace_TemplateModel_to_Model(TextManual, Table1.NameGo)
+	TextManual = create_files.Replace_TemplateTableName_to_TableName(TextManual, Table1.Name)
+
+	//ModelName := Table1.NameGo
+	//TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextManual = strings.ReplaceAll(TextManual, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextManual = TextManual
 
 	//замена импортов на новые URL
-	TextManual = create_files.ReplaceServiceURLImports(TextManual)
+	TextManual = create_files.Replace_RepositoryImportsURL(TextManual)
 
 	//удаление пустого импорта
-	TextManual = create_files.DeleteEmptyImport(TextManual)
+	TextManual = create_files.Delete_EmptyImport(TextManual)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), constants.FILE_PERMISSIONS)

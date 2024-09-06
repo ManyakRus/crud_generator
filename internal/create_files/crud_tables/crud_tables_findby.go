@@ -56,17 +56,17 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	TextTemplatedFunction := string(bytes)
 
 	//заменим имя пакета на новое
-	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
+	TextCrud = create_files.Replace_PackageName(TextCrud, DirReadyTable)
 
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
+		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		ConstantsURL := create_files.FindDBConstantsURL()
+		ConstantsURL := create_files.Find_DBConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
 
 	}
@@ -79,24 +79,28 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	TextCrud = TextCrud + TextCrudFunc
 
 	//создание текста
-	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
+	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
+	TextCrud = create_files.Replace_TemplateTableName_to_TableName(TextCrud, Table1.Name)
+	TextCrud = create_files.AddText_ModuleGenerated(TextCrud)
+
+	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
 
 	//замена импортов на новые URL
-	TextCrud = create_files.ReplaceServiceURLImports(TextCrud)
+	TextCrud = create_files.Replace_RepositoryImportsURL(TextCrud)
 
 	//uuid
-	TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
+	TextCrud = create_files.CheckAndAdd_ImportUUID_FromText(TextCrud)
 
 	//alias
-	TextCrud = create_files.CheckAndAddImportAlias(TextCrud)
+	TextCrud = create_files.CheckAndAdd_ImportAlias(TextCrud)
 
 	//удаление пустого импорта
-	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+	TextCrud = create_files.Delete_EmptyImport(TextCrud)
 
 	//удаление пустых строк
-	TextCrud = create_files.DeleteEmptyLines(TextCrud)
+	TextCrud = create_files.Delete_EmptyLines(TextCrud)
 
 	//запись файла
 	err = os.WriteFile(FilenameReady, []byte(TextCrud), constants.FILE_PERMISSIONS)
@@ -195,17 +199,17 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 	TextTemplatedFunction := string(bytes)
 
 	//заменим имя пакета на новое
-	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyTable)
+	TextCrud = create_files.Replace_PackageName(TextCrud, DirReadyTable)
 
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
+		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		CrudFuncURL := create_files.FindCrudFuncURL(TableName)
+		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
 
 	}
@@ -218,24 +222,28 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 	TextCrud = TextCrud + TextCrudFunc
 
 	//создание текста
-	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
+	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
+	TextCrud = create_files.Replace_TemplateTableName_to_TableName(TextCrud, Table1.Name)
+	TextCrud = create_files.AddText_ModuleGenerated(TextCrud)
+
+	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
 
 	//замена импортов на новые URL
-	TextCrud = create_files.ReplaceServiceURLImports(TextCrud)
+	TextCrud = create_files.Replace_RepositoryImportsURL(TextCrud)
 
 	//uuid
-	TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
+	TextCrud = create_files.CheckAndAdd_ImportUUID_FromText(TextCrud)
 
 	//alias
-	TextCrud = create_files.CheckAndAddImportAlias(TextCrud)
+	TextCrud = create_files.CheckAndAdd_ImportAlias(TextCrud)
 
 	//удаление пустого импорта
-	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+	TextCrud = create_files.Delete_EmptyImport(TextCrud)
 
 	//удаление пустых строк
-	TextCrud = create_files.DeleteEmptyLines(TextCrud)
+	TextCrud = create_files.Delete_EmptyLines(TextCrud)
 
 	//запись файла
 	err = os.WriteFile(FilenameReady, []byte(TextCrud), constants.FILE_PERMISSIONS)
@@ -278,7 +286,7 @@ func CreateFilesFindByTestTable1(Table1 *types.Table, TextTemplateFunction strin
 		if ok == false {
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
-		DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
+		DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
 		TextAssign = TextAssign + "\t" + `Otvet.` + Column1.NameGo + ` = ` + DefaultValue + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo

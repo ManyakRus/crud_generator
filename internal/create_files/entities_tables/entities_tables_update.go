@@ -44,20 +44,20 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextModel := string(bytes)
 
 	//заменим имя пакета на новое
-	TextModel = create_files.ReplacePackageName(TextModel, DirReadyModel)
+	TextModel = create_files.Replace_PackageName(TextModel, DirReadyModel)
 
 	//замена импортов на новые URL
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextModel = create_files.DeleteTemplateRepositoryImports(TextModel)
+		TextModel = create_files.Delete_TemplateRepositoryImports(TextModel)
 
-		ConstantsURL := create_files.FindDBConstantsURL()
+		ConstantsURL := create_files.Find_DBConstantsURL()
 		TextModel = create_files.AddImport(TextModel, ConstantsURL)
 	}
 
-	TextModel = create_files.CheckAndAddImportTime_FromText(TextModel)
+	TextModel = create_files.CheckAndAdd_ImportTime_FromText(TextModel)
 
 	//удаление пустого импорта
-	TextModel = create_files.DeleteEmptyImport(TextModel)
+	TextModel = create_files.Delete_EmptyImport(TextModel)
 
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(Table1.MapColumns))

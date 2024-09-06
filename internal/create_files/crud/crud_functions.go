@@ -21,7 +21,7 @@ func CreateCrud() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATES_CRUD_FUNC_FOLDERNAME + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATES_CRUD_FUNC_FOLDERNAME + micro.SeparatorFile()
-	FilenameReadyCrud := DirReadyCrud + create_files.DeleteLastUnderline(config.Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME)
+	FilenameReadyCrud := DirReadyCrud + create_files.Delete_LastUnderline(config.Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME)
 	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME
 
 	//создадим папку готовых файлов
@@ -34,20 +34,20 @@ func CreateCrud() error {
 	TextCrud := string(bytes)
 
 	//заменим имя пакета на новое
-	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyCrud)
+	TextCrud = create_files.Replace_PackageName(TextCrud, DirReadyCrud)
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
+		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
 
 		//constants db
-		DBConstantsURL := create_files.FindDBConstantsURL()
+		DBConstantsURL := create_files.Find_DBConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, DBConstantsURL)
 
 	}
 
 	//добавим импорт uuid
-	TextCrud = create_files.CheckAndAddImportUUID_FromText(TextCrud)
+	TextCrud = create_files.CheckAndAdd_ImportUUID_FromText(TextCrud)
 
 	//заменим имя сервиса на новое
 	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
@@ -62,7 +62,7 @@ func CreateCrud() error {
 	TextCrud = strings.ReplaceAll(TextCrud, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
 	//удаление пустого импорта
-	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+	TextCrud = create_files.Delete_EmptyImport(TextCrud)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyCrud, []byte(TextCrud), constants.FILE_PERMISSIONS)
@@ -80,7 +80,7 @@ func CreateCrudTest() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATES_CRUD_FUNC_FOLDERNAME + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATES_CRUD_FUNC_FOLDERNAME + micro.SeparatorFile()
-	FilenameReadyCrud := DirReadyCrud + create_files.DeleteLastUnderline(config.Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME)
+	FilenameReadyCrud := DirReadyCrud + create_files.Delete_LastUnderline(config.Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME)
 	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME
 
 	//создадим папку готовых файлов
@@ -93,13 +93,13 @@ func CreateCrudTest() error {
 	TextCrud := string(bytes)
 
 	//заменим имя пакета на новое
-	TextCrud = create_files.ReplacePackageName(TextCrud, DirReadyCrud)
+	TextCrud = create_files.Replace_PackageName(TextCrud, DirReadyCrud)
 
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextCrud = create_files.DeleteTemplateRepositoryImports(TextCrud)
+		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
 
-		DBConstantsURL := create_files.FindDBConstantsURL()
+		DBConstantsURL := create_files.Find_DBConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, DBConstantsURL)
 
 	}
@@ -117,7 +117,7 @@ func CreateCrudTest() error {
 	TextCrud = strings.ReplaceAll(TextCrud, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
 	//удаление пустого импорта
-	TextCrud = create_files.DeleteEmptyImport(TextCrud)
+	TextCrud = create_files.Delete_EmptyImport(TextCrud)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyCrud, []byte(TextCrud), constants.FILE_PERMISSIONS)

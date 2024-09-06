@@ -50,11 +50,11 @@ func StartFillAll() error {
 	}
 
 	//
-	Mass1 := create_files.FindMassTableColumns(MapAll, types.MassFindBy_String)
+	Mass1 := create_files.FindMass_TableColumns(MapAll, types.MassFindBy_String)
 	types.MassFindBy = Mass1
 
 	//
-	Mass1 = create_files.FindMassTableColumns(MapAll, types.MassFindMassBy_String)
+	Mass1 = create_files.FindMass_TableColumns(MapAll, types.MassFindMassBy_String)
 	types.MassFindMassBy = Mass1
 
 	//копируем все файлы

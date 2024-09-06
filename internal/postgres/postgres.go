@@ -282,7 +282,7 @@ order by
 			//новая таблица
 			//найдём имя модели golang
 			TableName := v.TableName
-			ModelName := create_files.FindSingularName(TableName)
+			ModelName := create_files.Find_SingularName(TableName)
 			ModelName = create_files.FormatName(ModelName)
 
 			//
@@ -374,7 +374,7 @@ func FillIDMinimum(MapTable map[string]*types.Table) error {
 		TextSQL := ""
 		Is_UUID_Type := create_files.Is_UUID_Type(TypeGo)
 		if Is_UUID_Type == false {
-			DefaultValueSQL := create_files.FindTextDefaultValueSQL(TypeGo)
+			DefaultValueSQL := create_files.FindText_DefaultValueSQL(TypeGo)
 			TextSQL = `SELECT 
 				Min("` + NameID + `") as id_minimum 
 				FROM
@@ -407,7 +407,7 @@ func FillIDMinimum(MapTable map[string]*types.Table) error {
 		}
 
 		//
-		ColumnPK := create_files.FindPrimaryKeyColumn(Table1)
+		ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
 		ColumnPK.IDMinimum = IDMinimum.String
 	}
 
@@ -425,7 +425,7 @@ func FillIDMinimum_ManyPK(MapTable map[string]*types.Table) error {
 	Schema := strings.Trim(postgres_gorm.Settings.DB_SCHEMA, " ")
 
 	for TableName, Table1 := range MapTable {
-		ColumnsPK := create_files.FindPrimaryKeyColumns(Table1)
+		ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
 
 		Is_UUID_Type := false
 		for _, Column1 := range ColumnsPK {
@@ -451,7 +451,7 @@ func FillIDMinimum_ManyPK(MapTable map[string]*types.Table) error {
 `
 
 			for _, Column1 := range ColumnsPK {
-				DefaultValueSQL := create_files.FindTextDefaultValueSQL(Column1.TypeGo)
+				DefaultValueSQL := create_files.FindText_DefaultValueSQL(Column1.TypeGo)
 				TextSQL += `and ` + Column1.Name + ` <> ` + DefaultValueSQL
 			}
 		} else {

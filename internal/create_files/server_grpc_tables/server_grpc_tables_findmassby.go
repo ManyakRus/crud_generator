@@ -56,20 +56,20 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 	TextTemplatedFunction := string(bytes)
 
 	//заменим имя пакета на новое
-	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+	TextGRPCServer = create_files.Replace_PackageName(TextGRPCServer, DirReadyTable)
 
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+		TextGRPCServer = create_files.Delete_TemplateRepositoryImports(TextGRPCServer)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-		CrudTableURL := create_files.FindCrudTableURL(TableName)
+		CrudTableURL := create_files.Find_CrudTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.Find_ProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
 	}
@@ -82,24 +82,28 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 	TextGRPCServer = TextGRPCServer + TextGRPCServerFunc
 
 	//создание текста
-	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
+	TextGRPCServer = create_files.Replace_TemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
+	TextGRPCServer = create_files.AddText_ModuleGenerated(TextGRPCServer)
+
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	//замена импортов на новые URL
-	TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
+	TextGRPCServer = create_files.Replace_RepositoryImportsURL(TextGRPCServer)
 
 	//uuid
-	TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+	TextGRPCServer = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCServer)
 
 	//alias
-	TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
+	TextGRPCServer = create_files.CheckAndAdd_ImportAlias(TextGRPCServer)
 
 	//удаление пустого импорта
-	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+	TextGRPCServer = create_files.Delete_EmptyImport(TextGRPCServer)
 
 	//удаление пустых строк
-	TextGRPCServer = create_files.DeleteEmptyLines(TextGRPCServer)
+	TextGRPCServer = create_files.Delete_EmptyLines(TextGRPCServer)
 
 	//запись файла
 	err = os.WriteFile(FilenameReady, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
@@ -131,7 +135,7 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 	FieldNamesWithComma := ""
 	TextAssign := ""
 
-	MassColumns := create_files.FindMassColumns_from_MassColumnsString(Table1, MassColumnsString)
+	MassColumns := create_files.FindMass_Columns_from_MassColumnsString(Table1, MassColumnsString)
 
 	//
 	TextFind := "\t" + `Model.FieldName = Request.RequestFieldName` + "\n"
@@ -143,8 +147,8 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 		if ok == false {
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
-		//RequestFieldName := create_files.FindRequestFieldName_FromMass(Column1, MassColumns)
-		TextRequest, TextRequestCode := create_files.ConvertProtobufVariableToGolangVariable_with_MassColumns(Column1, MassColumns, "Request.")
+		//RequestFieldName := create_files.Find_RequestFieldName_FromMass(Column1, MassColumns)
+		TextRequest, TextRequestCode := create_files.Convert_ProtobufVariableToGolangVariable_with_MassColumns(Column1, MassColumns, "Request.")
 		if TextRequestCode != "" {
 			TextAssign = TextAssign + TextRequestCode + "\n"
 		} else {
@@ -153,7 +157,7 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
 
-		ProtoTypeName := create_files.ConvertGolangTypeNameToProtobufFieldName(Column1.TypeGo)
+		ProtoTypeName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
 		RequestName = RequestName + Underline + ProtoTypeName
 
 		Underline = "_"
@@ -213,23 +217,23 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	TextTemplatedFunction := string(bytes)
 
 	//заменим имя пакета на новое
-	TextGRPCServer = create_files.ReplacePackageName(TextGRPCServer, DirReadyTable)
+	TextGRPCServer = create_files.Replace_PackageName(TextGRPCServer, DirReadyTable)
 
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.DeleteTemplateRepositoryImports(TextGRPCServer)
+		TextGRPCServer = create_files.Delete_TemplateRepositoryImports(TextGRPCServer)
 
-		ModelTableURL := create_files.FindModelTableURL(TableName)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ModelTableURL)
 
-		CrudStarterURL := create_files.FindCrudStarterURL()
+		CrudStarterURL := create_files.Find_CrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
-		ProtoURL := create_files.FindProtoURL()
+		ProtoURL := create_files.Find_ProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-		CrudFuncURL := create_files.FindCrudFuncURL(TableName)
+		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudFuncURL)
 
 	}
@@ -242,24 +246,28 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	TextGRPCServer = TextGRPCServer + TextGRPCServerFunc
 
 	//создание текста
-	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
+	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
+	TextGRPCServer = create_files.Replace_TemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
+	TextGRPCServer = create_files.AddText_ModuleGenerated(TextGRPCServer)
+
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	//замена импортов на новые URL
-	TextGRPCServer = create_files.ReplaceServiceURLImports(TextGRPCServer)
+	TextGRPCServer = create_files.Replace_RepositoryImportsURL(TextGRPCServer)
 
 	//uuid
-	TextGRPCServer = create_files.CheckAndAddImportUUID_FromText(TextGRPCServer)
+	TextGRPCServer = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCServer)
 
 	//alias
-	TextGRPCServer = create_files.CheckAndAddImportAlias(TextGRPCServer)
+	TextGRPCServer = create_files.CheckAndAdd_ImportAlias(TextGRPCServer)
 
 	//удаление пустого импорта
-	TextGRPCServer = create_files.DeleteEmptyImport(TextGRPCServer)
+	TextGRPCServer = create_files.Delete_EmptyImport(TextGRPCServer)
 
 	//удаление пустых строк
-	TextGRPCServer = create_files.DeleteEmptyLines(TextGRPCServer)
+	TextGRPCServer = create_files.Delete_EmptyLines(TextGRPCServer)
 
 	//запись файла
 	err = os.WriteFile(FilenameReady, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
@@ -295,7 +303,7 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 	TextAssign := ""
 	TextFieldName_TEST := ""
 
-	MassColumns := create_files.FindMassColumns_from_MassColumnsString(Table1, MassColumnsString)
+	MassColumns := create_files.FindMass_Columns_from_MassColumnsString(Table1, MassColumnsString)
 
 	RequestName := "Request_"
 	Underline := ""
@@ -305,14 +313,14 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 		if ok == false {
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
-		DefaultValue := create_files.FindTextDefaultValue(Column1.TypeGo)
-		RequestFieldName := create_files.FindRequestFieldName_FromMass(Column1, MassColumns)
+		DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
+		RequestFieldName := create_files.Find_RequestFieldName_FromMass(Column1, MassColumns)
 		TextAssign = TextAssign + "\t" + `Request.` + RequestFieldName + ` = ` + DefaultValue + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
 		TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue
 
-		ProtoTypeName := create_files.ConvertGolangTypeNameToProtobufFieldName(Column1.TypeGo)
+		ProtoTypeName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
 		RequestName = RequestName + Underline + ProtoTypeName
 
 		Underline = "_"

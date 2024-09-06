@@ -35,12 +35,12 @@ func FindTextReadFromCache(TextProto string, Table1 *types.Table) string {
 func TextReadFromCache(Table1 *types.Table) string {
 	Otvet := ""
 
-	PrimaryKeyColumn := create_files.FindPrimaryKeyColumn(Table1)
+	PrimaryKeyColumn := create_files.Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet
 	}
 
-	TextRequestId, _ := create_files.FindTextProtobufRequest(Table1)
+	TextRequestId, _ := create_files.FindText_ProtobufRequest(Table1)
 	ModelName := Table1.NameGo
 	Otvet = "rpc " + ModelName + "_ReadFromCache(" + TextRequestId + ") returns (Response) {}"
 

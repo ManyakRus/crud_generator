@@ -38,24 +38,24 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	TextGRPCClient = create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
+	TextGRPCClient = create_files.Replace_PackageName(TextGRPCClient, DirReadyTable)
 
 	//создание текста
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		//TextGRPCClient = create_files.ReplaceServiceURLImports(TextGRPCClient)
-		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
+		//TextGRPCClient = create_files.Replace_RepositoryImportsURL(TextGRPCClient)
+		TextGRPCClient = create_files.Delete_TemplateRepositoryImports(TextGRPCClient)
 
 		//proto
-		RepositoryGRPCProtoURL := create_files.FindProtoURL()
+		RepositoryGRPCProtoURL := create_files.Find_ProtoURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCProtoURL)
 
 		//model
-		RepositoryModelURL := create_files.FindModelTableURL(TableName)
+		RepositoryModelURL := create_files.Find_ModelTableURL(TableName)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryModelURL)
 
 		////grpc client
-		//RepositoryGRPCClientlURL := create_files.FindGRPClientURL()
+		//RepositoryGRPCClientlURL := create_files.Find_GRPClientURL()
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCClientlURL)
 
 		//grpc client func
@@ -63,14 +63,14 @@ func CreateFiles(Table1 *types.Table) error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPCClientFuncURL)
 
 		//nrpc client
-		RepositoryNRPCClientlURL := create_files.FindNRPClientURL()
+		RepositoryNRPCClientlURL := create_files.Find_NRPClientURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryNRPCClientlURL)
 
 		//constants GRPC
-		RepositoryGRPCConstantsURL := create_files.FindGRPCConstantsURL()
+		RepositoryGRPCConstantsURL := create_files.Find_GRPCConstantsURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCConstantsURL)
 
-		//DBConstantsURL := create_files.FindDBConstantsURL()
+		//DBConstantsURL := create_files.Find_DBConstantsURL()
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, DBConstantsURL)
 
 		//grpc_nrpc
@@ -78,35 +78,39 @@ func CreateFiles(Table1 *types.Table) error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
 
 		//замена ID на PrimaryKey
-		//TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)
+		//TextGRPCClient = create_files.Replace_PrimaryKeyOtvetID(TextGRPCClient, Table1)
 
 		//замена ID на PrimaryKey
-		TextGRPCClient = create_files.ReplacePrimaryKeyM_ID(TextGRPCClient, Table1)
+		TextGRPCClient = create_files.Replace_PrimaryKeyM_ID(TextGRPCClient, Table1)
 
 		//замена RequestId{}
-		TextGRPCClient = create_files.ReplaceTextRequestID_PrimaryKey(TextGRPCClient, Table1)
+		TextGRPCClient = create_files.ReplaceText_RequestID_PrimaryKey(TextGRPCClient, Table1)
 
 		//добавим импорт uuid
-		TextGRPCClient = create_files.CheckAndAddImportUUID_FromText(TextGRPCClient)
+		TextGRPCClient = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCClient)
 
 	}
 
 	//удалим лишние функции
-	TextGRPCClient = create_files.DeleteFuncDelete(TextGRPCClient, Table1)
-	TextGRPCClient = create_files.DeleteFuncRestore(TextGRPCClient, Table1)
-	TextGRPCClient = create_files.DeleteFuncFind_byExtID(TextGRPCClient, Table1)
+	TextGRPCClient = create_files.DeleteFunc_Delete(TextGRPCClient, Table1)
+	TextGRPCClient = create_files.DeleteFunc_Restore(TextGRPCClient, Table1)
+	TextGRPCClient = create_files.DeleteFunc_Find_byExtID(TextGRPCClient, Table1)
 
 	//замена имени таблицы
-	ModelName := Table1.NameGo
-	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
+	TextGRPCClient = create_files.Replace_TemplateModel_to_Model(TextGRPCClient, Table1.NameGo)
+	TextGRPCClient = create_files.Replace_TemplateTableName_to_TableName(TextGRPCClient, Table1.Name)
+	TextGRPCClient = create_files.AddText_ModuleGenerated(TextGRPCClient)
+
+	//ModelName := Table1.NameGo
+	//TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
 
 	//удаление пустого импорта
-	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
+	TextGRPCClient = create_files.Delete_EmptyImport(TextGRPCClient)
 
 	//удаление пустых строк
-	TextGRPCClient = create_files.DeleteEmptyLines(TextGRPCClient)
+	TextGRPCClient = create_files.Delete_EmptyLines(TextGRPCClient)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
@@ -140,19 +144,19 @@ func CreateFilesTest(Table1 *types.Table) error {
 	TextGRPCClient := string(bytes)
 
 	//заменим имя пакета на новое
-	TextGRPCClient = create_files.ReplacePackageName(TextGRPCClient, DirReadyTable)
+	TextGRPCClient = create_files.Replace_PackageName(TextGRPCClient, DirReadyTable)
 
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCClient = create_files.DeleteTemplateRepositoryImports(TextGRPCClient)
+		TextGRPCClient = create_files.Delete_TemplateRepositoryImports(TextGRPCClient)
 
-		GRPClientURL := create_files.FindGRPClientURL()
+		GRPClientURL := create_files.Find_GRPClientURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientURL)
 
-		ModelTableName := create_files.FindModelTableURL(TableName)
+		ModelTableName := create_files.Find_ModelTableURL(TableName)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ModelTableName)
 
-		GRPClientTableURL := create_files.FindGRPCClientTableURL(Table1.Name)
+		GRPClientTableURL := create_files.Find_GRPCClientTableURL(Table1.Name)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientTableURL)
 
 		//GRPClientFuncURL := create_files.Find_GRPCClient_func_URL()
@@ -162,24 +166,28 @@ func CreateFilesTest(Table1 *types.Table) error {
 		TextGRPCClient = create_files.Replace_Postgres_ID_Test(TextGRPCClient, Table1)
 
 		//замена Otvet.ID = -1
-		TextGRPCClient = create_files.ReplaceOtvetIDEqual1(TextGRPCClient, Table1)
+		TextGRPCClient = create_files.Replace_OtvetIDEqual1(TextGRPCClient, Table1)
 
 		//замена Otvet.ID = 0
-		TextGRPCClient = create_files.ReplaceOtvetIDEqual0(TextGRPCClient, Table1)
+		TextGRPCClient = create_files.Replace_OtvetIDEqual0(TextGRPCClient, Table1)
 
 		//замена ID на PrimaryKey
-		TextGRPCClient = create_files.ReplacePrimaryKeyOtvetID(TextGRPCClient, Table1)
+		TextGRPCClient = create_files.Replace_PrimaryKeyOtvetID(TextGRPCClient, Table1)
 
 		//добавим импорт uuid
-		TextGRPCClient = create_files.CheckAndAddImportUUID_FromText(TextGRPCClient)
+		TextGRPCClient = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCClient)
 
 	}
 
 	//создание текста
+	TextGRPCClient = create_files.Replace_TemplateModel_to_Model(TextGRPCClient, Table1.NameGo)
+	TextGRPCClient = create_files.Replace_TemplateTableName_to_TableName(TextGRPCClient, Table1.Name)
+	TextGRPCClient = create_files.AddText_ModuleGenerated(TextGRPCClient)
+
 	ModelName := Table1.NameGo
-	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
+	//TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	//TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextGRPCClient = config.Settings.TEXT_MODULE_GENERATED + TextGRPCClient
 
 	if config.Settings.HAS_IS_DELETED == true {
 		TextGRPCClient = DeleteFuncTestDelete(TextGRPCClient, ModelName, Table1)
@@ -191,13 +199,13 @@ func CreateFilesTest(Table1 *types.Table) error {
 	TextGRPCClient = create_files.AddSkipNow(TextGRPCClient, Table1)
 
 	//замена импортов на новые URL
-	TextGRPCClient = create_files.ReplaceServiceURLImports(TextGRPCClient)
+	TextGRPCClient = create_files.Replace_RepositoryImportsURL(TextGRPCClient)
 
 	//удаление пустого импорта
-	TextGRPCClient = create_files.DeleteEmptyImport(TextGRPCClient)
+	TextGRPCClient = create_files.Delete_EmptyImport(TextGRPCClient)
 
 	//удаление пустых строк
-	TextGRPCClient = create_files.DeleteEmptyLines(TextGRPCClient)
+	TextGRPCClient = create_files.Delete_EmptyLines(TextGRPCClient)
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
