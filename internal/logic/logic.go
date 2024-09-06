@@ -5,6 +5,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/create_files/alias"
 	"github.com/ManyakRus/crud_generator/internal/create_files/constants_file"
+	"github.com/ManyakRus/crud_generator/internal/create_files/crud"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_tables"
@@ -213,6 +214,13 @@ func StartFillAll() error {
 
 	//grpc_client_func
 	err = grpc_client_func.CreateAllFiles()
+	if err != nil {
+		//log.Error("env_file.CreateAllFiles() error: ", err)
+		return err
+	}
+
+	//crud
+	err = crud.CreateAllFiles()
 	if err != nil {
 		//log.Error("env_file.CreateAllFiles() error: ", err)
 		return err

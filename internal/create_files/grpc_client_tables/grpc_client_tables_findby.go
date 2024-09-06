@@ -231,14 +231,18 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ModelTableURL)
 
-		GRPCClient_func_URL := create_files.Find_GRPCClient_func_URL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPCClient_func_URL)
+		//GRPCClient_func_URL := create_files.Find_GRPCClient_func_URL()
+		//TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPCClient_func_URL)
 
 		GRPClientURL := create_files.FindGRPClientURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientURL)
 
 		GRPClientTableURL := create_files.FindGRPCClientTableURL(Table1.Name)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientTableURL)
+
+		CrudFuncURL := create_files.FindCrudFuncURL(TableName)
+		TextGRPCClient = create_files.AddImport(TextGRPCClient, CrudFuncURL)
+
 	}
 
 	//создание функций

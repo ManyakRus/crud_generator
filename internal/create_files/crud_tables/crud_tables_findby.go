@@ -205,6 +205,9 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 		ModelTableURL := create_files.FindModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
+		CrudFuncURL := create_files.FindCrudFuncURL(TableName)
+		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
+
 	}
 
 	//создание функций

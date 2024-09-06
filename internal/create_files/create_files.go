@@ -774,6 +774,15 @@ func FindModelTableURL(TableName string) string {
 	return Otvet
 }
 
+// FindCrudFuncURL - возвращает URL репозитория crud_func
+func FindCrudFuncURL(string) string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_CRUD_FUNC_FOLDERNAME
+
+	return Otvet
+}
+
 // FindGRPCClientTableURL - возвращает URL репозитория grpc_client для таблицы TableName
 func FindGRPCClientTableURL(TableName string) string {
 	Otvet := ""

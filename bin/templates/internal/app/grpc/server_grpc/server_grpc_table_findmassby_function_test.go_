@@ -9,8 +9,8 @@ func Test_server_LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(t *testing
 
 	server1 := &ServerGRPC{}
 	_, err := server1.LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(ctx, &Request)
-	if err != nil {
-		t.Log("Test_server_LawsuitStatusType_FindMassBy_FieldNamesWithUnderline() error: ", err)
+	if err != nil && crud_func.IsRecordNotFound(err) == false {
+		t.Error("Test_server_LawsuitStatusType_FindMassBy_FieldNamesWithUnderline() error: ", err)
 	}
 }
 

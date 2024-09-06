@@ -360,3 +360,12 @@ TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_FILENAME="grpc_client_table_fin
 #TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_findmassby_function_test.go_" file
 TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_TEST_FILENAME="grpc_client_table_findmassby_function_test.go_"
 
+#TEMPLATES_CRUD_FUNC_FOLDERNAME - folder name "crud_func"
+TEMPLATES_CRUD_FUNC_FOLDERNAME="pkg/db/crud_func"
+
+#TEMPLATES_CRUD_FUNC_FILENAME - short filename of "crud_func.go_" file
+TEMPLATES_CRUD_FUNC_FILENAME = "crud_func.go_"
+
+#TEMPLATES_CRUD_FUNC_TEST_FILENAME - short filename of "crud_func_test.go_" file
+TEMPLATES_CRUD_FUNC_TEST_FILENAME = "crud_func_test.go_"
+

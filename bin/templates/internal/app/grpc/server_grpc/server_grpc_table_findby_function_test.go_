@@ -9,9 +9,10 @@ func Test_server_LawsuitStatusType_FindBy_FieldNamesWithUnderline(t *testing.T) 
 
 	server1 := &ServerGRPC{}
 	Otvet, err := server1.LawsuitStatusType_FindBy_FieldNamesWithUnderline(ctx, &Request)
-	if err != nil {
-		t.Log("Test_server_LawsuitStatusType_FindBy_FieldNamesWithUnderline() error: ", err)
+	if err != nil && crud_func.IsRecordNotFound(err) == false {
+		t.Error("Test_server_LawsuitStatusType_FindBy_FieldNamesWithUnderline() error: ", err)
 	}
+
 	if Otvet.ModelString == "" {
 		t.Log("Test_server_LawsuitStatusType_FindBy_FieldNamesWithUnderline() error: ModelString=''")
 	}

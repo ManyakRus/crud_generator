@@ -8,8 +8,8 @@ func TestFindMassBy_FieldNamesWithUnderline(t *testing.T) {
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.FieldName = 0
 	_, err := crud.FindMassBy_FieldNamesWithUnderline(&Otvet)
-	if err != nil {
-		t.Log("crud_"+TableName+"_test.TestFindMassBy_FieldNamesWithUnderline() FieldNamesWithComma:", FieldNamesDefault, " error: ", err)
+	if err != nil && crud_func.IsRecordNotFound(err) == false {
+		t.Error("crud_"+TableName+"_test.TestFindMassBy_FieldNamesWithUnderline() FieldNamesWithComma:", FieldNamesDefault, " error: ", err)
 	}
 }
 

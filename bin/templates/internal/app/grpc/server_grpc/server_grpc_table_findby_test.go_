@@ -6,6 +6,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/files"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_func"
 	"testing"
 )
 

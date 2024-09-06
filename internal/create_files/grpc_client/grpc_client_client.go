@@ -68,16 +68,10 @@ func CreateGRPCClient() error {
 		RepositoryGRPCConstantsURL := create_files.FindGRPCConstantsURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCConstantsURL)
 
-		//заменим имя сервиса на новое
-		ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
-		ServiceName := config.Settings.SERVICE_NAME
-		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, ServiceNameTemplate, ServiceName)
-		TextGRPCClient = strings.ReplaceAll(TextGRPCClient, strings.ToUpper(ServiceNameTemplate), strings.ToUpper(ServiceName))
-
-		//добавим импорт uuid
-		TextGRPCClient = create_files.CheckAndAddImportUUID_FromText(TextGRPCClient)
-
 	}
+
+	//добавим импорт uuid
+	TextGRPCClient = create_files.CheckAndAddImportUUID_FromText(TextGRPCClient)
 
 	//заменим имя сервиса на новое
 	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME

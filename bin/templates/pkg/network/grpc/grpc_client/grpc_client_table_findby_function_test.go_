@@ -1,6 +1,7 @@
 func TestFindBy_FieldNamesWithUnderline(t *testing.T) {
 	config_main.LoadEnv()
-	grpc_client_func.Func_Connect_GRPC_NRPC.Connect_GRPC_NRPC()
+
+	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
 	crud := grpc_lawsuit_status_types.Crud_GRPC{}
@@ -8,8 +9,8 @@ func TestFindBy_FieldNamesWithUnderline(t *testing.T) {
 	Otvet.FieldName = 0
 	err := crud.FindBy_FieldNamesWithUnderline(&Otvet)
 
-	if err != nil {
-		t.Log("TestFindBy_FieldNamesWithUnderline() error: ", err)
+	if err != nil && crud_func.IsRecordNotFound(err) == false {
+		t.Error("TestFindBy_FieldNamesWithUnderline() error: ", err)
 	}
 
 }

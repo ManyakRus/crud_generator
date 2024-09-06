@@ -1,6 +1,7 @@
 func TestCrud_GRPC_FindMassBy_FieldNamesWithUnderline(t *testing.T) {
 	config_main.LoadEnv()
-	grpc_client_func.Func_Connect_GRPC_NRPC.Connect_GRPC_NRPC()
+
+	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
 
 	crud := grpc_lawsuit_status_types.Crud_GRPC{}
@@ -8,8 +9,8 @@ func TestCrud_GRPC_FindMassBy_FieldNamesWithUnderline(t *testing.T) {
 	Model1.FieldName = 0
 	_, err := crud.FindMassBy_FieldNamesWithUnderline(&Model1)
 
-	if err != nil {
-		t.Log("TestCrud_GRPC_FindMassBy_FieldNamesWithUnderline() error: ", err)
+	if err != nil && crud_func.IsRecordNotFound(err) == false {
+		t.Error("TestCrud_GRPC_FindMassBy_FieldNamesWithUnderline() error: ", err)
 	}
 
 }
