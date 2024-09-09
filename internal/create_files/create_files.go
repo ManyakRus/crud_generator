@@ -3068,10 +3068,10 @@ func Replace_TemplateModel_to_Model(Text, ModelName string) string {
 }
 
 // Replace_TemplateTableName_to_TableName - заменяет текст имя таблицы в шаблоне на имя таблицы новое
-func Replace_TemplateTableName_to_TableName(Text, ModelName string) string {
+func Replace_TemplateTableName_to_TableName(Text, TableName string) string {
 	Otvet := Text
 
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, TableName)
 
 	return Otvet
 }

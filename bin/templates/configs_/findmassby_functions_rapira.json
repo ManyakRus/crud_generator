@@ -1,1 +1,2 @@
-[{"Table":"connections","Columns":["branch_id"]}]
+[{"Table":"connections","Columns":["branch_id"]},
+{"Table":"file_types","Columns":[]}]
