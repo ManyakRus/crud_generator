@@ -153,10 +153,17 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 		Comma = ", "
 	}
 
+	//кроме помеченных на удаление
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
+		TextWhere = TextWhere + "\t" + `tx = tx.Where("is_deleted = ?", false)` + "\n"
+	}
+
 	//
 	if len(MassColumns1) == 0 {
 		FuncName := constants.TEXT_READALL
 		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
+		ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+		ColumnNamesWithComma = create_files.Find_ColumnNamesWithComma(ColumnsPK)
 	}
 
 	//

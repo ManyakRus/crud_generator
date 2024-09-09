@@ -2867,3 +2867,17 @@ func CommentLineInText(Text, TextFind string) string {
 
 	return Otvet
 }
+
+// Find_ColumnNamesWithComma - возвращает строку с именами колонок БД, через запятую
+func Find_ColumnNamesWithComma(MassColumns []*types.Column) string {
+	Otvet := ""
+
+	Comma := ""
+	for _, v := range MassColumns {
+		Otvet = Otvet + Comma + v.Name
+
+		Comma = ", "
+	}
+
+	return Otvet
+}
