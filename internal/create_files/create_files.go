@@ -1640,27 +1640,6 @@ func IsStringOrUUID(TypeGo string) bool {
 	return false
 }
 
-// Convert_RequestIdToAlias - заменяет ID на Alias
-func Convert_RequestIdToAlias(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	TableName := Table1.Name
-	IDName, _ := Find_PrimaryKeyNameType(Table1)
-	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
-	if ok == false {
-		return Otvet
-	}
-
-	Otvet = strings.ReplaceAll(Otvet, "Request.ID", TextConvert+"(Request.ID)")
-	if TextConvert[:6] != "alias." {
-		return Otvet
-	}
-
-	Otvet = CheckAndAdd_ImportAlias(Otvet)
-
-	return Otvet
-}
-
 // Convert_IDToAlias - заменяет "ID" на "alias.Name(ID)"
 func Convert_IDToAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := VariableName
@@ -2145,68 +2124,6 @@ func FindText_IDMinimum(Column1 *types.Column) string {
 	return Otvet
 }
 
-// Replace_Model_ID_Test - заменяет текст "const LawsuitStatusType_ID_Test = 0" на нужный ИД
-func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	//if Table1.PrimaryKeyColumnsCount == 1 {
-	//	PrimaryKeyColumn := Find_PrimaryKeyColumn(Table1)
-	//	if PrimaryKeyColumn == nil {
-	//		return Otvet
-	//	}
-	//
-	//	Otvet = Replace_Model_ID_Test1(Otvet, Table1, PrimaryKeyColumn)
-	//} else {
-	Otvet = Replace_Model_ID_Test_ManyPK(Otvet, Table1)
-	//}
-
-	return Otvet
-}
-
-// Replace_Model_ID_Test_ManyPK - заменяет текст "const Postgres_ID_Test = 0" на нужные ИД, для много колонок PrimaryKey
-func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	MassPK := Find_PrimaryKeyColumns(Table1)
-	if len(MassPK) == 0 {
-		return Otvet
-	}
-
-	//заменим const Postgres_ID_Test = 0
-	TextFind := "const LawsuitStatusType_ID_Test = 0\n"
-	TextNew := ""
-	for _, Column1 := range MassPK {
-		TextNew = TextNew + Replace_Model_ID_Test1(TextFind, Table1, Column1)
-	}
-	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
-
-	//заменим Request.ID = LawsuitStatusType_ID_Test
-	TextFind = "\tRequest.ID = LawsuitStatusType_ID_Test\n"
-	TextNew = ""
-	for _, Column1 := range MassPK {
-		Name := strings.ToUpper(Column1.NameGo)
-		VariableName := Table1.NameGo + "_" + Name + "_Test"
-		//Text1 := Convert_GolangVariableToProtobufVariable(Table1, Column1, VariableName)
-		RequestColumnName := Find_RequestFieldName(Table1, Column1)
-		TextNew = TextNew + "\tRequest." + RequestColumnName + " = " + VariableName + "\n"
-	}
-	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
-
-	//заменим Request.ID = LawsuitStatusType_ID_Test
-	TextFind = "\tRequest2.ID = LawsuitStatusType_ID_Test\n"
-	TextNew = ""
-	for _, Column1 := range MassPK {
-		Name := strings.ToUpper(Column1.NameGo)
-		VariableName := Table1.NameGo + "_" + Name + "_Test"
-		//Text1 := Convert_GolangVariableToProtobufVariable(Table1, Column1, VariableName)
-		RequestColumnName := Find_RequestFieldName(Table1, Column1)
-		TextNew = TextNew + "\tRequest2." + RequestColumnName + " = " + VariableName + "\n"
-	}
-	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
-
-	return Otvet
-}
-
 // Replace_Model_ID_Test1 - заменяет текст "const LawsuitStatusType_ID_Test = 0" на нужный ИД
 func Replace_Model_ID_Test1(Text string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := Text
@@ -2263,13 +2180,6 @@ func ReplaceText_RequestID_and_Column(Text string, Table1 *types.Table, Column1 
 func ReplaceText_RequestID_PrimaryKey(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	//if Table1.PrimaryKeyColumnsCount == 1 {
-	//	TextRequest := "Request"
-	//	Otvet = ReplaceText_RequestID_PrimaryKey1(Otvet, Table1, TextRequest)
-	//
-	//	TextRequest = "Request2"
-	//	Otvet = ReplaceText_RequestID_PrimaryKey1(Otvet, Table1, TextRequest)
-	//} else {
 	TextRequest := "Request"
 	Otvet = ReplaceText_RequestID_PrimaryKey_ManyPK(Otvet, Table1, TextRequest)
 
@@ -2500,19 +2410,6 @@ func Replace_OtvetIDEqual0(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// Replace_ModelIDEqual1 - заменяет Otvet.ID = -1
-func Replace_ModelIDEqual1(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	//if Table1.PrimaryKeyColumnsCount == 1 {
-	//	Otvet = ReplaceModelIDEqual1_1(Otvet, Table1)
-	//} else {
-	Otvet = Replace_ModelIDEqual1_ManyPK(Otvet, Table1)
-	//}
-
-	return Otvet
-}
-
 //// Replace_ModelIDEqual1 - заменяет Otvet.ID = -1
 //func ReplaceModelIDEqual1_1(Text string, Table1 *types.Table) string {
 //	Otvet := Text
@@ -2528,23 +2425,6 @@ func Replace_ModelIDEqual1(Text string, Table1 *types.Table) string {
 //
 //	return Otvet
 //}
-
-// Replace_ModelIDEqual1_ManyPK - заменяет m.ID = -1
-func Replace_ModelIDEqual1_ManyPK(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	TextFind := "\tm.ID = -1\n"
-	TextNew := ""
-	MassPrimaryKey := Find_PrimaryKeyColumns(Table1)
-	for _, Column1 := range MassPrimaryKey {
-		Value := Find_NegativeValue(Column1.TypeGo)
-		TextNew = TextNew + "\tm." + Column1.NameGo + " = " + Value + "\n"
-	}
-
-	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
-
-	return Otvet
-}
 
 // Find_NegativeValue - возвращает -1 для числовых типов
 func Find_NegativeValue(TypeGo string) string {
@@ -2878,6 +2758,27 @@ func Find_ColumnNamesWithComma(MassColumns []*types.Column) string {
 
 		Comma = ", "
 	}
+
+	return Otvet
+}
+
+// Convert_RequestIdToAlias - заменяет ID на Alias
+func Convert_RequestIdToAlias(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TableName := Table1.Name
+	IDName, _ := Find_PrimaryKeyNameType(Table1)
+	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+	if ok == false {
+		return Otvet
+	}
+
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", TextConvert+"(Request.ID)")
+	if TextConvert[:6] != "alias." {
+		return Otvet
+	}
+
+	Otvet = CheckAndAdd_ImportAlias(Otvet)
 
 	return Otvet
 }

@@ -261,7 +261,7 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc, Table1)
 
 	//Postgres_ID_Test = ID Minimum
-	TextGRPCServer = create_files.Replace_Model_ID_Test(TextGRPCServer, Table1)
+	TextGRPCServer = Replace_Model_ID_Test(TextGRPCServer, Table1)
 
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
@@ -340,7 +340,7 @@ func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *typ
 	TextRequestID := create_files.FindText_ProtobufRequest_ManyPK(Table1)
 
 	//Postgres_ID_Test = ID Minimum
-	Otvet = create_files.Replace_Model_ID_Test(Otvet, Table1)
+	Otvet = Replace_Model_ID_Test(Otvet, Table1)
 
 	//if TextGolangLine != "" {
 	//	Otvet = strings.ReplaceAll(Otvet, "value := Request.FieldName", TextGolangLine)

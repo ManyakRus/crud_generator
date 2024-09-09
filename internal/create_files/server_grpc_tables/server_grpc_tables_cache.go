@@ -155,7 +155,7 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 		TextGRPCServer = create_files.Replace_Connect_WithApplicationName(TextGRPCServer)
 
 		//Postgres_ID_Test = ID Minimum
-		TextGRPCServer = create_files.Replace_Model_ID_Test(TextGRPCServer, Table1)
+		TextGRPCServer = Replace_Model_ID_Test(TextGRPCServer, Table1)
 
 		//замена RequestId{}
 		TextGRPCServer = create_files.ReplaceText_RequestID_PrimaryKey(TextGRPCServer, Table1)

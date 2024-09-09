@@ -5,6 +5,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
+	"strings"
 )
 
 // CreateAllFiles - создаёт все файлы в папке grpc_server
@@ -105,4 +106,66 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 		}
 	}
 	return err
+}
+
+// Replace_Model_ID_Test - заменяет текст "const LawsuitStatusType_ID_Test = 0" на нужный ИД
+func Replace_Model_ID_Test(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	//if Table1.PrimaryKeyColumnsCount == 1 {
+	//	PrimaryKeyColumn := Find_PrimaryKeyColumn(Table1)
+	//	if PrimaryKeyColumn == nil {
+	//		return Otvet
+	//	}
+	//
+	//	Otvet = Replace_Model_ID_Test1(Otvet, Table1, PrimaryKeyColumn)
+	//} else {
+	Otvet = Replace_Model_ID_Test_ManyPK(Otvet, Table1)
+	//}
+
+	return Otvet
+}
+
+// Replace_Model_ID_Test_ManyPK - заменяет текст "const Postgres_ID_Test = 0" на нужные ИД, для много колонок PrimaryKey
+func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	MassPK := create_files.Find_PrimaryKeyColumns(Table1)
+	if len(MassPK) == 0 {
+		return Otvet
+	}
+
+	//заменим const Postgres_ID_Test = 0
+	TextFind := "const LawsuitStatusType_ID_Test = 0\n"
+	TextNew := ""
+	for _, Column1 := range MassPK {
+		TextNew = TextNew + create_files.Replace_Model_ID_Test1(TextFind, Table1, Column1)
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим Request.ID = LawsuitStatusType_ID_Test
+	TextFind = "\tRequest.ID = LawsuitStatusType_ID_Test\n"
+	TextNew = ""
+	for _, Column1 := range MassPK {
+		Name := strings.ToUpper(Column1.NameGo)
+		VariableName := Table1.NameGo + "_" + Name + "_Test"
+		//Text1 := Convert_GolangVariableToProtobufVariable(Table1, Column1, VariableName)
+		RequestColumnName := create_files.Find_RequestFieldName(Table1, Column1)
+		TextNew = TextNew + "\tRequest." + RequestColumnName + " = " + VariableName + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим Request.ID = LawsuitStatusType_ID_Test
+	TextFind = "\tRequest2.ID = LawsuitStatusType_ID_Test\n"
+	TextNew = ""
+	for _, Column1 := range MassPK {
+		Name := strings.ToUpper(Column1.NameGo)
+		VariableName := Table1.NameGo + "_" + Name + "_Test"
+		//Text1 := Convert_GolangVariableToProtobufVariable(Table1, Column1, VariableName)
+		RequestColumnName := create_files.Find_RequestFieldName(Table1, Column1)
+		TextNew = TextNew + "\tRequest2." + RequestColumnName + " = " + VariableName + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	return Otvet
 }
