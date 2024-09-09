@@ -56,7 +56,7 @@ func CreateFilesCache(Table1 *types.Table) error {
 	}
 
 	//alias
-	TextCache = create_files.Replace_IDToAlias_OtvetID(TextCache, Table1)
+	TextCache = Replace_IDToAlias_OtvetID(TextCache, Table1)
 
 	//const CACHE_SIZE = 1000
 	CACHE_ELEMENTS_COUNT_MAX := config.Settings.CACHE_ELEMENTS_COUNT_MAX
@@ -159,20 +159,15 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 		//тип ID кэша
 		if Table1.PrimaryKeyColumnsCount == 1 {
 			//Postgres_ID_Test = ID Minimum
-			TextCache = create_files.Replace_Postgres_ID_Test(TextCache, Table1)
+			TextCache = Replace_Postgres_ID_Test(TextCache, Table1)
 
 		} else {
-			TextIDMany := "(ID)"
-			TextIDMany = create_files.Replace_IDtoID_Many(TextIDMany, Table1)
-			//TextCache = strings.ReplaceAll(TextCache, "(ID)", "("+Table1.Name+".StringIdentifier"+TextIDMany+")")
-			//TextCache = create_files.Replace_IDtoID_Many(TextCache, Table1)
-			//TextIDMany := create_files.FindText_NameTest_ManyPK(Table1)
-			//TextCache = strings.ReplaceAll(TextCache, "ReadFromCache(Postgres_ID_Test)", "ReadFromCache("+TextIDMany+")")
-			//TextCache = create_files.Replace_Postgres_ID_Test(TextCache, Table1)
+			//TextIDMany := "(ID)"
+			//TextIDMany = Replace_IDtoID_Many(TextIDMany, Table1)
 			EntityURL := create_files.Find_ModelTableURL(Table1.Name)
 			TextCache = create_files.AddImport(TextCache, EntityURL)
 
-			TextCache = create_files.Replace_Postgres_ID_Test_ManyPK(TextCache, Table1)
+			TextCache = Replace_Postgres_ID_Test(TextCache, Table1)
 		}
 	}
 
@@ -199,4 +194,72 @@ func CreateFilesCacheTest(Table1 *types.Table) error {
 	err = os.WriteFile(FilenameReadyCache, []byte(TextCache), constants.FILE_PERMISSIONS)
 
 	return err
+}
+
+// Replace_IDToAlias_OtvetID - заменяет "Otvet.ID = ID" на "Otvet.ID = alias.Name(ID)"
+func Replace_IDToAlias_OtvetID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TableName := Table1.Name
+	IDName, _ := create_files.Find_PrimaryKeyNameType(Table1)
+	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+	if ok == false {
+		return Otvet
+	}
+
+	if TextConvert[:6] != "alias." {
+		return Otvet
+	}
+
+	TextFrom := constants.TEXT_OTVET_ID_ALIAS
+	TextTo := TextFrom
+	TextTo = strings.ReplaceAll(TextFrom, " AliasFromInt(ID)", " "+TextConvert+"(ID)")
+
+	Otvet = strings.ReplaceAll(Otvet, TextFrom, TextTo)
+	//URL := FindURL_Alias()
+	//if URL == "" {
+	//	return Otvet
+	//}
+
+	Otvet = create_files.CheckAndAdd_ImportAlias(Otvet)
+
+	return Otvet
+}
+
+// Replace_Postgres_ID_Test - заменяет текст "const Postgres_ID_Test = 0" на нужные ИД, для много колонок PrimaryKey
+func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	MassPK := create_files.Find_PrimaryKeyColumns(Table1)
+	if len(MassPK) == 0 {
+		return Otvet
+	}
+
+	//заменим m1.ID = Postgres_ID_Test
+	TextFind := "\tm1.ID = Postgres_ID_Test\n"
+	TextNew := ""
+	for _, PrimaryKey1 := range MassPK {
+		Text1 := create_files.FindText_VariableEqual_ColumnName_Test(PrimaryKey1, "m1."+PrimaryKey1.NameGo)
+		TextNew = TextNew + "\t" + Text1 + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим ReadFromCache(Postgres_ID_Test)
+	TextFind = "ReadFromCache(Postgres_ID_Test)"
+	TextNew = "ReadFromCache("
+	Comma := ""
+	for _, PrimaryKey1 := range MassPK {
+		Name := create_files.FindText_ColumnNameTest(PrimaryKey1)
+		TextNew = TextNew + Comma + Name
+		Comma = ", "
+	}
+	TextNew = TextNew + ")"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	////заменим ненужные Otvet.ID на Otvet.Name
+	//PrimaryKey1 := MassPK[0]
+	//Name := create_files.FindText_ColumnNameTest(PrimaryKey1)
+	//Otvet = strings.ReplaceAll(Otvet, "Postgres_ID_Test", Name)
+
+	return Otvet
 }

@@ -89,7 +89,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	//TextCrud = RenameFunctions(TextCrud, Table1)
 
 	//заменяет "m.ID" на название колонки PrimaryKey
-	TextCrud = create_files.Replace_PrimaryKeyM_ID(TextCrud, Table1)
+	TextCrud = Replace_PrimaryKeyOtvetID(TextCrud, Table1)
 
 	//добавим импорт uuid
 	TextCrud = create_files.CheckAndAdd_ImportUUID_FromText(TextCrud)
@@ -153,7 +153,7 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 
 	Otvet = ReplaceCacheRemove(Otvet, Table1)
 
-	Otvet = create_files.Replace_PrimaryKeyOtvetID_ManyPK1(Otvet, Table1, "m")
+	Otvet = Replace_PrimaryKeyOtvetID(Otvet, Table1)
 
 	//запись null в nullable колонки
 	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
@@ -181,27 +181,15 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	Otvet = create_files.Replace_TemplateModel_to_Model(Otvet, Table1.NameGo)
 	Otvet = create_files.Replace_TemplateTableName_to_TableName(Otvet, Table1.Name)
 
-	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnNamePK", ColumnPK.NameGo)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnNameField", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
-	//Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	//TextIntFromAlias := create_files.ConvertFromAlias(Table1, Column1, "m")
-	//DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
-
-	//TextEqual0 := create_files.FindText_Equal0(Column1)
-	//Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", TextIntFromAlias+TextEqual0)
-	//Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", TextIntFromAlias)
 
 	//внешние ключи заменяем 0 на null
 	TextEqualEmpty := create_files.FindText_EqualEmpty(Column1, "Value")
 	Otvet = strings.ReplaceAll(Otvet, "Value == 0", TextEqualEmpty)
-	//if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
-	//	Otvet = strings.ReplaceAll(Otvet, "0==1 && ", "")
-	//}
 
 	return Otvet
 }
@@ -242,11 +230,6 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	TextCrud := string(bytes)
 	TextCrud = TextCrud + "\n"
 
-	//заменим имя пакета на новое
-	TextCrud = create_files.Replace_PackageName(TextCrud, DirReadyTable)
-	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
-	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
@@ -254,12 +237,10 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		//Postgres_ID_Test = ID Minimum
-		TextCrud = create_files.Replace_Postgres_ID_Test(TextCrud, Table1)
+		TextCrud = Replace_Postgres_ID_Update_Test(TextCrud, Table1)
 
-		TextCrud = create_files.Replace_PrimaryKeyM_ID(TextCrud, Table1)
-		TextCrud = create_files.Replace_PrimaryKeyOtvetID(TextCrud, Table1)
-		//TextCrud = create_files.Convert_RequestIdToAlias(TextCrud, Table1)
+		//TextCrud = create_files.Replace_PrimaryKeyM_ID(TextCrud, Table1)
+		//TextCrud = create_files.Replace_PrimaryKeyOtvetID(TextCrud, Table1)
 
 		ConstantsURL := create_files.Find_ConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
@@ -278,6 +259,12 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 
 	TextCrud = TextCrud + TextUpdateEveryColumn
 
+	//заменим имя пакета на новое
+	TextCrud = create_files.Replace_PackageName(TextCrud, DirReadyTable)
+	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
+	TextCrud = create_files.Replace_TemplateTableName_to_TableName(TextCrud, Table1.Name)
+
+	//
 	TextCrud = create_files.CheckAndAdd_ImportFmt(TextCrud)
 
 	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
@@ -337,21 +324,118 @@ func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Tab
 	DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
 
 	//Postgres_ID_Test = ID Minimum
-	Otvet = create_files.Replace_Postgres_ID_Test(Otvet, Table1)
+	Otvet = Replace_Postgres_ID_Update_Test(Otvet, Table1)
 
-	Otvet = create_files.Replace_PrimaryKeyM_ID(Otvet, Table1)
-	Otvet = create_files.Replace_PrimaryKeyOtvetID(Otvet, Table1)
+	//Otvet = create_files.Replace_PrimaryKeyM_ID(Otvet, Table1)
+	//Otvet = create_files.Replace_PrimaryKeyOtvetID(Otvet, Table1)
 
-	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
-	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
-	//Otvet = strings.ReplaceAll(Otvet, "Otvet.Name", "Otvet."+ColumnName)
-	//Otvet = strings.ReplaceAll(Otvet, "Postgres_ID_Test", DefaultValue)
 	Otvet = strings.ReplaceAll(Otvet, "TestUpdate(", "Test"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, ".Update(", "."+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, " DefaultValue", " "+DefaultValue)
+
+	return Otvet
+}
+
+// Replace_PrimaryKeyOtvetID - заменяет "Otvet.ID" на название колонки PrimaryKey
+func Replace_PrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	VariableName := "m"
+
+	//сортировка по названию таблиц
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	TextOtvetIDAliasID := ""
+	TextIfMId := ""
+	TextIfMIdNot0 := ""
+	TextM2ID := ""
+	TextIDRequestID := ""
+	TextOtvetIDID := ""
+	TextRequestIDmID := ""
+	TextRequestIDInt64ID := ""
+	TextOtvetIDmID := ""
+	TextMID0 := ""
+	TextOR := ""
+	for _, key1 := range keys {
+		Column1, _ := Table1.MapColumns[key1]
+		if Column1.IsPrimaryKey != true {
+			continue
+		}
+		TextOtvetIDID = TextOtvetIDID + "\t" + VariableName + "." + Column1.NameGo + " = " + Column1.NameGo + "\n"
+		RequestColumnName := create_files.Find_RequestFieldName(Table1, Column1)
+		Value, GolangCode := create_files.Convert_ProtobufVariableToGolangVariable(Table1, Column1, "Request.")
+		if GolangCode == "" {
+			TextIDRequestID = TextIDRequestID + "\t" + Column1.NameGo + " := " + Value + "\n"
+		} else {
+			TextIDRequestID = TextIDRequestID + "\t" + GolangCode + "\n"
+		}
+		TextM := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
+		TextRequestIDmID = TextRequestIDmID + "\t" + VariableName + "." + RequestColumnName + " = " + TextM + "\n"
+		TextInt64ID := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "")
+		TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
+		TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
+
+		DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
+
+		TextM2ID = TextM2ID + "\t" + "m2." + Column1.NameGo + " = " + "m." + Column1.NameGo + "\n"
+		TextIfMId = TextIfMId + TextOR + "m." + Column1.NameGo + " == " + DefaultValue
+		TextIfMIdNot0 = TextIfMIdNot0 + TextOR + "m." + Column1.NameGo + " != " + DefaultValue
+
+		TextMID0 = TextMID0 + TextOR + " (" + VariableName + "." + Column1.NameGo + " == " + DefaultValue + ")"
+		TextAlias := create_files.Convert_IDToAlias(Table1, Column1, Column1.NameGo)
+		TextOtvetIDAliasID = TextOtvetIDAliasID + "\t" + VariableName + "." + Column1.NameGo + " = " + TextAlias + "\n"
+		TextOR = " || "
+	}
+
+	//Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = AliasFromInt(ID)", TextOtvetIDAliasID)
+	////Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = AliasFromInt(ID)", TextOtvetIDID)
+	//Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = ProtoFromInt(m.ID)", TextRequestIDmID)
+	//Otvet = strings.ReplaceAll(Otvet, "\t"+VariableName+".ID = int64(ID)", TextRequestIDInt64ID)
+	//Otvet = strings.ReplaceAll(Otvet, "\tOtvet.ID = "+VariableName+".ID\n", TextOtvetIDmID)
+	Otvet = strings.ReplaceAll(Otvet, " IntFromAlias("+VariableName+".ID) == 0", TextMID0)
+	//Otvet = strings.ReplaceAll(Otvet, "\tm2.ID = int64(m.ID)", TextM2ID)
+	//Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", TextIfMId)
+	//Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", TextIfMIdNot0)
+
+	////заменим ID := Request.ID
+	//Otvet = strings.ReplaceAll(Otvet, "\tID := Request.ID\n", TextIDRequestID)
+
+	return Otvet
+}
+
+// Replace_Postgres_ID_Update_Test - заменяет текст "const Postgres_ID_Test = 0" на нужные ИД, для много колонок PrimaryKey
+func Replace_Postgres_ID_Update_Test(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	MassPK := create_files.Find_PrimaryKeyColumns(Table1)
+	if len(MassPK) == 0 {
+		return Otvet
+	}
+
+	//заменим Otvet.ID = Postgres_ID_Test
+	TextFind := "\tOtvet.ID = Postgres_ID_Test\n"
+	TextNew := ""
+	for _, PrimaryKey1 := range MassPK {
+		Text1 := create_files.FindText_VariableEqual_ColumnName_Test(PrimaryKey1, "Otvet."+PrimaryKey1.NameGo)
+		TextNew = TextNew + "\t" + Text1 + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим m.ID = Postgres_ID_Test
+	TextFind = "\tm.ID = Postgres_ID_Test\n"
+	TextNew = ""
+	for _, PrimaryKey1 := range MassPK {
+		Text1 := create_files.FindText_VariableEqual_ColumnName_Test(PrimaryKey1, "m."+PrimaryKey1.NameGo)
+		TextNew = TextNew + "\t" + Text1 + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 
 	return Otvet
 }

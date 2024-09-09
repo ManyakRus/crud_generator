@@ -158,7 +158,7 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 		//кэш
 		if config.Settings.NEED_CREATE_CACHE_API == false {
 			TextModel = DeleteFromInterfaceReadFromCache(TextModel, Table1)
-			TextModel = create_files.DeleteFunc_ReadFromCache(TextModel, Table1)
+			TextModel = DeleteFunc_ReadFromCache(TextModel, Table1)
 		}
 		TextModel = create_files.Replace_IDtoID(TextModel, Table1)
 
@@ -551,6 +551,21 @@ func DeleteFromInterfaceUpdateManyFields(TextModel string, Table1 *types.Table) 
 	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
 	TextFind := "\n\tUpdateManyFields(*" + ModelName + ", []string) error"
 	Otvet = strings.ReplaceAll(Otvet, TextFind, "")
+
+	return Otvet
+}
+
+// DeleteFunc_ReadFromCache - удаляет функцию ReadFromCache()
+func DeleteFunc_ReadFromCache(TextModel string, Table1 *types.Table) string {
+	Otvet := TextModel
+
+	//проверим есть ли колонка IsDeleted
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
+		return Otvet
+	}
+
+	Otvet = create_files.DeleteFuncFromComment(Otvet, "\n// ReadFromCache ")
+	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "ReadFromCache")
 
 	return Otvet
 }

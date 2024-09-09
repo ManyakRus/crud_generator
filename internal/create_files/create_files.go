@@ -249,12 +249,7 @@ func Find_PrimaryKeyColumns(Table1 *types.Table) []*types.Column {
 func Replace_PrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	//PrimaryKeyCount := Table1.PrimaryKeyColumnsCount
-	//if PrimaryKeyCount == 1 {
-	//	Otvet = Replace_PrimaryKeyOtvetID1(Otvet, Table1)
-	//} else {
 	Otvet = Replace_PrimaryKeyOtvetID_Many(Otvet, Table1)
-	//}
 
 	return Otvet
 }
@@ -436,12 +431,7 @@ func Replace_PrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variabl
 func Replace_PrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	//PrimaryKeyCount := Table1.PrimaryKeyColumnsCount
-	//if PrimaryKeyCount == 1 {
-	//	Otvet = ReplacePrimaryKeyM_ID1(Otvet, Table1)
-	//} else {
 	Otvet = Replace_PrimaryKeyM_ManyPK(Otvet, Table1)
-	//}
 
 	return Otvet
 }
@@ -458,71 +448,6 @@ func Replace_PrimaryKeyM_ManyPK(Text string, Table1 *types.Table) string {
 
 	return Otvet
 }
-
-//// ReplacePrimaryKeyM_ID1 - заменяет "m.ID" на название колонки PrimaryKey
-//func ReplacePrimaryKeyM_ID1(Text string, Table1 *types.Table) string {
-//	Otvet := Text
-//
-//	ColumnNamePK, ColumnTypeGoPK := Find_PrimaryKeyNameTypeGo(Table1)
-//	ColumnPK := Find_PrimaryKeyColumn(Table1)
-//
-//	//заменим ID-Alias на ID
-//	TableName := Table1.Name
-//	IDName, _ := Find_PrimaryKeyNameType(Table1)
-//	Alias, _ := types.MapConvertID[TableName+"."+IDName]
-//	OtvetColumnName := "m." + ColumnNamePK
-//	//if ok == true {
-//	//	OtvetColumnName = Alias + "(" + OtvetColumnName + ")"
-//	//}
-//
-//	//заменим int64(m.ID) на m.ID
-//	if mini_func.IsNumberType(ColumnTypeGoPK) == true {
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
-//	} else if ColumnTypeGoPK == "string" {
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+" == \"\"")
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+" != \"\"")
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
-//	} else if ColumnTypeGoPK == "uuid.UUID" || ColumnTypeGoPK == "uuid.NullUUID" {
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+" == uuid.Nil")
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+" != uuid.Nil")
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName+".String()")
-//	} else if ColumnTypeGoPK == "time.Time" {
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", OtvetColumnName+".IsZero() == true")
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", OtvetColumnName+".IsZero() == false")
-//		Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", OtvetColumnName)
-//	}
-//	//Otvet = strings.ReplaceAll(Otvet, "m.ID = ", OtvetColumnName+" = ")
-//	//Otvet = strings.ReplaceAll(Otvet, " = m.ID", " = "+OtvetColumnName)
-//	Otvet = strings.ReplaceAll(Otvet, ", m.ID,", ", "+OtvetColumnName+",")
-//	//Otvet = strings.ReplaceAll(Otvet, "(m.ID)", "("+OtvetColumnName+")")
-//	Value := Convert_ColumnToAlias(Table1, ColumnPK, "")
-//	Otvet = strings.ReplaceAll(Otvet, "m.ID = AliasFromInt(ID)", "m."+ColumnNamePK+" = "+Value)
-//
-//	Otvet = strings.ReplaceAll(Otvet, "\tm2.ID = ", "\tm2."+ColumnNamePK+" = ")
-//
-//	//Alias преобразуем в int64, и наоборот
-//	if Alias != "" {
-//		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", ColumnTypeGoPK+"(m."+ColumnNamePK+")")
-//		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", ColumnTypeGoPK+"(m."+ColumnNamePK+")")
-//		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
-//		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", Alias+"("+ColumnNamePK+")")
-//		Value := Convert_GolangVariableToProtobufVariable(Table1, ColumnPK, "m")
-//		Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
-//	} else {
-//		DefaultValue := FindText_DefaultValue(ColumnTypeGoPK)
-//		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID) == 0", "m."+ColumnNamePK+" == "+DefaultValue)
-//		//Value := Convert_GolangVariableToProtobufVariable(Table1, ColumnPK, "m")
-//		Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(m.ID)", "m."+ColumnNamePK) //не protobuf
-//		Value := Convert_GolangVariableToProtobufVariable(Table1, ColumnPK, "m")
-//		Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
-//		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(m.ID)", OtvetColumnName)
-//		Otvet = strings.ReplaceAll(Otvet, "AliasFromInt(ID)", "ID")
-//		Otvet = strings.ReplaceAll(Otvet, " ID=0", " "+ColumnNamePK+"="+DefaultValue)
-//		Otvet = strings.ReplaceAll(Otvet, "(m.ID)", "(m."+ColumnNamePK+")")
-//	}
-//
-//	return Otvet
-//}
 
 // ReplaceIntFromAlias - заменяет "m.ID" на текст m.ID или int64(m.ID)
 func ReplaceIntFromAlias(Text string, Table1 *types.Table, Column1 *types.Column, VariableName string) string {
@@ -1408,112 +1333,6 @@ func DeleteFunc_Find_byExtID(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFunc_DeleteCtx - удаляет функцию Delete_ctx()
-func DeleteFunc_DeleteCtx(TextModel string, Table1 *types.Table) string {
-	Otvet := TextModel
-
-	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted_Bool(Table1) == true {
-		return Otvet
-	}
-
-	Otvet = DeleteFuncFromComment(Otvet, "\n// Delete_ctx ")
-	Otvet = DeleteFuncFromFuncName(Otvet, "Delete_ctx")
-
-	return Otvet
-}
-
-// DeleteFunc_RestoreCtx - удаляет функцию Restore_ctx()
-func DeleteFunc_RestoreCtx(TextModel string, Table1 *types.Table) string {
-	Otvet := TextModel
-
-	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted_Bool(Table1) == true && config.Settings.HAS_IS_DELETED == true {
-		return Otvet
-	}
-
-	Otvet = DeleteFuncFromComment(Otvet, "\n// Restore_ctx ")
-	Otvet = DeleteFuncFromFuncName(Otvet, "Restore_ctx")
-
-	return Otvet
-}
-
-// DeleteFunc_Find_byExtIDCtx - удаляет функцию Find_ByExtID_ctx()
-func DeleteFunc_Find_byExtIDCtx(TextModel string, Table1 *types.Table) string {
-	Otvet := TextModel
-
-	//проверка есть ли колонки ExtID и ConnectionID
-	if Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
-		return Otvet
-	}
-
-	Otvet = DeleteFuncFromComment(Otvet, "\n// Find_ByExtID_ctx ")
-	Otvet = DeleteFuncFromFuncName(Otvet, "Find_ByExtID_ctx")
-
-	return Otvet
-}
-
-// DeleteFunc_TestDelete - удаляет функцию Delete()
-func DeleteFunc_TestDelete(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted_Bool(Table1) == true {
-		return Otvet
-	}
-
-	Otvet = DeleteFuncFromComment(Otvet, "\n// TestDelete ")
-	Otvet = DeleteFuncFromFuncName(Otvet, "TestDelete")
-
-	return Otvet
-}
-
-// DeleteFunc_ReadFromCache - удаляет функцию ReadFromCache()
-func DeleteFunc_ReadFromCache(TextModel string, Table1 *types.Table) string {
-	Otvet := TextModel
-
-	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted_Bool(Table1) == true {
-		return Otvet
-	}
-
-	Otvet = DeleteFuncFromComment(Otvet, "\n// ReadFromCache ")
-	Otvet = DeleteFuncFromFuncName(Otvet, "ReadFromCache")
-
-	return Otvet
-}
-
-// DeleteFunc_TestRestore - удаляет функцию Restore()
-func DeleteFunc_TestRestore(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	//проверим есть ли колонка IsDeleted
-	if Has_Column_IsDeleted_Bool(Table1) == true && config.Settings.HAS_IS_DELETED == true {
-		return Otvet
-	}
-
-	Otvet = DeleteFuncFromComment(Otvet, "\n// TestRestore ")
-	Otvet = DeleteFuncFromFuncName(Otvet, "TestRestore")
-
-	return Otvet
-}
-
-// DeleteFunc_Find_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFunc_TestFind_byExtID(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	//проверка есть ли колонки ExtID и ConnectionID
-	if Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
-		return Otvet
-	}
-
-	//
-	Otvet = DeleteFuncFromComment(Otvet, "\n// TestFind_ByExtID ")
-	Otvet = DeleteFuncFromFuncName(Otvet, "TestFind_ByExtID")
-
-	return Otvet
-}
-
 // Delete_EmptyLines - удаляет пустые строки
 func Delete_EmptyLines(Text string) string {
 	Otvet := Text
@@ -1842,36 +1661,6 @@ func Convert_RequestIdToAlias(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// Replace_IDToAlias_OtvetID - заменяет "Otvet.ID = ID" на "Otvet.ID = alias.Name(ID)"
-func Replace_IDToAlias_OtvetID(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	TableName := Table1.Name
-	IDName, _ := Find_PrimaryKeyNameType(Table1)
-	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
-	if ok == false {
-		return Otvet
-	}
-
-	if TextConvert[:6] != "alias." {
-		return Otvet
-	}
-
-	TextFrom := constants.TEXT_OTVET_ID_ALIAS
-	TextTo := TextFrom
-	TextTo = strings.ReplaceAll(TextFrom, " AliasFromInt(ID)", " "+TextConvert+"(ID)")
-
-	Otvet = strings.ReplaceAll(Otvet, TextFrom, TextTo)
-	//URL := FindURL_Alias()
-	//if URL == "" {
-	//	return Otvet
-	//}
-
-	Otvet = CheckAndAdd_ImportAlias(Otvet)
-
-	return Otvet
-}
-
 // Convert_IDToAlias - заменяет "ID" на "alias.Name(ID)"
 func Convert_IDToAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := VariableName
@@ -2161,22 +1950,7 @@ func Is_UUID_Type(TypeGo string) bool {
 func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	//if Table1.PrimaryKeyColumnsCount == 1 {
-	//	ColumnPK := Find_PrimaryKeyColumn(Table1)
-	//	if ColumnPK == nil {
-	//		return Otvet
-	//	}
-	//
-	//	Otvet = Replace_Postgres_ID_Test1(Otvet, Table1, ColumnPK)
-	//	TextFind := "Postgres_ID_Test"
-	//	PrimaryKeyName := strings.ToUpper(ColumnPK.NameGo)
-	//	Otvet = strings.ReplaceAll(Otvet, "\tm1.ID = "+TextFind, "\tm1."+ColumnPK.NameGo+" = "+TextFind)
-	//	Otvet = strings.ReplaceAll(Otvet, TextFind, PrimaryKeyName+`_Test`)
-	//	//Otvet = strings.ReplaceAll(Otvet, TextFind, PrimaryKeyName+`_Test`)
-	//	//Otvet = strings.ReplaceAll(Otvet, TextFind, `Postgres_`+PrimaryKeyName+`_Test`)
-	//} else {
 	Otvet = Replace_Postgres_ID_Test_ManyPK(Otvet, Table1)
-	//}
 
 	return Otvet
 }
