@@ -147,6 +147,13 @@ func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, M
 		Underline = "_"
 		Plus = "+"
 	}
+
+	//кроме помеченных на удаление
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
+		TextWhere = TextWhere + "\t" + `tx = tx.Where("is_deleted = ?", false)` + "\n"
+	}
+
+	//
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextWhere)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)

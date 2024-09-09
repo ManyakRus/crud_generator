@@ -289,3 +289,8 @@ message ResponseEmpty {
 message ResponseMass {
     repeated string MassModelString 	= 1; //массив объект-модель в формате json
 }
+
+message Request_Empty {
+    uint32 VersionModel  = 1; //версия структуры модели
+}
+

@@ -152,6 +152,14 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 		Plus = "+"
 		Comma = ", "
 	}
+
+	//
+	if len(MassColumns1) == 0 {
+		FuncName := constants.TEXT_READALL
+		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
+	}
+
+	//
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextWhere)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
@@ -283,7 +291,7 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 	//
 	TextAssignFind := "\t" + `Otvet.FieldName = 0` + "\n"
 	TextAssign := ""
-	TextFieldName_TEST := ""
+	TextFieldsDefaultValue := ""
 
 	Underline := ""
 	Comma := ""
@@ -296,15 +304,28 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 		TextAssign = TextAssign + "\t" + `Otvet.` + Column1.NameGo + ` = ` + DefaultValue + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
-		TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue
+		TextFieldsDefaultValue = TextFieldsDefaultValue + Comma + DefaultValue
 
 		Underline = "_"
 		Comma = ", "
 	}
+
+	//
+	if len(MassColumns1) == 0 {
+		FuncName := constants.TEXT_READALL
+		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
+	}
+
+	//
+	if TextFieldsDefaultValue == "" {
+		TextFieldsDefaultValue = `""`
+	}
+
+	//
 	Otvet = strings.ReplaceAll(Otvet, TextAssignFind, TextAssign)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithComma", FieldNamesWithComma)
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesDefault", TextFieldName_TEST)
+	Otvet = strings.ReplaceAll(Otvet, "FieldNamesDefault", TextFieldsDefaultValue)
 
 	return Otvet
 }

@@ -164,6 +164,14 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 		Plus = "+"
 	}
 
+	//функция ReadAll()
+	if len(MassColumnsString) == 0 {
+		FuncName := constants.TEXT_READALL
+		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
+		Otvet = strings.ReplaceAll(Otvet, ".RequestName", ".Request_Empty")
+	}
+
+	//
 	Otvet = strings.ReplaceAll(Otvet, "RequestName", RequestName)
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextAssign)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
@@ -326,6 +334,15 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 		Underline = "_"
 		Comma = ", "
 	}
+
+	//функция ReadAll()
+	if len(MassColumnsString) == 0 {
+		FuncName := constants.TEXT_READALL
+		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
+		Otvet = strings.ReplaceAll(Otvet, ".RequestName", ".Request_Empty")
+	}
+
+	//
 	Otvet = strings.ReplaceAll(Otvet, TextAssignFind, TextAssign)
 	Otvet = strings.ReplaceAll(Otvet, "RequestName", RequestName)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
