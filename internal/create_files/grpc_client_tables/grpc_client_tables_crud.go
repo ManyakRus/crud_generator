@@ -78,13 +78,14 @@ func CreateFiles(Table1 *types.Table) error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
 
 		//замена ID на PrimaryKey
-		//TextGRPCClient = create_files.Replace_PrimaryKeyOtvetID(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_PrimaryKeyRequest_ID(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_PrimaryKeyOtvetID(TextGRPCClient, Table1)
 
 		//замена ID на PrimaryKey
-		TextGRPCClient = create_files.Replace_PrimaryKeyM_ID(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_PrimaryKeyM_ID(TextGRPCClient, Table1)
 
 		//замена RequestId{}
-		TextGRPCClient = create_files.ReplaceText_RequestID_PrimaryKey(TextGRPCClient, Table1)
+		TextGRPCClient = ReplaceText_RequestID_PrimaryKey_ManyPK(TextGRPCClient, Table1)
 
 		//добавим импорт uuid
 		TextGRPCClient = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCClient)
@@ -163,16 +164,16 @@ func CreateFilesTest(Table1 *types.Table) error {
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientFuncURL)
 
 		//Postgres_ID_Test = ID Minimum
-		TextGRPCClient = create_files.Replace_Postgres_ID_Test(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_Postgres_ID_Test(TextGRPCClient, Table1)
 
 		//замена Otvet.ID = -1
-		TextGRPCClient = create_files.Replace_OtvetIDEqual1(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_OtvetIDEqual1(TextGRPCClient, Table1)
 
 		//замена Otvet.ID = 0
-		TextGRPCClient = create_files.Replace_OtvetIDEqual0(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_OtvetIDEqual0(TextGRPCClient, Table1)
 
 		//замена ID на PrimaryKey
-		TextGRPCClient = create_files.Replace_PrimaryKeyOtvetID(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_PrimaryKeyOtvetID(TextGRPCClient, Table1)
 
 		//добавим импорт uuid
 		TextGRPCClient = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCClient)
@@ -325,6 +326,135 @@ func DeleteFuncTestFind_byExtID(Text, ModelName string, Table1 *types.Table) str
 
 	//
 	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "TestFindByExtID")
+
+	return Otvet
+}
+
+// ReplaceText_RequestID_PrimaryKey_ManyPK - заменяет RequestId{} на RequestString{}
+func ReplaceText_RequestID_PrimaryKey_ManyPK(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TextRequestID := create_files.FindText_ProtobufRequest_ManyPK(Table1)
+
+	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
+	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*grpc_proto."+TextRequestID)
+
+	return Otvet
+}
+
+// Replace_Postgres_ID_Test - заменяет текст "const Postgres_ID_Test = 0" на нужные ИД, для много колонок PrimaryKey
+func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	MassPK := create_files.Find_PrimaryKeyColumns(Table1)
+	if len(MassPK) == 0 {
+		return Otvet
+	}
+
+	//заменим const Postgres_ID_Test = 0
+	TextFind := "const Postgres_ID_Test = 0\n"
+	TextNew := ""
+	for _, PrimaryKey1 := range MassPK {
+		TextNew = TextNew + create_files.Replace_Postgres_ID_Test1(TextFind, Table1, PrimaryKey1)
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим Otvet.ID = Postgres_ID_Test
+	TextFind = "\tOtvet.ID = Postgres_ID_Test\n"
+	TextNew = ""
+	for _, PrimaryKey1 := range MassPK {
+		Text1 := create_files.FindText_VariableEqual_ColumnName_Test(PrimaryKey1, "Otvet."+PrimaryKey1.NameGo)
+		TextNew = TextNew + "\t" + Text1 + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим m.ID = Postgres_ID_Test
+	TextFind = "\tm.ID = Postgres_ID_Test\n"
+	TextNew = ""
+	for _, PrimaryKey1 := range MassPK {
+		Text1 := create_files.FindText_VariableEqual_ColumnName_Test(PrimaryKey1, "m."+PrimaryKey1.NameGo)
+		TextNew = TextNew + "\t" + Text1 + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	////заменим m1.ID = Postgres_ID_Test
+	//TextFind = "\tm1.ID = Postgres_ID_Test\n"
+	//TextNew = ""
+	//for _, PrimaryKey1 := range MassPK {
+	//	Text1 := create_files.FindText_VariableEqual_ColumnName_Test(PrimaryKey1, "m1."+PrimaryKey1.NameGo)
+	//	TextNew = TextNew + "\t" + Text1 + "\n"
+	//}
+	//Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//заменим ReadFromCache(Postgres_ID_Test)
+	TextFind = "ReadFromCache(Postgres_ID_Test)"
+	TextNew = "ReadFromCache("
+	Comma := ""
+	for _, PrimaryKey1 := range MassPK {
+		Name := create_files.FindText_ColumnNameTest(PrimaryKey1)
+		TextNew = TextNew + Comma + Name
+		Comma = ", "
+	}
+	TextNew = TextNew + ")"
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	////заменим ненужные Otvet.ID на Otvet.Name
+	PrimaryKey1 := MassPK[0]
+	//Otvet = strings.ReplaceAll(Otvet, " Otvet.ID ", " Otvet."+PrimaryKey1.NameGo+" ")
+	//Otvet = strings.ReplaceAll(Otvet, " Otvet.ID)", " Otvet."+PrimaryKey1.NameGo+")")
+	Name := create_files.FindText_ColumnNameTest(PrimaryKey1)
+	Otvet = strings.ReplaceAll(Otvet, "Postgres_ID_Test", Name)
+
+	return Otvet
+}
+
+// Replace_OtvetIDEqual1 - заменяет Otvet.ID = -1
+func Replace_OtvetIDEqual1(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	PrimaryKeyColumns := create_files.Find_PrimaryKeyColumns(Table1)
+	if len(PrimaryKeyColumns) == 0 {
+		return Otvet
+	}
+
+	TextFind := "\tOtvet.ID = -1\n"
+	TextNew := ""
+	for _, ColumnPK1 := range PrimaryKeyColumns {
+		Value := create_files.Find_NegativeValue(ColumnPK1.TypeGo)
+		TextNew = TextNew + "\tOtvet." + ColumnPK1.NameGo + " = " + Value + "\n"
+	}
+
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	return Otvet
+}
+
+// Replace_OtvetIDEqual0 - заменяет Otvet.ID = -1
+func Replace_OtvetIDEqual0(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	if len(ColumnsPK) == 0 {
+		return Otvet
+	}
+
+	//
+	TextFind := "\tOtvet.ID = 0\n"
+	TextNew := ""
+	for _, ColumnPK1 := range ColumnsPK {
+		Value := create_files.FindText_DefaultValue(ColumnPK1.TypeGo)
+		TextNew = TextNew + "\tOtvet." + ColumnPK1.NameGo + " = " + Value + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+
+	//
+	TextFind = " Otvet.ID == 0"
+	for _, ColumnPK1 := range ColumnsPK {
+		Value := create_files.FindText_DefaultValue(ColumnPK1.TypeGo)
+		TextNew = " Otvet." + ColumnPK1.NameGo + " == " + Value + ""
+		Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
+		break
+	}
 
 	return Otvet
 }

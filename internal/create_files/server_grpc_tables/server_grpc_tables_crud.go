@@ -90,7 +90,7 @@ func CreateFiles(Table1 *types.Table) error {
 	//TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.Convert_RequestIdToAlias(TextGRPCServer, Table1)
+		TextGRPCServer = Convert_RequestIdToAlias(TextGRPCServer, Table1)
 	}
 
 	//удаление пустого импорта

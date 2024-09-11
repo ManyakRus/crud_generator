@@ -169,3 +169,24 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 
 	return Otvet
 }
+
+// Convert_RequestIdToAlias - заменяет ID на Alias
+func Convert_RequestIdToAlias(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TableName := Table1.Name
+	IDName, _ := create_files.Find_PrimaryKeyNameType(Table1)
+	TextConvert, ok := types.MapConvertID[TableName+"."+IDName]
+	if ok == false {
+		return Otvet
+	}
+
+	Otvet = strings.ReplaceAll(Otvet, "Request.ID", TextConvert+"(Request.ID)")
+	if TextConvert[:6] != "alias." {
+		return Otvet
+	}
+
+	Otvet = create_files.CheckAndAdd_ImportAlias(Otvet)
+
+	return Otvet
+}

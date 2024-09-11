@@ -159,11 +159,11 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 
 	//замена RequestId{}
-	Otvet = create_files.ReplaceText_RequestID_and_Column(Otvet, Table1, Column1)
+	Otvet = ReplaceText_RequestID_and_Column(Otvet, Table1, Column1)
 	Otvet = create_files.ReplaceText_RequestID_PrimaryKey(Otvet, Table1)
 
 	//замена ID на PrimaryKey
-	Otvet = create_files.Replace_PrimaryKeyM_ID(Otvet, Table1)
+	Otvet = Replace_PrimaryKeyM_ID(Otvet, Table1)
 
 	//
 	ColumnNameGolang := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
@@ -183,6 +183,9 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID)", " "+IDTypeGo+"(m.ID)")
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.FieldName", "Request."+TextRequestFieldName)
+
+	Otvet = Replace_PrimaryKeyRequest_ID(Otvet, Table1)
+	Otvet = Replace_PrimaryKeyOtvetID(Otvet, Table1)
 
 	return Otvet
 }
@@ -257,12 +260,12 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 		//GRPClientFuncURL := create_files.Find_GRPCClient_func_URL()
 		//TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPClientFuncURL)
 
-		TextGRPC_Client = create_files.Replace_Postgres_ID_Test(TextGRPC_Client, Table1)
+		TextGRPC_Client = Replace_Postgres_ID_Test(TextGRPC_Client, Table1)
 
-		TextGRPC_Client = create_files.Replace_PrimaryKeyOtvetID(TextGRPC_Client, Table1)
+		TextGRPC_Client = Replace_PrimaryKeyOtvetID(TextGRPC_Client, Table1)
 
 		//замена m.ID = Postgres_ID_Test
-		TextGRPC_Client = create_files.Replace_PrimaryKeyM_ID(TextGRPC_Client, Table1)
+		TextGRPC_Client = Replace_PrimaryKeyM_ID(TextGRPC_Client, Table1)
 
 	}
 
@@ -334,11 +337,11 @@ func FindTextUpdateEveryColumnTest(TextGRPC_ClientUpdateFunc string, Table1 *typ
 func FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextGRPC_ClientUpdateFunc
 
-	Otvet = create_files.Replace_Postgres_ID_Test(Otvet, Table1)
+	Otvet = Replace_Postgres_ID_Test(Otvet, Table1)
 
-	Otvet = create_files.ReplaceText_RequestID_and_Column(Otvet, Table1, Column1)
-	Otvet = create_files.Replace_PrimaryKeyM_ID(Otvet, Table1)
-	Otvet = create_files.Replace_PrimaryKeyOtvetID(Otvet, Table1)
+	Otvet = ReplaceText_RequestID_and_Column(Otvet, Table1, Column1)
+	Otvet = Replace_PrimaryKeyM_ID(Otvet, Table1)
+	Otvet = Replace_PrimaryKeyOtvetID(Otvet, Table1)
 
 	//ModelName := Table1.NameGo
 	ColumnName := Column1.NameGo
@@ -359,6 +362,19 @@ func FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc string, Table1 *ty
 	Otvet = strings.ReplaceAll(Otvet, "TestRead(", "Test"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, "error: ID =0", "error: "+ColumnName+" ="+DefaultValue)
 	Otvet = strings.ReplaceAll(Otvet, "_Update(", "_"+FuncName+"(")
+
+	return Otvet
+}
+
+// ReplaceText_RequestID_and_Column - заменяет RequestId{} на RequestString{}
+func ReplaceText_RequestID_and_Column(Text string, Table1 *types.Table, Column1 *types.Column) string {
+	Otvet := Text
+
+	//TypeGo := Column1.TypeGo
+
+	TextRequestID, _, _, _ := create_files.FindText_ProtobufRequest_ID_Type(Table1, Column1, "Request")
+	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
+	//Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextID)
 
 	return Otvet
 }

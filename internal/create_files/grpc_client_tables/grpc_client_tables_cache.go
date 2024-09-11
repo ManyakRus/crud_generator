@@ -87,13 +87,13 @@ func CreateFiles_GRPC_Client_Cache(Table1 *types.Table) error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
 
 		//замена Request.ID = Int64(ID)
-		TextGRPCClient = create_files.Replace_PrimaryKeyM_ID(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_PrimaryKeyRequest_ID(TextGRPCClient, Table1)
 
 		//замена RequestId{}
-		TextGRPCClient = create_files.ReplaceText_RequestID_PrimaryKey(TextGRPCClient, Table1)
+		TextGRPCClient = ReplaceText_RequestID_PrimaryKey(TextGRPCClient, Table1)
 
 		//замена int64(ID) на ID
-		TextGRPCClient = create_files.Replace_IDtoID(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_IDtoID(TextGRPCClient, Table1)
 
 		//добавим импорт uuid
 		TextGRPCClient = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCClient)
@@ -150,7 +150,7 @@ func CreateFiles_GRPC_Client_Cache_Test(Table1 *types.Table) error {
 		ModelTableName := create_files.Find_ModelTableURL(TableName)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, ModelTableName)
 
-		TextGRPCClient = create_files.Replace_Postgres_ID_Test(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_Postgres_ID_Test(TextGRPCClient, Table1)
 		////proto
 		//RepositoryGRPCProtoURL := create_files.Find_ProtoURL()
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryGRPCProtoURL)
@@ -174,7 +174,7 @@ func CreateFiles_GRPC_Client_Cache_Test(Table1 *types.Table) error {
 		//TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientFuncURL)
 
 		// замена ID на PrimaryKey
-		TextGRPCClient = create_files.Replace_PrimaryKeyOtvetID(TextGRPCClient, Table1)
+		TextGRPCClient = Replace_PrimaryKeyOtvetID(TextGRPCClient, Table1)
 
 		//добавим импорт uuid
 		TextGRPCClient = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCClient)
@@ -206,4 +206,32 @@ func CreateFiles_GRPC_Client_Cache_Test(Table1 *types.Table) error {
 	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
 
 	return err
+}
+
+// ReplaceText_RequestID_PrimaryKey - заменяет RequestId{} на RequestString{}
+func ReplaceText_RequestID_PrimaryKey(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TextRequestID := create_files.FindText_ProtobufRequest_ManyPK(Table1)
+
+	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
+	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*grpc_proto."+TextRequestID)
+
+	return Otvet
+}
+
+// Replace_IDtoID_Many - заменяет int64(ID) на ID, и остальные PrimaryKey
+func Replace_IDtoID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TextNames, TextNamesTypes, TextProtoNames := create_files.FindText_IDMany(Table1)
+
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceManyID(ID)", TextNames)
+	Otvet = strings.ReplaceAll(Otvet, "int64(ID)", TextProtoNames)
+	Otvet = strings.ReplaceAll(Otvet, "(ID int64", "("+TextNamesTypes)
+	Otvet = strings.ReplaceAll(Otvet, "(ID)", "("+TextNames+")")
+	Otvet = strings.ReplaceAll(Otvet, ", ID)", ", "+TextNames+")")
+	Otvet = strings.ReplaceAll(Otvet, ", ID int64)", ", "+TextNamesTypes+")")
+
+	return Otvet
 }

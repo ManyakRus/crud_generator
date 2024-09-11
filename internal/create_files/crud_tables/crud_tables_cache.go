@@ -79,9 +79,9 @@ func CreateFilesCache(Table1 *types.Table) error {
 		TextCache = strings.ReplaceAll(TextCache, "LRU[int64", "LRU[string")
 		TextCache = create_files.Replace_PrimaryKeyOtvetID_Many(TextCache, Table1)
 		TextIDMany := "(ID)"
-		TextIDMany = create_files.Replace_IDtoID_Many(TextIDMany, Table1)
+		TextIDMany = Replace_IDtoID(TextIDMany, Table1)
 		TextCache = strings.ReplaceAll(TextCache, "int64(ID)", "("+Table1.Name+".StringIdentifier"+TextIDMany+")")
-		TextCache = create_files.Replace_IDtoID_Many(TextCache, Table1)
+		TextCache = Replace_IDtoID(TextCache, Table1)
 	}
 
 	//uuid
@@ -260,6 +260,22 @@ func Replace_Postgres_ID_Test(Text string, Table1 *types.Table) string {
 	//PrimaryKey1 := MassPK[0]
 	//Name := create_files.FindText_ColumnNameTest(PrimaryKey1)
 	//Otvet = strings.ReplaceAll(Otvet, "Postgres_ID_Test", Name)
+
+	return Otvet
+}
+
+// Replace_IDtoID_Many - заменяет int64(ID) на ID, и остальные PrimaryKey
+func Replace_IDtoID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TextNames, TextNamesTypes, TextProtoNames := create_files.FindText_IDMany(Table1)
+
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceManyID(ID)", TextNames)
+	Otvet = strings.ReplaceAll(Otvet, "int64(ID)", TextProtoNames)
+	Otvet = strings.ReplaceAll(Otvet, "(ID int64", "("+TextNamesTypes)
+	Otvet = strings.ReplaceAll(Otvet, "(ID)", "("+TextNames+")")
+	Otvet = strings.ReplaceAll(Otvet, ", ID)", ", "+TextNames+")")
+	Otvet = strings.ReplaceAll(Otvet, ", ID int64)", ", "+TextNamesTypes+")")
 
 	return Otvet
 }

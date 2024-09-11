@@ -160,7 +160,7 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 			TextModel = DeleteFromInterfaceReadFromCache(TextModel, Table1)
 			TextModel = DeleteFunc_ReadFromCache(TextModel, Table1)
 		}
-		TextModel = create_files.Replace_IDtoID(TextModel, Table1)
+		TextModel = Replace_IDtoID(TextModel, Table1)
 
 		//
 		TextModel = AddFunctionStringIdentifier(TextModel, Table1)
@@ -566,6 +566,22 @@ func DeleteFunc_ReadFromCache(TextModel string, Table1 *types.Table) string {
 
 	Otvet = create_files.DeleteFuncFromComment(Otvet, "\n// ReadFromCache ")
 	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "ReadFromCache")
+
+	return Otvet
+}
+
+// Replace_IDtoID_Many - заменяет int64(ID) на ID, и остальные PrimaryKey
+func Replace_IDtoID(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	TextNames, TextNamesTypes, TextProtoNames := create_files.FindText_IDMany(Table1)
+
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceManyID(ID)", TextNames)
+	Otvet = strings.ReplaceAll(Otvet, "int64(ID)", TextProtoNames)
+	Otvet = strings.ReplaceAll(Otvet, "(ID int64", "("+TextNamesTypes)
+	Otvet = strings.ReplaceAll(Otvet, "(ID)", "("+TextNames+")")
+	Otvet = strings.ReplaceAll(Otvet, ", ID)", ", "+TextNames+")")
+	Otvet = strings.ReplaceAll(Otvet, ", ID int64)", ", "+TextNamesTypes+")")
 
 	return Otvet
 }

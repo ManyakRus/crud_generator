@@ -81,11 +81,11 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPCServer = TextGRPCServer + TextUpdateEveryColumn
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		TextGRPCServer = create_files.Convert_RequestIdToAlias(TextGRPCServer, Table1)
+		TextGRPCServer = Convert_RequestIdToAlias(TextGRPCServer, Table1)
 		TextGRPCServer = create_files.CheckAndAdd_ImportAlias(TextGRPCServer)
 
 		//замена RequestId{}
-		TextGRPCServer = create_files.ReplaceText_RequestID_PrimaryKey(TextGRPCServer, Table1)
+		TextGRPCServer = ReplaceText_RequestID_PrimaryKey(TextGRPCServer, Table1)
 
 		//добавим импорт uuid
 		TextGRPCServer = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCServer)
@@ -149,8 +149,8 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	IsPrimaryKey := create_files.IsPrimaryKeyColumn(Table1, Column1)
 
 	//замена ID на PrimaryKey
-	Otvet = create_files.Replace_PrimaryKeyOtvetID(Otvet, Table1)
-	Otvet = create_files.Replace_PrimaryKeyM_ID(Otvet, Table1)
+	//Otvet = create_files.Replace_PrimaryKeyOtvetID(Otvet, Table1)
+	Otvet = Replace_PrimaryKeyM_ID(Otvet, Table1)
 
 	//ColumnNameGolang := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
 
@@ -276,7 +276,7 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	//замена RequestId{}
-	TextGRPCServer = create_files.ReplaceText_RequestID_PrimaryKey(TextGRPCServer, Table1)
+	TextGRPCServer = ReplaceText_RequestID_PrimaryKey(TextGRPCServer, Table1)
 
 	//добавим импорт uuid
 	TextGRPCServer = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCServer)
