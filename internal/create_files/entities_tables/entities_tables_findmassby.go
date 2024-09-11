@@ -157,6 +157,7 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 	if len(MassColumns1) == 0 {
 		FuncName := constants.TEXT_READALL
 		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
+		Otvet = strings.ReplaceAll(Otvet, "(m)", "()")
 	}
 
 	//
@@ -347,14 +348,17 @@ func AddInterfacesFindMassBy(TextModel string, Table1 *types.Table) string {
 			Underline = "_"
 		}
 
+		TextFunc1 := ""
 		FuncName := "FindMassBy_" + FieldNamesWithUnderline
 		//функция ReadAll()
 		if len(TableColumns1.MassColumnNames) == 0 {
 			FuncName = constants.TEXT_READALL
+			TextFunc1 = "\n\t" + FuncName + "() ([]" + Table1.NameGo + ", error)"
+		} else {
+			TextFunc1 = "\n\t" + FuncName + "(*" + Table1.NameGo + ") ([]" + Table1.NameGo + ", error)"
 		}
 
 		//
-		TextFunc1 := "\n\t" + FuncName + "(*" + Table1.NameGo + ") ([]" + Table1.NameGo + ", error)"
 		TextFunc = TextFunc + TextFunc1
 
 	}

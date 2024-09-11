@@ -338,6 +338,8 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 	//функция ReadAll()
 	if len(MassColumnsString) == 0 {
 		FuncName := constants.TEXT_READALL
+		Otvet = strings.ReplaceAll(Otvet, "(ctx, db, Model)", "(ctx, db)")
+		Otvet = strings.ReplaceAll(Otvet, "\tModel.FieldName = Request.RequestFieldName\n", "")
 		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
 		Otvet = strings.ReplaceAll(Otvet, ".RequestName", ".Request_Empty")
 	}

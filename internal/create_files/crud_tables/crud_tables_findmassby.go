@@ -164,6 +164,9 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
 		ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
 		ColumnNamesWithComma = create_files.Find_ColumnNamesWithComma(ColumnsPK)
+		Otvet = strings.ReplaceAll(Otvet, ", m *lawsuit_status_types.LawsuitStatusType", "")
+		Otvet = strings.ReplaceAll(Otvet, "m *lawsuit_status_types.LawsuitStatusType", "")
+		Otvet = strings.ReplaceAll(Otvet, "(ctx, db, m)", "(ctx, db)")
 	}
 
 	//
@@ -321,6 +324,7 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 	if len(MassColumns1) == 0 {
 		FuncName := constants.TEXT_READALL
 		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
+		Otvet = strings.ReplaceAll(Otvet, "(&Otvet)", "()")
 	}
 
 	//
