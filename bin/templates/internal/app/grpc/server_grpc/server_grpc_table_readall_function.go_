@@ -1,0 +1,32 @@
+// LawsuitStatusType_ReadAll - находит все строки lawsuit_status_types в БД
+func (s *ServerGRPC) LawsuitStatusType_ReadAll(ctx context.Context, Request *grpc_proto.RequestEmpty) (*grpc_proto.ResponseMass, error) {
+	var Otvet grpc_proto.ResponseMass
+	var err error
+
+	// проверим совпадения версии модели
+	VersionServer := lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+	VersionClient := Request.VersionModel
+	if VersionServer != VersionClient {
+		err = ErrorModelVersion(lawsuit_status_types.LawsuitStatusType{})
+		return &Otvet, err
+	}
+
+	// запрос в БД
+	db := postgres_gorm.GetConnection()
+	Mass, err := crud_lawsuit_status_types.ReadAll_ctx(ctx, db)
+	if err != nil {
+		return &Otvet, err
+	}
+
+	// заполяем ответ
+	for _, v := range Mass {
+		ModelString, err := v.GetJSON()
+		if err != nil {
+			return &Otvet, err
+		}
+		Otvet.MassModelString = append(Otvet.MassModelString, ModelString)
+	}
+
+	return &Otvet, err
+}
+

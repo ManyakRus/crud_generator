@@ -1,0 +1,15 @@
+func TestCrud_GRPC_ReadAll(t *testing.T) {
+	config_main.LoadEnv()
+
+	grpc_client.Connect()
+	defer grpc_client.CloseConnection()
+
+	crud := grpc_lawsuit_status_types.Crud_GRPC{}
+	_, err := crud.ReadAll()
+
+	if err != nil && crud_func.IsRecordNotFound(err) == false {
+		t.Error("TestCrud_GRPC_ReadAll() error: ", err)
+	}
+
+}
+

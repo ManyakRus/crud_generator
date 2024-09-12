@@ -1,0 +1,16 @@
+func Test_server_LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(t *testing.T) {
+	config_main.LoadEnv()
+	crud_starter.InitCrudTransport_DB()
+
+	ctx := context.Background()
+	Request := grpc_proto.RequestName{}
+	Request.RequestFieldName = 0
+	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+
+	server1 := &ServerGRPC{}
+	_, err := server1.LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(ctx, &Request)
+	if err != nil && crud_func.IsRecordNotFound(err) == false {
+		t.Error("Test_server_LawsuitStatusType_FindMassBy_FieldNamesWithUnderline() error: ", err)
+	}
+}
+
