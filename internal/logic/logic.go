@@ -26,6 +26,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_nrpc_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/tables_tables"
 	"github.com/ManyakRus/crud_generator/internal/folders"
+	"github.com/ManyakRus/crud_generator/internal/load_configs"
 	"github.com/ManyakRus/crud_generator/internal/postgres"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
@@ -33,6 +34,22 @@ import (
 )
 
 //var MassTable []types.Table
+
+// FillGlobalVariables - заполняет глобальные переменные
+func FillGlobalVariables(MapAll map[string]*types.Table) {
+
+	// MassFindBy
+	Mass1 := create_files.FindMass_TableColumns(MapAll, types.MassFindBy_String)
+	types.MassFindBy = Mass1
+
+	// MassFindMassBy
+	Mass1 = create_files.FindMass_TableColumns(MapAll, types.MassFindMassBy_String)
+	types.MassFindMassBy = Mass1
+
+	// ReadAll
+	types.MapReadAll = load_configs.LoadReadAll(MapAll)
+
+}
 
 func StartFillAll() error {
 	var err error
@@ -50,12 +67,7 @@ func StartFillAll() error {
 	}
 
 	//
-	Mass1 := create_files.FindMass_TableColumns(MapAll, types.MassFindBy_String)
-	types.MassFindBy = Mass1
-
-	//
-	Mass1 = create_files.FindMass_TableColumns(MapAll, types.MassFindMassBy_String)
-	types.MassFindMassBy = Mass1
+	FillGlobalVariables(MapAll)
 
 	//копируем все файлы
 	dir := micro.ProgramDir_bin()

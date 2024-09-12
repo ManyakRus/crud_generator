@@ -75,3 +75,6 @@ var MassFindBy = make([]TableColumns, 0)
 
 // MassFindMassBy - карта функций которые будут созданы для поиска много строк в таблице
 var MassFindMassBy = make([]TableColumns, 0)
+
+// MapReadAll - таблицы, для которых нужна функция ReadAll()
+var MapReadAll = make(map[*Table]bool, 0)

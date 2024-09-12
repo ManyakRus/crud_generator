@@ -255,3 +255,40 @@ func LoadFindMassBy() {
 	}
 
 }
+
+// LoadReadAll - загружает из файла .json список таблиц, для которых нужна функция ReadAll()
+func LoadReadAll(MapAll map[string]*types.Table) map[*types.Table]bool {
+	Otvet := make(map[*types.Table]bool)
+
+	dir := micro.ProgramDir_bin()
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + config.Settings.TEMPLATES_READALL_FILENAME
+
+	var err error
+
+	//чтение файла
+	bytes, err := os.ReadFile(FileName)
+	if err != nil {
+		TextError := fmt.Sprint("ReadFile() error: ", err)
+		log.Panic(TextError)
+	}
+
+	MapStrings := make(map[string]string, 0)
+
+	//json в map strings
+	err = json.Unmarshal(bytes, MapStrings)
+	if err != nil {
+		log.Panic("Unmarshal() error: ", err)
+	}
+
+	//map strings в map tables
+	for MapName1, _ := range MapStrings {
+		Table1, ok := MapAll[MapName1]
+		if ok == false {
+			log.Debug("Table not found: ", MapName1)
+			continue
+		}
+		Otvet[Table1] = true
+	}
+
+	return Otvet
+}

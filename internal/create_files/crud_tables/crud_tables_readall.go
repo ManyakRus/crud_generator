@@ -11,11 +11,11 @@ import (
 	"strings"
 )
 
-// CreateFilesFindMassBy - создаёт 1 файл в папке crud
-func CreateFilesFindMassBy(Table1 *types.Table) error {
+// CreateFilesReadAll - создаёт 1 файл в папке crud
+func CreateFilesReadAll(Table1 *types.Table) error {
 	var err error
 
-	if len(types.MassFindMassBy_String) == 0 {
+	if len(types.MapReadAll) == 0 {
 		return err
 	}
 
@@ -26,10 +26,10 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FILENAME
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD + TableName
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_findmassby.go"
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_readall.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -48,7 +48,7 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 	TextCrud := string(bytes)
 
 	//загрузим шаблон файла функции
-	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_FILENAME
+	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_FILENAME
 	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
@@ -72,7 +72,7 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextCrudFunc := CreateFilesFindMassByTable(Table1, TextTemplatedFunction)
+	TextCrudFunc := CreateFilesReadAllTable(Table1, TextTemplatedFunction)
 	if TextCrudFunc == "" {
 		return err
 	}
@@ -108,23 +108,23 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesFindMassByTable - создаёт текст всех функций
-func CreateFilesFindMassByTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFilesReadAllTable - создаёт текст всех функций
+func CreateFilesReadAllTable(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
-	for _, TableColumns1 := range types.MassFindMassBy_String {
-		if TableColumns1.TableName != Table1.Name {
+	for TableReadAll1, _ := range types.MapReadAll {
+		if TableReadAll1.Name != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesFindMassByTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFilesReadAllTable1(Table1, TextTemplateFunction)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesFindMassByTable1 - создаёт текст всех функций
-func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
+// CreateFilesReadAllTable1 - создаёт текст всех функций
+func CreateFilesReadAllTable1(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := TextTemplateFunction
 
 	//
@@ -135,39 +135,19 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 	//
 	TextFind := "\t" + `tx = tx.Where("ColumnName = ?", m.FieldName)` + "\n"
 	TextWhere := ""
-	Underline := ""
-	Plus := ""
-	Comma := ""
-	for _, ColumnName1 := range MassColumns1 {
-		Column1, ok := Table1.MapColumns[ColumnName1]
-		if ok == false {
-			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
-		}
-		TextWhere = TextWhere + "\t" + `tx = tx.Where("` + ColumnName1 + ` = ?", m.` + Column1.NameGo + `)` + "\n"
-		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
-		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
-		ColumnNamesWithComma = ColumnNamesWithComma + Comma + Column1.Name
-
-		Underline = "_"
-		Plus = "+"
-		Comma = ", "
-	}
-
 	//кроме помеченных на удаление
 	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
 		TextWhere = TextWhere + "\t" + `tx = tx.Where("is_deleted = ?", false)` + "\n"
 	}
 
 	//
-	//if len(MassColumns1) == 0 {
-	//	FuncName := constants.TEXT_READALL
-	//	Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
-	//	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
-	//	ColumnNamesWithComma = create_files.Find_ColumnNamesWithComma(ColumnsPK)
-	//	Otvet = strings.ReplaceAll(Otvet, ", m *lawsuit_status_types.LawsuitStatusType", "")
-	//	Otvet = strings.ReplaceAll(Otvet, "m *lawsuit_status_types.LawsuitStatusType", "")
-	//	Otvet = strings.ReplaceAll(Otvet, "(ctx, db, m)", "(ctx, db)")
-	//}
+	FuncName := constants.TEXT_READALL
+	Otvet = strings.ReplaceAll(Otvet, "ReadAll_FieldNamesWithUnderline", FuncName)
+	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	ColumnNamesWithComma = create_files.Find_ColumnNamesWithComma(ColumnsPK)
+	Otvet = strings.ReplaceAll(Otvet, ", m *lawsuit_status_types.LawsuitStatusType", "")
+	Otvet = strings.ReplaceAll(Otvet, "m *lawsuit_status_types.LawsuitStatusType", "")
+	Otvet = strings.ReplaceAll(Otvet, "(ctx, db, m)", "(ctx, db)")
 
 	//
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextWhere)
@@ -178,11 +158,11 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 	return Otvet
 }
 
-// CreateFilesFindMassByTest - создаёт 1 файл в папке crud
-func CreateFilesFindMassByTest(Table1 *types.Table) error {
+// CreateFilesReadAllTest - создаёт 1 файл в папке crud
+func CreateFilesReadAllTest(Table1 *types.Table) error {
 	var err error
 
-	if len(types.MassFindMassBy_String) == 0 {
+	if len(types.MapReadAll) == 0 {
 		return err
 	}
 
@@ -193,10 +173,10 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_TEST_FILENAME
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD + TableName
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_findmassby_test.go"
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_readall_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -215,7 +195,7 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	TextCrud := string(bytes)
 
 	//загрузим шаблон файла функции
-	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_TEST_FILENAME
+	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME
 	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
@@ -239,7 +219,7 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextCrudFunc := CreateFilesFindMassByTestTable(Table1, TextTemplatedFunction)
+	TextCrudFunc := CreateFilesReadAllTestTable(Table1, TextTemplatedFunction)
 	if TextCrudFunc == "" {
 		return err
 	}
@@ -275,23 +255,23 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesFindMassByTestTable - создаёт текст всех функций
-func CreateFilesFindMassByTestTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFilesReadAllTestTable - создаёт текст всех функций
+func CreateFilesReadAllTestTable(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
-	for _, TableColumns1 := range types.MassFindMassBy_String {
-		if TableColumns1.TableName != Table1.Name {
+	for TableReadAll1, _ := range types.MapReadAll {
+		if TableReadAll1.Name != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesFindMassByTestTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFilesReadAllTestTable1(Table1, TextTemplateFunction)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesFindMassByTestTable1 - создаёт текст всех функций
-func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
+// CreateFilesReadAllTestTable1 - создаёт текст всех функций
+func CreateFilesReadAllTestTable1(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := TextTemplateFunction
 
 	//
@@ -303,34 +283,9 @@ func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction s
 	TextAssign := ""
 	TextFieldsDefaultValue := ""
 
-	Underline := ""
-	Comma := ""
-	for _, ColumnName1 := range MassColumns1 {
-		Column1, ok := Table1.MapColumns[ColumnName1]
-		if ok == false {
-			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
-		}
-		DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
-		TextAssign = TextAssign + "\t" + `Otvet.` + Column1.NameGo + ` = ` + DefaultValue + "\n"
-		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
-		FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
-		TextFieldsDefaultValue = TextFieldsDefaultValue + Comma + DefaultValue
-
-		Underline = "_"
-		Comma = ", "
-	}
-
-	////
-	//if len(MassColumns1) == 0 {
-	//	FuncName := constants.TEXT_READALL
-	//	Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
-	//	Otvet = strings.ReplaceAll(Otvet, "(&Otvet)", "()")
-	//}
-
-	//
-	if TextFieldsDefaultValue == "" {
-		TextFieldsDefaultValue = `""`
-	}
+	FuncName := constants.TEXT_READALL
+	Otvet = strings.ReplaceAll(Otvet, "ReadAll_FieldNamesWithUnderline", FuncName)
+	Otvet = strings.ReplaceAll(Otvet, "(&Otvet)", "()")
 
 	//
 	Otvet = strings.ReplaceAll(Otvet, TextAssignFind, TextAssign)
