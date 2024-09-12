@@ -14,120 +14,140 @@ var Settings SettingsINI
 
 // SettingsINI - структура для хранения всех нужных переменных окружения
 type SettingsINI struct {
-	INCLUDE_TABLES                                          string
-	EXCLUDE_TABLES                                          string
-	TEMPLATE_FOLDERNAME                                     string
-	TEMPLATE_FOLDERNAME_MODEL                               string
-	TEMPLATE_FOLDERNAME_DB                                  string
-	TEMPLATE_FOLDERNAME_CRUD                                string
-	TEMPLATE_FOLDERNAME_TABLES                              string
-	TEMPLATE_FOLDERNAME_GRPC                                string
-	TEMPLATE_FOLDERNAME_GRPC_PROTO                          string
-	TEMPLATE_FOLDERNAME_GRPC_SERVER                         string
-	TEMPLATE_FOLDERNAME_GRPC_CLIENT                         string
-	TEMPLATE_FOLDERNAME_NRPC                                string
-	TEMPLATE_FOLDERNAME_NRPC_SERVER                         string
-	TEMPLATE_FOLDERNAME_NRPC_CLIENT                         string
-	TEMPLATE_FOLDERNAME_GRPC_NRPC                           string
-	TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC                    string
-	TEMPLATE_SERVICE_NAME                                   string
-	TEMPLATE_FOLDERNAME_CRUD_STARTER                        string
-	TEMPLATE_FOLDERNAME_ALIAS                               string
-	TEMPLATE_FOLDER_CRUD_FUNCTIONS                          string
-	TEMPLATE_FOLDERNAME_MAIN                                string
-	TEMPLATE_REPOSITORY_URL                                 string
-	TEMPLATE_EXTERNAL_PROTO_FILENAME                        string
-	TEMPLATES_CRUD_FILENAME                                 string
-	TEMPLATES_CRUD_TEST_FILENAME                            string
-	TEMPLATES_ALIAS_FILENAME                                string
-	TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME               string
-	TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME          string
-	TEMPLATES_CONVERT_ID_FILENAME                           string
-	TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME                string
-	TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME          string
-	TEMPLATES_NAME_REPLACE_FILENAME                         string
-	TEMPLATES_NULLABLE_FILENAME                             string
-	TEMPLATES_CRUD_TABLE_UPDATE_FILENAME                    string
-	TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME               string
-	TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_FILENAME             string
-	TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME        string
-	TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME             string
-	TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME        string
-	TEMPLATES_GRPC_CLIENT_TABLES_CACHE_FILENAME             string
-	TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME        string
-	TEMPLATE_GRPC_CLIENT_FUNC_FILENAME                      string
-	TEMPLATE_GRPC_CLIENT_FUNC_TEST_FILENAME                 string
-	TEMPLATES_README_MD_FILENAME                            string
-	TEMPLATES_README_RUS_FILENAME                           string
-	TEMPLATE_FOLDERNAME_CONSTANTS                           string
-	TEMPLATES_CONSTANTS_FILENAME                            string
-	NEED_CREATE_MODEL_STRUCT                                bool
-	NEED_CREATE_MODEL_CRUD                                  bool
-	NEED_CREATE_DB                                          bool
-	NEED_CREATE_DB_TEST                                     bool
-	NEED_CREATE_DB_TABLES                                   bool
-	NEED_CREATE_GRPC                                        bool
-	NEED_CREATE_GRPC_SERVER_TEST                            bool
-	NEED_CREATE_GRPC_CLIENT_TEST                            bool
-	NEED_CREATE_NRPC                                        bool
-	NEED_CREATE_NRPC_SERVER_TEST                            bool
-	NEED_CREATE_NRPC_CLIENT_TEST                            bool
-	NEED_CREATE_MANUAL_FILES                                bool
-	NEED_CREATE_CACHE_API                                   bool
-	NEED_CREATE_CACHE_FILES                                 bool
-	NEED_CREATE_CACHE_TEST_FILES                            bool
-	SERVICE_NAME                                            string
-	SERVICE_REPOSITORY_URL                                  string
-	TEXT_TEMPLATE_MODEL                                     string
-	TEXT_TEMPLATE_TABLENAME                                 string
-	HAS_IS_DELETED                                          bool
-	READY_FOLDERNAME                                        string
-	TEXT_DB_MODIFIED_AT                                     string
-	TEXT_DB_CREATED_AT                                      string
-	TEXT_DB_IS_DELETED                                      string
-	USE_DEFAULT_TEMPLATE                                    bool
-	PREFIX_SERVER_GRPC                                      string
-	PREFIX_CLIENT_GRPC                                      string
-	PREFIX_CRUD                                             string
-	PREFIX_MODEL                                            string
-	PREFIX_TABLE                                            string
-	COMMENT_MODEL_STRUCT                                    string
-	TEXT_MODULE_GENERATED                                   string
-	READY_ALIAS_FILENAME                                    string
-	NEED_CREATE_UPDATE_EVERY_COLUMN                         bool
-	CACHE_ELEMENTS_COUNT_MAX                                int64
-	SINGULAR_TABLE_NAMES                                    bool
-	TEMPLATES_FINDBY_FILENAME                               string
-	TEMPLATES_FINDMASSBY_FILENAME                           string
-	TEMPLATES_CRUD_TABLE_FINDBY_FILENAME                    string
-	TEMPLATES_CRUD_TABLE_FINDBY_TEST_FILENAME               string
-	TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_FILENAME           string
-	TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME      string
-	TEMPLATES_CRUD_TABLE_FINDMASSBY_FILENAME                string
-	TEMPLATES_CRUD_TABLE_FINDMASSBY_TEST_FILENAME           string
-	TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_FILENAME       string
-	TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_TEST_FILENAME  string
-	TEMPLATES_GRPC_SERVER_FINDBY_FILENAME                   string
-	TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME          string
-	TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME               string
-	TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_FILENAME      string
-	TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME              string
-	TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME     string
-	TEMPLATES_GRPC_SERVER_FINDMASSBY_TEST_FILENAME          string
-	TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_TEST_FILENAME string
-	TEMPLATES_MODEL_FINDBY_FILENAME                         string
-	TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME                string
-	TEMPLATES_MODEL_FINDMASSBY_FILENAME                     string
-	TEMPLATES_MODEL_FINDMASSBY_FUNCTION_FILENAME            string
+	INCLUDE_TABLES                                   string
+	EXCLUDE_TABLES                                   string
+	TEMPLATE_FOLDERNAME                              string
+	TEMPLATE_FOLDERNAME_MODEL                        string
+	TEMPLATE_FOLDERNAME_DB                           string
+	TEMPLATE_FOLDERNAME_CRUD                         string
+	TEMPLATE_FOLDERNAME_TABLES                       string
+	TEMPLATE_FOLDERNAME_GRPC                         string
+	TEMPLATE_FOLDERNAME_GRPC_PROTO                   string
+	TEMPLATE_FOLDERNAME_GRPC_SERVER                  string
+	TEMPLATE_FOLDERNAME_GRPC_CLIENT                  string
+	TEMPLATE_FOLDERNAME_NRPC                         string
+	TEMPLATE_FOLDERNAME_NRPC_SERVER                  string
+	TEMPLATE_FOLDERNAME_NRPC_CLIENT                  string
+	TEMPLATE_FOLDERNAME_GRPC_NRPC                    string
+	TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC             string
+	TEMPLATE_SERVICE_NAME                            string
+	TEMPLATE_FOLDERNAME_CRUD_STARTER                 string
+	TEMPLATE_FOLDERNAME_ALIAS                        string
+	TEMPLATE_FOLDER_CRUD_FUNCTIONS                   string
+	TEMPLATE_FOLDERNAME_MAIN                         string
+	TEMPLATE_REPOSITORY_URL                          string
+	TEMPLATE_EXTERNAL_PROTO_FILENAME                 string
+	TEMPLATES_CRUD_FILENAME                          string
+	TEMPLATES_CRUD_TEST_FILENAME                     string
+	TEMPLATES_ALIAS_FILENAME                         string
+	TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME        string
+	TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME   string
+	TEMPLATES_CONVERT_ID_FILENAME                    string
+	TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME         string
+	TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME   string
+	TEMPLATES_NAME_REPLACE_FILENAME                  string
+	TEMPLATES_NULLABLE_FILENAME                      string
+	TEMPLATES_CRUD_TABLE_UPDATE_FILENAME             string
+	TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME        string
+	TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_FILENAME      string
+	TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME string
+	TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME      string
+	TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME string
+	TEMPLATES_GRPC_CLIENT_TABLES_CACHE_FILENAME      string
+	TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME string
+	TEMPLATE_GRPC_CLIENT_FUNC_FILENAME               string
+	TEMPLATE_GRPC_CLIENT_FUNC_TEST_FILENAME          string
+	TEMPLATES_README_MD_FILENAME                     string
+	TEMPLATES_README_RUS_FILENAME                    string
+	TEMPLATE_FOLDERNAME_CONSTANTS                    string
+	TEMPLATES_CONSTANTS_FILENAME                     string
+	NEED_CREATE_MODEL_STRUCT                         bool
+	NEED_CREATE_MODEL_CRUD                           bool
+	NEED_CREATE_DB                                   bool
+	NEED_CREATE_DB_TEST                              bool
+	NEED_CREATE_DB_TABLES                            bool
+	NEED_CREATE_GRPC                                 bool
+	NEED_CREATE_GRPC_SERVER_TEST                     bool
+	NEED_CREATE_GRPC_CLIENT_TEST                     bool
+	NEED_CREATE_NRPC                                 bool
+	NEED_CREATE_NRPC_SERVER_TEST                     bool
+	NEED_CREATE_NRPC_CLIENT_TEST                     bool
+	NEED_CREATE_MANUAL_FILES                         bool
+	NEED_CREATE_CACHE_API                            bool
+	NEED_CREATE_CACHE_FILES                          bool
+	NEED_CREATE_CACHE_TEST_FILES                     bool
+	SERVICE_NAME                                     string
+	SERVICE_REPOSITORY_URL                           string
+	TEXT_TEMPLATE_MODEL                              string
+	TEXT_TEMPLATE_TABLENAME                          string
+	HAS_IS_DELETED                                   bool
+	READY_FOLDERNAME                                 string
+	TEXT_DB_MODIFIED_AT                              string
+	TEXT_DB_CREATED_AT                               string
+	TEXT_DB_IS_DELETED                               string
+	USE_DEFAULT_TEMPLATE                             bool
+	PREFIX_SERVER_GRPC                               string
+	PREFIX_CLIENT_GRPC                               string
+	PREFIX_CRUD                                      string
+	PREFIX_MODEL                                     string
+	PREFIX_TABLE                                     string
+	COMMENT_MODEL_STRUCT                             string
+	TEXT_MODULE_GENERATED                            string
+	READY_ALIAS_FILENAME                             string
+	NEED_CREATE_UPDATE_EVERY_COLUMN                  bool
+	CACHE_ELEMENTS_COUNT_MAX                         int64
+	SINGULAR_TABLE_NAMES                             bool
 
-	TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME                   string
-	TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME              string
-	TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME          string
-	TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME     string
+	//---FINDBY---
+	TEMPLATES_FINDBY_FILENAME                                  string
+	TEMPLATES_CRUD_TABLE_FINDBY_FILENAME                       string
+	TEMPLATES_CRUD_TABLE_FINDBY_TEST_FILENAME                  string
+	TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_FILENAME              string
+	TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME         string
+	TEMPLATES_GRPC_SERVER_FINDBY_FILENAME                      string
+	TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME             string
+	TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME                 string
+	TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME        string
+	TEMPLATES_MODEL_FINDBY_FILENAME                            string
+	TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME                   string
+	TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME               string
+	TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME          string
+	TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME      string
+	TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME string
+
+	//---FINDMASSBY---
+	TEMPLATES_FINDMASSBY_FILENAME                                  string
+	TEMPLATES_CRUD_TABLE_FINDMASSBY_FILENAME                       string
+	TEMPLATES_CRUD_TABLE_FINDMASSBY_TEST_FILENAME                  string
+	TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_FILENAME              string
+	TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_TEST_FILENAME         string
+	TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME                      string
+	TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_FILENAME             string
+	TEMPLATES_GRPC_SERVER_FINDMASSBY_TEST_FILENAME                 string
+	TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_TEST_FILENAME        string
 	TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FILENAME               string
 	TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_TEST_FILENAME          string
 	TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_FILENAME      string
 	TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_TEST_FILENAME string
+	TEMPLATES_MODEL_FINDMASSBY_FILENAME                            string
+	TEMPLATES_MODEL_FINDMASSBY_FUNCTION_FILENAME                   string
+
+	//---READALL---
+	TEMPLATES_READALL_FILENAME                                  string
+	TEMPLATES_CRUD_TABLE_READALL_FILENAME                       string
+	TEMPLATES_CRUD_TABLE_READALL_TEST_FILENAME                  string
+	TEMPLATES_CRUD_TABLE_READALL_FUNCTION_FILENAME              string
+	TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME         string
+	TEMPLATES_GRPC_SERVER_READALL_FILENAME                      string
+	TEMPLATES_GRPC_SERVER_READALL_FUNCTION_FILENAME             string
+	TEMPLATES_GRPC_SERVER_READALL_TEST_FILENAME                 string
+	TEMPLATES_GRPC_SERVER_READALL_FUNCTION_TEST_FILENAME        string
+	TEMPLATES_GRPC_CLIENT_TABLES_READALL_FILENAME               string
+	TEMPLATES_GRPC_CLIENT_TABLES_READALL_TEST_FILENAME          string
+	TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_FILENAME      string
+	TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_TEST_FILENAME string
+	TEMPLATES_MODEL_READALL_FILENAME                            string
+	TEMPLATES_MODEL_READALL_FUNCTION_FILENAME                   string
 
 	TEMPLATES_CRUD_FUNC_FOLDERNAME    string
 	TEMPLATES_CRUD_FUNC_FILENAME      string
@@ -579,11 +599,6 @@ func FillSettings() {
 	Settings.TEMPLATES_FINDBY_FILENAME = s
 
 	//
-	Name = "TEMPLATES_FINDMASSBY_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_FINDMASSBY_FILENAME = s
-
-	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDBY_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_CRUD_TABLE_FINDBY_FILENAME = s
@@ -602,6 +617,62 @@ func FillSettings() {
 	Name = "TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_SERVER_FINDBY_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_SERVER_FINDBY_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_MODEL_FINDBY_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_MODEL_FINDBY_FILENAME = s
+
+	//
+	Name = "TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME = s
+
+	//-----------------FINDMASSBY---------------------------
+	//
+	Name = "TEMPLATES_FINDMASSBY_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_FINDMASSBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDMASSBY_FILENAME"
@@ -624,16 +695,6 @@ func FillSettings() {
 	Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_TEST_FILENAME = s
 
 	//
-	Name = "TEMPLATES_GRPC_SERVER_FINDBY_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_GRPC_SERVER_FINDBY_FILENAME = s
-
-	//
-	Name = "TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME = s
-
-	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME = s
@@ -642,16 +703,6 @@ func FillSettings() {
 	Name = "TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_FILENAME = s
-
-	//
-	Name = "TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME = s
-
-	//
-	Name = "TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDMASSBY_TEST_FILENAME"
@@ -664,16 +715,6 @@ func FillSettings() {
 	Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_TEST_FILENAME = s
 
 	//
-	Name = "TEMPLATES_MODEL_FINDBY_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_MODEL_FINDBY_FILENAME = s
-
-	//
-	Name = "TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME = s
-
-	//
 	Name = "TEMPLATES_MODEL_FINDMASSBY_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_MODEL_FINDMASSBY_FILENAME = s
@@ -682,26 +723,6 @@ func FillSettings() {
 	Name = "TEMPLATES_MODEL_FINDMASSBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_MODEL_FINDMASSBY_FUNCTION_FILENAME = s
-
-	//
-	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME = s
-
-	//
-	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME = s
-
-	//
-	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME = s
-
-	//
-	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FILENAME"
@@ -723,6 +744,83 @@ func FillSettings() {
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_TEST_FILENAME = s
 
+	//-----------------READALL---------------------------
+	//
+	Name = "TEMPLATES_READALL_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_READALL_FILENAME = s
+
+	//
+	Name = "TEMPLATES_CRUD_TABLE_READALL_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_TABLE_READALL_FILENAME = s
+
+	//
+	Name = "TEMPLATES_CRUD_TABLE_READALL_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_TABLE_READALL_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_CRUD_TABLE_READALL_FUNCTION_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_FILENAME = s
+
+	//
+	Name = "TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_SERVER_READALL_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_SERVER_READALL_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_SERVER_READALL_FUNCTION_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_SERVER_READALL_FUNCTION_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_SERVER_READALL_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_SERVER_READALL_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_SERVER_READALL_FUNCTION_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_SERVER_READALL_FUNCTION_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_MODEL_READALL_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_MODEL_READALL_FILENAME = s
+
+	//
+	Name = "TEMPLATES_MODEL_READALL_FUNCTION_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_MODEL_READALL_FUNCTION_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READALL_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READALL_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READALL_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READALL_TEST_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_FILENAME = s
+
+	//
+	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_TEST_FILENAME = s
+
+	//----------------CRUD_FUNC----------------------------
 	//
 	Name = "TEMPLATES_CRUD_FUNC_FOLDERNAME"
 	s = Getenv(Name, true)
@@ -738,6 +836,7 @@ func FillSettings() {
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME = s
 
+	//--------------------------------------------
 }
 
 // CurrentDirectory - возвращает текущую директорию ОС

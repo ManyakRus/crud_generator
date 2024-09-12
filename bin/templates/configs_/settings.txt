@@ -280,6 +280,7 @@ TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_FILENAME="crud_tables_findby_function.go_"
 TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME="crud_tables_findby_function_test.go_"
 
 
+#---FINDMASSBY---
 #TEMPLATES_FINDMASSBY_FILENAME - short filename of "findmassby_functions.json" file
 TEMPLATES_FINDMASSBY_FILENAME="findmassby_functions.json"
 
@@ -296,19 +297,6 @@ TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_FILENAME="crud_tables_findmassby_functi
 TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_TEST_FILENAME="crud_tables_findmassby_function_test.go_"
 
 
-#TEMPLATES_GRPC_SERVER_FINDBY_FILENAME - short filename of "server_grpc_table_findby.go_" file
-TEMPLATES_GRPC_SERVER_FINDBY_FILENAME="server_grpc_table_findby.go_"
-
-#TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME - short filename of "server_grpc_table_findby_function.go_" file
-TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME="server_grpc_table_findby_function.go_"
-
-#TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME - short filename of "server_grpc_table_findby_test.go_" file
-TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME="server_grpc_table_findby_test.go_"
-
-#TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME - short filename of "server_grpc_table_findby_function_test.go_" file
-TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME="server_grpc_table_findby_function_test.go_"
-
-
 #TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME - short filename of "server_grpc_table_findmassby.go_" file
 TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME="server_grpc_table_findmassby.go_"
 
@@ -322,30 +310,11 @@ TEMPLATES_GRPC_SERVER_FINDMASSBY_TEST_FILENAME="server_grpc_table_findmassby_tes
 TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_TEST_FILENAME="server_grpc_table_findmassby_function_test.go_"
 
 
-#TEMPLATES_MODEL_FINDBY_FILENAME - short filename of "model_table_findby.go_" file
-TEMPLATES_MODEL_FINDBY_FILENAME="model_table_findby.go_"
-
-#TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME - short filename of "model_table_findby_function.go_" file
-TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME="model_table_findby_function.go_"
-
 #TEMPLATES_MODEL_FINDMASSBY_FILENAME - short filename of "model_table_findmassby.go_" file
 TEMPLATES_MODEL_FINDMASSBY_FILENAME="model_table_findmassby.go_"
 
 #TEMPLATES_MODEL_FINDMASSBY_FUNCTION_FILENAME - short filename of "model_table_findmassby_function.go_" file
 TEMPLATES_MODEL_FINDMASSBY_FUNCTION_FILENAME="model_table_findmassby_function.go_"
-
-
-#TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME - short filename of "grpc_client_table_findby.go_" file
-TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME="grpc_client_table_findby.go_"
-
-#TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME - short filename of "grpc_client_table_findby_test.go_" file
-TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME="grpc_client_table_findby_test.go_"
-
-#TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME - short filename of "grpc_client_table_findby_function.go_" file
-TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME="grpc_client_table_findby_function.go_"
-
-#TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_findby_function_test.go_" file
-TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME="grpc_client_table_findby_function_test.go_"
 
 
 #TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FILENAME - short filename of "grpc_client_table_findmassby.go_" file
@@ -360,6 +329,8 @@ TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_FILENAME="grpc_client_table_fin
 #TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_findmassby_function_test.go_" file
 TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_TEST_FILENAME="grpc_client_table_findmassby_function_test.go_"
 
+
+
 #TEMPLATES_CRUD_FUNC_FOLDERNAME - folder name "crud_func"
 TEMPLATES_CRUD_FUNC_FOLDERNAME="pkg/db/crud_func"
 
@@ -368,4 +339,57 @@ TEMPLATES_CRUD_FUNC_FILENAME = "crud_func.go_"
 
 #TEMPLATES_CRUD_FUNC_TEST_FILENAME - short filename of "crud_func_test.go_" file
 TEMPLATES_CRUD_FUNC_TEST_FILENAME = "crud_func_test.go_"
+
+
+
+
+
+#---READALL---
+#TEMPLATES_READALL_FILENAME - short filename of "readall_functions.json" file
+TEMPLATES_READALL_FILENAME="readall_functions.json"
+
+#TEMPLATES_CRUD_TABLE_READALL_FILENAME - short filename of "crud_tables_readall.go_" file
+TEMPLATES_CRUD_TABLE_READALL_FILENAME="crud_tables_readall.go_"
+
+#TEMPLATES_CRUD_TABLE_READALL_TEST_FILENAME - short filename of "crud_tables_readall_test.go_" file
+TEMPLATES_CRUD_TABLE_READALL_TEST_FILENAME="crud_tables_readall_test.go_"
+
+#TEMPLATES_CRUD_TABLE_READALL_FUNCTION_FILENAME - short filename of "crud_tables_readall_function.go_" file
+TEMPLATES_CRUD_TABLE_READALL_FUNCTION_FILENAME="crud_tables_readall_function.go_"
+
+#TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME - short filename of "crud_tables_readall_function_test.go_" file
+TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME="crud_tables_readall_function_test.go_"
+
+
+#TEMPLATES_GRPC_SERVER_READALL_FILENAME - short filename of "server_grpc_table_readall.go_" file
+TEMPLATES_GRPC_SERVER_READALL_FILENAME="server_grpc_table_readall.go_"
+
+#TEMPLATES_GRPC_SERVER_READALL_FUNCTION_FILENAME - short filename of "server_grpc_table_readall_test.go_" file
+TEMPLATES_GRPC_SERVER_READALL_FUNCTION_FILENAME="server_grpc_table_readall_function.go_"
+
+#TEMPLATES_GRPC_SERVER_READALL_TEST_FILENAME - short filename of "server_grpc_table_readall_test.go_" file
+TEMPLATES_GRPC_SERVER_READALL_TEST_FILENAME="server_grpc_table_readall_test.go_"
+
+#TEMPLATES_GRPC_SERVER_READALL_FUNCTION_TEST_FILENAME - short filename of "server_grpc_table_readall_test.go_" file
+TEMPLATES_GRPC_SERVER_READALL_FUNCTION_TEST_FILENAME="server_grpc_table_readall_function_test.go_"
+
+
+#TEMPLATES_MODEL_READALL_FILENAME - short filename of "model_table_readall.go_" file
+TEMPLATES_MODEL_READALL_FILENAME="model_table_readall.go_"
+
+#TEMPLATES_MODEL_READALL_FUNCTION_FILENAME - short filename of "model_table_readall_function.go_" file
+TEMPLATES_MODEL_READALL_FUNCTION_FILENAME="model_table_readall_function.go_"
+
+
+#TEMPLATES_GRPC_CLIENT_TABLES_READALL_FILENAME - short filename of "grpc_client_table_readall.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READALL_FILENAME="grpc_client_table_readall.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_READALL_TEST_FILENAME - short filename of "grpc_client_table_readall_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READALL_TEST_FILENAME="grpc_client_table_readall_test.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_FILENAME - short filename of "grpc_client_table_readall_function.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_FILENAME="grpc_client_table_readall_function.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_readall_function_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_TEST_FILENAME="grpc_client_table_readall_function_test.go_"
 
