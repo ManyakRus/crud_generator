@@ -136,14 +136,13 @@ SELECT
 	    as is_primary_key
 
 FROM 
-	pg_catalog.pg_statio_all_tables as st
-	
-right join 
 	information_schema.columns c 
-on 
 	
-	c.table_schema = st.schemaname
-	and c.table_name   = st.relname
+left join 
+	pg_catalog.pg_statio_all_tables as st
+on 
+	st.schemaname = c.table_schema
+	and st.relname = c.table_name
 
 left join 
 	pg_catalog.pg_description pgd 
