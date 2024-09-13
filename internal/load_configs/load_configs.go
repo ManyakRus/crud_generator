@@ -275,7 +275,7 @@ func LoadReadAll(MapAll map[string]*types.Table) map[*types.Table]bool {
 	MapStrings := make(map[string]string, 0)
 
 	//json в map strings
-	err = json.Unmarshal(bytes, MapStrings)
+	err = json.Unmarshal(bytes, &MapStrings)
 	if err != nil {
 		log.Panic("Unmarshal() error: ", err)
 	}

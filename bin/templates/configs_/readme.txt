@@ -79,3 +79,12 @@ Need for automatic create functions searching many rows in table filtered by col
 example:
 [{"Table":"table_name1","Columns":["column_name1"]}]
 [{"Table":"table_name1","Columns":["column_name1","column_name2"]}]
+
+
+readall_function.json
+Need for automatic create functions ReadAll() returning all rows in table (exclude is_deleted rows)
+example:
+{
+      "lawsuits": ""
+}
+
