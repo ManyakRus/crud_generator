@@ -179,6 +179,9 @@ func CreateFiles_Model_crud(Table1 *types.Table, DirTemplatesModel, DirReadyMode
 
 		//
 		TextModel = AddInterfaces_FindMassBy(TextModel, Table1)
+
+		//
+		TextModel = AddInterfaces_ReadAll(TextModel, Table1)
 	}
 
 	//

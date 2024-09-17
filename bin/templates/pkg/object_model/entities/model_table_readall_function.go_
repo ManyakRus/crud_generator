@@ -1,11 +1,12 @@
 // ReadAll - возвращает все записи таблицы в БД
 func (m *LawsuitStatusType) ReadAll() ([]LawsuitStatusType, error) {
 	Otvet := make([]LawsuitStatusType, 0)
-	if Crud_manual_LawsuitStatusType == nil {
+
+	if Crud_LawsuitStatusType == nil {
 		return Otvet, db_constants.ErrorCrudIsNotInit
 	}
 
-	Otvet, err := Crud_LawsuitStatusType.ReadAll(m)
+	Otvet, err := Crud_LawsuitStatusType.ReadAll()
 
 	return Otvet, err
 }

@@ -41,10 +41,17 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 				return err
 			}
 
-			//
+			//FindMassBy
 			err = CreateFiles_FindMassBy(Table1)
 			if err != nil {
 				log.Error("CreateFiles_FindMassBy() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			//ReadAll
+			err = CreateFiles_ReadAll(Table1)
+			if err != nil {
+				log.Error("CreateFiles_ReadAll() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 
