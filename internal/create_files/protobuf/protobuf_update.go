@@ -8,8 +8,8 @@ import (
 	"strings"
 )
 
-// FindTextProtoTable1_UpdateEveryColumn - возвращает текст всех функций .proto для таблицы, обновления каждого поля таблицы
-func FindTextProtoTable1_UpdateEveryColumn(TextProto string, Table1 *types.Table) string {
+// FindText_ProtoTable1_UpdateEveryColumn - возвращает текст всех функций .proto для таблицы, обновления каждого поля таблицы
+func FindText_ProtoTable1_UpdateEveryColumn(TextProto string, Table1 *types.Table) string {
 	Otvet := "" //"\n\t//\n"
 
 	//ModelName := Table1.NameGo
@@ -25,23 +25,23 @@ func FindTextProtoTable1_UpdateEveryColumn(TextProto string, Table1 *types.Table
 	for _, key1 := range keys {
 		Column1, ok := Table1.MapColumns[key1]
 		if ok == false {
-			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
+			log.Panic("FindText_ProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
 		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 
-		Otvet1 := FindTextUpdateEveryColumn(TextProto, Table1, Column1)
+		Otvet1 := FindText_UpdateEveryColumn(TextProto, Table1, Column1)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// FindTextUpdateEveryColumn - возвращает текст .proto функции Update_ColumnName()
-func FindTextUpdateEveryColumn(TextProto string, Table1 *types.Table, Column1 *types.Column) string {
+// FindText_UpdateEveryColumn - возвращает текст .proto функции Update_ColumnName()
+func FindText_UpdateEveryColumn(TextProto string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := ""
-	Otvet2 := TextUpdateEveryColumn(Table1, Column1)
+	Otvet2 := Text_UpdateEveryColumn(Table1, Column1)
 
 	//добавим текст message RequestId_Float64 {
 	//Otvet = Otvet + AddTextMessageRequestID_ColumnType(TextProto, Table1, Column1)
@@ -57,8 +57,8 @@ func FindTextUpdateEveryColumn(TextProto string, Table1 *types.Table, Column1 *t
 	return Otvet
 }
 
-// TextUpdateEveryColumn - возвращает текст .proto функции Update_ColumnName()
-func TextUpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
+// Text_UpdateEveryColumn - возвращает текст .proto функции Update_ColumnName()
+func Text_UpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := ""
 
 	ModelName := Table1.NameGo
@@ -76,20 +76,20 @@ func TextUpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
 	return Otvet
 }
 
-// FindTextProtoTable1_UpdateManyFields - возвращает текст функции UpdateManyFields() .proto для таблицы
-func FindTextProtoTable1_UpdateManyFields(TextProto string, Table1 *types.Table) string {
+// FindText_ProtoTable1_UpdateManyFields - возвращает текст функции UpdateManyFields() .proto для таблицы
+func FindText_ProtoTable1_UpdateManyFields(TextProto string, Table1 *types.Table) string {
 	Otvet := "" //"\n\t//\n"
 
 	ModelName := Table1.NameGo
-	Otvet = Otvet + FindTextUpdateManyFields(TextProto, ModelName)
+	Otvet = Otvet + FindText_UpdateManyFields(TextProto, ModelName)
 
 	return Otvet
 }
 
-// FindTextUpdateManyFields - возвращает текст .proto
-func FindTextUpdateManyFields(TextProto string, ModelName string) string {
+// FindText_UpdateManyFields - возвращает текст .proto
+func FindText_UpdateManyFields(TextProto string, ModelName string) string {
 	Otvet := ""
-	Otvet2 := TextUpdateManyFields(ModelName)
+	Otvet2 := Text_UpdateManyFields(ModelName)
 
 	//проверка такой текст уже есть
 	pos1 := strings.Index(TextProto, Otvet2)
@@ -102,8 +102,8 @@ func FindTextUpdateManyFields(TextProto string, ModelName string) string {
 	return Otvet
 }
 
-// TextUpdateManyFields - возвращает текст .proto
-func TextUpdateManyFields(ModelName string) string {
+// Text_UpdateManyFields - возвращает текст .proto
+func Text_UpdateManyFields(ModelName string) string {
 	Otvet := "rpc " + ModelName + "_UpdateManyFields(Request_Model_MassString) returns (ResponseEmpty) {}"
 
 	return Otvet

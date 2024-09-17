@@ -1,1 +1,0 @@
-package crud_starter_tables

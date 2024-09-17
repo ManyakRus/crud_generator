@@ -28,23 +28,23 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 		}
 
 		if config.Settings.NEED_CREATE_UPDATE_EVERY_COLUMN == true {
-			err = CreateFilesUpdateEveryColumn(Table1)
+			err = CreateFiles_UpdateEveryColumn(Table1)
 			if err != nil {
 				log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 
 			//
-			err = CreateFilesFindBy(Table1)
+			err = CreateFiles_FindBy(Table1)
 			if err != nil {
-				log.Error("CreateFilesFindBy() table: ", Table1.Name, " error: ", err)
+				log.Error("CreateFiles_FindBy() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 
 			//
-			err = CreateFilesFindMassBy(Table1)
+			err = CreateFiles_FindMassBy(Table1)
 			if err != nil {
-				log.Error("CreateFilesFindMassBy() table: ", Table1.Name, " error: ", err)
+				log.Error("CreateFiles_FindMassBy() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 

@@ -11,8 +11,8 @@ import (
 	"strings"
 )
 
-// CreateFilesFindBy - создаёт 1 файл в папке crud
-func CreateFilesFindBy(Table1 *types.Table) error {
+// CreateFiles_FindBy - создаёт 1 файл в папке crud
+func CreateFiles_FindBy(Table1 *types.Table) error {
 	var err error
 
 	if len(types.MassFindBy_String) == 0 {
@@ -72,7 +72,7 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextModelFunc := CreateFilesFindByTable(Table1, TextTemplatedFunction)
+	TextModelFunc := CreateFiles_FindBy_Table(Table1, TextTemplatedFunction)
 	if TextModelFunc == "" {
 		return err
 	}
@@ -108,23 +108,23 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesFindByTable - создаёт текст всех функций
-func CreateFilesFindByTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFiles_FindBy_Table - создаёт текст всех функций
+func CreateFiles_FindBy_Table(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
 	for _, TableColumns1 := range types.MassFindBy_String {
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesFindByTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFiles_FindBy_Table1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesFindByTable1 - создаёт текст всех функций
-func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
+// CreateFiles_FindBy_Table1 - создаёт текст всех функций
+func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
 	Otvet := TextTemplateFunction
 
 	//
@@ -154,8 +154,8 @@ func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, M
 	return Otvet
 }
 
-// AddInterfacesFindBy - добавляет функцию внутрь интерфейса
-func AddInterfacesFindBy(TextModel string, Table1 *types.Table) string {
+// AddInterfaces_FindBy - добавляет функцию внутрь интерфейса
+func AddInterfaces_FindBy(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	if len(types.MassFindBy_String) == 0 {

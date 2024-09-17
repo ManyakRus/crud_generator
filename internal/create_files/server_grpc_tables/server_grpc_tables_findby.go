@@ -11,8 +11,8 @@ import (
 	"strings"
 )
 
-// CreateFilesFindBy - создаёт 1 файл в папке server_grpc
-func CreateFilesFindBy(Table1 *types.Table) error {
+// CreateFiles_FindBy - создаёт 1 файл в папке server_grpc
+func CreateFiles_FindBy(Table1 *types.Table) error {
 	var err error
 
 	if len(types.MassFindBy_String) == 0 {
@@ -75,7 +75,7 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextServerGRPCFunc := CreateFilesFindByTable(Table1, TextTemplatedFunction)
+	TextServerGRPCFunc := CreateFiles_FindBy_Table(Table1, TextTemplatedFunction)
 	if TextServerGRPCFunc == "" {
 		return err
 	}
@@ -111,23 +111,23 @@ func CreateFilesFindBy(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesFindByTable - создаёт текст всех функций
-func CreateFilesFindByTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFiles_FindBy_Table - создаёт текст всех функций
+func CreateFiles_FindBy_Table(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
 	for _, TableColumns1 := range types.MassFindBy_String {
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesFindByTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFiles_FindBy_Table1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesFindByTable1 - создаёт текст всех функций
-func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
+// CreateFiles_FindBy_Table1 - создаёт текст всех функций
+func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
 	Otvet := TextTemplateFunction
 
 	//
@@ -172,8 +172,8 @@ func CreateFilesFindByTable1(Table1 *types.Table, TextTemplateFunction string, M
 	return Otvet
 }
 
-// CreateFilesFindByTest - создаёт 1 файл в папке server_grpc
-func CreateFilesFindByTest(Table1 *types.Table) error {
+// CreateFiles_FindBy_Test - создаёт 1 файл в папке server_grpc
+func CreateFiles_FindBy_Test(Table1 *types.Table) error {
 	var err error
 
 	if len(types.MassFindBy_String) == 0 {
@@ -239,7 +239,7 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextGRPCServerFunc := CreateFilesFindByTestTable(Table1, TextTemplatedFunction)
+	TextGRPCServerFunc := CreateFiles_FindBy_Test_Table(Table1, TextTemplatedFunction)
 	if TextGRPCServerFunc == "" {
 		return err
 	}
@@ -275,23 +275,23 @@ func CreateFilesFindByTest(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesFindByTestTable - создаёт текст всех функций
-func CreateFilesFindByTestTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFiles_FindBy_Test_Table - создаёт текст всех функций
+func CreateFiles_FindBy_Test_Table(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
 	for _, TableColumns1 := range types.MassFindBy_String {
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesFindByTestTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFiles_FindBy_Test_Table1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesFindByTestTable1 - создаёт текст всех функций
-func CreateFilesFindByTestTable1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
+// CreateFiles_FindBy_Test_Table1 - создаёт текст всех функций
+func CreateFiles_FindBy_Test_Table1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
 	Otvet := TextTemplateFunction
 
 	//

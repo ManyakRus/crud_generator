@@ -32,27 +32,27 @@ func CreateFiles(Table1 *types.Table) error {
 
 	// создание файла struct
 	if config.Settings.NEED_CREATE_MODEL_STRUCT == true {
-		err = CreateFilesModel_struct(Table1, DirTemplatesModel, DirReadyModel)
+		err = CreateFiles_Model_struct(Table1, DirTemplatesModel, DirReadyModel)
 		if err != nil {
-			log.Error("CreateFilesModel_struct() table: ", Table1.Name, " error: ", err)
+			log.Error("CreateFiles_Model_struct() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 	}
 
 	// создание файла crud
 	if config.Settings.NEED_CREATE_MODEL_CRUD == true {
-		err = CreateFilesModel_crud(Table1, DirTemplatesModel, DirReadyModel)
+		err = CreateFiles_Model_crud(Table1, DirTemplatesModel, DirReadyModel)
 		if err != nil {
-			log.Error("CreateFilesModel_crud() table: ", Table1.Name, " error: ", err)
+			log.Error("CreateFiles_Model_crud() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 	}
 
 	// создание файла manual
 	if config.Settings.NEED_CREATE_MANUAL_FILES == true {
-		err = CreateFilesModel_manual(Table1, DirTemplatesModel, DirReadyModel)
+		err = CreateFiles_Model_Manual(Table1, DirTemplatesModel, DirReadyModel)
 		if err != nil {
-			log.Error("CreateFilesModel_manual() table: ", Table1.Name, " error: ", err)
+			log.Error("CreateFiles_Model_Manual() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 	}
@@ -60,8 +60,8 @@ func CreateFiles(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesModel_struct - создаёт 1 файл со структурой в папке model
-func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
+// CreateFiles_Model_struct - создаёт 1 файл со структурой в папке model
+func CreateFiles_Model_struct(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
 	var err error
 	//var ModelName string
 
@@ -115,8 +115,8 @@ func CreateFilesModel_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	return err
 }
 
-// CreateFilesModel_crud - создаёт 1 файл с crud операциями
-func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
+// CreateFiles_Model_crud - создаёт 1 файл с crud операциями
+func CreateFiles_Model_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
 	var err error
 
 	//ModelName := Table1.NameGo
@@ -151,13 +151,13 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 		TextModel = create_files.DeleteFunc_Find_byExtID(TextModel, Table1)
 
 		//удалим лишние функции из интерфейса
-		TextModel = DeleteFromInterfaceDelete(TextModel, Table1)
-		TextModel = DeleteFromInterfaceRestore(TextModel, Table1)
-		TextModel = DeleteFromInterfaceFind_ByExtID(TextModel, Table1)
-		TextModel = DeleteFromInterfaceUpdateManyFields(TextModel, Table1)
+		TextModel = DeleteFromInterface_Delete(TextModel, Table1)
+		TextModel = DeleteFromInterface_Restore(TextModel, Table1)
+		TextModel = DeleteFromInterface_Find_ByExtID(TextModel, Table1)
+		TextModel = DeleteFromInterface_UpdateManyFields(TextModel, Table1)
 		//кэш
 		if config.Settings.NEED_CREATE_CACHE_API == false {
-			TextModel = DeleteFromInterfaceReadFromCache(TextModel, Table1)
+			TextModel = DeleteFromInterface_ReadFromCache(TextModel, Table1)
 			TextModel = DeleteFunc_ReadFromCache(TextModel, Table1)
 		}
 		TextModel = Replace_IDtoID(TextModel, Table1)
@@ -175,15 +175,15 @@ func CreateFilesModel_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel
 		TextModel = create_files.CheckAndAdd_ImportFmt(TextModel)
 
 		//
-		TextModel = AddInterfacesFindBy(TextModel, Table1)
+		TextModel = AddInterfaces_FindBy(TextModel, Table1)
 
 		//
-		TextModel = AddInterfacesFindMassBy(TextModel, Table1)
+		TextModel = AddInterfaces_FindMassBy(TextModel, Table1)
 	}
 
 	//
 	if config.Settings.NEED_CREATE_UPDATE_EVERY_COLUMN == true {
-		TextModel = AddInterfaceUpdateEveryColumn(TextModel, Table1)
+		TextModel = AddInterface_UpdateEveryColumn(TextModel, Table1)
 	}
 
 	//создание текста
@@ -231,8 +231,8 @@ func DeleteFunctions(Text, TableName string, MapModelCrudDeleteFunctions map[str
 	return Otvet
 }
 
-// FindTextModelStruct - возвращает текст структуры и тегов gorm
-func FindTextModelStruct(TextModel string, Table1 *types.Table) (string, string, string, error) {
+// FindText_ModelStruct - возвращает текст структуры и тегов gorm
+func FindText_ModelStruct(TextModel string, Table1 *types.Table) (string, string, string, error) {
 	var Otvet string
 	var ModelName string
 	var err error
@@ -293,7 +293,7 @@ type ` + ModelName + ` struct {
 		}
 
 		var TextColumn string
-		TextModel, TextColumn = FindTextColumn(TextModel, Table1, Column1)
+		TextModel, TextColumn = FindText_Column(TextModel, Table1, Column1)
 		Otvet = Otvet + TextColumn + "\n"
 		Table1.MapColumns[key1] = Column1
 	}
@@ -302,8 +302,8 @@ type ` + ModelName + ` struct {
 	return TextModel, Otvet, ModelName, err
 }
 
-// FindTextColumn - возвращает текст gorm
-func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
+// FindText_Column - возвращает текст gorm
+func FindText_Column(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
 	Otvet := ""
 	//	Code string `json:"code" gorm:"column:code;default:0"`
 
@@ -317,13 +317,13 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	//}
 	//Type_go := SQLMapping1.GoType
 	Type_go := Column1.TypeGo
-	TextModel, Type_go = FindColumnTypeGoImport(TextModel, Table1, Column1)
+	TextModel, Type_go = Find_ColumnTypeGoImport(TextModel, Table1, Column1)
 	//Column1.TypeGo = Type_go
 	TextDefaultValue := ""
 	if Column1.IsPrimaryKey == false {
 		TextDefaultValue = create_files.FindText_DefaultGORMValue(Column1)
 	}
-	TextPrimaryKey := FindTextPrimaryKey(Column1.IsIdentity)
+	TextPrimaryKey := FindText_PrimaryKey(Column1.IsIdentity)
 	Description := Column1.Description
 	Description = create_files.PrintableString(Description) //экранирование символов
 
@@ -349,8 +349,8 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	return TextModel, Otvet
 }
 
-// FindTextPrimaryKey - возвращает строку gorm для primaryKey
-func FindTextPrimaryKey(Is_identity bool) string {
+// FindText_PrimaryKey - возвращает строку gorm для primaryKey
+func FindText_PrimaryKey(Is_identity bool) string {
 	Otvet := ""
 
 	if Is_identity == true {
@@ -360,8 +360,8 @@ func FindTextPrimaryKey(Is_identity bool) string {
 	return Otvet
 }
 
-// ReplaceModelStruct - заменяет структуру модели на новую
-func ReplaceModelStruct(TextTemplateModel, TextModelStruct string) string {
+// Replace_ModelStruct - заменяет структуру модели на новую
+func Replace_ModelStruct(TextTemplateModel, TextModelStruct string) string {
 	Otvet := ""
 
 	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
@@ -375,14 +375,14 @@ func ReplaceModelStruct(TextTemplateModel, TextModelStruct string) string {
 	}
 
 	if pos1 < 0 {
-		log.Panic("ReplaceModelStruct() error: in model.go_ not found text: ", TextFind1)
+		log.Panic("Replace_ModelStruct() error: in model.go_ not found text: ", TextFind1)
 	}
 
 	s2 := TextTemplateModel[pos1:]
 	TextFind1 = "}\n"
 	posEnd := strings.Index(s2, TextFind1)
 	if posEnd < 0 {
-		log.Panic("ReplaceModelStruct() error: in model.go_ not found text: ", TextFind1)
+		log.Panic("Replace_ModelStruct() error: in model.go_ not found text: ", TextFind1)
 	}
 
 	//
@@ -391,8 +391,8 @@ func ReplaceModelStruct(TextTemplateModel, TextModelStruct string) string {
 	return Otvet
 }
 
-// FindColumnTypeGoImport - заменяет ID на Alias
-func FindColumnTypeGoImport(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
+// Find_ColumnTypeGoImport - заменяет ID на Alias
+func Find_ColumnTypeGoImport(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
 	Otvet := Column1.TypeGo
 
 	//тип колонки из БД или из convert_id.json
@@ -435,8 +435,8 @@ func FillColumnsNameGo(MapAll *map[string]*types.Table) error {
 	return err
 }
 
-// DeleteFromInterfaceDelete - удаляет функцию Delete() из интерфейса
-func DeleteFromInterfaceDelete(TextModel string, Table1 *types.Table) string {
+// DeleteFromInterface_Delete - удаляет функцию Delete() из интерфейса
+func DeleteFromInterface_Delete(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
@@ -451,8 +451,8 @@ func DeleteFromInterfaceDelete(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFromInterfaceRestore - удаляет функцию Restore() из интерфейса
-func DeleteFromInterfaceRestore(TextModel string, Table1 *types.Table) string {
+// DeleteFromInterface_Restore - удаляет функцию Restore() из интерфейса
+func DeleteFromInterface_Restore(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted
@@ -467,8 +467,8 @@ func DeleteFromInterfaceRestore(TextModel string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFromInterfaceFind_ByExtID - удаляет функцию Find_ByExtID() из интерфейса
-func DeleteFromInterfaceFind_ByExtID(TextModel string, Table1 *types.Table) string {
+// DeleteFromInterface_Find_ByExtID - удаляет функцию Find_ByExtID() из интерфейса
+func DeleteFromInterface_Find_ByExtID(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонки ExtID и ConnectionID
@@ -483,8 +483,8 @@ func DeleteFromInterfaceFind_ByExtID(TextModel string, Table1 *types.Table) stri
 	return Otvet
 }
 
-// CreateFilesModel_manual - создаёт 1 файл с _manual.go
-func CreateFilesModel_manual(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
+// CreateFiles_Model_Manual - создаёт 1 файл с _manual.go
+func CreateFiles_Model_Manual(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
 	var err error
 
 	//
@@ -528,8 +528,8 @@ func CreateFilesModel_manual(Table1 *types.Table, DirTemplatesModel, DirReadyMod
 	return err
 }
 
-// DeleteFromInterfaceReadFromCache - удаляет функцию ReadFromCache() из интерфейса
-func DeleteFromInterfaceReadFromCache(TextModel string, Table1 *types.Table) string {
+// DeleteFromInterface_ReadFromCache - удаляет функцию ReadFromCache() из интерфейса
+func DeleteFromInterface_ReadFromCache(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
@@ -539,8 +539,8 @@ func DeleteFromInterfaceReadFromCache(TextModel string, Table1 *types.Table) str
 	return Otvet
 }
 
-// DeleteFromInterfaceUpdateManyFields - удаляет функцию UpdateManyFields() из интерфейса
-func DeleteFromInterfaceUpdateManyFields(TextModel string, Table1 *types.Table) string {
+// DeleteFromInterface_UpdateManyFields - удаляет функцию UpdateManyFields() из интерфейса
+func DeleteFromInterface_UpdateManyFields(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверим есть ли колонка IsDeleted

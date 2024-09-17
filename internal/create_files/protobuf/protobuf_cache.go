@@ -6,17 +6,17 @@ import (
 	"strings"
 )
 
-// FindTextProtoTable1_Cache - возвращает текст функции ReadFromCache() .proto для таблицы
-func FindTextProtoTable1_Cache(TextProto string, Table1 *types.Table) string {
+// FindText_ProtoTable1_Cache - возвращает текст функции ReadFromCache() .proto для таблицы
+func FindText_ProtoTable1_Cache(TextProto string, Table1 *types.Table) string {
 	Otvet := "" //"\n\t//\n"
 
-	Otvet = Otvet + FindTextReadFromCache(TextProto, Table1)
+	Otvet = Otvet + FindText_ReadFromCache(TextProto, Table1)
 
 	return Otvet
 }
 
-// FindTextReadFromCache - возвращает текст .proto
-func FindTextReadFromCache(TextProto string, Table1 *types.Table) string {
+// FindText_ReadFromCache - возвращает текст .proto
+func FindText_ReadFromCache(TextProto string, Table1 *types.Table) string {
 	Otvet := ""
 	Otvet2 := TextReadFromCache(Table1)
 

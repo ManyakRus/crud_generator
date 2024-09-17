@@ -19,17 +19,17 @@ func CreateAllFiles() error {
 		return err
 	}
 
-	err = CreateServerGRPCStarter()
+	err = CreateFiles_ServerGRPCStarter()
 	if err != nil {
-		log.Error("CreateServerGRPCStarter() error: ", err)
+		log.Error("CreateFiles_ServerGRPCStarter() error: ", err)
 		return err
 	}
 
 	return err
 }
 
-// CreateServerGRPCStarter - создаёт 1 файл в папке server_grpc
-func CreateServerGRPCStarter() error {
+// CreateFiles_ServerGRPCStarter - создаёт 1 файл в папке server_grpc
+func CreateFiles_ServerGRPCStarter() error {
 	var err error
 
 	//чтение файлов

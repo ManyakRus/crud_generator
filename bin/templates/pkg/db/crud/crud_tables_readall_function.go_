@@ -1,0 +1,31 @@
+// ReadAll - возвращает все записи в БД, кроме is_deleted=true
+func (crud Crud_DB) ReadAll() ([]lawsuit_status_types.LawsuitStatusType, error) {
+	Otvet := make([]lawsuit_status_types.LawsuitStatusType, 0)
+	var err error
+
+	ctxMain := context.Background()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	db := postgres_gorm.GetConnection()
+
+	Otvet, err = ReadAll_ctx(ctx, db)
+
+	return Otvet, err
+}
+
+// ReadAll_ctx - возвращает все записи в БД, кроме is_deleted=true
+func ReadAll_ctx(ctx context.Context, db *gorm.DB) ([]lawsuit_status_types.LawsuitStatusType, error) {
+	var err error
+	Otvet := make([]lawsuit_status_types.LawsuitStatusType, 0)
+
+	tx := db.WithContext(ctx)
+	
+	tx = tx.Where("is_deleted = ?", false)
+	tx = tx.Order("PrimaryKeyNamesWithComma")
+	tx = tx.Find(&Otvet)
+	err = tx.Error
+
+	return Otvet, err
+}
+

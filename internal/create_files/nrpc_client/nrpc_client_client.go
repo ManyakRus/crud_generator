@@ -84,8 +84,8 @@ func CreateNRPCClient() error {
 	return err
 }
 
-// CreateNRPCClientTest - создаёт 1 файл в папке grpc_client
-func CreateNRPCClientTest() error {
+// CreateNRPCClient_Test - создаёт 1 файл в папке grpc_client
+func CreateNRPCClient_Test() error {
 	var err error
 
 	//чтение файлов

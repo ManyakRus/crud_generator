@@ -138,8 +138,8 @@ func CreateFiles(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesTest - создаёт 1 файл в папке db
-func CreateFilesTest(Table1 *types.Table) error {
+// CreateFiles_Test - создаёт 1 файл в папке db
+func CreateFiles_Test(Table1 *types.Table) error {
 	var err error
 
 	TableName := strings.ToLower(Table1.Name)

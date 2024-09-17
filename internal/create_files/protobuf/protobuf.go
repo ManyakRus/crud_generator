@@ -84,9 +84,9 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 			continue
 		}
 
-		TextProtoNew = TextProtoNew + FindTextProtoTable1(TextProto, Table1)
-		TextProtoNew = TextProtoNew + FindTextProtoTable1_UpdateManyFields(TextProto, Table1)
-		TextProtoNew = TextProtoNew + FindTextProtoTable1_UpdateEveryColumn(TextProto, Table1)
+		TextProtoNew = TextProtoNew + FindText_ProtoTable1(TextProto, Table1)
+		TextProtoNew = TextProtoNew + FindText_ProtoTable1_UpdateManyFields(TextProto, Table1)
+		TextProtoNew = TextProtoNew + FindText_ProtoTable1_UpdateEveryColumn(TextProto, Table1)
 
 		//добавим текст FindBy
 		TextProto, TextProtoNew1 := FindText_FindBy(TextProto, Table1)
@@ -97,7 +97,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		TextProtoNew = TextProtoNew + TextProtoNew1
 
 		if config.Settings.NEED_CREATE_CACHE_API == true {
-			TextProtoNew = TextProtoNew + FindTextProtoTable1_Cache(TextProto, Table1)
+			TextProtoNew = TextProtoNew + FindText_ProtoTable1_Cache(TextProto, Table1)
 		}
 		TextProto = AddTextMessageRequestID(TextProto, Table1)
 	}
@@ -136,7 +136,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 //
 //
 //	//создание текста
-//	TextProtoTable := FindTextProtoTable1(Table1)
+//	TextProtoTable := FindText_ProtoTable1(Table1)
 //
 //	return Otvet
 //}
@@ -387,7 +387,7 @@ func AddTextMessageRequestID(TextProto string, Table1 *types.Table) string {
 	for _, key1 := range keys {
 		Column1, ok := Table1.MapColumns[key1]
 		if ok == false {
-			log.Panic("FindTextProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
+			log.Panic("FindText_ProtoTable1_UpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
 
 		Otvet = AddTextMessageRequestID_ColumnType_ManyPK(Otvet, Table1, Column1)

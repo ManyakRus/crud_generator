@@ -12,8 +12,8 @@ import (
 	"strings"
 )
 
-// CreateFilesCache - создаёт 1 файл в папке grpc_server
-func CreateFilesCache(Table1 *types.Table) error {
+// CreateFiles_Cache - создаёт 1 файл в папке grpc_server
+func CreateFiles_Cache(Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов
@@ -107,8 +107,8 @@ func CreateFilesCache(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesCacheTest - создаёт 1 файл в папке grpc_server
-func CreateFilesCacheTest(Table1 *types.Table) error {
+// CreateFiles_Cache_Test - создаёт 1 файл в папке grpc_server
+func CreateFiles_Cache_Test(Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов

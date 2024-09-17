@@ -55,9 +55,9 @@ func CreateFiles(Table1 *types.Table) error {
 
 	// создание файла struct
 	if config.Settings.NEED_CREATE_DB_TABLES == true {
-		err = CreateFilesTable_struct(Table1, DirTemplatesTable, DirReadyTable)
+		err = CreateFiles_Table_struct(Table1, DirTemplatesTable, DirReadyTable)
 		if err != nil {
-			log.Error("CreateFilesTable_struct() table: ", Table1.Name, " error: ", err)
+			log.Error("CreateFiles_Table_struct() table: ", Table1.Name, " error: ", err)
 			return err
 		}
 	}
@@ -65,8 +65,8 @@ func CreateFiles(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesTable_struct - создаёт 1 файл со структурой в папке model
-func CreateFilesTable_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTable string) error {
+// CreateFiles_Table_struct - создаёт 1 файл со структурой в папке model
+func CreateFiles_Table_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTable string) error {
 	var err error
 	var ModelName string
 
@@ -85,8 +85,8 @@ func CreateFilesTable_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTab
 	TextModel = create_files.Replace_PackageName(TextModel, DirReadyTable)
 
 	//создание текста
-	TextModel, TextModelStruct, ModelName, err := FindTextModelStruct(TextModel, Table1)
-	TextModel = ReplaceModelStruct(TextModel, TextModelStruct)
+	TextModel, TextModelStruct, ModelName, err := FindText_ModelStruct(TextModel, Table1)
+	TextModel = Replace_ModelStruct(TextModel, TextModelStruct)
 
 	//
 	TextModel = create_files.Replace_TemplateModel_to_Model(TextModel, Table1.NameGo)
@@ -97,10 +97,10 @@ func CreateFilesTable_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTab
 	//TextModel = config.Settings.TEXT_MODULE_GENERATED + TextModel
 
 	if config.Settings.HAS_IS_DELETED == true {
-		TextModel = DeleteFuncDelete(TextModel, ModelName, Table1)
-		TextModel = DeleteFuncRestore(TextModel, ModelName, Table1)
+		TextModel = DeleteFunc_Delete(TextModel, ModelName, Table1)
+		TextModel = DeleteFunc_Restore(TextModel, ModelName, Table1)
 	}
-	TextModel = DeleteFuncFind_byExtID(TextModel, ModelName, Table1)
+	TextModel = DeleteFunc_Find_byExtID(TextModel, ModelName, Table1)
 
 	//import time
 	TextModel = create_files.CheckAndAdd_ImportTime_FromText(TextModel)
@@ -123,8 +123,8 @@ func CreateFilesTable_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTab
 	return err
 }
 
-// FindTextModelStruct - возвращает текст структуры и тегов gorm
-func FindTextModelStruct(TextModel string, Table1 *types.Table) (string, string, string, error) {
+// FindText_ModelStruct - возвращает текст структуры и тегов gorm
+func FindText_ModelStruct(TextModel string, Table1 *types.Table) (string, string, string, error) {
 	var Otvet string
 	var ModelName string
 	var err error
@@ -208,7 +208,7 @@ type ` + ModelNameWithPrefix + ` struct {
 		}
 
 		var TextColumn string
-		TextModel, TextColumn = FindTextColumn(TextModel, Table1, Column1)
+		TextModel, TextColumn = FindText_Column(TextModel, Table1, Column1)
 		Otvet = Otvet + TextColumn + "\n"
 		Table1.MapColumns[key1] = Column1
 	}
@@ -223,8 +223,8 @@ type ` + ModelNameWithPrefix + ` struct {
 	return TextModel, Otvet, ModelName, err
 }
 
-// FindTextColumn - возвращает текст gorm
-func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
+// FindText_Column - возвращает текст gorm
+func FindText_Column(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
 	Otvet := ""
 	//	Code string `json:"code" gorm:"column:code;default:0"`
 
@@ -233,13 +233,13 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	ColumnModelName := create_files.FormatName(Column1.Name)
 
 	Type_go := Column1.TypeGo
-	TextModel, Type_go = FindColumnTypeGoImport(TextModel, Table1, Column1)
+	TextModel, Type_go = Find_ColumnTypeGoImport(TextModel, Table1, Column1)
 	//Column1.TypeGo = Type_go
 	TextDefaultValue := ""
 	if Column1.IsPrimaryKey == false {
 		TextDefaultValue = create_files.FindText_DefaultGORMValue(Column1)
 	}
-	TextPrimaryKey := FindTextPrimaryKey(Column1.IsPrimaryKey)
+	TextPrimaryKey := FindText_PrimaryKey(Column1.IsPrimaryKey)
 	Description := Column1.Description
 	Description = create_files.PrintableString(Description) //экранирование символов
 
@@ -266,8 +266,8 @@ func FindTextColumn(TextModel string, Table1 *types.Table, Column1 *types.Column
 	return TextModel, Otvet
 }
 
-// FindTextPrimaryKey - возвращает строку gorm для primaryKey
-func FindTextPrimaryKey(Is_identity bool) string {
+// FindText_PrimaryKey - возвращает строку gorm для primaryKey
+func FindText_PrimaryKey(Is_identity bool) string {
 	Otvet := ""
 
 	if Is_identity == true {
@@ -277,8 +277,8 @@ func FindTextPrimaryKey(Is_identity bool) string {
 	return Otvet
 }
 
-// ReplaceModelStruct - заменяет структуру модели на новую
-func ReplaceModelStruct(TextTemplateModel, TextModelStruct string) string {
+// Replace_ModelStruct - заменяет структуру модели на новую
+func Replace_ModelStruct(TextTemplateModel, TextModelStruct string) string {
 	Otvet := ""
 
 	ModelName := config.Settings.TEXT_TEMPLATE_MODEL
@@ -292,14 +292,14 @@ func ReplaceModelStruct(TextTemplateModel, TextModelStruct string) string {
 	}
 
 	if pos1 < 0 {
-		log.Panic("ReplaceModelStruct() error: in model.go_ not found text: ", TextFind1)
+		log.Panic("Replace_ModelStruct() error: in model.go_ not found text: ", TextFind1)
 	}
 
 	s2 := TextTemplateModel[pos1:]
 	TextFind1 = "}\n"
 	posEnd := strings.Index(s2, TextFind1)
 	if posEnd < 0 {
-		log.Panic("ReplaceModelStruct() error: in model.go_ not found text: ", TextFind1)
+		log.Panic("Replace_ModelStruct() error: in model.go_ not found text: ", TextFind1)
 	}
 
 	//
@@ -308,8 +308,8 @@ func ReplaceModelStruct(TextTemplateModel, TextModelStruct string) string {
 	return Otvet
 }
 
-// DeleteFuncDelete - удаляет функцию Delete()
-func DeleteFuncDelete(TextModel, ModelName string, Table1 *types.Table) string {
+// DeleteFunc_Delete - удаляет функцию Delete()
+func DeleteFunc_Delete(TextModel, ModelName string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	_, ok := Table1.MapColumns["is_deleted"]
@@ -338,8 +338,8 @@ func DeleteFuncDelete(TextModel, ModelName string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncRestore - удаляет функцию Restore()
-func DeleteFuncRestore(TextModel, Modelname string, Table1 *types.Table) string {
+// DeleteFunc_Restore - удаляет функцию Restore()
+func DeleteFunc_Restore(TextModel, Modelname string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	_, ok := Table1.MapColumns["is_deleted"]
@@ -368,8 +368,8 @@ func DeleteFuncRestore(TextModel, Modelname string, Table1 *types.Table) string 
 	return Otvet
 }
 
-// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) string {
+// DeleteFunc_Find_byExtID - удаляет функцию Find_ByExtID()
+func DeleteFunc_Find_byExtID(TextModel, Modelname string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//
@@ -402,8 +402,8 @@ func DeleteFuncFind_byExtID(TextModel, Modelname string, Table1 *types.Table) st
 	return Otvet
 }
 
-// FindColumnTypeGoImport - заменяет ID на Alias
-func FindColumnTypeGoImport(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
+// Find_ColumnTypeGoImport - заменяет ID на Alias
+func Find_ColumnTypeGoImport(TextModel string, Table1 *types.Table, Column1 *types.Column) (string, string) {
 	Otvet := Column1.TypeGo
 
 	//тип колонки из БД или из convert_id.json

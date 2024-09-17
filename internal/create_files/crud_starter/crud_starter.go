@@ -18,9 +18,9 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
 	//crud_starter.go
-	err = CreateFileCrudStarter(MapAll)
+	err = CreateFile_CrudStarter(MapAll)
 	if err != nil {
-		log.Error("CreateFileCrudStarter() error: ", err)
+		log.Error("CreateFile_CrudStarter() error: ", err)
 		return err
 	}
 
@@ -36,8 +36,8 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 	return err
 }
 
-// CreateFileCrudStarter - создаёт 1 файл в папке crud_starter
-func CreateFileCrudStarter(MapAll map[string]*types.Table) error {
+// CreateFile_CrudStarter - создаёт 1 файл в папке crud_starter
+func CreateFile_CrudStarter(MapAll map[string]*types.Table) error {
 	var err error
 
 	if config.Settings.NEED_CREATE_DB == false {

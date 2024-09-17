@@ -13,8 +13,8 @@ import (
 	"strings"
 )
 
-// CreateFilesUpdateEveryColumn - создаёт 1 файл в папке model, для каждой колонки функция Update()
-func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
+// CreateFiles_UpdateEveryColumn - создаёт 1 файл в папке model, для каждой колонки функция Update()
+func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	var err error
 
 	TableName := strings.ToLower(Table1.Name)
@@ -71,7 +71,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	for _, key1 := range keys {
 		Column1, ok := Table1.MapColumns[key1]
 		if ok == false {
-			log.Panic("CreateFilesUpdateEveryColumn() Table1.MapColumns[key1] = false")
+			log.Panic("CreateFiles_UpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
 		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
@@ -116,7 +116,7 @@ func (m *` + ModelName + `) Update_` + ColumnName + `() error {
 	return Otvet
 }
 
-func AddInterfaceUpdateEveryColumn(TextModel string, Table1 *types.Table) string {
+func AddInterface_UpdateEveryColumn(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//сортировка по названию таблиц
@@ -131,7 +131,7 @@ func AddInterfaceUpdateEveryColumn(TextModel string, Table1 *types.Table) string
 	for _, key1 := range keys {
 		Column1, ok := Table1.MapColumns[key1]
 		if ok == false {
-			log.Panic("CreateFilesUpdateEveryColumn() Table1.MapColumns[key1] = false")
+			log.Panic("CreateFiles_UpdateEveryColumn() Table1.MapColumns[key1] = false")
 		}
 		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue

@@ -11,8 +11,8 @@ import (
 	"strings"
 )
 
-// CreateFilesReadAll - создаёт 1 файл в папке crud
-func CreateFilesReadAll(Table1 *types.Table) error {
+// CreateFiles_ReadAll - создаёт 1 файл в папке crud
+func CreateFiles_ReadAll(Table1 *types.Table) error {
 	var err error
 
 	if len(types.MapReadAll) == 0 {
@@ -72,7 +72,7 @@ func CreateFilesReadAll(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextCrudFunc := CreateFilesReadAllTable(Table1, TextTemplatedFunction)
+	TextCrudFunc := CreateFiles_ReadAllTable(Table1, TextTemplatedFunction)
 	if TextCrudFunc == "" {
 		return err
 	}
@@ -108,58 +108,40 @@ func CreateFilesReadAll(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesReadAllTable - создаёт текст всех функций
-func CreateFilesReadAllTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFiles_ReadAllTable - создаёт текст всех функций
+func CreateFiles_ReadAllTable(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
 	for TableReadAll1, _ := range types.MapReadAll {
 		if TableReadAll1.Name != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesReadAllTable1(Table1, TextTemplateFunction)
+		Otvet1 := CreateFiles_ReadAll_Table1(Table1, TextTemplateFunction)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesReadAllTable1 - создаёт текст всех функций
-func CreateFilesReadAllTable1(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFiles_ReadAll_Table1 - создаёт текст всех функций
+func CreateFiles_ReadAll_Table1(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := TextTemplateFunction
 
-	//
-	FieldNamesWithUnderline := ""
-	FieldNamesWithComma := ""
-	ColumnNamesWithComma := ""
-
-	//
-	TextFind := "\t" + `tx = tx.Where("ColumnName = ?", m.FieldName)` + "\n"
-	TextWhere := ""
 	//кроме помеченных на удаление
-	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
-		TextWhere = TextWhere + "\t" + `tx = tx.Where("is_deleted = ?", false)` + "\n"
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == false {
+		TextWhere := "\t" + `tx = tx.Where("is_deleted = ?", false)` + "\n"
+		Otvet = strings.ReplaceAll(Otvet, TextWhere, "")
 	}
 
 	//
-	FuncName := constants.TEXT_READALL
-	Otvet = strings.ReplaceAll(Otvet, "ReadAll_FieldNamesWithUnderline", FuncName)
-	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
-	ColumnNamesWithComma = create_files.Find_ColumnNamesWithComma(ColumnsPK)
-	Otvet = strings.ReplaceAll(Otvet, ", m *lawsuit_status_types.LawsuitStatusType", "")
-	Otvet = strings.ReplaceAll(Otvet, "m *lawsuit_status_types.LawsuitStatusType", "")
-	Otvet = strings.ReplaceAll(Otvet, "(ctx, db, m)", "(ctx, db)")
-
-	//
-	Otvet = strings.ReplaceAll(Otvet, TextFind, TextWhere)
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
-	Otvet = strings.ReplaceAll(Otvet, "ColumnNamesWithComma", ColumnNamesWithComma)
+	PrimaryKeyNamesWithComma := create_files.Find_PrimaryKeyNamesWithComma(Table1)
+	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeyNamesWithComma", PrimaryKeyNamesWithComma)
 
 	return Otvet
 }
 
-// CreateFilesReadAllTest - создаёт 1 файл в папке crud
-func CreateFilesReadAllTest(Table1 *types.Table) error {
+// CreateFiles_ReadAll_Test - создаёт 1 файл в папке crud
+func CreateFiles_ReadAll_Test(Table1 *types.Table) error {
 	var err error
 
 	if len(types.MapReadAll) == 0 {
@@ -210,8 +192,8 @@ func CreateFilesReadAllTest(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
 
-		ModelTableURL := create_files.Find_ModelTableURL(TableName)
-		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+		//ModelTableURL := create_files.Find_ModelTableURL(TableName)
+		//TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
 		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
@@ -219,7 +201,7 @@ func CreateFilesReadAllTest(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextCrudFunc := CreateFilesReadAllTestTable(Table1, TextTemplatedFunction)
+	TextCrudFunc := CreateFiles_ReadAll_TestTable(Table1, TextTemplatedFunction)
 	if TextCrudFunc == "" {
 		return err
 	}
@@ -255,43 +237,34 @@ func CreateFilesReadAllTest(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesReadAllTestTable - создаёт текст всех функций
-func CreateFilesReadAllTestTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFiles_ReadAll_TestTable - создаёт текст всех функций
+func CreateFiles_ReadAll_TestTable(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
 	for TableReadAll1, _ := range types.MapReadAll {
 		if TableReadAll1.Name != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesReadAllTestTable1(Table1, TextTemplateFunction)
+		Otvet1 := CreateFiles_ReadAll_Test_Table1(Table1, TextTemplateFunction)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesReadAllTestTable1 - создаёт текст всех функций
-func CreateFilesReadAllTestTable1(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFiles_ReadAll_Test_Table1 - создаёт текст всех функций
+func CreateFiles_ReadAll_Test_Table1(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := TextTemplateFunction
 
 	//
-	FieldNamesWithUnderline := ""
-	FieldNamesWithComma := ""
+	TextFieldsDefaultValue := create_files.Find_PrimaryKeysDefaultValues(Table1)
 
 	//
-	TextAssignFind := "\t" + `Otvet.FieldName = 0` + "\n"
-	TextAssign := ""
-	TextFieldsDefaultValue := ""
-
-	FuncName := constants.TEXT_READALL
-	Otvet = strings.ReplaceAll(Otvet, "ReadAll_FieldNamesWithUnderline", FuncName)
-	Otvet = strings.ReplaceAll(Otvet, "(&Otvet)", "()")
+	Otvet = strings.ReplaceAll(Otvet, "FieldNamesDefaultValues", TextFieldsDefaultValue)
 
 	//
-	Otvet = strings.ReplaceAll(Otvet, TextAssignFind, TextAssign)
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithComma", FieldNamesWithComma)
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesDefault", TextFieldsDefaultValue)
+	PrimaryKeyNamesWithComma := create_files.Find_PrimaryKeyNamesWithComma(Table1)
+	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeyNamesWithComma", PrimaryKeyNamesWithComma)
 
 	return Otvet
 }

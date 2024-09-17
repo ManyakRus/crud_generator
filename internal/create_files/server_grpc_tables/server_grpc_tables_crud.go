@@ -55,7 +55,7 @@ func CreateFiles(Table1 *types.Table) error {
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudTableURL)
 
 		if Table1.PrimaryKeyColumnsCount == 1 {
-			TextGRPCServer = ReplaceIDRequestID_1PK(TextGRPCServer, Table1)
+			TextGRPCServer = Replace_IDRequestID_1PK(TextGRPCServer, Table1)
 		}
 
 		//замена "m.ID = AliasFromInt(ID)"
@@ -74,9 +74,9 @@ func CreateFiles(Table1 *types.Table) error {
 		TextGRPCServer = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCServer)
 
 		//удалим лишние функции
-		TextGRPCServer = DeleteFuncDelete(TextGRPCServer, Table1)
-		TextGRPCServer = DeleteFuncRestore(TextGRPCServer, Table1)
-		TextGRPCServer = DeleteFuncFind_byExtID(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFunc_Delete(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFunc_Restore(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFunc_Find_byExtID(TextGRPCServer, Table1)
 	}
 
 	//создание текста
@@ -102,8 +102,8 @@ func CreateFiles(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesTest - создаёт 1 файл в папке grpc_server
-func CreateFilesTest(Table1 *types.Table) error {
+// CreateFiles_Test - создаёт 1 файл в папке grpc_server
+func CreateFiles_Test(Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов
@@ -133,9 +133,9 @@ func CreateFilesTest(Table1 *types.Table) error {
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		//удалим лишние функции
-		TextGRPCServer = DeleteFuncTestDelete(TextGRPCServer, Table1)
-		TextGRPCServer = DeleteFuncTestRestore(TextGRPCServer, Table1)
-		TextGRPCServer = DeleteFuncTestFind_byExtID(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFunc_Test_Delete(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFunc_Test_Restore(TextGRPCServer, Table1)
+		TextGRPCServer = DeleteFunc_Test_Find_byExtID(TextGRPCServer, Table1)
 
 		//добавим импорты
 		TextGRPCServer = create_files.Delete_TemplateRepositoryImports(TextGRPCServer)
@@ -200,8 +200,8 @@ func CreateFilesTest(Table1 *types.Table) error {
 	return err
 }
 
-// DeleteFuncDelete - удаляет функцию Delete()
-func DeleteFuncDelete(Text string, Table1 *types.Table) string {
+// DeleteFunc_Delete - удаляет функцию Delete()
+func DeleteFunc_Delete(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
@@ -215,8 +215,8 @@ func DeleteFuncDelete(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncRestore - удаляет функцию Restore()
-func DeleteFuncRestore(Text string, Table1 *types.Table) string {
+// DeleteFunc_Restore - удаляет функцию Restore()
+func DeleteFunc_Restore(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
@@ -258,8 +258,8 @@ func DeleteFuncRestore(Text string, Table1 *types.Table) string {
 //	return Otvet
 //}
 
-// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncFind_byExtID(Text string, Table1 *types.Table) string {
+// DeleteFunc_Find_byExtID - удаляет функцию Find_ByExtID()
+func DeleteFunc_Find_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//если есть обе колонки - ничего не делаем
@@ -275,8 +275,8 @@ func DeleteFuncFind_byExtID(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncTestDelete - удаляет функцию Delete()
-func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
+// DeleteFunc_Test_Delete - удаляет функцию Delete()
+func DeleteFunc_Test_Delete(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
@@ -290,8 +290,8 @@ func DeleteFuncTestDelete(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncTestRestore - удаляет функцию Restore()
-func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
+// DeleteFunc_Test_Restore - удаляет функцию Restore()
+func DeleteFunc_Test_Restore(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверим есть ли колонка IsDeleted
@@ -305,8 +305,8 @@ func DeleteFuncTestRestore(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// DeleteFuncFind_byExtID - удаляет функцию Find_ByExtID()
-func DeleteFuncTestFind_byExtID(Text string, Table1 *types.Table) string {
+// DeleteFunc_Find_byExtID - удаляет функцию Find_ByExtID()
+func DeleteFunc_Test_Find_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//если есть обе колонки - ничего не делаем

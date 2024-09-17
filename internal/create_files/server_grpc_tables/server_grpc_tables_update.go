@@ -13,8 +13,8 @@ import (
 	"strings"
 )
 
-// CreateFilesUpdateEveryColumn - создаёт 1 файл в папке grpc_server
-func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
+// CreateFiles_UpdateEveryColumn - создаёт 1 файл в папке grpc_server
+func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов
@@ -72,7 +72,7 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	}
 
 	//создание текста
-	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc, Table1)
+	TextUpdateEveryColumn := FindText_UpdateEveryColumn(TextGRPCServerUpdateFunc, Table1)
 	//// пустой файл не нужен
 	//if TextUpdateEveryColumn == "" {
 	//	return err
@@ -106,8 +106,8 @@ func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
 	return err
 }
 
-// FindTextUpdateEveryColumn - возвращает текст для всех таблиц
-func FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc string, Table1 *types.Table) string {
+// FindText_UpdateEveryColumn - возвращает текст для всех таблиц
+func FindText_UpdateEveryColumn(TextGRPCServerUpdateFunc string, Table1 *types.Table) string {
 	Otvet := ""
 
 	//сортировка по названию таблиц
@@ -127,7 +127,7 @@ func FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc string, Table1 *types.Ta
 			continue
 		}
 
-		TextColumn1 := FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc, Table1, Column1)
+		TextColumn1 := FindText_UpdateEveryColumn1(TextGRPCServerUpdateFunc, Table1, Column1)
 		Otvet = Otvet + TextColumn1 + "\n\n"
 
 	}
@@ -135,8 +135,8 @@ func FindTextUpdateEveryColumn(TextGRPCServerUpdateFunc string, Table1 *types.Ta
 	return Otvet
 }
 
-// FindTextUpdateEveryColumn1 - возвращает текст для одной таблицы
-func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
+// FindText_UpdateEveryColumn1 - возвращает текст для одной таблицы
+func FindText_UpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextGRPCServerUpdateFunc
 
 	ModelName := Table1.NameGo
@@ -172,13 +172,13 @@ func FindTextUpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.T
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Model.Update()", "Model."+FuncName+"()")
 
-	Otvet = ReplaceIDRequestID_1PK(Otvet, Table1)
+	Otvet = Replace_IDRequestID_1PK(Otvet, Table1)
 
 	return Otvet
 }
 
-// ReplaceIDRequestID_1PK - замена "ID := Request.ID"
-func ReplaceIDRequestID_1PK(Text string, Table1 *types.Table) string {
+// Replace_IDRequestID_1PK - замена "ID := Request.ID"
+func Replace_IDRequestID_1PK(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//замена ID := Request.ID
@@ -194,8 +194,8 @@ func ReplaceIDRequestID_1PK(Text string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// CreateFilesUpdateEveryColumnTest - создаёт 1 файл в папке grpc_server
-func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
+// CreateFiles_UpdateEveryColumn_Test - создаёт 1 файл в папке grpc_server
+func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов
@@ -258,7 +258,7 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	}
 
 	//создание текста
-	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc, Table1)
+	TextUpdateEveryColumn := FindText_UpdateEveryColumn_Test(TextGRPCServerUpdateFunc, Table1)
 
 	//Postgres_ID_Test = ID Minimum
 	TextGRPCServer = Replace_Model_ID_Test(TextGRPCServer, Table1)
@@ -299,8 +299,8 @@ func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
 	return err
 }
 
-// FindTextUpdateEveryColumnTest - возвращает текст для всех таблиц
-func FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc string, Table1 *types.Table) string {
+// FindText_UpdateEveryColumn_Test - возвращает текст для всех таблиц
+func FindText_UpdateEveryColumn_Test(TextGRPCServerUpdateFunc string, Table1 *types.Table) string {
 	Otvet := ""
 
 	//сортировка по названию таблиц
@@ -320,7 +320,7 @@ func FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc string, Table1 *type
 			continue
 		}
 
-		TextColumn1 := FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc, Table1, Column1)
+		TextColumn1 := FindText_UpdateEveryColumn_Test1(TextGRPCServerUpdateFunc, Table1, Column1)
 		Otvet = Otvet + TextColumn1 + "\n\n"
 
 	}
@@ -328,8 +328,8 @@ func FindTextUpdateEveryColumnTest(TextGRPCServerUpdateFunc string, Table1 *type
 	return Otvet
 }
 
-// FindTextUpdateEveryColumnTest1 - возвращает текст для одной таблицы
-func FindTextUpdateEveryColumnTest1(TextGRPCServerUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
+// FindText_UpdateEveryColumn_Test1 - возвращает текст для одной таблицы
+func FindText_UpdateEveryColumn_Test1(TextGRPCServerUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextGRPCServerUpdateFunc
 
 	ModelName := Table1.NameGo

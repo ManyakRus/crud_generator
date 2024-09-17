@@ -19,9 +19,9 @@ func CreateAllFiles() error {
 		return err
 	}
 
-	err = CreateNRPCClientTest()
+	err = CreateNRPCClient_Test()
 	if err != nil {
-		log.Error("CreateNRPCClientTest() error: ", err)
+		log.Error("CreateNRPCClient_Test() error: ", err)
 		return err
 	}
 

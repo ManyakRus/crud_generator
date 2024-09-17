@@ -2663,3 +2663,34 @@ func Find_ColumnNamesWithComma(MassColumns []*types.Column) string {
 
 	return Otvet
 }
+
+// Find_PrimaryKeyNamesWithComma - возвращает строку с именами колонок БД Primary key, через запятую
+func Find_PrimaryKeyNamesWithComma(Table1 *types.Table) string {
+	Otvet := ""
+
+	MassPK := Find_PrimaryKeyColumns(Table1)
+	Comma := ""
+	for _, v := range MassPK {
+		Otvet = Otvet + Comma + v.NameGo
+		Comma = ", "
+	}
+
+	return Otvet
+}
+
+// Find_PrimaryKeysDefaultValues - возвращает строку с значениями по умолчанию колонок БД Primary key, через запятую
+func Find_PrimaryKeysDefaultValues(Table1 *types.Table) string {
+	Otvet := ""
+
+	MassPrimaryKeys := Find_PrimaryKeyColumns(Table1)
+
+	Comma := ""
+	for _, Column1 := range MassPrimaryKeys {
+		DefaultValue := FindText_DefaultValue(Column1.TypeGo)
+		Otvet = Otvet + Comma + DefaultValue
+
+		Comma = ", "
+	}
+
+	return Otvet
+}

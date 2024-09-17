@@ -119,8 +119,8 @@ func CreateFiles(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesTest - создаёт 1 файл в папке grpc_client
-func CreateFilesTest(Table1 *types.Table) error {
+// CreateFiles_Test - создаёт 1 файл в папке grpc_client
+func CreateFiles_Test(Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов

@@ -29,9 +29,9 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 		//тестовые файлы grpc_server
 		if config.Settings.NEED_CREATE_GRPC_SERVER_TEST == true {
-			err = CreateFilesTest(Table1)
+			err = CreateFiles_Test(Table1)
 			if err != nil {
-				log.Error("CreateFilesTest() table: ", Table1.Name, " error: ", err)
+				log.Error("CreateFiles_Test() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 		}
@@ -39,7 +39,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 		//UPDATE_EVERY_COLUMN
 		if config.Settings.NEED_CREATE_UPDATE_EVERY_COLUMN == true {
 			//файлы grpc_server update
-			err = CreateFilesUpdateEveryColumn(Table1)
+			err = CreateFiles_UpdateEveryColumn(Table1)
 			if err != nil {
 				log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
 				return err
@@ -47,9 +47,9 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 			//тестовые файлы grpc_server update
 			if config.Settings.NEED_CREATE_GRPC_SERVER_TEST == true {
-				err = CreateFilesUpdateEveryColumnTest(Table1)
+				err = CreateFiles_UpdateEveryColumn_Test(Table1)
 				if err != nil {
-					log.Error("CreateFilesTest() table: ", Table1.Name, " error: ", err)
+					log.Error("CreateFiles_Test() table: ", Table1.Name, " error: ", err)
 					return err
 				}
 			}
@@ -60,7 +60,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 		if config.Settings.NEED_CREATE_CACHE_API == true {
 			//файлы grpc_server cache
 			if config.Settings.NEED_CREATE_CACHE_FILES == true {
-				err = CreateFilesCache(Table1)
+				err = CreateFiles_Cache(Table1)
 				if err != nil {
 					log.Error("CreateFiles() table: ", Table1.Name, " error: ", err)
 					return err
@@ -69,38 +69,38 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 
 			//тестовые файлы grpc_server cache
 			if config.Settings.NEED_CREATE_CACHE_TEST_FILES == true {
-				err = CreateFilesCacheTest(Table1)
+				err = CreateFiles_Cache_Test(Table1)
 				if err != nil {
-					log.Error("CreateFilesTest() table: ", Table1.Name, " error: ", err)
+					log.Error("CreateFiles_Test() table: ", Table1.Name, " error: ", err)
 					return err
 				}
 			}
 
 			//
-			err = CreateFilesFindBy(Table1)
+			err = CreateFiles_FindBy(Table1)
 			if err != nil {
-				log.Error("CreateFilesFindBy() table: ", Table1.Name, " error: ", err)
+				log.Error("CreateFiles_FindBy() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 
 			//
-			err = CreateFilesFindByTest(Table1)
+			err = CreateFiles_FindBy_Test(Table1)
 			if err != nil {
-				log.Error("CreateFilesFindByTest() table: ", Table1.Name, " error: ", err)
+				log.Error("CreateFiles_FindBy_Test() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 
 			//
-			err = CreateFilesFindMassBy(Table1)
+			err = CreateFiles_FindMassBy(Table1)
 			if err != nil {
-				log.Error("CreateFilesFindMassBy() table: ", Table1.Name, " error: ", err)
+				log.Error("CreateFiles_FindMassBy() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 
 			//
-			err = CreateFilesFindMassByTest(Table1)
+			err = CreateFiles_FindMassBy_Test(Table1)
 			if err != nil {
-				log.Error("CreateFilesFindMassByTest() table: ", Table1.Name, " error: ", err)
+				log.Error("CreateFiles_FindMassBy_Test() table: ", Table1.Name, " error: ", err)
 				return err
 			}
 		}

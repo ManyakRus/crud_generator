@@ -13,8 +13,8 @@ import (
 	"strings"
 )
 
-// CreateFilesUpdateEveryColumn - создаёт 1 файл в папке crud
-func CreateFilesUpdateEveryColumn(Table1 *types.Table) error {
+// CreateFiles_UpdateEveryColumn - создаёт 1 файл в папке crud
+func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	var err error
 
 	TableName := strings.ToLower(Table1.Name)
@@ -194,8 +194,8 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	return Otvet
 }
 
-// CreateFilesUpdateEveryColumnTest - создаёт 1 файл в папке grpc_client
-func CreateFilesUpdateEveryColumnTest(Table1 *types.Table) error {
+// CreateFiles_UpdateEveryColumn_Test - создаёт 1 файл в папке grpc_client
+func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	var err error
 
 	TableName := strings.ToLower(Table1.Name)

@@ -11,8 +11,8 @@ import (
 	"strings"
 )
 
-// CreateFilesFindMassBy - создаёт 1 файл в папке grpc_client
-func CreateFilesFindMassBy(Table1 *types.Table) error {
+// CreateFiles_FindMassBy - создаёт 1 файл в папке grpc_client
+func CreateFiles_FindMassBy(Table1 *types.Table) error {
 	var err error
 
 	if len(types.MassFindMassBy_String) == 0 {
@@ -84,7 +84,7 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextGRPCClientFunc := CreateFilesFindMassByTable(Table1, TextTemplatedFunction)
+	TextGRPCClientFunc := CreateFiles_FindMassBy_Table(Table1, TextTemplatedFunction)
 	if TextGRPCClientFunc == "" {
 		return err
 	}
@@ -123,23 +123,23 @@ func CreateFilesFindMassBy(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesFindMassByTable - создаёт текст всех функций
-func CreateFilesFindMassByTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFiles_FindMassBy_Table - создаёт текст всех функций
+func CreateFiles_FindMassBy_Table(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
 	for _, TableColumns1 := range types.MassFindMassBy_String {
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesFindMassByTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFiles_FindMassBy_Table1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesFindMassByTable1 - создаёт текст всех функций
-func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
+// CreateFiles_FindMassBy_Table1 - создаёт текст всех функций
+func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
 	Otvet := TextTemplateFunction
 
 	//
@@ -188,8 +188,8 @@ func CreateFilesFindMassByTable1(Table1 *types.Table, TextTemplateFunction strin
 	return Otvet
 }
 
-// CreateFilesFindMassByTest - создаёт 1 файл в папке grpc_client
-func CreateFilesFindMassByTest(Table1 *types.Table) error {
+// CreateFiles_FindMassBy_Test - создаёт 1 файл в папке grpc_client
+func CreateFiles_FindMassBy_Test(Table1 *types.Table) error {
 	var err error
 
 	if len(types.MassFindMassBy_String) == 0 {
@@ -257,7 +257,7 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	}
 
 	//создание функций
-	TextGRPCClientFunc := CreateFilesFindMassByTestTable(Table1, TextTemplatedFunction)
+	TextGRPCClientFunc := CreateFiles_FindMassBy_Test_Table(Table1, TextTemplatedFunction)
 	if TextGRPCClientFunc == "" {
 		return err
 	}
@@ -293,23 +293,23 @@ func CreateFilesFindMassByTest(Table1 *types.Table) error {
 	return err
 }
 
-// CreateFilesFindMassByTestTable - создаёт текст всех функций
-func CreateFilesFindMassByTestTable(Table1 *types.Table, TextTemplateFunction string) string {
+// CreateFiles_FindMassBy_Test_Table - создаёт текст всех функций
+func CreateFiles_FindMassBy_Test_Table(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
 	for _, TableColumns1 := range types.MassFindMassBy_String {
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFilesFindMassByTestTable1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFiles_FindMassBy_Test_Table1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 
 	return Otvet
 }
 
-// CreateFilesFindMassByTestTable1 - создаёт текст всех функций
-func CreateFilesFindMassByTestTable1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
+// CreateFiles_FindMassBy_Test_Table1 - создаёт текст всех функций
+func CreateFiles_FindMassBy_Test_Table1(Table1 *types.Table, TextTemplateFunction string, MassColumnsString []string) string {
 	Otvet := TextTemplateFunction
 
 	//
