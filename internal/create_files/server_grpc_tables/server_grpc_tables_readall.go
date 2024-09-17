@@ -117,7 +117,6 @@ func CreateFiles_ReadAll_Table(Table1 *types.Table, TextTemplateFunction string)
 
 	_, ok := types.MapReadAll[Table1]
 	if ok == false {
-		Otvet = TextTemplateFunction
 		return Otvet
 	}
 
@@ -243,7 +242,6 @@ func CreateFiles_ReadAll_Test_Table(Table1 *types.Table, TextTemplateFunction st
 
 	_, ok := types.MapReadAll[Table1]
 	if ok == false {
-		Otvet = TextTemplateFunction
 		return Otvet
 	}
 

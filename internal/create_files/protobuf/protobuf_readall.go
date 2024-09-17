@@ -9,20 +9,22 @@ import (
 func FindText_ReadAll(TextProto string, Table1 *types.Table) (TextProtoNew string, TextAdd string) {
 	TextProtoNew = TextProto
 
-	TextAdd = ""
-	for Table1, _ := range types.MapReadAll {
-
-		Text1 := FindText_ReadAll1(Table1)
-
-		//проверим такой текст уже есть
-		pos1 := strings.Index(TextProto, Text1)
-		if pos1 >= 0 {
-			continue
-		}
-
-		//
-		TextAdd = TextAdd + Text1
+	_, ok := types.MapReadAll[Table1]
+	if ok == false {
+		return
 	}
+
+	TextAdd = ""
+	Text1 := FindText_ReadAll1(Table1)
+
+	//проверим такой текст уже есть
+	pos1 := strings.Index(TextProto, Text1)
+	if pos1 >= 0 {
+		return
+	}
+
+	//
+	TextAdd = TextAdd + Text1
 
 	return TextProtoNew, TextAdd
 }

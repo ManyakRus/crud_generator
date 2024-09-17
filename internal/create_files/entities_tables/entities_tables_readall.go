@@ -135,7 +135,8 @@ func CreateFiles_ReadAll_Table1(Table1 *types.Table, TextTemplateFunction string
 func AddInterfaces_ReadAll(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
-	if len(types.MapReadAll) == 0 {
+	_, ok := types.MapReadAll[Table1]
+	if ok == false {
 		return Otvet
 	}
 
