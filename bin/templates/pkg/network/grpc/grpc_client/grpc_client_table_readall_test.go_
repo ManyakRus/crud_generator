@@ -4,7 +4,6 @@ import (
 	"github.com/ManyakRus/starter/config_main"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client/grpc_lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_func"
 	"testing"
 )

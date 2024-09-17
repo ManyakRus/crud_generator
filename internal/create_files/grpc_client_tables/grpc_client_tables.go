@@ -90,7 +90,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			return err
 		}
 
-		//
+		//FindMassBy
 		err = CreateFiles_FindMassBy(Table1)
 		if err != nil {
 			log.Error("CreateFiles_FindMassBy() table: ", Table1.Name, " error: ", err)
@@ -104,6 +104,19 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			return err
 		}
 
+		//ReadAll
+		err = CreateFiles_ReadAll(Table1)
+		if err != nil {
+			log.Error("CreateFiles_ReadAll() table: ", Table1.Name, " error: ", err)
+			return err
+		}
+
+		//
+		err = CreateFiles_ReadAll_Test(Table1)
+		if err != nil {
+			log.Error("CreateFiles_ReadAll_Test() table: ", Table1.Name, " error: ", err)
+			return err
+		}
 	}
 
 	return err

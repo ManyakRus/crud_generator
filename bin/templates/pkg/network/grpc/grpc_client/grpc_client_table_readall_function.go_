@@ -9,7 +9,7 @@ func (crud Crud_GRPC) ReadAll() ([]lawsuit_status_types.LawsuitStatusType, error
 	// подготовка запроса
 	var VersionModel = crud.GetVersionModel()
 
-	Request := &grpc_proto.RequestEmpty{}
+	Request := &grpc_proto.Request_Empty{}
 	Request.VersionModel = VersionModel
 
 	ctxMain := context.Background()

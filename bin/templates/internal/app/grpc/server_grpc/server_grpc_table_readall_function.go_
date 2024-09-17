@@ -1,5 +1,5 @@
 // LawsuitStatusType_ReadAll - находит все строки lawsuit_status_types в БД
-func (s *ServerGRPC) LawsuitStatusType_ReadAll(ctx context.Context, Request *grpc_proto.RequestEmpty) (*grpc_proto.ResponseMass, error) {
+func (s *ServerGRPC) LawsuitStatusType_ReadAll(ctx context.Context, Request *grpc_proto.Request_Empty) (*grpc_proto.ResponseMass, error) {
 	var Otvet grpc_proto.ResponseMass
 	var err error
 

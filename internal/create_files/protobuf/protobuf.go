@@ -96,6 +96,11 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		TextProto, TextProtoNew1 = FindText_FindMassBy(TextProto, Table1)
 		TextProtoNew = TextProtoNew + TextProtoNew1
 
+		//добавим текст ReadAll
+		TextProto, TextProtoNew1 = FindText_ReadAll(TextProto, Table1)
+		TextProtoNew = TextProtoNew + TextProtoNew1
+
+		//
 		if config.Settings.NEED_CREATE_CACHE_API == true {
 			TextProtoNew = TextProtoNew + FindText_ProtoTable1_Cache(TextProto, Table1)
 		}
