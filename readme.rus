@@ -14,6 +14,7 @@
 - UpdateManyFields() - изменение нескольких колонок, перечисленных в массиве
 - FindBy_ColumnName() - поиск записи по одной или нескольким колонкам (если заполнить файл findby_functions.json)
 - FindMassBy_ColumnName() - поиск несколько записей по одной или нескольким колонкам (если заполнить файл findmassby_functions.json)
+- ReadAll() - возврат всех записей таблицы, кроме помеченных на удаление is_deleted=true (если заполнить файл readall_functions.json)
 
 
 генерируются файлы:

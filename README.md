@@ -14,6 +14,7 @@ separate function for each column of each table
 - UpdateManyFields() - change several columns listed in an array
 - FindBy_ColumnName() - search for a record by one or more columns (if you fill in the findby_functions.json file)
 - FindMassBy_ColumnName() - search for multiple records by one or more columns (if you fill in the findmassby_functions.json file)
+- ReadAll() - returns all table records, except those marked for deletion is_deleted=true (if you fill in the readall_functions.json file)
 
 files are generated:
 1. table - struct structure with all fields from the database, and gorm + json annotations
