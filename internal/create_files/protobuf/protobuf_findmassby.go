@@ -1,7 +1,7 @@
 package protobuf
 
 import (
-	"github.com/ManyakRus/crud_generator/internal/constants"
+	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"strings"
@@ -57,7 +57,7 @@ func FindText_FindMassBy1(TableColumns1 types.TableColumns) string {
 	FuncName := "FindMassBy_" + TextFields
 	//функция ReadAll()
 	if len(TableColumns1.Columns) == 0 {
-		FuncName = constants.TEXT_READALL
+		FuncName = config.Settings.TEXT_READALL
 		TextRequest = "Request_Empty"
 	}
 

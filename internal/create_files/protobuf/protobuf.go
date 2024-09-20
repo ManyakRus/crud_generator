@@ -2,13 +2,13 @@ package protobuf
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"sort"
 	"strconv"
@@ -129,7 +129,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	TextProto = create_files.Delete_EmptyLines(TextProto)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyProto, []byte(TextProto), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyProto, []byte(TextProto), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

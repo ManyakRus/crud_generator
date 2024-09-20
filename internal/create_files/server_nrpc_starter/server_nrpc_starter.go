@@ -2,11 +2,11 @@ package server_nrpc_starter
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -86,7 +86,7 @@ func CreateFile_ServerGRPCStarter() error {
 	TextNRPCStarter = create_files.Delete_EmptyImport(TextNRPCStarter)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyMain, []byte(TextNRPCStarter), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyMain, []byte(TextNRPCStarter), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

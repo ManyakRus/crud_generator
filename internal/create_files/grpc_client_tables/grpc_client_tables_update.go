@@ -2,12 +2,12 @@ package grpc_client_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"sort"
 	"strings"
@@ -26,7 +26,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	DirTemplatesGRPC_Client := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyGRPC_Client := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + micro.SeparatorFile()
 
-	FilenameTemplateGRPC_ClientFunc := DirTemplatesGRPC_Client + constants.GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME
+	FilenameTemplateGRPC_ClientFunc := DirTemplatesGRPC_Client + config.Settings.GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME
 	DirReadyTable := DirReadyGRPC_Client
 	FilenameReadyGRPC_ClientUpdate := DirReadyTable + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_update.go"
 
@@ -113,7 +113,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPC_Client = create_files.Delete_EmptyLines(TextGRPC_Client)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPC_ClientUpdate, []byte(TextGRPC_Client), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPC_ClientUpdate, []byte(TextGRPC_Client), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -203,7 +203,7 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	DirTemplatesGRPC_Client := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyGRPC_Client := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile() + config.Settings.PREFIX_CLIENT_GRPC + TableName + micro.SeparatorFile()
 
-	FilenameTemplateGRPC_ClientFunc := DirTemplatesGRPC_Client + constants.GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME
+	FilenameTemplateGRPC_ClientFunc := DirTemplatesGRPC_Client + config.Settings.GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME
 	DirReadyTable := DirReadyGRPC_Client + "tests" + micro.SeparatorFile()
 	FilenameReadyGRPC_ClientUpdate := DirReadyTable + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_update_test.go"
 
@@ -299,7 +299,7 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	TextGRPC_Client = create_files.Delete_EmptyLines(TextGRPC_Client)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPC_ClientUpdate, []byte(TextGRPC_Client), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPC_ClientUpdate, []byte(TextGRPC_Client), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

@@ -2,11 +2,11 @@ package server_grpc_func
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 )
 
@@ -37,8 +37,8 @@ func CreateServerGRPCFunc() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesServerGRPC := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 	DirReadyServerGRPC := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
-	FilenameReadyServerGRPCFunc := DirReadyServerGRPC + constants.SERVER_GRPC_FUNC_FILENAME
-	FilenameTemplateServerGRPCFunc := DirTemplatesServerGRPC + constants.SERVER_GRPC_FUNC_FILENAME + "_"
+	FilenameReadyServerGRPCFunc := DirReadyServerGRPC + config.Settings.SERVER_GRPC_FUNC_FILENAME
+	FilenameTemplateServerGRPCFunc := DirTemplatesServerGRPC + config.Settings.SERVER_GRPC_FUNC_FILENAME + "_"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyServerGRPC)
@@ -76,7 +76,7 @@ func CreateServerGRPCFunc() error {
 	TextGRPCFunc = create_files.Delete_EmptyImport(TextGRPCFunc)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyServerGRPCFunc, []byte(TextGRPCFunc), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyServerGRPCFunc, []byte(TextGRPCFunc), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

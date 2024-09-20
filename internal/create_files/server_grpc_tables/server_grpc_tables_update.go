@@ -2,12 +2,12 @@ package server_grpc_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"sort"
 	"strings"
@@ -24,7 +24,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 
-	FilenameTemplateGRPCServerFunc := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME
+	FilenameTemplateGRPCServerFunc := DirTemplatesGRPCServer + config.Settings.SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCServer
 	FilenameReadyGRPCServerUpdateFunc := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_update.go"
@@ -101,7 +101,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	TextGRPCServer = create_files.Delete_EmptyLines(TextGRPCServer)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCServerUpdateFunc, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCServerUpdateFunc, []byte(TextGRPCServer), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -205,7 +205,7 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 
-	FilenameTemplateGRPCServerFunc := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME
+	FilenameTemplateGRPCServerFunc := DirTemplatesGRPCServer + config.Settings.SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCServer
 	FilenameReadyGRPCServerUpdate := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_update_test.go"
@@ -294,7 +294,7 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	TextGRPCServer = create_files.Delete_EmptyLines(TextGRPCServer)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCServerUpdate, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCServerUpdate, []byte(TextGRPCServer), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

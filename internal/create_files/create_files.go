@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
@@ -711,7 +710,7 @@ func Find_GRPCClientTableURL(TableName string) string {
 func Find_CrudStarterTableURL(TableName string) string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + "/" + constants.STARTER_TABLES_PREFIX + TableName
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + "/" + config.Settings.STARTER_TABLES_PREFIX + TableName
 
 	return Otvet
 }
@@ -720,7 +719,7 @@ func Find_CrudStarterTableURL(TableName string) string {
 func Find_CrudTableURL(TableName string) string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD + "/" + constants.CRUD_TABLES_FREFIX + TableName
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD + "/" + config.Settings.CRUD_TABLES_FREFIX + TableName
 
 	return Otvet
 }

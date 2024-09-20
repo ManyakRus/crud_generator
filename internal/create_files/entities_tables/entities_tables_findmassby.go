@@ -2,11 +2,11 @@ package entities_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -103,7 +103,7 @@ func CreateFiles_FindMassBy(Table1 *types.Table) error {
 	TextModel = create_files.Delete_EmptyLines(TextModel)
 
 	//запись файла
-	err = os.WriteFile(FilenameReady, []byte(TextModel), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReady, []byte(TextModel), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -155,7 +155,7 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 
 	//функция ReadAll()
 	if len(MassColumns1) == 0 {
-		FuncName := constants.TEXT_READALL
+		FuncName := config.Settings.TEXT_READALL
 		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
 		Otvet = strings.ReplaceAll(Otvet, "(m)", "()")
 	}
@@ -258,7 +258,7 @@ func CreateFiles_FindMassBy_Test(Table1 *types.Table) error {
 	TextCrud = create_files.Delete_EmptyLines(TextCrud)
 
 	//запись файла
-	err = os.WriteFile(FilenameReady, []byte(TextCrud), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReady, []byte(TextCrud), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -310,7 +310,7 @@ func CreateFiles_FindMassBy_Test_Table1(Table1 *types.Table, TextTemplateFunctio
 
 	//функция ReadAll()
 	if len(MassColumns1) == 0 {
-		FuncName := constants.TEXT_READALL
+		FuncName := config.Settings.TEXT_READALL
 		Otvet = strings.ReplaceAll(Otvet, "FindMassBy_FieldNamesWithUnderline", FuncName)
 	}
 
@@ -352,7 +352,7 @@ func AddInterfaces_FindMassBy(TextModel string, Table1 *types.Table) string {
 		FuncName := "FindMassBy_" + FieldNamesWithUnderline
 		//функция ReadAll()
 		if len(TableColumns1.MassColumnNames) == 0 {
-			FuncName = constants.TEXT_READALL
+			FuncName = config.Settings.TEXT_READALL
 			TextFunc1 = "\n\t" + FuncName + "() ([]" + Table1.NameGo + ", error)"
 		} else {
 			TextFunc1 = "\n\t" + FuncName + "(*" + Table1.NameGo + ") ([]" + Table1.NameGo + ", error)"

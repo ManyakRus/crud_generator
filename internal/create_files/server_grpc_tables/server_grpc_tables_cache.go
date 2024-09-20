@@ -2,12 +2,12 @@ package server_grpc_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -23,7 +23,7 @@ func CreateFiles_Cache(Table1 *types.Table) error {
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 
-	FilenameTemplateCache := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_CACHE_FILENAME
+	FilenameTemplateCache := DirTemplatesGRPCServer + config.Settings.SERVER_GRPC_TABLE_CACHE_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCServer
 	FilenameReadyCache := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_cache.go"
@@ -102,7 +102,7 @@ func CreateFiles_Cache(Table1 *types.Table) error {
 	TextGRPCServer = create_files.Delete_EmptyImport(TextGRPCServer)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -118,7 +118,7 @@ func CreateFiles_Cache_Test(Table1 *types.Table) error {
 	DirTemplatesGRPCServer := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 	DirReadyGRPCServer := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER + micro.SeparatorFile()
 
-	FilenameTemplateCache := DirTemplatesGRPCServer + constants.SERVER_GRPC_TABLE_CACHE_TEST_FILENAME
+	FilenameTemplateCache := DirTemplatesGRPCServer + config.Settings.SERVER_GRPC_TABLE_CACHE_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyGRPCServer
 	FilenameReadyCache := DirReadyTable + config.Settings.PREFIX_SERVER_GRPC + TableName + "_cache_test.go"
@@ -186,7 +186,7 @@ func CreateFiles_Cache_Test(Table1 *types.Table) error {
 	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

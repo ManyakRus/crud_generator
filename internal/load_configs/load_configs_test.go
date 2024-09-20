@@ -3,7 +3,6 @@ package load_configs
 import (
 	"encoding/json"
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/micro"
 	"os"

@@ -393,3 +393,92 @@ TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_FILENAME="grpc_client_table_readal
 #TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_readall_function_test.go_" file
 TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_TEST_FILENAME="grpc_client_table_readall_function_test.go_"
 
+
+
+
+#FILE_PERMISSIONS - linux file permissions, integer 438 = octal 0666
+FILE_PERMISSIONS = 438
+
+#GENERATION_PROTO_FILENAME - filename of "generation_code.sh" file
+GENERATION_PROTO_FILENAME = "generation_code.sh"
+
+#GRPC_CLIENT_FILENAME - filename of "grpc_client.go" file
+GRPC_CLIENT_FILENAME = "grpc_client.go"
+
+#GRPC_CLIENT_TEST_FILENAME - filename of "grpc_client_test.go" file
+GRPC_CLIENT_TEST_FILENAME = "grpc_client_test.go"
+
+#NRPC_CLIENT_FILENAME - filename of "nrpc_client.go" file
+NRPC_CLIENT_FILENAME = "nrpc_client.go"
+
+#NRPC_CLIENT_TEST_FILENAME - filename of "nrpc_client_test.go" file
+NRPC_CLIENT_TEST_FILENAME = "nrpc_client_test.go"
+
+#NRPC_CLIENT_TABLE_FILENAME - filename of "nrpc_client_table.go" file
+NRPC_CLIENT_TABLE_FILENAME = "nrpc_client_table.go"
+
+#NRPC_CLIENT_TABLE_TEST_FILENAME - filename of "nrpc_client_table_test.go" file
+NRPC_CLIENT_TABLE_TEST_FILENAME = "nrpc_client_table_test.go"
+
+#SERVER_GRPC_STARTER_FILENAME - filename of "server_grpc_starter.go" file
+SERVER_GRPC_STARTER_FILENAME = "server_grpc_starter.go"
+
+#SERVER_GRPC_FUNC_FILENAME - filename of "server_grpc_func.go" file
+SERVER_GRPC_FUNC_FILENAME = "server_grpc_func.go"
+
+#MAKEFILE_FILENAME - filename of "Makefile" file
+MAKEFILE_FILENAME = "Makefile"
+
+#ENV_FILENAME - filename of ".env" file
+ENV_FILENAME = ".env"
+
+#STARTER_TABLES_FILENAME - filename of "starter_tables.go_" file
+STARTER_TABLES_FILENAME = "starter_tables.go_"
+
+#STARTER_TABLES_TEST_FILENAME - filename of "starter_tables_test.go_" file
+STARTER_TABLES_TEST_FILENAME = "starter_tables_test.go_"
+
+#STARTER_TABLES_MANUAL_FILENAME - filename of "starter_tables_manual.go_" file
+STARTER_TABLES_MANUAL_FILENAME = "starter_tables_manual.go_"
+
+#STARTER_TABLES_TEST_MANUAL_FILENAME - filename of "starter_tables_manual_test.go_" file
+STARTER_TABLES_TEST_MANUAL_FILENAME = "starter_tables_manual_test.go_"
+
+#STARTER_TABLES_PREFIX - prefix "crud_starter_" for files
+STARTER_TABLES_PREFIX = "crud_starter_"
+
+#CRUD_TABLES_FREFIX - prefix "crud_" for files
+CRUD_TABLES_FREFIX = "crud_"
+
+#MODEL_TABLE_MANUAL_FILENAME - filename of "model_table_manual.go_" file
+MODEL_TABLE_MANUAL_FILENAME = "model_table_manual.go_"
+
+#MODEL_TABLE_UPDATE_FILENAME - filename of "model_table_update.go_" file
+MODEL_TABLE_UPDATE_FILENAME = "model_table_update.go_"
+
+#SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME - filename of "server_grpc_table_update_func.go_" file
+SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME = "server_grpc_table_update_func.go_"
+
+#SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME - filename of "server_grpc_table_update_func_test.go_" file
+SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME = "server_grpc_table_update_func_test.go_"
+
+#GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME - filename of "grpc_client_table_update_func.go_" file
+GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME = "grpc_client_table_update_func.go_"
+
+#GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME - filename of "grpc_client_table_update_func_test.go_" file
+GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME = "grpc_client_table_update_func_test.go_"
+
+#CRUD_TABLES_CACHE_FILENAME - filename of "crud_table_cache.go_" file
+CRUD_TABLES_CACHE_FILENAME = "crud_table_cache.go_"
+
+#CRUD_TABLES_CACHE_TEST_FILENAME - filename of "crud_table_cache_test.go_" file
+CRUD_TABLES_CACHE_TEST_FILENAME = "crud_table_cache_test.go_"
+
+#SERVER_GRPC_TABLE_CACHE_FILENAME - filename of "server_grpc_table_cache.go_" file
+SERVER_GRPC_TABLE_CACHE_FILENAME = "server_grpc_table_cache.go_"
+
+#SERVER_GRPC_TABLE_CACHE_TEST_FILENAME - filename of "server_grpc_table_cache_test.go_" file
+SERVER_GRPC_TABLE_CACHE_TEST_FILENAME = "server_grpc_table_cache_test.go_"
+
+#TEXT_READALL - "ReadAll" function name
+TEXT_READALL = "ReadAll"

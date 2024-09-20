@@ -2,11 +2,11 @@ package grpc_client_func
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -85,7 +85,7 @@ func CreateFileGRPCClientFunc() error {
 
 	}
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCClientFunc, []byte(TextGRPCClientFunc), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCClientFunc, []byte(TextGRPCClientFunc), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -137,7 +137,7 @@ func CreateFileGRPCClientFuncTest() error {
 
 	}
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCClientFunc, []byte(TextGRPCClientFunc), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyGRPCClientFunc, []byte(TextGRPCClientFunc), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

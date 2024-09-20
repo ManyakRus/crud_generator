@@ -6,6 +6,7 @@ import (
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -152,6 +153,50 @@ type SettingsINI struct {
 	TEMPLATES_CRUD_FUNC_FOLDERNAME    string
 	TEMPLATES_CRUD_FUNC_FILENAME      string
 	TEMPLATES_CRUD_FUNC_TEST_FILENAME string
+
+	//
+	FILE_PERMISSIONS uint32 //= 0666
+
+	GENERATION_PROTO_FILENAME string
+
+	GRPC_CLIENT_FILENAME      string
+	GRPC_CLIENT_TEST_FILENAME string
+
+	NRPC_CLIENT_FILENAME      string
+	NRPC_CLIENT_TEST_FILENAME string
+
+	NRPC_CLIENT_TABLE_FILENAME      string
+	NRPC_CLIENT_TABLE_TEST_FILENAME string
+
+	SERVER_GRPC_STARTER_FILENAME string
+	SERVER_GRPC_FUNC_FILENAME    string
+
+	MAKEFILE_FILENAME string
+	ENV_FILENAME      string
+
+	STARTER_TABLES_FILENAME             string
+	STARTER_TABLES_TEST_FILENAME        string
+	STARTER_TABLES_MANUAL_FILENAME      string
+	STARTER_TABLES_TEST_MANUAL_FILENAME string
+	STARTER_TABLES_PREFIX               string
+	CRUD_TABLES_FREFIX                  string
+
+	MODEL_TABLE_MANUAL_FILENAME string
+	MODEL_TABLE_UPDATE_FILENAME string
+
+	SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME      string
+	SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME string
+
+	GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME      string
+	GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME string
+
+	CRUD_TABLES_CACHE_FILENAME      string
+	CRUD_TABLES_CACHE_TEST_FILENAME string
+
+	SERVER_GRPC_TABLE_CACHE_FILENAME      string
+	SERVER_GRPC_TABLE_CACHE_TEST_FILENAME string
+
+	TEXT_READALL string
 }
 
 func Getenv(Name string, IsRequired bool) string {
@@ -837,6 +882,157 @@ func FillSettings() {
 	Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME = s
 
 	//--------------------------------------------
+
+	//
+	Name = "FILE_PERMISSIONS"
+	s = Getenv(Name, true)
+	x, err := strconv.Atoi(s)
+	if err != nil {
+		x = 0666
+		log.Error("FILE_PERMISSIONS error: ", err)
+	}
+	Settings.FILE_PERMISSIONS = uint32(x)
+
+	//
+	Name = "GENERATION_PROTO_FILENAME"
+	s = Getenv(Name, true)
+	Settings.GENERATION_PROTO_FILENAME = s
+
+	//
+	Name = "GRPC_CLIENT_FILENAME"
+	s = Getenv(Name, true)
+	Settings.GRPC_CLIENT_FILENAME = s
+
+	//
+	Name = "GRPC_CLIENT_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.GRPC_CLIENT_TEST_FILENAME = s
+
+	//
+	Name = "NRPC_CLIENT_FILENAME"
+	s = Getenv(Name, true)
+	Settings.NRPC_CLIENT_FILENAME = s
+
+	//
+	Name = "NRPC_CLIENT_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.NRPC_CLIENT_TEST_FILENAME = s
+
+	//
+	Name = "NRPC_CLIENT_TABLE_FILENAME"
+	s = Getenv(Name, true)
+	Settings.NRPC_CLIENT_TABLE_FILENAME = s
+
+	//
+	Name = "NRPC_CLIENT_TABLE_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.NRPC_CLIENT_TABLE_TEST_FILENAME = s
+
+	//
+	Name = "SERVER_GRPC_STARTER_FILENAME"
+	s = Getenv(Name, true)
+	Settings.SERVER_GRPC_STARTER_FILENAME = s
+
+	//
+	Name = "SERVER_GRPC_FUNC_FILENAME"
+	s = Getenv(Name, true)
+	Settings.SERVER_GRPC_FUNC_FILENAME = s
+
+	//
+	Name = "MAKEFILE_FILENAME"
+	s = Getenv(Name, true)
+	Settings.MAKEFILE_FILENAME = s
+
+	//
+	Name = "ENV_FILENAME"
+	s = Getenv(Name, true)
+	Settings.ENV_FILENAME = s
+
+	//
+	Name = "STARTER_TABLES_FILENAME"
+	s = Getenv(Name, true)
+	Settings.STARTER_TABLES_FILENAME = s
+
+	//
+	Name = "STARTER_TABLES_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.STARTER_TABLES_TEST_FILENAME = s
+
+	//
+	Name = "STARTER_TABLES_MANUAL_FILENAME"
+	s = Getenv(Name, true)
+	Settings.STARTER_TABLES_MANUAL_FILENAME = s
+
+	//
+	Name = "STARTER_TABLES_TEST_MANUAL_FILENAME"
+	s = Getenv(Name, true)
+	Settings.STARTER_TABLES_TEST_MANUAL_FILENAME = s
+
+	//
+	Name = "STARTER_TABLES_PREFIX"
+	s = Getenv(Name, true)
+	Settings.STARTER_TABLES_PREFIX = s
+
+	//
+	Name = "CRUD_TABLES_FREFIX"
+	s = Getenv(Name, true)
+	Settings.CRUD_TABLES_FREFIX = s
+
+	//
+	Name = "MODEL_TABLE_MANUAL_FILENAME"
+	s = Getenv(Name, true)
+	Settings.MODEL_TABLE_MANUAL_FILENAME = s
+
+	//
+	Name = "MODEL_TABLE_UPDATE_FILENAME"
+	s = Getenv(Name, true)
+	Settings.MODEL_TABLE_UPDATE_FILENAME = s
+
+	//
+	Name = "SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME"
+	s = Getenv(Name, true)
+	Settings.SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME = s
+
+	//
+	Name = "SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME = s
+
+	//
+	Name = "GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME"
+	s = Getenv(Name, true)
+	Settings.GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME = s
+
+	//
+	Name = "GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME = s
+
+	//
+	Name = "CRUD_TABLES_CACHE_FILENAME"
+	s = Getenv(Name, true)
+	Settings.CRUD_TABLES_CACHE_FILENAME = s
+
+	//
+	Name = "CRUD_TABLES_CACHE_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.CRUD_TABLES_CACHE_TEST_FILENAME = s
+
+	//
+	Name = "SERVER_GRPC_TABLE_CACHE_FILENAME"
+	s = Getenv(Name, true)
+	Settings.SERVER_GRPC_TABLE_CACHE_FILENAME = s
+
+	//
+	Name = "SERVER_GRPC_TABLE_CACHE_TEST_FILENAME"
+	s = Getenv(Name, true)
+	Settings.SERVER_GRPC_TABLE_CACHE_TEST_FILENAME = s
+
+	//
+	Name = "TEXT_READALL"
+	s = Getenv(Name, true)
+	Settings.TEXT_READALL = s
+
 }
 
 // CurrentDirectory - возвращает текущую директорию ОС

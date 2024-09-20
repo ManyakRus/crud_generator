@@ -2,10 +2,10 @@ package makefile
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -37,8 +37,8 @@ func CreateMakefile() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesMakefile := DirTemplates
 	DirReadyMakefile := DirReady
-	FilenameReadyMakefile := DirReadyMakefile + constants.MAKEFILE_FILENAME
-	FilenameTemplateMakefile := DirTemplatesMakefile + constants.MAKEFILE_FILENAME + "_"
+	FilenameReadyMakefile := DirReadyMakefile + config.Settings.MAKEFILE_FILENAME
+	FilenameTemplateMakefile := DirTemplatesMakefile + config.Settings.MAKEFILE_FILENAME + "_"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyMakefile)
@@ -64,11 +64,11 @@ func CreateMakefile() error {
 
 	//заполним GENERATION_PROTO
 	VariableName = "GENERATION_PROTO"
-	Value = "cd ./" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + " && " + "./" + constants.GENERATION_PROTO_FILENAME
+	Value = "cd ./" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + " && " + "./" + config.Settings.GENERATION_PROTO_FILENAME
 	TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyMakefile, []byte(TextMakefile), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyMakefile, []byte(TextMakefile), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

@@ -2,13 +2,13 @@ package crud_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"sort"
 	"strings"
@@ -76,7 +76,8 @@ func CreateFiles(Table1 *types.Table) error {
 		//кэш
 		if config.Settings.NEED_CREATE_CACHE_API == true {
 			//исправление Save()
-			TextDB = create_files.CommentLineInText(TextDB, constants.TEXT_CACHE_REMOVE)
+			const TEXT_CACHE_REMOVE = "cache.Remove("
+			TextDB = create_files.CommentLineInText(TextDB, TEXT_CACHE_REMOVE)
 			//TextDB = strings.ReplaceAll(TextDB, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
 		}
 
@@ -133,7 +134,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = create_files.Delete_EmptyLines(TextDB)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -220,7 +221,7 @@ func CreateFiles_Test(Table1 *types.Table) error {
 	TextDB = create_files.Delete_EmptyLines(TextDB)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

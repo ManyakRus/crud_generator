@@ -2,11 +2,11 @@ package grpc_client
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -21,8 +21,8 @@ func CreateGRPCClient() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesClientGRPC := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyClientGRPC := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
-	FilenameReadyMain := DirReadyClientGRPC + constants.GRPC_CLIENT_FILENAME
-	FilenameTemplateMain := DirTemplatesClientGRPC + constants.GRPC_CLIENT_FILENAME + "_"
+	FilenameReadyMain := DirReadyClientGRPC + config.Settings.GRPC_CLIENT_FILENAME
+	FilenameTemplateMain := DirTemplatesClientGRPC + config.Settings.GRPC_CLIENT_FILENAME + "_"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyClientGRPC)
@@ -89,7 +89,7 @@ func CreateGRPCClient() error {
 	TextGRPCClient = create_files.Delete_EmptyImport(TextGRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCClient), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -104,8 +104,8 @@ func CreateGRPCClientTest() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesClientGRPC := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
 	DirReadyClientGRPC := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT + micro.SeparatorFile()
-	FilenameReadyMain := DirReadyClientGRPC + constants.GRPC_CLIENT_TEST_FILENAME
-	FilenameTemplateMain := DirTemplatesClientGRPC + constants.GRPC_CLIENT_TEST_FILENAME + "_"
+	FilenameReadyMain := DirReadyClientGRPC + config.Settings.GRPC_CLIENT_TEST_FILENAME
+	FilenameTemplateMain := DirTemplatesClientGRPC + config.Settings.GRPC_CLIENT_TEST_FILENAME + "_"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyClientGRPC)
@@ -144,7 +144,7 @@ func CreateGRPCClientTest() error {
 	TextGRPCClient = create_files.Delete_EmptyImport(TextGRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCClient), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCClient), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

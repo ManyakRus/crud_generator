@@ -2,11 +2,11 @@ package server_grpc_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -106,7 +106,7 @@ func CreateFiles_FindBy(Table1 *types.Table) error {
 	TextGRPCServer = create_files.Delete_EmptyLines(TextGRPCServer)
 
 	//запись файла
-	err = os.WriteFile(FilenameReady, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReady, []byte(TextGRPCServer), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -270,7 +270,7 @@ func CreateFiles_FindBy_Test(Table1 *types.Table) error {
 	TextGRPCServer = create_files.Delete_EmptyLines(TextGRPCServer)
 
 	//запись файла
-	err = os.WriteFile(FilenameReady, []byte(TextGRPCServer), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReady, []byte(TextGRPCServer), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

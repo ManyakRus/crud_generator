@@ -2,11 +2,11 @@ package main_file
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -84,7 +84,7 @@ func CreateFileMain() error {
 	TextMain = create_files.Delete_EmptyImport(TextMain)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyMain, []byte(TextMain), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyMain, []byte(TextMain), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

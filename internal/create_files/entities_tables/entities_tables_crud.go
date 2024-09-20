@@ -3,12 +3,12 @@ package entities_tables
 import (
 	"errors"
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"sort"
 	"strings"
@@ -110,7 +110,7 @@ func CreateFiles_Model_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMo
 	TextModel = create_files.Delete_EmptyImport(TextModel)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -211,7 +211,7 @@ func CreateFiles_Model_crud(Table1 *types.Table, DirTemplatesModel, DirReadyMode
 	TextModel = DeleteFunctions(TextModel, TableName, types.MapModelCrudDeleteFunctions)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -494,7 +494,7 @@ func CreateFiles_Model_Manual(Table1 *types.Table, DirTemplatesModel, DirReadyMo
 	//ModelName := Table1.NameGo
 
 	TableName := strings.ToLower(Table1.Name)
-	FilenameTemplateModel := DirTemplatesModel + constants.MODEL_TABLE_MANUAL_FILENAME
+	FilenameTemplateModel := DirTemplatesModel + config.Settings.MODEL_TABLE_MANUAL_FILENAME
 	FilenameReadyModel := DirReadyModel + TableName + "_manual.go"
 
 	//чтение файла шаблона
@@ -526,7 +526,7 @@ func CreateFiles_Model_Manual(Table1 *types.Table, DirTemplatesModel, DirReadyMo
 	TextModel = create_files.Delete_EmptyImport(TextModel)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

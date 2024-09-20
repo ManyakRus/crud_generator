@@ -2,11 +2,11 @@ package nrpc_client
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -21,8 +21,8 @@ func CreateNRPCClient() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesClientNRPC := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
 	DirReadyClientNRPC := DirReady + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
-	FilenameReadyNRPC := DirReadyClientNRPC + constants.NRPC_CLIENT_FILENAME
-	FilenameTemplateNRPC := DirTemplatesClientNRPC + constants.NRPC_CLIENT_FILENAME + "_"
+	FilenameReadyNRPC := DirReadyClientNRPC + config.Settings.NRPC_CLIENT_FILENAME
+	FilenameTemplateNRPC := DirTemplatesClientNRPC + config.Settings.NRPC_CLIENT_FILENAME + "_"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyClientNRPC)
@@ -79,7 +79,7 @@ func CreateNRPCClient() error {
 	TextNRPCClient = create_files.Delete_EmptyImport(TextNRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -94,8 +94,8 @@ func CreateNRPCClient_Test() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesClientNRPC := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
 	DirReadyClientNRPC := DirReady + config.Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT + micro.SeparatorFile()
-	FilenameReadyNRPC := DirReadyClientNRPC + constants.NRPC_CLIENT_TEST_FILENAME
-	FilenameTemplateNRPC := DirTemplatesClientNRPC + constants.NRPC_CLIENT_TEST_FILENAME + "_"
+	FilenameReadyNRPC := DirReadyClientNRPC + config.Settings.NRPC_CLIENT_TEST_FILENAME
+	FilenameTemplateNRPC := DirTemplatesClientNRPC + config.Settings.NRPC_CLIENT_TEST_FILENAME + "_"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyClientNRPC)
@@ -136,7 +136,7 @@ func CreateNRPCClient_Test() error {
 	TextNRPCClient = create_files.Delete_EmptyImport(TextNRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

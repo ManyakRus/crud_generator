@@ -2,12 +2,12 @@ package crud_starter
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"sort"
 	"strings"
@@ -90,7 +90,7 @@ func CreateFile_CrudStarter(MapAll map[string]*types.Table) error {
 	TextCrudStarter = create_files.Delete_EmptyImport(TextCrudStarter)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -142,7 +142,7 @@ import (`
 // FindTextImportStarter1 - возвращает текст импорта crud_starter_ для 1 таблицы
 func FindTextImportStarter1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + "/" + constants.STARTER_TABLES_PREFIX + TableName
+	DB_URL := config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + "/" + config.Settings.STARTER_TABLES_PREFIX + TableName
 	Otvet := "\n\t\"" + DB_URL + `"`
 
 	return Otvet
@@ -226,7 +226,7 @@ func InitCrudTransport_DB() {`
 // FindTextDB1 - возвращает текст для 1 таблицы
 func FindTextDB1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	Otvet := "\n\t" + constants.STARTER_TABLES_PREFIX + TableName + ".SetCrudInterface(" + config.Settings.PREFIX_CRUD + TableName + ".Crud_DB{})"
+	Otvet := "\n\t" + config.Settings.STARTER_TABLES_PREFIX + TableName + ".SetCrudInterface(" + config.Settings.PREFIX_CRUD + TableName + ".Crud_DB{})"
 
 	return Otvet
 }
@@ -274,7 +274,7 @@ func InitCrudTransport_GRPC() {`
 // FindTextNRPC1 - возвращает текст для 1 таблицы
 func FindTextGRPC1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	Otvet := "\n\t" + constants.STARTER_TABLES_PREFIX + TableName + ".SetCrudInterface(grpc_" + TableName + ".Crud_GRPC{})"
+	Otvet := "\n\t" + config.Settings.STARTER_TABLES_PREFIX + TableName + ".SetCrudInterface(grpc_" + TableName + ".Crud_GRPC{})"
 
 	return Otvet
 }
@@ -322,7 +322,7 @@ func InitCrudTransport_NRPC() {`
 // FindTextNRPC1 - возвращает текст 1 таблицы
 func FindTextNRPC1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	Otvet := "\n\t" + constants.STARTER_TABLES_PREFIX + TableName + ".SetCrudInterface(nrpc_" + TableName + ".Crud_NRPC{})"
+	Otvet := "\n\t" + config.Settings.STARTER_TABLES_PREFIX + TableName + ".SetCrudInterface(nrpc_" + TableName + ".Crud_NRPC{})"
 
 	return Otvet
 }
@@ -381,7 +381,7 @@ func CreateFileCrudStarter_manual(MapAll map[string]*types.Table) error {
 	TextCrudStarter = create_files.Delete_EmptyImport(TextCrudStarter)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -426,7 +426,7 @@ func initCrudTransport_manual_DB() {`
 // FindTextDB_manual1 - возвращает текст для 1 таблицы
 func FindTextDB_manual1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	Otvet := "\n\t" + constants.STARTER_TABLES_PREFIX + TableName + ".SetCrudManualInterface(" + config.Settings.PREFIX_CRUD + TableName + ".Crud_DB{})"
+	Otvet := "\n\t" + config.Settings.STARTER_TABLES_PREFIX + TableName + ".SetCrudManualInterface(" + config.Settings.PREFIX_CRUD + TableName + ".Crud_DB{})"
 
 	return Otvet
 }
@@ -473,7 +473,7 @@ func initCrudTransport_manual_GRPC() {`
 // FindTextGRPC_manual1 - возвращает текст для 1 таблицы
 func FindTextGRPC_manual1(Table1 *types.Table) string {
 	TableName := strings.ToLower(Table1.Name)
-	Otvet := "\n\t" + constants.STARTER_TABLES_PREFIX + TableName + ".SetCrudManualInterface(grpc_" + TableName + ".Crud_GRPC{})"
+	Otvet := "\n\t" + config.Settings.STARTER_TABLES_PREFIX + TableName + ".SetCrudManualInterface(grpc_" + TableName + ".Crud_GRPC{})"
 
 	return Otvet
 }

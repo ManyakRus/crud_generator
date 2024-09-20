@@ -2,12 +2,12 @@ package entities_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"sort"
 	"strings"
@@ -30,7 +30,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyModel)
 
-	FilenameTemplateModel := DirTemplatesModel + constants.MODEL_TABLE_UPDATE_FILENAME
+	FilenameTemplateModel := DirTemplatesModel + config.Settings.MODEL_TABLE_UPDATE_FILENAME
 	FilenameReadyModel := DirReadyModel + config.Settings.PREFIX_MODEL + TableName + "_update.go"
 
 	//создадим папку готовых файлов
@@ -89,7 +89,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	TextModel = TextModel + TextNew
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

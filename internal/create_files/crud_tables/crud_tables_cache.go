@@ -2,12 +2,12 @@ package crud_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -25,7 +25,7 @@ func CreateFiles_Cache(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + micro.SeparatorFile()
 
-	FilenameTemplateCache := DirTemplatesCrud + constants.CRUD_TABLES_CACHE_FILENAME
+	FilenameTemplateCache := DirTemplatesCrud + config.Settings.CRUD_TABLES_CACHE_FILENAME
 	DirReadyTable := DirReadyCrud
 	FilenameReadyCache := DirReadyTable + "crud_" + TableName + "_cache.go"
 
@@ -63,7 +63,7 @@ func CreateFiles_Cache(Table1 *types.Table) error {
 	Count_Now := Table1.RowsCount
 	CACHE_ELEMENTS_COUNT := micro.MinInt64(Count_Now, CACHE_ELEMENTS_COUNT_MAX)
 	sCACHE_ELEMENTS_COUNT := micro.StringFromInt64(CACHE_ELEMENTS_COUNT)
-	TextCache = create_files.FillVariable(TextCache, constants.TEXT_CACHE_SIZE_1000, sCACHE_ELEMENTS_COUNT)
+	TextCache = create_files.FillVariable(TextCache, "CACHE_SIZE", sCACHE_ELEMENTS_COUNT)
 
 	ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
 
@@ -104,7 +104,7 @@ func CreateFiles_Cache(Table1 *types.Table) error {
 	TextCache = create_files.Delete_EmptyLines(TextCache)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCache, []byte(TextCache), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyCache, []byte(TextCache), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -122,7 +122,7 @@ func CreateFiles_Cache_Test(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + micro.SeparatorFile()
 
-	FilenameTemplateCache := DirTemplatesCrud + constants.CRUD_TABLES_CACHE_TEST_FILENAME
+	FilenameTemplateCache := DirTemplatesCrud + config.Settings.CRUD_TABLES_CACHE_TEST_FILENAME
 	DirReadyTable := DirReadyCrud
 	FilenameReadyCache := DirReadyTable + "crud_" + TableName + "_cache_test.go"
 
@@ -191,7 +191,7 @@ func CreateFiles_Cache_Test(Table1 *types.Table) error {
 	TextCache = create_files.AddSkipNow(TextCache, Table1)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCache, []byte(TextCache), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyCache, []byte(TextCache), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -211,7 +211,7 @@ func Replace_IDToAlias_OtvetID(Text string, Table1 *types.Table) string {
 		return Otvet
 	}
 
-	TextFrom := constants.TEXT_OTVET_ID_ALIAS
+	TextFrom := "Otvet.ID = AliasFromInt(ID)"
 	TextTo := TextFrom
 	TextTo = strings.ReplaceAll(TextFrom, " AliasFromInt(ID)", " "+TextConvert+"(ID)")
 

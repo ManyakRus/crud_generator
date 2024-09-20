@@ -113,7 +113,7 @@ package nrpc_client_tables
 //	TextNRPCClient = create_files.DeleteEmptyImport(TextNRPCClient)
 //
 //	//запись файла
-//	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
+//	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextNRPCClient), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 //
 //	return err
 //}
@@ -193,7 +193,7 @@ package nrpc_client_tables
 //	TextNRPCClient = create_files.DeleteEmptyImport(TextNRPCClient)
 //
 //	//запись файла
-//	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextNRPCClient), constants.FILE_PERMISSIONS)
+//	err = os.WriteFile(FilenameReadyNRPCClient, []byte(TextNRPCClient), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 //
 //	return err
 //}

@@ -2,12 +2,12 @@ package crud_starter_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -71,10 +71,10 @@ func CreateFiles(Table1 *types.Table) error {
 	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile() + "starter_tables" + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + constants.STARTER_TABLES_FILENAME
+	FilenameTemplateDB := DirTemplatesDB + config.Settings.STARTER_TABLES_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyDB + constants.STARTER_TABLES_PREFIX + TableName
-	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + constants.STARTER_TABLES_PREFIX + TableName + ".go"
+	DirReadyTable := DirReadyDB + config.Settings.STARTER_TABLES_PREFIX + TableName
+	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.STARTER_TABLES_PREFIX + TableName + ".go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -120,7 +120,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = create_files.Delete_EmptyImport(TextDB)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -138,9 +138,9 @@ func CreateFiles_Test(Table1 *types.Table) error {
 	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile() + "starter_tables" + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + constants.STARTER_TABLES_TEST_FILENAME
-	DirReadyTable := DirReadyDB + constants.STARTER_TABLES_PREFIX + TableName
-	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + constants.STARTER_TABLES_PREFIX + TableName + "_test.go"
+	FilenameTemplateDB := DirTemplatesDB + config.Settings.STARTER_TABLES_TEST_FILENAME
+	DirReadyTable := DirReadyDB + config.Settings.STARTER_TABLES_PREFIX + TableName
+	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.STARTER_TABLES_PREFIX + TableName + "_test.go"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
@@ -180,7 +180,7 @@ func CreateFiles_Test(Table1 *types.Table) error {
 	TextDB = create_files.Delete_EmptyImport(TextDB)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -196,10 +196,10 @@ func CreateFiles_manual(Table1 *types.Table) error {
 	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile() + "starter_tables" + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + constants.STARTER_TABLES_MANUAL_FILENAME
+	FilenameTemplateDB := DirTemplatesDB + config.Settings.STARTER_TABLES_MANUAL_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyDB + constants.STARTER_TABLES_PREFIX + TableName
-	FilenameReadyManual := DirReadyTable + micro.SeparatorFile() + constants.STARTER_TABLES_PREFIX + TableName + "_manual.go"
+	DirReadyTable := DirReadyDB + config.Settings.STARTER_TABLES_PREFIX + TableName
+	FilenameReadyManual := DirReadyTable + micro.SeparatorFile() + config.Settings.STARTER_TABLES_PREFIX + TableName + "_manual.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -244,7 +244,7 @@ func CreateFiles_manual(Table1 *types.Table) error {
 	TextManual = create_files.Delete_EmptyImport(TextManual)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
@@ -260,10 +260,10 @@ func CreateFiles_manual_test(Table1 *types.Table) error {
 	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile() + "starter_tables" + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 
-	FilenameTemplateDB := DirTemplatesDB + constants.STARTER_TABLES_TEST_MANUAL_FILENAME
+	FilenameTemplateDB := DirTemplatesDB + config.Settings.STARTER_TABLES_TEST_MANUAL_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyDB + constants.STARTER_TABLES_PREFIX + TableName
-	FilenameReadyManual := DirReadyTable + micro.SeparatorFile() + constants.STARTER_TABLES_PREFIX + TableName + "_manual_test.go"
+	DirReadyTable := DirReadyDB + config.Settings.STARTER_TABLES_PREFIX + TableName
+	FilenameReadyManual := DirReadyTable + micro.SeparatorFile() + config.Settings.STARTER_TABLES_PREFIX + TableName + "_manual_test.go"
 
 	//создадим каталог
 	ok, err := micro.FileExists(DirReadyTable)
@@ -313,7 +313,7 @@ func CreateFiles_manual_test(Table1 *types.Table) error {
 	TextManual = create_files.Delete_EmptyImport(TextManual)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }

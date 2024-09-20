@@ -2,11 +2,11 @@ package env_file
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
-	"github.com/ManyakRus/crud_generator/internal/constants"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_gorm"
+	"io/fs"
 	"os"
 	"strings"
 )
@@ -38,8 +38,8 @@ func CreateENV() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesMakefile := DirTemplates
 	DirReadyENV := DirReady
-	FilenameReadyENV := DirReadyENV + constants.ENV_FILENAME
-	FilenameTemplateENV := DirTemplatesMakefile + constants.ENV_FILENAME + "_"
+	FilenameReadyENV := DirReadyENV + config.Settings.ENV_FILENAME
+	FilenameTemplateENV := DirTemplatesMakefile + config.Settings.ENV_FILENAME + "_"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyENV)
@@ -92,13 +92,13 @@ func CreateENV() error {
 	TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
 
 	//запись файла в корень проекта
-	err = os.WriteFile(FilenameReadyENV, []byte(TextMakefile), constants.FILE_PERMISSIONS)
+	err = os.WriteFile(FilenameReadyENV, []byte(TextMakefile), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	//запись файла в bin
 	Dir := DirReady + "bin" + micro.SeparatorFile()
 	folders.CreateFolder(Dir)
-	FilenameReadyENV = Dir + constants.ENV_FILENAME
-	err = os.WriteFile(FilenameReadyENV, []byte(TextMakefile), constants.FILE_PERMISSIONS)
+	FilenameReadyENV = Dir + config.Settings.ENV_FILENAME
+	err = os.WriteFile(FilenameReadyENV, []byte(TextMakefile), fs.FileMode(config.Settings.FILE_PERMISSIONS))
 
 	return err
 }
