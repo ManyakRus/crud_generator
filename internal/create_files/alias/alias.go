@@ -5,7 +5,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
+
 	"os"
 )
 
@@ -49,7 +49,7 @@ func CreateAlias() error {
 	TextAlias := string(bytes)
 
 	//запись файла в bin
-	err = os.WriteFile(FilenameReadyAlias, []byte(TextAlias), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyAlias, []byte(TextAlias), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

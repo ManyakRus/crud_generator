@@ -7,7 +7,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
 	"os"
 	"sort"
 	"strings"
@@ -105,7 +104,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	TextCrud = create_files.Delete_EmptyLines(TextCrud)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCrudUpdateFunc, []byte(TextCrud), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyCrudUpdateFunc, []byte(TextCrud), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
@@ -280,7 +279,7 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	TextCrud = create_files.Delete_EmptyLines(TextCrud)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCrudUpdate, []byte(TextCrud), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyCrudUpdate, []byte(TextCrud), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

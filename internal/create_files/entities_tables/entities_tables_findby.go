@@ -6,7 +6,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
+
 	"os"
 	"strings"
 )
@@ -103,7 +103,7 @@ func CreateFiles_FindBy(Table1 *types.Table) error {
 	TextModel = create_files.Delete_EmptyLines(TextModel)
 
 	//запись файла
-	err = os.WriteFile(FilenameReady, []byte(TextModel), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReady, []byte(TextModel), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

@@ -6,7 +6,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
 	"os"
 	"strings"
 )
@@ -103,7 +102,7 @@ func CreateFiles_ReadAll(Table1 *types.Table) error {
 	TextCrud = create_files.Delete_EmptyLines(TextCrud)
 
 	//запись файла
-	err = os.WriteFile(FilenameReady, []byte(TextCrud), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReady, []byte(TextCrud), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
@@ -232,7 +231,7 @@ func CreateFiles_ReadAll_Test(Table1 *types.Table) error {
 	TextCrud = create_files.Delete_EmptyLines(TextCrud)
 
 	//запись файла
-	err = os.WriteFile(FilenameReady, []byte(TextCrud), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReady, []byte(TextCrud), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

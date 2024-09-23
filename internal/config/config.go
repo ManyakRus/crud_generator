@@ -5,6 +5,7 @@ import (
 	ConfigMain "github.com/ManyakRus/starter/config_main"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"io/fs"
 	"os"
 	"strconv"
 	"strings"
@@ -155,7 +156,7 @@ type SettingsINI struct {
 	TEMPLATES_CRUD_FUNC_TEST_FILENAME string
 
 	//
-	FILE_PERMISSIONS uint32 //= 0666
+	FILE_PERMISSIONS fs.FileMode //= 0666
 
 	GENERATION_PROTO_FILENAME string
 
@@ -891,7 +892,7 @@ func FillSettings() {
 		x = 0666
 		log.Error("FILE_PERMISSIONS error: ", err)
 	}
-	Settings.FILE_PERMISSIONS = uint32(x)
+	Settings.FILE_PERMISSIONS = fs.FileMode(x)
 
 	//
 	Name = "GENERATION_PROTO_FILENAME"

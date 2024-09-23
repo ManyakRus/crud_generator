@@ -34,4 +34,6 @@ func StartApp() {
 		println(constants.TEXT_HELP)
 	}
 
+	log.Info("stop app")
+
 }

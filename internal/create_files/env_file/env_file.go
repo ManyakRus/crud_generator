@@ -6,7 +6,7 @@ import (
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_gorm"
-	"io/fs"
+
 	"os"
 	"strings"
 )
@@ -92,13 +92,13 @@ func CreateENV() error {
 	TextMakefile = ReplaceVariable(TextMakefile, VariableName, Value)
 
 	//запись файла в корень проекта
-	err = os.WriteFile(FilenameReadyENV, []byte(TextMakefile), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyENV, []byte(TextMakefile), config.Settings.FILE_PERMISSIONS)
 
 	//запись файла в bin
 	Dir := DirReady + "bin" + micro.SeparatorFile()
 	folders.CreateFolder(Dir)
 	FilenameReadyENV = Dir + config.Settings.ENV_FILENAME
-	err = os.WriteFile(FilenameReadyENV, []byte(TextMakefile), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyENV, []byte(TextMakefile), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

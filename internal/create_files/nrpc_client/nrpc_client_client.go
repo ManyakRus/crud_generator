@@ -6,7 +6,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
 	"os"
 	"strings"
 )
@@ -79,7 +78,7 @@ func CreateNRPCClient() error {
 	TextNRPCClient = create_files.Delete_EmptyImport(TextNRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
@@ -136,7 +135,7 @@ func CreateNRPCClient_Test() error {
 	TextNRPCClient = create_files.Delete_EmptyImport(TextNRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyNRPC, []byte(TextNRPCClient), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

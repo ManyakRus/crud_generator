@@ -7,7 +7,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
+
 	"os"
 	"strings"
 )
@@ -120,7 +120,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = create_files.Delete_EmptyImport(TextDB)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
@@ -180,7 +180,7 @@ func CreateFiles_Test(Table1 *types.Table) error {
 	TextDB = create_files.Delete_EmptyImport(TextDB)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
@@ -244,7 +244,7 @@ func CreateFiles_manual(Table1 *types.Table) error {
 	TextManual = create_files.Delete_EmptyImport(TextManual)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
@@ -313,7 +313,7 @@ func CreateFiles_manual_test(Table1 *types.Table) error {
 	TextManual = create_files.Delete_EmptyImport(TextManual)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyManual, []byte(TextManual), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

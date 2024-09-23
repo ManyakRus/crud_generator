@@ -8,7 +8,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
 	"os"
 	"sort"
 	"strings"
@@ -118,7 +117,7 @@ func CreateFiles_Table_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTa
 	TextModel = create_files.Delete_EmptyImport(TextModel)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyModel, []byte(TextModel), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

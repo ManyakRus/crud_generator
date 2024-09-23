@@ -7,7 +7,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
 	"os"
 	"strings"
 )
@@ -107,7 +106,7 @@ func CreateFiles_GRPC_Client_Cache(Table1 *types.Table) error {
 	TextGRPCClient = create_files.Delete_EmptyLines(TextGRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextGRPCClient), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyGRPCClient, []byte(TextGRPCClient), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
@@ -203,7 +202,7 @@ func CreateFiles_GRPC_Client_Cache_Test(Table1 *types.Table) error {
 	TextGRPCClient = create_files.Delete_EmptyLines(TextGRPCClient)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCClient), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCClient), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

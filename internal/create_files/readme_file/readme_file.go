@@ -6,7 +6,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
 	"os"
 	"strings"
 )
@@ -63,7 +62,7 @@ func CreateReadmeMD() error {
 	TextReadmeFile = strings.ReplaceAll(TextReadmeFile, CrudStarterURLOld, CrudStarterURL)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyReadmeFile, []byte(TextReadmeFile), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyReadmeFile, []byte(TextReadmeFile), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
@@ -101,7 +100,7 @@ func CreateReadmeRus() error {
 	TextReadmeFile = strings.ReplaceAll(TextReadmeFile, CrudStarterURLOld, CrudStarterURL)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyReadmeFile, []byte(TextReadmeFile), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyReadmeFile, []byte(TextReadmeFile), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

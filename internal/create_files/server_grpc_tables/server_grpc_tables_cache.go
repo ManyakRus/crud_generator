@@ -7,7 +7,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
 	"os"
 	"strings"
 )
@@ -102,7 +101,7 @@ func CreateFiles_Cache(Table1 *types.Table) error {
 	TextGRPCServer = create_files.Delete_EmptyImport(TextGRPCServer)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
@@ -186,7 +185,7 @@ func CreateFiles_Cache_Test(Table1 *types.Table) error {
 	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyCache, []byte(TextGRPCServer), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
+
 	"os"
 	"strings"
 )
@@ -53,7 +53,7 @@ func CreateFileConstants() error {
 	TextConstants = strings.ReplaceAll(TextConstants, ServiceNameTemplate, ServiceNameNew)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyConstants, []byte(TextConstants), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyConstants, []byte(TextConstants), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

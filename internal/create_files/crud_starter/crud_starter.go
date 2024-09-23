@@ -7,7 +7,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
+
 	"os"
 	"sort"
 	"strings"
@@ -90,7 +90,7 @@ func CreateFile_CrudStarter(MapAll map[string]*types.Table) error {
 	TextCrudStarter = create_files.Delete_EmptyImport(TextCrudStarter)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
@@ -381,7 +381,7 @@ func CreateFileCrudStarter_manual(MapAll map[string]*types.Table) error {
 	TextCrudStarter = create_files.Delete_EmptyImport(TextCrudStarter)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyCrudStarter, []byte(TextCrudStarter), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }

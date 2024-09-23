@@ -6,7 +6,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"io/fs"
 	"os"
 	"strings"
 )
@@ -85,7 +84,7 @@ func CreateFiles_ServerGRPCStarter() error {
 	TextGRPCStarter = create_files.Delete_EmptyImport(TextGRPCStarter)
 
 	//запись файла
-	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCStarter), fs.FileMode(config.Settings.FILE_PERMISSIONS))
+	err = os.WriteFile(FilenameReadyMain, []byte(TextGRPCStarter), config.Settings.FILE_PERMISSIONS)
 
 	return err
 }
