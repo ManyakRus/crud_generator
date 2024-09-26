@@ -88,7 +88,8 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		TextProtoNew = TextProtoNew + FindText_ProtoTable1_UpdateEveryColumn(TextProto, Table1)
 
 		//добавим текст FindBy
-		TextProto, TextProtoNew1 := FindText_FindBy(TextProto, Table1)
+		TextProtoNew1 := ""
+		TextProto, TextProtoNew1 = FindText_FindBy(TextProto, Table1)
 		TextProtoNew = TextProtoNew + TextProtoNew1
 
 		//добавим текст FindMassBy
@@ -361,10 +362,10 @@ message ` + TextRequest + ` {
 
 	//
 	for i, Column1 := range Columns {
-		ProtoType := create_files.Convert_GolangTypeNameToProtobufTypeName(Column1.Type)
+		ProtoType := create_files.Convert_GolangTypeNameToProtobufTypeName(Column1.TypeGo)
 		ProtoName := create_files.Find_RequestFieldName_FromMass(Column1, Columns)
 		TextMessage = TextMessage + `
-		` + ProtoType + ` ` + ProtoName + ` = ` + strconv.Itoa(i+2) + `; //значение поиска`
+    ` + ProtoType + ` ` + ProtoName + ` = ` + strconv.Itoa(i+2) + `; //значение поиска`
 	}
 
 	TextMessage = TextMessage + `

@@ -2601,12 +2601,12 @@ func Find_RequestFieldNames_FromMass(MassColumns []*types.Column) string {
 	Otvet := ""
 
 	TextFields := ""
-	TextRequest := ""
+	//TextRequest := ""
 	Underline := ""
 	for _, Column1 := range MassColumns {
 		TextFields = TextFields + Underline + Column1.NameGo
 		TextRequest1 := Find_RequestFieldName_FromMass(Column1, MassColumns)
-		TextRequest = TextRequest + Underline + TextRequest1
+		Otvet = Otvet + Underline + TextRequest1
 		Underline = "_"
 	}
 

@@ -42,7 +42,7 @@ func Connect() {
 	// Connect to the NATS server.
 	Conn, err := nats.Connect(NatsURL, nats.Timeout(60*time.Second))
 	if err != nil {
-		log.Panic(err)
+		log.Panic("nats.Connect(", NatsURL, ") error: ", err)
 	}
 	//defer Conn.Close()
 

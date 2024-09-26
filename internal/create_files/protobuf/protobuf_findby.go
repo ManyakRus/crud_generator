@@ -26,10 +26,11 @@ func FindText_FindBy(TextProto string, Table1 *types.Table) (string, string) {
 
 		//добавим message
 		TextMess := AddTextMessageRequestID_Columns(TextProto, TableColumns1.Columns)
+
 		//проверим такой текст message уже есть
 		pos1 = strings.Index(TextProto, TextMess)
 		if pos1 < 0 {
-			Otvet = Otvet + "\n" + TextMess
+			Otvet = TextMess
 		}
 
 		//

@@ -404,7 +404,7 @@ func Is_Common_Сolumn(Column1 *types.Column) bool {
 func Is_NotNeedUpdate_Сolumn(Column1 *types.Column) bool {
 	Otvet := false
 
-	Otvet = Is_Column_CommonStruct(Column1) || Is_Column_GroupsStruct(Column1) || Is_Column_ExtLinksStruct(Column1)
+	Otvet = Is_Column_CommonStruct(Column1) || Is_Column_GroupsStruct(Column1) //|| Is_Column_ExtLinksStruct(Column1)
 
 	if Is_Need_Сolumn(Column1) == false {
 		Otvet = true
