@@ -2535,7 +2535,8 @@ func FindMass_Columns_from_MassColumnsString(Table1 *types.Table, MassColumnsStr
 	for i, ColumnName := range MassColumnsString {
 		Column1, ok := Table1.MapColumns[ColumnName]
 		if ok == false {
-			log.Panic(Table1.Name + " .MapColumns[" + ColumnName + "] = false")
+			log.Panic(Table1.Name + " error: not found column: " + ColumnName)
+			//log.Panic(Table1.Name + " .MapColumns[" + ColumnName + "] = false")
 		}
 		Otvet[i] = Column1
 	}

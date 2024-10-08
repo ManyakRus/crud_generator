@@ -1,2 +1,4 @@
-[{"Table":"connections","Columns":["branch_id"]}
+[{"Table":"connections","Columns":["branch_id"]},
+{"Table":"briefcases_hashtags","Columns":["briefcase_id"]},
+{"Table":"employees_hashtags","Columns":["employee_id"]}
 ]
