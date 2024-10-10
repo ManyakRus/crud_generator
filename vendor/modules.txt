@@ -12,6 +12,11 @@ github.com/ManyakRus/starter/micro
 github.com/ManyakRus/starter/port_checker
 github.com/ManyakRus/starter/postgres_gorm
 github.com/ManyakRus/starter/stopapp
+# github.com/alexsergivan/transliterator v1.0.1
+## explicit; go 1.13
+github.com/alexsergivan/transliterator
+github.com/alexsergivan/transliterator/data
+github.com/alexsergivan/transliterator/languages
 # github.com/bxcodec/faker/v3 v3.8.1
 ## explicit; go 1.12
 github.com/bxcodec/faker/v3

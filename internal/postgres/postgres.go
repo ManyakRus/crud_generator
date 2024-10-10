@@ -10,6 +10,8 @@ import (
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/alexsergivan/transliterator"
+	_ "github.com/alexsergivan/transliterator"
 	"sort"
 	"strings"
 	"time"
@@ -264,6 +266,8 @@ order by
 		return MapTable, err
 	}
 
+	trans := transliterator.NewTransliterator(nil)
+
 	//заполним MapTable
 	MapColumns := make(map[string]*types.Column, 0)
 	OrderNumberColumn := 0
@@ -289,6 +293,8 @@ order by
 			ModelName := create_files.Find_SingularName(TableName)
 			ModelName = create_files.FormatName(ModelName)
 
+			NameGo_translit := trans.Transliterate(ModelName, "en")
+
 			//
 			TableComment := v.TableComment
 			TableComment = strings.ReplaceAll(TableComment, "\n", "")
@@ -299,6 +305,7 @@ order by
 			Table1.OrderNumber = OrderNumberTable
 			Table1.Comment = TableComment
 			Table1.NameGo = ModelName
+			Table1.NameGo_translit = NameGo_translit
 
 			PrimaryKeyColumnsCount = 0
 		}
@@ -642,6 +649,10 @@ func FillNameGo(Column1 *types.Column) {
 		err = errors.New("FillNameGo() error: Column: " + ColumnName + " Type: " + Column1.Type + " NameGo= \"\"")
 		log.Panic(err)
 	}
+
+	trans := transliterator.NewTransliterator(nil)
+	NameGo_translit := trans.Transliterate(ColumnNameGo, "en")
+	Column1.NameGo_translit = NameGo_translit
 
 	return
 }

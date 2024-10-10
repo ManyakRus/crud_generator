@@ -6,8 +6,10 @@ toolchain go1.22.1
 
 require (
 	github.com/ManyakRus/starter v1.0.58
+	github.com/alexsergivan/transliterator v1.0.1
 	github.com/bxcodec/faker/v3 v3.8.1
 	github.com/davecgh/go-spew v1.1.1
+	github.com/gobeam/stringy v0.0.7
 	github.com/iancoleman/strcase v0.3.0
 	github.com/jimsmart/schema v0.2.1
 	github.com/jinzhu/inflection v1.0.0
@@ -21,7 +23,6 @@ require (
 
 require (
 	github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792 // indirect
-	github.com/gobeam/stringy v0.0.7 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
