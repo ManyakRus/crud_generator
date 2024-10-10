@@ -1,5 +1,7 @@
 package types
 
+import "github.com/ManyakRus/crud_generator/pkg/dbmeta"
+
 type Column struct {
 	Name         string `json:"name"   gorm:"column:name;default:''"`
 	Type         string `json:"type_name"   gorm:"column:type_name;default:''"`
@@ -78,3 +80,11 @@ var MassFindMassBy = make([]TableColumns, 0)
 
 // MapReadAll - таблицы, для которых нужна функция ReadAll()
 var MapReadAll = make(map[*Table]bool, 0)
+
+// SettingsFillFromDatabase - настройки для заполнения данных из базы данных
+type SettingsFillFromDatabase struct {
+	INCLUDE_TABLES    string
+	EXCLUDE_TABLES    string
+	NEED_USE_DB_VIEWS bool
+	MapDBTypes        map[string]*dbmeta.SQLMapping //карта соответсвий типов в базе данных и типов в golang
+}

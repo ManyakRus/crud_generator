@@ -5,10 +5,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/types"
-	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/postgres_gorm"
@@ -36,11 +34,11 @@ type TableRowsStruct struct {
 }
 
 // FillMapTable - возвращает массив MassTable данными из БД
-func FillMapTable() (map[string]*types.Table, error) {
+func FillMapTable(SettingsFill types.SettingsFillFromDatabase) (map[string]*types.Table, error) {
 	MapTable := make(map[string]*types.Table, 0)
 	var err error
 
-	MapTable, err = FillMapTable1()
+	MapTable, err = FillMapTable1(SettingsFill)
 	if err != nil {
 		log.Error("FillMapTable1() error: ", err)
 		return MapTable, err
@@ -63,7 +61,7 @@ func FillMapTable() (map[string]*types.Table, error) {
 }
 
 // FillMapTable1 - возвращает массив MassTable данными из БД
-func FillMapTable1() (map[string]*types.Table, error) {
+func FillMapTable1(SettingsFill types.SettingsFillFromDatabase) (map[string]*types.Table, error) {
 	var err error
 	//MassTable := make([]types.Table, 0)
 	MapTable := make(map[string]*types.Table, 0)
@@ -182,9 +180,7 @@ order by
 	table_name, 
 	is_identity desc,
 	column_name
-	
-
-	
+		
 `
 
 	SCHEMA := strings.Trim(postgres_gorm.Settings.DB_SCHEMA, " ")
@@ -192,12 +188,16 @@ order by
 		TextSQL = strings.ReplaceAll(TextSQL, "public", SCHEMA)
 	}
 
-	if config.Settings.INCLUDE_TABLES != "" {
-		TextSQL = strings.ReplaceAll(TextSQL, "--INCLUDE_TABLES", "and c.table_name ~* '"+config.Settings.INCLUDE_TABLES+"'")
+	if SettingsFill.INCLUDE_TABLES != "" {
+		TextSQL = strings.ReplaceAll(TextSQL, "--INCLUDE_TABLES", "and c.table_name ~* '"+SettingsFill.INCLUDE_TABLES+"'")
 	}
 
-	if config.Settings.EXCLUDE_TABLES != "" {
-		TextSQL = strings.ReplaceAll(TextSQL, "--EXCLUDE_TABLES", "and c.table_name !~* '"+config.Settings.EXCLUDE_TABLES+"'")
+	if SettingsFill.EXCLUDE_TABLES != "" {
+		TextSQL = strings.ReplaceAll(TextSQL, "--EXCLUDE_TABLES", "and c.table_name !~* '"+SettingsFill.EXCLUDE_TABLES+"'")
+	}
+
+	if SettingsFill.NEED_USE_DB_VIEWS == true {
+		TextSQL = strings.ReplaceAll(TextSQL, "\tand v.table_name is null", "")
 	}
 
 	//соединение
@@ -304,7 +304,7 @@ order by
 		FillNameGo(&Column1)
 
 		//Type_go
-		FillTypeGo(&Column1)
+		FillTypeGo(SettingsFill, &Column1)
 		//SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
 		//if ok == false {
 		//	log.Panic("GetMappings() ", Column1.Type, " error: not found")
@@ -354,64 +354,64 @@ func CreateTable() *types.Table {
 	return Otvet
 }
 
-// FillIDMinimum - находим минимальный ID, для тестов с этим ID
-func FillIDMinimum(MapTable map[string]*types.Table) error {
-	var err error
-
-	//соединение
-	db := postgres_gorm.GetConnection()
-	ctxMain := contextmain.GetContext()
-
-	Schema := strings.Trim(postgres_gorm.Settings.DB_SCHEMA, " ")
-
-	for TableName, Table1 := range MapTable {
-		//текст запроса
-		NameID, TypeGo := FindNameType_from_PrimaryKey(Table1)
-		if NameID == "" {
-			continue
-		}
-		TextSQL := ""
-		Is_UUID_Type := create_files.Is_UUID_Type(TypeGo)
-		if Is_UUID_Type == false {
-			DefaultValueSQL := create_files.FindText_DefaultValueSQL(TypeGo)
-			TextSQL = `SELECT 
-				Min("` + NameID + `") as id_minimum 
-				FROM
-					"` + Schema + `"."` + TableName + `" 
-				WHERE 
-					"` + NameID + `" <> ` + DefaultValueSQL
-		} else {
-			TextSQL = `SELECT "` + NameID + `" as id_minimum 
-				FROM "` + Schema + `"."` + TableName + `"
-				WHERE "` + NameID + `" is not null 
-				ORDER BY ` + NameID + `
-				LIMIT 1`
-		}
-		ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*60)
-		defer ctxCancelFunc()
-		db.WithContext(ctx)
-
-		//запрос
-		tx := db.Raw(TextSQL)
-		err = tx.Error
-		if err != nil {
-			log.Panic("Wrong SQL query: ", TextSQL, " error: ", err)
-		}
-
-		var IDMinimum sql.NullString
-		tx = tx.Scan(&IDMinimum)
-		err = tx.Error
-		if err != nil {
-			log.Panic("Wrong SQL Scan(): ", TextSQL, " error: ", err)
-		}
-
-		//
-		ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
-		ColumnPK.IDMinimum = IDMinimum.String
-	}
-
-	return err
-}
+//// FillIDMinimum - находим минимальный ID, для тестов с этим ID
+//func FillIDMinimum(MapTable map[string]*types.Table) error {
+//	var err error
+//
+//	//соединение
+//	db := postgres_gorm.GetConnection()
+//	ctxMain := contextmain.GetContext()
+//
+//	Schema := strings.Trim(postgres_gorm.Settings.DB_SCHEMA, " ")
+//
+//	for TableName, Table1 := range MapTable {
+//		//текст запроса
+//		NameID, TypeGo := FindNameType_from_PrimaryKey(Table1)
+//		if NameID == "" {
+//			continue
+//		}
+//		TextSQL := ""
+//		Is_UUID_Type := create_files.Is_UUID_Type(TypeGo)
+//		if Is_UUID_Type == false {
+//			DefaultValueSQL := create_files.FindText_DefaultValueSQL(TypeGo)
+//			TextSQL = `SELECT
+//				Min("` + NameID + `") as id_minimum
+//				FROM
+//					"` + Schema + `"."` + TableName + `"
+//				WHERE
+//					"` + NameID + `" <> ` + DefaultValueSQL
+//		} else {
+//			TextSQL = `SELECT "` + NameID + `" as id_minimum
+//				FROM "` + Schema + `"."` + TableName + `"
+//				WHERE "` + NameID + `" is not null
+//				ORDER BY ` + NameID + `
+//				LIMIT 1`
+//		}
+//		ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*60)
+//		defer ctxCancelFunc()
+//		db.WithContext(ctx)
+//
+//		//запрос
+//		tx := db.Raw(TextSQL)
+//		err = tx.Error
+//		if err != nil {
+//			log.Panic("Wrong SQL query: ", TextSQL, " error: ", err)
+//		}
+//
+//		var IDMinimum sql.NullString
+//		tx = tx.Scan(&IDMinimum)
+//		err = tx.Error
+//		if err != nil {
+//			log.Panic("Wrong SQL Scan(): ", TextSQL, " error: ", err)
+//		}
+//
+//		//
+//		ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
+//		ColumnPK.IDMinimum = IDMinimum.String
+//	}
+//
+//	return err
+//}
 
 // FillIDMinimum_ManyPK - находим минимальный ID, для тестов с этим ID, для многих Primary Key
 func FillIDMinimum_ManyPK(MapTable map[string]*types.Table) error {
@@ -625,34 +625,41 @@ func FindNameType_from_PrimaryKey(Table1 *types.Table) (string, string) {
 //}
 
 // FillNameGo - заполняет NameGo во все колонки
-func FillNameGo(Column1 *types.Column) error {
+func FillNameGo(Column1 *types.Column) {
 	var err error
 
 	ColumnName := Column1.Name
 	ColumnNameGo := create_files.FormatName(ColumnName)
 	Column1.NameGo = ColumnNameGo
 	if ColumnNameGo == "" {
-		err = errors.New("Column: " + ColumnName + " Type: " + Column1.Type + " NameGo= \"\"")
+		err = errors.New("FillNameGo() error: Column: " + ColumnName + " Type: " + Column1.Type + " NameGo= \"\"")
+		log.Panic(err)
 	}
 
-	return err
+	return
 }
 
 // FillTypeGo - заполняет тип golang из типа postgres
-func FillTypeGo(Column1 *types.Column) error {
+func FillTypeGo(SettingsFill types.SettingsFillFromDatabase, Column1 *types.Column) {
 	var err error
 
-	SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
+	//SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
+	//if ok == false {
+	//	log.Panic("GetMappings() ", Column1.Type, " error: not found")
+	//}
+
+	SQLMapping1, ok := SettingsFill.MapDBTypes[Column1.Type]
 	if ok == false {
-		log.Panic("GetMappings() ", Column1.Type, " error: not found")
+		log.Panic("FillTypeGo() Column1.Type: ", Column1.Type, " error: not found")
 	}
 
 	ColumnName := Column1.Name
 	Type_go := SQLMapping1.GoType
 	Column1.TypeGo = Type_go
 	if Type_go == "" {
-		err = errors.New("Column: " + ColumnName + " Type: " + Column1.Type + " TypeGo= \"\"")
+		err = errors.New("FillTypeGo() error: Column: " + ColumnName + " Type: " + Column1.Type + " TypeGo= \"\"")
+		log.Panic(err)
 	}
 
-	return err
+	return
 }

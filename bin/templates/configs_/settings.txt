@@ -26,6 +26,10 @@ EXCLUDE_TABLES="ext_"
 #SINGULAR_TABLE_NAMES: true = table names will be not renamed to plural name
 SINGULAR_TABLE_NAMES=true
 
+#NEED_USE_DB_VIEWS - need create crud for database views, same as usual tables
+NEED_USE_DB_VIEWS=false
+
+
 #---------------------Template settings---------------------
 
 #SERVICE_REPOSITORY_URL - URL of your new service repository (Github, gitlab, etc.)

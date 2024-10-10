@@ -29,33 +29,23 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/load_configs"
 	"github.com/ManyakRus/crud_generator/internal/postgres"
 	"github.com/ManyakRus/crud_generator/internal/types"
+	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 )
 
 //var MassTable []types.Table
 
-// FillGlobalVariables - заполняет глобальные переменные
-func FillGlobalVariables(MapAll map[string]*types.Table) {
-
-	// MassFindBy
-	Mass1 := create_files.FindMass_TableColumns(MapAll, types.MassFindBy_String)
-	types.MassFindBy = Mass1
-
-	// MassFindMassBy
-	Mass1 = create_files.FindMass_TableColumns(MapAll, types.MassFindMassBy_String)
-	types.MassFindMassBy = Mass1
-
-	// ReadAll
-	types.MapReadAll = load_configs.LoadReadAll(MapAll)
-
-}
-
 func StartFillAll() error {
 	var err error
 
 	//заполним MapAll
-	MapAll, err := postgres.FillMapTable()
+	SettingsFillFromDatabase := types.SettingsFillFromDatabase{}
+	SettingsFillFromDatabase.MapDBTypes = dbmeta.GetMappings()
+	SettingsFillFromDatabase.INCLUDE_TABLES = config.Settings.INCLUDE_TABLES
+	SettingsFillFromDatabase.EXCLUDE_TABLES = config.Settings.EXCLUDE_TABLES
+	SettingsFillFromDatabase.NEED_USE_DB_VIEWS = config.Settings.NEED_USE_DB_VIEWS
+	MapAll, err := postgres.FillMapTable(SettingsFillFromDatabase)
 	if err != nil {
 		log.Error("FillMapTable() error: ", err)
 		return err
@@ -239,4 +229,20 @@ func StartFillAll() error {
 	}
 
 	return err
+}
+
+// FillGlobalVariables - заполняет глобальные переменные
+func FillGlobalVariables(MapAll map[string]*types.Table) {
+
+	// MassFindBy
+	Mass1 := create_files.FindMass_TableColumns(MapAll, types.MassFindBy_String)
+	types.MassFindBy = Mass1
+
+	// MassFindMassBy
+	Mass1 = create_files.FindMass_TableColumns(MapAll, types.MassFindMassBy_String)
+	types.MassFindMassBy = Mass1
+
+	// ReadAll
+	types.MapReadAll = load_configs.LoadReadAll(MapAll)
+
 }

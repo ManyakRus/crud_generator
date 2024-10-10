@@ -198,6 +198,8 @@ type SettingsINI struct {
 	SERVER_GRPC_TABLE_CACHE_TEST_FILENAME string
 
 	TEXT_READALL string
+
+	NEED_USE_DB_VIEWS bool
 }
 
 func Getenv(Name string, IsRequired bool) string {
@@ -1033,6 +1035,11 @@ func FillSettings() {
 	Name = "TEXT_READALL"
 	s = Getenv(Name, true)
 	Settings.TEXT_READALL = s
+
+	//
+	Name = "NEED_USE_DB_VIEWS"
+	s = Getenv(Name, true)
+	Settings.NEED_USE_DB_VIEWS = BoolFromString(s)
 
 }
 
