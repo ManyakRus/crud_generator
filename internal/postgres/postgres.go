@@ -26,6 +26,7 @@ type TableColumn struct {
 	ColumnColumnKey   string `json:"column_key"   gorm:"column:column_key;default:''"`
 	TableComment      string `json:"table_comment"   gorm:"column:table_comment;default:''"`
 	IsPrimaryKey      bool   `json:"is_primary_key"   gorm:"column:is_primary_key;default:false"`
+	TableIsView       bool   `json:"table_is_view"   gorm:"column:table_is_view;default:false"`
 }
 
 type TableRowsStruct struct {
@@ -131,8 +132,12 @@ SELECT
 		WHEN tpk.table_name is not null
 		THEN true
 		ELSE false END 
-	    as is_primary_key
-
+	    as is_primary_key,
+	CASE
+		WHEN v.table_name is not null
+		THEN true
+		ELSE false END 
+	    as is_view
 FROM 
 	information_schema.columns c 
 	
@@ -312,6 +317,8 @@ order by
 		//Type_go := SQLMapping1.GoType
 		//Column1.TypeGo = Type_go
 
+		IsPrimaryKey_manual := Find_IsPrimaryKey_manual(SettingsFill, v.TableName, v.ColumnName)
+		IsPrimaryKey := v.IsPrimaryKey || IsPrimaryKey_manual
 		//
 		if v.ColumnIsIdentity == "YES" {
 			Column1.IsIdentity = true
@@ -323,8 +330,8 @@ order by
 		Column1.OrderNumber = OrderNumberColumn
 		Column1.TableKey = v.ColumnTableKey
 		Column1.ColumnKey = v.ColumnColumnKey
-		Column1.IsPrimaryKey = v.IsPrimaryKey
-		if v.IsPrimaryKey == true {
+		Column1.IsPrimaryKey = IsPrimaryKey
+		if IsPrimaryKey == true {
 			PrimaryKeyColumnsCount++
 		}
 
@@ -662,4 +669,22 @@ func FillTypeGo(SettingsFill types.SettingsFillFromDatabase, Column1 *types.Colu
 	}
 
 	return
+}
+
+// Find_IsPrimaryKey_manual - возвращает true если эта колонка является PrimaryKey (заполненных вручную)
+func Find_IsPrimaryKey_manual(SettingsFill types.SettingsFillFromDatabase, TableName string, ColumnName string) bool {
+	Otvet := false
+
+	MassColumnStrings, ok := SettingsFill.MapPrimaryKeys[TableName]
+	if ok == false {
+		return Otvet
+	}
+
+	for _, ColumnString := range MassColumnStrings {
+		if ColumnString == ColumnName {
+			Otvet = true
+		}
+	}
+
+	return Otvet
 }

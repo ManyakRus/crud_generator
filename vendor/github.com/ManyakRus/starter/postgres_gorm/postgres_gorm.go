@@ -12,17 +12,11 @@ import (
 	"strings"
 	"time"
 
-	//"github.com/jackc/pgconn"
-	"os"
-	"sync"
-	//"time"
-
-	//"github.com/jmoiron/sqlx"
-	//_ "github.com/lib/pq"
-
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/stopapp"
+	"os"
+	"sync"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -55,6 +49,9 @@ type SettingsINI struct {
 	DB_PASSWORD string
 }
 
+// NamingStrategy - структура для хранения настроек наименования таблиц
+var NamingStrategy = schema.NamingStrategy{}
+
 // Connect_err - подключается к базе данных
 func Connect() {
 
@@ -65,6 +62,12 @@ func Connect() {
 	port_checker.CheckPort(Settings.DB_HOST, Settings.DB_PORT)
 
 	err := Connect_err()
+	LogInfo_Connected(err)
+
+}
+
+// LogInfo_Connected - выводит сообщение в Лог, или паника при ошибке
+func LogInfo_Connected(err error) {
 	if err != nil {
 		log.Panicln("POSTGRES gorm Connect() to database host: ", Settings.DB_HOST, ", Error: ", err)
 	} else {
@@ -81,6 +84,33 @@ func Connect_err() error {
 	return err
 }
 
+// Connect_WithApplicationName_SingularTableName - подключается к базе данных, с указанием имени приложения, без переименования имени таблиц
+func Connect_WithApplicationName_SingularTableName(ApplicationName string) {
+	err := Connect_WithApplicationName_SingularTableName_err(ApplicationName)
+	if err != nil {
+		log.Panicln("POSTGRES gorm Connect_WithApplicationName_SingularTableName_err() to database host: ", Settings.DB_HOST, ", Error: ", err)
+	} else {
+		log.Info("POSTGRES gorm Connected. host: ", Settings.DB_HOST, ", base name: ", Settings.DB_NAME, ", schema: ", Settings.DB_SCHEMA)
+	}
+}
+
+// Connect_WithApplicationName_SingularTableName_err - подключается к базе данных, с указанием имени приложения, без переименования имени таблиц
+func Connect_WithApplicationName_SingularTableName_err(ApplicationName string) error {
+	SetSingularTableNames(true)
+	err := Connect_WithApplicationName_err(ApplicationName)
+	return err
+}
+
+// Connect_WithApplicationName - подключается к базе данных, с указанием имени приложения
+func Connect_WithApplicationName(ApplicationName string) {
+	err := Connect_WithApplicationName_err(ApplicationName)
+	if err != nil {
+		log.Panicln("POSTGRES gorm Connect_WithApplicationName_err() to database host: ", Settings.DB_HOST, ", Error: ", err)
+	} else {
+		log.Info("POSTGRES gorm Connected. host: ", Settings.DB_HOST, ", base name: ", Settings.DB_NAME, ", schema: ", Settings.DB_SCHEMA)
+	}
+}
+
 // Connect_WithApplicationName_err - подключается к базе данных, с указанием имени приложения
 func Connect_WithApplicationName_err(ApplicationName string) error {
 	var err error
@@ -89,29 +119,24 @@ func Connect_WithApplicationName_err(ApplicationName string) error {
 		FillSettings()
 	}
 
-	//ctxMain := context.Background()
-	//ctxMain := contextmain.GetContext()
-	//ctx, cancel := context.WithTimeout(ctxMain, 5*time.Second)
-	//defer cancel()
-
-	// get the database connection URL.
+	//get the database connection URL.
 	dsn := GetDSN(ApplicationName)
 
 	//
 	conf := &gorm.Config{
 		Logger: gormlogger.Default.LogMode(gormlogger.Silent),
 	}
-	//conn := postgres.Open(dsn)
+	conf.NamingStrategy = NamingStrategy
 
-	dialect := postgres.New(postgres.Config{
+	//
+	config := postgres.Config{
 		DSN:                  dsn,
 		PreferSimpleProtocol: true, //для запуска мультизапросов
-	})
-	Conn, err = gorm.Open(dialect, conf)
+	}
 
-	//Conn, err = gorm.Open(conn, conf)
-	Conn.Config.NamingStrategy = schema.NamingStrategy{TablePrefix: Settings.DB_SCHEMA + "."}
-	//Conn.Config.Logger = gormlogger.Default.LogMode(gormlogger.Error)
+	//
+	dialect := postgres.New(config)
+	Conn, err = gorm.Open(dialect, conf)
 
 	if err == nil {
 		DB, err := Conn.DB()
@@ -259,7 +284,54 @@ func WaitStop() {
 
 // StartDB - делает соединение с БД, отключение и др.
 func StartDB() {
-	Connect()
+	var err error
+
+	ctx := contextmain.GetContext()
+	WaitGroup := stopapp.GetWaitGroup_Main()
+	err = Start_ctx(&ctx, WaitGroup)
+	LogInfo_Connected(err)
+
+}
+
+// Start_ctx - необходимые процедуры для подключения к серверу БД
+// Свой контекст и WaitGroup нужны для остановки работы сервиса Graceful shutdown
+// Для тех кто пользуется этим репозиторием для старта и останова сервиса можно просто StartDB()
+func Start_ctx(ctx *context.Context, WaitGroup *sync.WaitGroup) error {
+	var err error
+
+	//запомним к себе контекст
+	contextmain.Ctx = ctx
+	if ctx == nil {
+		contextmain.GetContext()
+	}
+
+	//запомним к себе WaitGroup
+	stopapp.SetWaitGroup_Main(WaitGroup)
+	if WaitGroup == nil {
+		stopapp.StartWaitStop()
+	}
+
+	//
+	err = Connect_err()
+	if err != nil {
+		return err
+	}
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go WaitStop()
+
+	stopapp.GetWaitGroup_Main().Add(1)
+	go ping_go()
+
+	return err
+}
+
+// Start - делает соединение с БД, отключение и др.
+func Start(ApplicationName string) {
+	err := Connect_WithApplicationName_err(ApplicationName)
+	if err != nil {
+		log.Panic("Postgres gorm Start() error: ", err)
+	}
 
 	stopapp.GetWaitGroup_Main().Add(1)
 	go WaitStop()
@@ -269,15 +341,10 @@ func StartDB() {
 
 }
 
-// Start - делает соединение с БД, отключение и др.
-func Start(ApplicationName string) {
-	Connect_WithApplicationName_err(ApplicationName)
-
-	stopapp.GetWaitGroup_Main().Add(1)
-	go WaitStop()
-
-	stopapp.GetWaitGroup_Main().Add(1)
-	go ping_go()
+// Start_SingularTableName - делает соединение с БД, отключение и др. Без переименования имени таблиц на множественное число
+func Start_SingularTableName(ApplicationName string) {
+	SetSingularTableNames(true)
+	Start(ApplicationName)
 
 }
 
@@ -327,6 +394,8 @@ func FillSettings() {
 	}
 
 	//
+	NamingStrategy.SchemaName(Settings.DB_SCHEMA)
+	NamingStrategy.TablePrefix = Settings.DB_SCHEMA + "."
 }
 
 // GetDSN - возвращает строку соединения к базе данных
@@ -356,7 +425,10 @@ func GetConnection() *gorm.DB {
 // GetConnection_WithApplicationName - возвращает соединение к нужной базе данных, с указанием имени приложения
 func GetConnection_WithApplicationName(ApplicationName string) *gorm.DB {
 	if Conn == nil {
-		Connect_WithApplicationName_err(ApplicationName)
+		err := Connect_WithApplicationName_err(ApplicationName)
+		if err != nil {
+			log.Panic("GetConnection_WithApplicationName() error: ", err)
+		}
 	}
 
 	return Conn
@@ -441,8 +513,8 @@ func RawMultipleSQL(db *gorm.DB, TextSQL string) *gorm.DB {
 	}
 
 	//запустим транзакцию
-	//tx = tx.Begin()
-	//defer tx.Commit()
+	//tx0 := tx.Begin()
+	//defer tx0.Commit()
 
 	//
 	TextSQL1 := ""
@@ -472,4 +544,87 @@ func RawMultipleSQL(db *gorm.DB, TextSQL string) *gorm.DB {
 	}
 
 	return tx
+}
+
+// ReplaceSchema - заменяет "public." на Settings.DB_SCHEMA
+func ReplaceSchema(TextSQL string) string {
+	Otvet := TextSQL
+
+	if Settings.DB_SCHEMA == "" {
+		return Otvet
+	}
+
+	Otvet = strings.ReplaceAll(Otvet, "\tpublic.", "\t"+Settings.DB_SCHEMA+".")
+	Otvet = strings.ReplaceAll(Otvet, "\npublic.", "\n"+Settings.DB_SCHEMA+".")
+	Otvet = strings.ReplaceAll(Otvet, " public.", " "+Settings.DB_SCHEMA+".")
+
+	return Otvet
+}
+
+// ReplaceTemporaryTableNamesToUnique - заменяет "public.TableName" на "public.TableName_UUID"
+func ReplaceTemporaryTableNamesToUnique(TextSQL string) string {
+	Otvet := TextSQL
+
+	sUUID := micro.StringIdentifierFromUUID()
+	map1 := make(map[string]int)
+
+	//найдём список всех временных таблиц, и заполним в map1
+	s0 := Otvet
+	for {
+		sFind := "CREATE TEMPORARY TABLE "
+		sFind2 := "create temporary table "
+		pos1 := micro.IndexSubstringMin2(s0, sFind, sFind2)
+		if pos1 < 0 {
+			break
+		}
+		s2 := s0[pos1+len(sFind):]
+		pos2 := micro.IndexSubstringMin2(s2, " ", "\n")
+		if pos2 <= 0 {
+			break
+		}
+		name1 := s0[pos1+len(sFind) : pos1+len(sFind)+pos2]
+		if name1 == "" {
+			break
+		}
+
+		s0 = s0[pos1+len(sFind)+pos2:]
+		map1[name1] = len(name1)
+	}
+
+	//заменим все временные таблицы на уникальные
+	MassNames := micro.SortMapStringInt_Desc(map1)
+	for _, v := range MassNames {
+		sFirst := " "
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+" ", " "+v+"_"+sUUID+" ")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+"\n", " "+v+"_"+sUUID+"\n")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+"\t", " "+v+"_"+sUUID+"\t")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+";", " "+v+"_"+sUUID+";")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+"(", " "+v+"_"+sUUID+"(")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+")", " "+v+"_"+sUUID+")")
+
+		sFirst = "\t"
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+" ", " "+v+"_"+sUUID+" ")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+"\n", " "+v+"_"+sUUID+"\n")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+"\t", " "+v+"_"+sUUID+"\t")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+";", " "+v+"_"+sUUID+";")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+"(", " "+v+"_"+sUUID+"(")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+")", " "+v+"_"+sUUID+")")
+
+		sFirst = "\n"
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+" ", " "+v+"_"+sUUID+" ")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+"\n", " "+v+"_"+sUUID+"\n")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+"\t", " "+v+"_"+sUUID+"\t")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+";", " "+v+"_"+sUUID+";")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+"(", " "+v+"_"+sUUID+"(")
+		Otvet = strings.ReplaceAll(Otvet, sFirst+v+")", " "+v+"_"+sUUID+")")
+
+	}
+
+	return Otvet
+}
+
+// SetSingularTableNames - меняет настройку "SingularTable" - надо ли НЕ переименовывать имя таблиц во вножественное число
+// true = не переименовывать
+func SetSingularTableNames(IsSingular bool) {
+	NamingStrategy.SingularTable = IsSingular
 }

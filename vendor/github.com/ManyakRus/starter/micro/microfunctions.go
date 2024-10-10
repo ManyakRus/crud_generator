@@ -3,12 +3,16 @@
 package micro
 
 import (
+	"bytes"
 	"context"
+	"encoding/gob"
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	"hash/fnv"
 	"reflect"
 	"runtime"
+	"sort"
 	"strconv"
 	"strings"
 	"unicode"
@@ -85,6 +89,17 @@ func Sleep(ms int) {
 // Pause - приостановка работы программы на нужное число миллисекунд
 func Pause(ms int) {
 	Sleep(ms)
+}
+
+// Pause_ctx - приостановка работы программы на нужное число миллисекунд, с учётом глобального контекста
+func Pause_ctx(ctx context.Context, ms int) {
+
+	Duration := time.Duration(ms) * time.Millisecond
+
+	select {
+	case <-ctx.Done():
+	case <-time.After(Duration):
+	}
 }
 
 // FindDirUp - возвращает строку с именем каталога на уровень выше
@@ -827,5 +842,165 @@ func StringFloat32_Dimension2(f float32) string {
 // запускать:
 // defer micro.ShowTimePassed(time.Now())
 func ShowTimePassed(StartAt time.Time) {
-	fmt.Print("Time passed: ", time.Since(StartAt))
+	fmt.Printf("Time passed: %s\n", time.Since(StartAt))
+}
+
+// ShowTimePassedSeconds - показывает время секунд прошедшее с момента старта
+// запускать:
+// defer micro.ShowTimePassedSeconds(time.Now())
+func ShowTimePassedSeconds(StartAt time.Time) {
+	fmt.Printf("Time passed: %s\n", time.Since(StartAt).Round(time.Second))
+}
+
+// ShowTimePassedMilliSeconds - показывает время миллисекунд прошедшее с момента старта
+// запускать:
+// defer micro.ShowTimePassedMilliSeconds(time.Now())
+func ShowTimePassedMilliSeconds(StartAt time.Time) {
+	fmt.Printf("Time passed: %s\n", time.Since(StartAt).Round(time.Millisecond))
+}
+
+// StructDeepCopy - копирует структуру из src в dist
+// dist - обязательно ссылка &
+func StructDeepCopy(src, dist interface{}) (err error) {
+	buf := bytes.Buffer{}
+	if err = gob.NewEncoder(&buf).Encode(src); err != nil {
+		return
+	}
+	return gob.NewDecoder(&buf).Decode(dist)
+}
+
+// IsEmptyValue - возвращает true если значение по умолчанию (0, пустая строка, пустой слайс)
+func IsEmptyValue(v any) bool {
+	rv := reflect.ValueOf(v)
+	Otvet := !rv.IsValid() || reflect.DeepEqual(rv.Interface(), reflect.Zero(rv.Type()).Interface())
+	return Otvet
+}
+
+// StringIdentifierFromUUID - возвращает строку из UUID
+func StringIdentifierFromUUID() string {
+	Otvet := uuid.New().String()
+	Otvet = strings.ReplaceAll(Otvet, "-", "")
+
+	return Otvet
+}
+
+// IndexSubstringMin - возвращает индекс первого вхождения в строке
+func IndexSubstringMin(s string, MassSubstr ...string) int {
+	Otvet := -1
+
+	for _, v := range MassSubstr {
+		Otvet1 := -1
+		if v != "" {
+			Otvet1 = strings.Index(s, v)
+		}
+		if Otvet1 != -1 && (Otvet1 < Otvet || Otvet == -1) {
+			Otvet = Otvet1
+		}
+	}
+
+	return Otvet
+}
+
+// IndexSubstringMin2 - возвращает индекс первого вхождения в строке
+func IndexSubstringMin2(s string, substr1, substr2 string) int {
+	Otvet := -1
+
+	Otvet1 := -1
+	Otvet2 := -1
+	if substr1 != "" {
+		Otvet1 = strings.Index(s, substr1)
+	}
+	if substr2 != "" {
+		Otvet2 = strings.Index(s, substr2)
+	}
+
+	if Otvet1 != -1 && (Otvet1 < Otvet2 || Otvet2 == -1) {
+		Otvet = Otvet1
+	} else {
+		Otvet = Otvet2
+	}
+
+	return Otvet
+}
+
+// SortMapStringInt_Desc - сортирует map по значению, по убыванию
+func SortMapStringInt_Desc(values map[string]int) []string {
+	type kv struct {
+		Key   string
+		Value int
+	}
+	var ss []kv
+	for k, v := range values {
+		ss = append(ss, kv{k, v})
+	}
+	sort.Slice(ss, func(i, j int) bool {
+		return ss[i].Value > ss[j].Value
+	})
+	ranked := make([]string, len(values))
+	for i, kv := range ss {
+		ranked[i] = kv.Key
+	}
+	return ranked
+}
+
+// IsNilInterface - проверка интерфейса на nil
+func IsNilInterface(i any) bool {
+	iv := reflect.ValueOf(i)
+	if !iv.IsValid() {
+		return true
+	}
+
+	switch iv.Kind() {
+	case reflect.Ptr, reflect.Slice, reflect.Map, reflect.Func, reflect.Interface:
+		return iv.IsNil()
+	default:
+		return false
+	}
+}
+
+// StringFromMassInt64 - преобразование массива int64 в строку
+func StringFromMassInt64(A []int64, delim string) string {
+
+	var buffer bytes.Buffer
+	for i := 0; i < len(A); i++ {
+		s1 := StringFromInt64(A[i])
+		buffer.WriteString(s1)
+		if i != len(A)-1 {
+			buffer.WriteString(delim)
+		}
+	}
+
+	return buffer.String()
+}
+
+// IsInt - проверяет, является ли строка целым числом
+func IsInt(s string) bool {
+	Otvet := false
+	if s == "" {
+		return Otvet
+	}
+
+	for _, c := range s {
+		if !unicode.IsDigit(c) {
+			return Otvet
+		}
+	}
+
+	Otvet = true
+	return Otvet
+}
+
+// Int32FromString - возвращает int32 из строки
+func Int32FromString(s string) (int32, error) {
+	var Otvet int32
+	var err error
+
+	Otvet64, err := strconv.ParseInt(s, 10, 32)
+	if err != nil {
+		return Otvet, err
+	}
+
+	Otvet = int32(Otvet64)
+
+	return Otvet, err
 }

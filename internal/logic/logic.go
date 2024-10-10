@@ -45,6 +45,7 @@ func StartFillAll() error {
 	SettingsFillFromDatabase.INCLUDE_TABLES = config.Settings.INCLUDE_TABLES
 	SettingsFillFromDatabase.EXCLUDE_TABLES = config.Settings.EXCLUDE_TABLES
 	SettingsFillFromDatabase.NEED_USE_DB_VIEWS = config.Settings.NEED_USE_DB_VIEWS
+	SettingsFillFromDatabase.MapPrimaryKeys = types.MapPrimaryKeys
 	MapAll, err := postgres.FillMapTable(SettingsFillFromDatabase)
 	if err != nil {
 		log.Error("FillMapTable() error: ", err)

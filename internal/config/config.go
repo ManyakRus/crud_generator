@@ -48,6 +48,7 @@ type SettingsINI struct {
 	TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME         string
 	TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME   string
 	TEMPLATES_NAME_REPLACE_FILENAME                  string
+	TEMPLATES_NAME_PRIMARYKEYS_FILENAME              string
 	TEMPLATES_NULLABLE_FILENAME                      string
 	TEMPLATES_CRUD_TABLE_UPDATE_FILENAME             string
 	TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME        string
@@ -1040,6 +1041,11 @@ func FillSettings() {
 	Name = "NEED_USE_DB_VIEWS"
 	s = Getenv(Name, true)
 	Settings.NEED_USE_DB_VIEWS = BoolFromString(s)
+
+	//
+	Name = "TEMPLATES_NAME_PRIMARYKEYS_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_NAME_PRIMARYKEYS_FILENAME = s
 
 }
 

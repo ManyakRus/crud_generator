@@ -28,6 +28,7 @@ type Table struct {
 	Comment                string `json:"table_comment"   gorm:"column:table_comment;default:''"`
 	RowsCount              int64
 	PrimaryKeyColumnsCount int
+	IsView                 bool
 }
 
 type ReplaceStruct struct {
@@ -87,4 +88,8 @@ type SettingsFillFromDatabase struct {
 	EXCLUDE_TABLES    string
 	NEED_USE_DB_VIEWS bool
 	MapDBTypes        map[string]*dbmeta.SQLMapping //карта соответсвий типов в базе данных и типов в golang
+	MapPrimaryKeys    map[string][]string
 }
+
+// MapPrimaryKeys - карта первичных ключей, добавленных вручную в файл primary_keys.json
+var MapPrimaryKeys = make(map[string][]string, 0)

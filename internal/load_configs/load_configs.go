@@ -25,6 +25,7 @@ func LoadConfigsAll() {
 	LoadCrudFunctionsRename()
 	LoadFindBy()
 	LoadFindMassBy()
+	Load_MapPrimaryKeys()
 }
 
 // LoadMappings - загружает маппинг ТипБД = ТипGolang, из файла .json
@@ -291,4 +292,26 @@ func LoadReadAll(MapAll map[string]*types.Table) map[*types.Table]bool {
 	}
 
 	return Otvet
+}
+
+// Load_MapPrimaryKeys - загружает маппинг ТипБД = ТипGolang, из файла .json
+func Load_MapPrimaryKeys() {
+	dir := micro.ProgramDir_bin()
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + config.Settings.TEMPLATES_NAME_PRIMARYKEYS_FILENAME
+
+	var err error
+
+	//чтение файла
+	bytes, err := os.ReadFile(FileName)
+	if err != nil {
+		TextError := fmt.Sprint("ReadFile() error: ", err)
+		log.Panic(TextError)
+	}
+
+	//json в map
+	err = json.Unmarshal(bytes, &types.MapPrimaryKeys)
+	if err != nil {
+		log.Panic("Unmarshal() error: ", err)
+	}
+
 }

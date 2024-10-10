@@ -8,7 +8,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"github.com/iancoleman/strcase"
+	"github.com/gobeam/stringy"
 	"github.com/jinzhu/inflection"
 	"sort"
 	"strconv"
@@ -43,7 +43,10 @@ func FormatName(Name string) string {
 		return Otvet
 	}
 
-	Otvet = strcase.ToCamel(Otvet)
+	//Otvet = strcase.ToCamel(Otvet) //не понимает русские буквы
+
+	str := stringy.New(Otvet)
+	Otvet = str.PascalCase("?", "").Get()
 
 	//_id в конце заменяем на ID
 	lenName := len(Name)

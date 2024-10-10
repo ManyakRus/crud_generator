@@ -486,3 +486,6 @@ SERVER_GRPC_TABLE_CACHE_TEST_FILENAME = "server_grpc_table_cache_test.go_"
 
 #TEXT_READALL - "ReadAll" function name
 TEXT_READALL = "ReadAll"
+
+#TEMPLATES_NAME_PRIMARYKEYS_FILENAME - filename of "primary_keys.json" file
+TEMPLATES_NAME_PRIMARYKEYS_FILENAME = "primary_keys.json"
