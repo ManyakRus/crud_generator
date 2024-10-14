@@ -25,9 +25,9 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_nrpc_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/tables_tables"
+	"github.com/ManyakRus/crud_generator/internal/database"
 	"github.com/ManyakRus/crud_generator/internal/folders"
 	"github.com/ManyakRus/crud_generator/internal/load_configs"
-	"github.com/ManyakRus/crud_generator/internal/postgres"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
@@ -41,12 +41,11 @@ func StartFillAll() error {
 
 	//заполним MapAll
 	SettingsFillFromDatabase := types.SettingsFillFromDatabase{}
-	SettingsFillFromDatabase.MapDBTypes = dbmeta.GetMappings()
 	SettingsFillFromDatabase.INCLUDE_TABLES = config.Settings.INCLUDE_TABLES
 	SettingsFillFromDatabase.EXCLUDE_TABLES = config.Settings.EXCLUDE_TABLES
 	SettingsFillFromDatabase.NEED_USE_DB_VIEWS = config.Settings.NEED_USE_DB_VIEWS
-	SettingsFillFromDatabase.MapPrimaryKeys = types.MapPrimaryKeys
-	MapAll, err := postgres.FillMapTable(SettingsFillFromDatabase)
+	SettingsFillFromDatabase.MapDBTypes = dbmeta.GetMappings()
+	MapAll, err := database.FillMapTable(SettingsFillFromDatabase)
 	if err != nil {
 		log.Error("FillMapTable() error: ", err)
 		return err

@@ -10,8 +10,6 @@ import (
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/postgres_gorm"
-	"github.com/alexsergivan/transliterator"
-	_ "github.com/alexsergivan/transliterator"
 	"sort"
 	"strings"
 	"time"
@@ -36,17 +34,14 @@ type TableRowsStruct struct {
 	RowsCount sql.NullInt64  `json:"rows_count"   gorm:"column:rows_count;default:0"`
 }
 
-// FillMapTable - возвращает массив MassTable данными из БД
-func FillMapTable(SettingsFill types.SettingsFillFromDatabase) (map[string]*types.Table, error) {
-	MapTable := make(map[string]*types.Table, 0)
+// StartAll - заполняет MapTable данными из БД, и другие колонки
+func StartAll(SettingsFill types.SettingsFillFromDatabase) (map[string]*types.Table, error) {
+	var MapTable map[string]*types.Table
 	var err error
 
 	MapTable, err = FillMapTable1(SettingsFill)
-	if err != nil {
-		log.Error("FillMapTable1() error: ", err)
-		return MapTable, err
-	}
 
+	//заполним ID Minimum
 	err = FillIDMinimum_ManyPK(MapTable)
 	//err = FillIDMinimum(MapTable)
 	if err != nil {
@@ -54,6 +49,7 @@ func FillMapTable(SettingsFill types.SettingsFillFromDatabase) (map[string]*type
 		return MapTable, err
 	}
 
+	//заполним Rows Count
 	err = FillRowsCount(MapTable)
 	if err != nil {
 		log.Error("FillRowsCount() error: ", err)
@@ -266,7 +262,7 @@ order by
 		return MapTable, err
 	}
 
-	trans := transliterator.NewTransliterator(nil)
+	//trans := transliterator.NewTransliterator(nil)
 
 	//заполним MapTable
 	MapColumns := make(map[string]*types.Column, 0)
@@ -290,10 +286,10 @@ order by
 			//новая таблица
 			//найдём имя модели golang
 			TableName := v.TableName
-			ModelName := create_files.Find_SingularName(TableName)
-			ModelName = create_files.FormatName(ModelName)
+			//ModelName := create_files.Find_SingularName(TableName)
+			//ModelName = create_files.FormatName(ModelName)
 
-			NameGo_translit := trans.Transliterate(ModelName, "en")
+			//NameGo_translit := trans.Transliterate(ModelName, "en")
 
 			//
 			TableComment := v.TableComment
@@ -304,8 +300,8 @@ order by
 			Table1.Name = TableName
 			Table1.OrderNumber = OrderNumberTable
 			Table1.Comment = TableComment
-			Table1.NameGo = ModelName
-			Table1.NameGo_translit = NameGo_translit
+			//Table1.NameGo = ModelName
+			//Table1.NameGo_translit = NameGo_translit
 
 			PrimaryKeyColumnsCount = 0
 		}
@@ -313,9 +309,9 @@ order by
 		Column1 := types.Column{}
 		Column1.Name = v.ColumnName
 		Column1.Type = v.ColumnType
-		FillNameGo(&Column1)
-
-		//Type_go
+		//FillNameGo(&Column1)
+		//
+		////Type_go
 		FillTypeGo(SettingsFill, &Column1)
 		//SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
 		//if ok == false {
@@ -324,8 +320,8 @@ order by
 		//Type_go := SQLMapping1.GoType
 		//Column1.TypeGo = Type_go
 
-		IsPrimaryKey_manual := Find_IsPrimaryKey_manual(SettingsFill, v.TableName, v.ColumnName)
-		IsPrimaryKey := v.IsPrimaryKey || IsPrimaryKey_manual
+		//IsPrimaryKey_manual := database.Find_IsPrimaryKey_manual(SettingsFill, v.TableName, v.ColumnName)
+		IsPrimaryKey := v.IsPrimaryKey //|| IsPrimaryKey_manual
 		//
 		if v.ColumnIsIdentity == "YES" {
 			Column1.IsIdentity = true
@@ -425,6 +421,48 @@ func CreateTable() *types.Table {
 //	}
 //
 //	return err
+//}
+
+// FindNameType_from_PrimaryKey - возвращает наименование и тип БД для колонки PrimaryKey (ID)
+func FindNameType_from_PrimaryKey(Table1 *types.Table) (string, string) {
+	Otvet := ""
+	Type := ""
+
+	//сортировка по названию колонок
+	keys := make([]string, 0, len(Table1.MapColumns))
+	for k := range Table1.MapColumns {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key1 := range keys {
+		Column1, ok := Table1.MapColumns[key1]
+		if ok == false {
+			log.Panic("Table1.MapColumns[key1] = false")
+		}
+		if Column1.IsPrimaryKey == true {
+			return Column1.NameGo, Column1.TypeGo
+		}
+	}
+
+	return Otvet, Type
+}
+
+//// FillTypeGo - заполняет тип golang из типа postgres
+//func FillTypeGo(MapTable map[string]*types.Table) {
+//
+//	for _, Table1 := range MapTable {
+//		for _, Column1 := range Table1.MapColumns {
+//
+//			SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
+//			if ok == false {
+//				log.Panic("GetMappings() ", Column1.Type, " error: not found")
+//			}
+//			Type_go := SQLMapping1.GoType
+//			Column1.TypeGo = Type_go
+//		}
+//	}
+//
 //}
 
 // FillIDMinimum_ManyPK - находим минимальный ID, для тестов с этим ID, для многих Primary Key
@@ -596,67 +634,6 @@ WHERE
 	return err
 }
 
-// FindNameType_from_PrimaryKey - возвращает наименование и тип БД для колонки PrimaryKey (ID)
-func FindNameType_from_PrimaryKey(Table1 *types.Table) (string, string) {
-	Otvet := ""
-	Type := ""
-
-	//сортировка по названию колонок
-	keys := make([]string, 0, len(Table1.MapColumns))
-	for k := range Table1.MapColumns {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-
-	for _, key1 := range keys {
-		Column1, ok := Table1.MapColumns[key1]
-		if ok == false {
-			log.Panic("Table1.MapColumns[key1] = false")
-		}
-		if Column1.IsPrimaryKey == true {
-			return Column1.NameGo, Column1.TypeGo
-		}
-	}
-
-	return Otvet, Type
-}
-
-//// FillTypeGo - заполняет тип golang из типа postgres
-//func FillTypeGo(MapTable map[string]*types.Table) {
-//
-//	for _, Table1 := range MapTable {
-//		for _, Column1 := range Table1.MapColumns {
-//
-//			SQLMapping1, ok := dbmeta.GetMappings()[Column1.Type]
-//			if ok == false {
-//				log.Panic("GetMappings() ", Column1.Type, " error: not found")
-//			}
-//			Type_go := SQLMapping1.GoType
-//			Column1.TypeGo = Type_go
-//		}
-//	}
-//
-//}
-
-// FillNameGo - заполняет NameGo во все колонки
-func FillNameGo(Column1 *types.Column) {
-	var err error
-
-	ColumnName := Column1.Name
-	ColumnNameGo := create_files.FormatName(ColumnName)
-	Column1.NameGo = ColumnNameGo
-	if ColumnNameGo == "" {
-		err = errors.New("FillNameGo() error: Column: " + ColumnName + " Type: " + Column1.Type + " NameGo= \"\"")
-		log.Panic(err)
-	}
-
-	trans := transliterator.NewTransliterator(nil)
-	NameGo_translit := trans.Transliterate(ColumnNameGo, "en")
-	Column1.NameGo_translit = NameGo_translit
-
-	return
-}
-
 // FillTypeGo - заполняет тип golang из типа postgres
 func FillTypeGo(SettingsFill types.SettingsFillFromDatabase, Column1 *types.Column) {
 	var err error
@@ -680,22 +657,4 @@ func FillTypeGo(SettingsFill types.SettingsFillFromDatabase, Column1 *types.Colu
 	}
 
 	return
-}
-
-// Find_IsPrimaryKey_manual - возвращает true если эта колонка является PrimaryKey (заполненных вручную)
-func Find_IsPrimaryKey_manual(SettingsFill types.SettingsFillFromDatabase, TableName string, ColumnName string) bool {
-	Otvet := false
-
-	MassColumnStrings, ok := SettingsFill.MapPrimaryKeys[TableName]
-	if ok == false {
-		return Otvet
-	}
-
-	for _, ColumnString := range MassColumnStrings {
-		if ColumnString == ColumnName {
-			Otvet = true
-		}
-	}
-
-	return Otvet
 }

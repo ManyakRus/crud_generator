@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
+	"github.com/ManyakRus/crud_generator/internal/database"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"testing"
 )
@@ -12,7 +13,7 @@ func TestFillMassTable(t *testing.T) {
 	postgres_gorm.Connect()
 	defer postgres_gorm.CloseConnection()
 
-	Otvet, err := FillMapTable()
+	Otvet, err := database.FillMapTable()
 	if err != nil {
 		t.Error("TestFillMassTable() error: ", err)
 	}
