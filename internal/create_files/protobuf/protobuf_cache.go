@@ -41,7 +41,7 @@ func TextReadFromCache(Table1 *types.Table) string {
 	}
 
 	TextRequestId, _ := create_files.FindText_ProtobufRequest(Table1)
-	ModelName := Table1.NameGo
+	ModelName := Table1.NameGo_translit
 	Otvet = "rpc " + ModelName + "_ReadFromCache(" + TextRequestId + ") returns (Response) {}"
 
 	return Otvet

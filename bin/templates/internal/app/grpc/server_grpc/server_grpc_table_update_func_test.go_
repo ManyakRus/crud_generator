@@ -13,15 +13,15 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	Response1, err := server1.LawsuitStatusType_Read(ctx, &Request)
 	if err != nil {
-		t.Error("Test_server_LawsuitStatusType_Update() Read() error: ", err)
+		t.Error("Test_server_LawsuitStatusType_Update_ColumnNameTranslit() Read() error: ", err)
 	}
 	if Response1.ModelString == "" {
-		t.Error("Test_server_LawsuitStatusType_Update() Read() error: ModelString=''")
+		t.Error("Test_server_LawsuitStatusType_Update_ColumnNameTranslit() Read() error: ModelString=''")
 	}
 	m := lawsuit_status_types.LawsuitStatusType{}
 	err = m.GetModelFromJSON(Response1.ModelString)
 	if err != nil {
-		t.Error("Test_server_LawsuitStatusType_Update_ColumnName() GetModelFromJSON() error: ", err)
+		t.Error("Test_server_LawsuitStatusType_Update_ColumnNameTranslit() GetModelFromJSON() error: ", err)
 	}
 
 	//запишем в БД это же значение
@@ -29,7 +29,7 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 	Request2.ID = LawsuitStatusType_ID_Test
 	Request2.ColumnName = m.ColumnName
 	Request2.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
-	_, err = server1.LawsuitStatusType_Update_ColumnName(ctx, &Request2)
+	_, err = server1.LawsuitStatusType_Update_ColumnNameTranslit(ctx, &Request2)
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Update() Update_ColumnName() error: ", err)
 	}

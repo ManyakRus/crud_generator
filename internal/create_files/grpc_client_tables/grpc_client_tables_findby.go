@@ -161,7 +161,8 @@ func CreateFiles_FindByTable1(Table1 *types.Table, TextTemplateFunction string, 
 		TextRequest := create_files.Find_RequestFieldName_FromMass(Column1, MassColumns)
 		ValueM := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
 		TextAssign = TextAssign + "\tRequest." + TextRequest + " = " + ValueM + "\n"
-		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		ColumnNameTranslit := Column1.NameGo
+		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + ColumnNameTranslit
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
 
 		ProtoTypeName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
@@ -325,7 +326,8 @@ func CreateFiles_FindBy_Test_Table1(Table1 *types.Table, TextTemplateFunction st
 		DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
 		//RequestFieldName := create_files.Find_RequestFieldName_FromMass(Column1, MassColumns)
 		TextAssign = TextAssign + "\t" + `Otvet.` + Column1.NameGo + ` = ` + DefaultValue + "\n"
-		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		ColumnNameTranslit := Column1.NameGo
+		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + ColumnNameTranslit
 		FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
 		TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue
 

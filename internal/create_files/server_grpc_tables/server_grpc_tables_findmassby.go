@@ -153,7 +153,7 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 		} else {
 			TextAssign = TextAssign + "\t" + "Model." + Column1.NameGo + " = " + TextRequest + "\n"
 		}
-		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo_translit
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
 
 		ProtoTypeName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
@@ -323,7 +323,7 @@ func CreateFiles_FindMassBy_Test_Table1(Table1 *types.Table, TextTemplateFunctio
 		DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
 		RequestFieldName := create_files.Find_RequestFieldName_FromMass(Column1, MassColumns)
 		TextAssign = TextAssign + "\t" + `Request.` + RequestFieldName + ` = ` + DefaultValue + "\n"
-		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo_translit
 		FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
 		TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue
 

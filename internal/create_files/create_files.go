@@ -1442,15 +1442,6 @@ func FindText_ProtobufRequest1(Table1 *types.Table) (OtvetRequestType string, Ot
 	}
 
 	PrimaryKeyTypeGo := PrimaryKeyColumn.TypeGo
-	//switch PrimaryKeyTypeGo {
-	//case "string", "uuid.UUID":
-	//	TextRequest = "Request"
-	//}
-
-	OtvetRequestName = PrimaryKeyColumn.TypeGo
-
-	OtvetRequestName = micro.StringFromUpperCase(OtvetRequestName)
-	OtvetRequestType = TextRequest + OtvetRequestName
 
 	switch PrimaryKeyTypeGo {
 	case "string", "uuid.UUID":
@@ -1459,6 +1450,10 @@ func FindText_ProtobufRequest1(Table1 *types.Table) (OtvetRequestType string, Ot
 	case "time.Time":
 		OtvetRequestName = "Date"
 		OtvetRequestType = TextRequest + "Date"
+	default:
+		OtvetRequestName = PrimaryKeyColumn.TypeGo
+		OtvetRequestName = micro.StringFromUpperCase(OtvetRequestName)
+		OtvetRequestType = TextRequest + OtvetRequestName
 	}
 
 	return OtvetRequestType, OtvetRequestName

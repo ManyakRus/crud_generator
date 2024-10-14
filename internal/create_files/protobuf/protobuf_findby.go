@@ -48,13 +48,13 @@ func FindText_FindBy1(TableColumns1 types.TableColumns) string {
 	TextRequest := "Request_"
 	Underline := ""
 	for _, Column1 := range TableColumns1.Columns {
-		TextFields = TextFields + Underline + Column1.NameGo
+		TextFields = TextFields + Underline + Column1.NameGo_translit
 		TextRequest1 := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
 		TextRequest = TextRequest + Underline + TextRequest1
 		Underline = "_"
 	}
 
-	Otvet = Otvet + TableColumns1.Table.NameGo + "_FindBy_" + TextFields + "(" + TextRequest + ") returns (Response) {}\n"
+	Otvet = Otvet + TableColumns1.Table.NameGo_translit + "_FindBy_" + TextFields + "(" + TextRequest + ") returns (Response) {}\n"
 
 	return Otvet
 }

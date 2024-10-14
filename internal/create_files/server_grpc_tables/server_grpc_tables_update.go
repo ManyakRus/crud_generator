@@ -138,9 +138,11 @@ func FindText_UpdateEveryColumn(TextGRPCServerUpdateFunc string, Table1 *types.T
 func FindText_UpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextGRPCServerUpdateFunc
 
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
+	ModelNameTranslit := Table1.NameGo_translit
 	ColumnName := Column1.NameGo
-	FuncName := "Update_" + ColumnName
+	ColumnNameTranslit := Column1.NameGo_translit
+	FuncName := "Update_" + ColumnNameTranslit
 	_, _, TextRequestFieldGolang, TextGolangLine := create_files.FindText_ProtobufRequest_ID_Type(Table1, Column1, "Request.")
 	//if Table1.PrimaryKeyColumnsCount > 1 {
 	TextRequest := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
@@ -153,7 +155,7 @@ func FindText_UpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.
 
 	//ColumnNameGolang := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
 
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update", ModelName+"_"+FuncName)
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update", ModelNameTranslit+"_"+FuncName)
 
 	Otvet = create_files.Replace_TemplateModel_to_Model(Otvet, Table1.NameGo)
 	Otvet = create_files.Replace_TemplateTableName_to_TableName(Otvet, Table1.Name)
@@ -168,6 +170,7 @@ func FindText_UpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "Request.FieldName", TextRequestFieldGolang)
 	Otvet = strings.ReplaceAll(Otvet, "Model.ColumnName", "Model."+ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnNameTranslit", ColumnNameTranslit)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Model.Update()", "Model."+FuncName+"()")
 
@@ -331,9 +334,11 @@ func FindText_UpdateEveryColumn_Test(TextGRPCServerUpdateFunc string, Table1 *ty
 func FindText_UpdateEveryColumn_Test1(TextGRPCServerUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextGRPCServerUpdateFunc
 
-	ModelName := Table1.NameGo
+	//ModelName := Table1.NameGo
+	ModelNameTranslit := Table1.NameGo_translit
 	ColumnName := Column1.NameGo
-	FuncName := "Update_" + ColumnName
+	ColumnNameTranslit := Column1.NameGo_translit
+	FuncName := "Update_" + ColumnNameTranslit
 	_, TextRequestField, TextRequestFieldGolang, _ := create_files.FindText_ProtobufRequest_ID_Type(Table1, Column1, "Request2.")
 	TextModelColumnName := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
 	TextRequestID := create_files.FindText_ProtobufRequest_ManyPK(Table1)
@@ -355,8 +360,9 @@ func FindText_UpdateEveryColumn_Test1(TextGRPCServerUpdateFunc string, Table1 *t
 	Otvet = strings.ReplaceAll(Otvet, "Request2.ColumnName", "Request2."+TextRequestField)
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", "grpc_proto."+TextRequestString)
 	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", TextModelColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnNameTranslit", ColumnNameTranslit)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update(", ModelName+"_"+FuncName+"(")
+	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Update(", ModelNameTranslit+"_"+FuncName+"(")
 
 	Otvet = create_files.Replace_TemplateModel_to_Model(Otvet, Table1.NameGo)
 	Otvet = create_files.Replace_TemplateTableName_to_TableName(Otvet, Table1.Name)

@@ -28,7 +28,7 @@ func (s *ServerGRPC) LawsuitStatusType_Update(ctx context.Context, Request *grpc
 	m := &lawsuit_status_types.LawsuitStatusType{}
 	m.ID = AliasFromInt(ID)
 	m.ColumnName = ColumnName
-	err = crud_lawsuit_status_types.Update_ColumnName_ctx(ctx, db, m)
+	err = crud_lawsuit_status_types.Update_ColumnNameTranslit_ctx(ctx, db, m)
 	if err != nil {
 		return &Otvet, err
 	}

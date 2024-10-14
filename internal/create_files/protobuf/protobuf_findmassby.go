@@ -48,7 +48,7 @@ func FindText_FindMassBy1(TableColumns1 types.TableColumns) string {
 	TextRequest := "Request_"
 	Underline := ""
 	for _, Column1 := range TableColumns1.Columns {
-		TextFields = TextFields + Underline + Column1.NameGo
+		TextFields = TextFields + Underline + Column1.NameGo_translit
 		TextRequest1 := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
 		TextRequest = TextRequest + Underline + TextRequest1
 		Underline = "_"
@@ -62,7 +62,7 @@ func FindText_FindMassBy1(TableColumns1 types.TableColumns) string {
 	}
 
 	//
-	Otvet = Otvet + TableColumns1.Table.NameGo + "_" + FuncName + "(" + TextRequest + ") returns (ResponseMass) {}\n"
+	Otvet = Otvet + TableColumns1.Table.NameGo_translit + "_" + FuncName + "(" + TextRequest + ") returns (ResponseMass) {}\n"
 
 	return Otvet
 }

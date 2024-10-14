@@ -11,7 +11,7 @@ import (
 func FindText_ProtoTable1(TextProto string, Table1 *types.Table) string {
 	Otvet := "\n" //"\n\t//\n"
 
-	ModelName := Table1.NameGo
+	ModelName := Table1.NameGo_translit
 	//Otvet = Otvet + AddTextMessageRequestID(TextProto, Table1)
 
 	Otvet = Otvet + FindText_Read(TextProto, Table1)
@@ -149,7 +149,7 @@ func FindText_FindByExtId(TextProto string, ModelName string) string {
 func Text_Read(Table1 *types.Table) string {
 	Otvet := ""
 
-	ModelName := Table1.NameGo
+	ModelName := Table1.NameGo_translit
 	PrimaryKeyColumn := create_files.Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet
@@ -186,7 +186,7 @@ func Text_Save(ModelName string) string {
 func Text_Delete(Table1 *types.Table) string {
 	Otvet := ""
 
-	ModelName := Table1.NameGo
+	ModelName := Table1.NameGo_translit
 	PrimaryKeyColumn := create_files.Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet
@@ -202,7 +202,7 @@ func Text_Delete(Table1 *types.Table) string {
 func Text_Restore(Table1 *types.Table) string {
 	Otvet := ""
 
-	ModelName := Table1.NameGo
+	ModelName := Table1.NameGo_translit
 	PrimaryKeyColumn := create_files.Find_PrimaryKeyColumn(Table1)
 	if PrimaryKeyColumn == nil {
 		return Otvet

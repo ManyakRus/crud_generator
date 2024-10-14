@@ -61,7 +61,7 @@ func FindText_UpdateEveryColumn(TextProto string, Table1 *types.Table, Column1 *
 func Text_UpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := ""
 
-	ModelName := Table1.NameGo
+	ModelName := Table1.NameGo_translit
 
 	TextRequest := ""
 	//TypeGo := Column1.TypeGo
@@ -80,7 +80,7 @@ func Text_UpdateEveryColumn(Table1 *types.Table, Column1 *types.Column) string {
 func FindText_ProtoTable1_UpdateManyFields(TextProto string, Table1 *types.Table) string {
 	Otvet := "" //"\n\t//\n"
 
-	ModelName := Table1.NameGo
+	ModelName := Table1.NameGo_translit
 	Otvet = Otvet + FindText_UpdateManyFields(TextProto, ModelName)
 
 	return Otvet

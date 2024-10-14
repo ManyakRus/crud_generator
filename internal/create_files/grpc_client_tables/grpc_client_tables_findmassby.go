@@ -159,8 +159,10 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
 		TextRequest := create_files.Find_RequestFieldName_FromMass(Column1, MassColumns)
-		TextAssign = TextAssign + "\tRequest." + TextRequest + " = m." + Column1.NameGo + "\n"
-		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		ColumnName := Column1.NameGo
+		ColumnNameTranslit := Column1.NameGo_translit
+		TextAssign = TextAssign + "\tRequest." + TextRequest + " = m." + ColumnName + "\n"
+		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + ColumnNameTranslit
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
 
 		ProtoTypeName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
@@ -332,7 +334,8 @@ func CreateFiles_FindMassBy_Test_Table1(Table1 *types.Table, TextTemplateFunctio
 		DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
 		//RequestFieldName := create_files.Find_RequestFieldName_FromMass(Column1, MassColumns)
 		TextAssign = TextAssign + "\t" + `Model1.` + Column1.NameGo + ` = ` + DefaultValue + "\n"
-		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		ColumnNameTranslit := Column1.NameGo_translit
+		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + ColumnNameTranslit
 		FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
 		TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue
 

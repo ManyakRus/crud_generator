@@ -37,7 +37,7 @@ func FindText_ReadAll1(Table1 *types.Table) string {
 	TextRequest := "Request_Empty"
 
 	//
-	Otvet = Otvet + Table1.NameGo + "_" + FuncName + "(" + TextRequest + ") returns (ResponseMass) {}\n"
+	Otvet = Otvet + Table1.NameGo_translit + "_" + FuncName + "(" + TextRequest + ") returns (ResponseMass) {}\n"
 
 	return Otvet
 }
