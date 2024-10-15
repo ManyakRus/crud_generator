@@ -67,7 +67,7 @@ func GenerateDeleteSQL(dbTable DbTableMeta) (string, error) {
 // GenerateUpdateSQL generate sql for a update
 func GenerateUpdateSQL(dbTable DbTableMeta) (string, error) {
 	primaryCnt := PrimaryKeyCount(dbTable)
-	// nonPrimaryCnt := len(dbTable.Columns()) - primaryCnt
+	// nonPrimaryCnt := len(dbTable.Column()) - primaryCnt
 
 	if primaryCnt == 0 {
 		return "", fmt.Errorf("table %s does not have a primary key, cannot generate sql", dbTable.TableName())

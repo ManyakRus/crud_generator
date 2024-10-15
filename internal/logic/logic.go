@@ -56,6 +56,9 @@ func StartFillAll() error {
 		return err
 	}
 
+	//загрузим FindModelBy .json
+	load_configs.LoadFindModelBy(MapAll)
+
 	//
 	FillGlobalVariables(MapAll)
 

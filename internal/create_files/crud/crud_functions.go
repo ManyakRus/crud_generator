@@ -21,8 +21,8 @@ func CreateCrud() error {
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATES_CRUD_FUNC_FOLDERNAME + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATES_CRUD_FUNC_FOLDERNAME + micro.SeparatorFile()
-	FilenameReadyCrud := DirReadyCrud + create_files.Delete_LastUnderline(config.Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME)
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME
+	FilenameReadyCrud := DirReadyCrud + create_files.Delete_LastUnderline(config.Settings.TEMPLATES_CRUD_FUNC_FILENAME)
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_FUNC_FILENAME
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyCrud)

@@ -22,7 +22,7 @@ type Table struct {
 	Name string `json:"name"   gorm:"column:name;default:''"`
 	//Element     *etree.Element
 	MapColumns map[string]*Column
-	//Columns []Column
+	//Column []Column
 	OrderNumber            int
 	NameGo                 string
 	NameGo_translit        string `gorm:-` //имя для golang, русские буквы заменены на английские
@@ -59,7 +59,7 @@ var MapRenameFunctions = make(map[string][]ReplaceStruct, 0)
 // TableColumns_String - структура строк для загрузки из JSON
 type TableColumns_String struct {
 	TableName       string   `json:"Table"`
-	MassColumnNames []string `json:"Columns"`
+	MassColumnNames []string `json:"Column"`
 }
 
 // MassFindBy_String - карта функций которые будут созданы для поиска 1 строки в таблице
@@ -72,6 +72,18 @@ var MassFindMassBy_String = make([]TableColumns_String, 0)
 type TableColumns struct {
 	Table   *Table
 	Columns []*Column
+}
+
+// TableColumn - структура таблица + колонка
+type TableColumn struct {
+	Table  *Table
+	Column *Column
+}
+
+// TableColumn_string - структура таблица + колонка, только строки
+type TableColumn_string struct {
+	TableName  string
+	ColumnName string
 }
 
 // MassFindBy - карта функций которые будут созданы для поиска 1 строки в таблице
@@ -94,3 +106,6 @@ type SettingsFillFromDatabase struct {
 
 // MapPrimaryKeys - карта первичных ключей, добавленных вручную в файл primary_keys.json
 var MapPrimaryKeys = make(map[string][]string, 0)
+
+// MassFindModelBy - массив функций которые будут созданы для поиска 1 строки в связанной таблицы из foreign key, фильтр по колонке
+var MassFindModelBy = make([]TableColumn, 0)

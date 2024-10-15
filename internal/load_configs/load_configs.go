@@ -220,13 +220,6 @@ func LoadFindBy() {
 		TextError := fmt.Sprint("ReadFile() error: ", err)
 		log.Panic(TextError)
 	}
-
-	//MassFindBy1 := types.TableColumns_String{}
-	//MassFindBy1.TableName = "TableName"
-	//MassFindBy1.MassColumnNames = []string{"ColumnName"}
-	//types.MassFindBy_String = append(types.MassFindBy_String, MassFindBy1)
-	//bytes, _ = json.Marshal(types.MassFindBy_String) //удалить
-
 	//json в map
 	err = json.Unmarshal(bytes, &types.MassFindBy_String)
 	if err != nil {
@@ -312,6 +305,50 @@ func Load_MapPrimaryKeys() {
 	err = json.Unmarshal(bytes, &types.MapPrimaryKeys)
 	if err != nil {
 		log.Panic("Unmarshal() error: ", err)
+	}
+
+}
+
+// LoadFindModelBy - загружает из файла .json список функций FindModelBy которые надо создать
+func LoadFindModelBy(MapTables map[string]*types.Table) {
+	dir := micro.ProgramDir_bin()
+	FileName := dir + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile() + constants.CONFIG_FOLDER_NAME + micro.SeparatorFile() + config.Settings.TEMPLATES_FINDMODELBY_FILENAME
+
+	var err error
+
+	//чтение файла
+	bytes, err := os.ReadFile(FileName)
+	if err != nil {
+		TextError := fmt.Sprint("ReadFile() error: ", err)
+		log.Panic(TextError)
+	}
+	//json в map, строки
+	MassTableColumn_string := make([]types.TableColumn_string, 0)
+	err = json.Unmarshal(bytes, &MassTableColumn_string)
+	if err != nil {
+		log.Panic("Unmarshal() error: ", err)
+	}
+
+	//map strings в map tables
+	for _, TableColumn_string1 := range MassTableColumn_string {
+		Table1, ok := MapTables[TableColumn_string1.TableName]
+		if ok == false {
+			log.Panic("Table not found: ", TableColumn_string1.TableName)
+		}
+
+		Column1, ok := Table1.MapColumns[TableColumn_string1.ColumnName]
+		if ok == false {
+			log.Panic("Column not found: ", TableColumn_string1.ColumnName)
+		}
+
+		if Column1.TableKey == "" || Column1.ColumnKey == "" {
+			log.Panic("error: foreign key is empty fot table: ", Table1.Name, " column: ", Column1.Name)
+		}
+
+		TableColumn1 := types.TableColumn{}
+		TableColumn1.Table = Table1
+		TableColumn1.Column = Column1
+		types.MassFindModelBy = append(types.MassFindModelBy, TableColumn1)
 	}
 
 }

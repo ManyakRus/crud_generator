@@ -339,7 +339,7 @@ order by
 		}
 
 		MapColumns[v.ColumnName] = &Column1
-		//Table1.Columns = append(Table1.Columns, Column1)
+		//Table1.Column = append(Table1.Column, Column1)
 
 		OrderNumberColumn++
 		TableName0 = v.TableName

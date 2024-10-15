@@ -1,0 +1,46 @@
+// FindModelBy_FieldNamesWithUnderline - находит запись в БД из связанной таблицы по FieldNamesWithPlus
+func (crud Crud_DB) FindModelBy_FieldNamesWithUnderline(m *lawsuit_status_types.LawsuitStatusType) (foreign_package.ForeignModel, error) {
+	var err error
+
+	ctxMain := context.Background()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	db := postgres_gorm.GetConnection()
+
+	Otvet, err := FindModelBy_FieldNamesWithUnderline_ctx(ctx, db, m)
+
+	return Otvet, err
+}
+
+// FindModelBy_FieldNamesWithUnderline_ctx - находит запись в БД из связанной таблицы по FieldNamesWithPlus
+func FindModelBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) (foreign_package.ForeignModel, error) {
+	Otvet := foreign_package.ForeignModel{}
+	var err error
+
+	tx := db.WithContext(ctx)
+	
+	//находим запись в этой таблице
+	//tx = tx.Where("ColumnName = ?", m.PrimaryKeyName)
+	tx = tx.First(m)
+	err = tx.Error
+	if err != nil {
+		err = fmt.Errorf("tx.First() error: %w", err)
+		return Otvet, err
+	}
+
+	//находим запись в другой таблице
+	tx = db.WithContext(ctx)
+	ID := m.FieldName
+	Otvet.ForeignPrimaryKeyName = ID
+	tx = tx.First(&Otvet)
+	err = tx.Error
+	if err != nil {
+		err = fmt.Errorf("tx.First() error: %w", err)
+		return Otvet, err
+	}
+
+
+	return Otvet, err
+}
+

@@ -1,0 +1,15 @@
+func TestFindModelBy_FieldNamesWithUnderline(t *testing.T) {
+	config_main.LoadEnv()
+
+	postgres_gorm.Connect()
+	defer postgres_gorm.CloseConnection()
+
+	crud := Crud_DB{}
+	Otvet := lawsuit_status_types.LawsuitStatusType{}
+	Otvet.FieldName = 0
+	_, err := crud.FindModelBy_FieldNamesWithUnderline(&Otvet)
+	if err != nil && crud_func.IsRecordNotFound(err) == false {
+		t.Error("crud_"+TableName+"_test.TestFindModelBy_FieldNamesWithUnderline() FieldNamesWithComma:", FieldNamesDefault, " error: ", err)
+	}
+}
+

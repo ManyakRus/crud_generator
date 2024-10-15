@@ -489,3 +489,54 @@ TEXT_READALL = "ReadAll"
 
 #TEMPLATES_NAME_PRIMARYKEYS_FILENAME - filename of "primary_keys.json" file
 TEMPLATES_NAME_PRIMARYKEYS_FILENAME = "primary_keys.json"
+
+#---FINDMODELBY---
+#TEMPLATES_FINDMODELBY_FILENAME - short filename of "findmodelby_functions.json" file
+TEMPLATES_FINDMODELBY_FILENAME="findmodelby_functions.json"
+
+#TEMPLATES_CRUD_TABLE_FINDMODELBY_FILENAME - short filename of "crud_tables_findmodelby.go_" file
+TEMPLATES_CRUD_TABLE_FINDMODELBY_FILENAME="crud_tables_findmodelby.go_"
+
+#TEMPLATES_CRUD_TABLE_FINDMODELBY_TEST_FILENAME - short filename of "crud_tables_findmodelby_test.go_" file
+TEMPLATES_CRUD_TABLE_FINDMODELBY_TEST_FILENAME="crud_tables_findmodelby_test.go_"
+
+#TEMPLATES_CRUD_TABLE_FINDMODELBY_FUNCTION_FILENAME - short filename of "crud_tables_findmodelby_function.go_" file
+TEMPLATES_CRUD_TABLE_FINDMODELBY_FUNCTION_FILENAME="crud_tables_findmodelby_function.go_"
+
+#TEMPLATES_CRUD_TABLE_FINDMODELBY_FUNCTION_TEST_FILENAME - short filename of "crud_tables_findmodelby_function_test.go_" file
+TEMPLATES_CRUD_TABLE_FINDMODELBY_FUNCTION_TEST_FILENAME="crud_tables_findmodelby_function_test.go_"
+
+
+#TEMPLATES_GRPC_SERVER_FINDMODELBY_FILENAME - short filename of "server_grpc_table_findmodelby.go_" file
+TEMPLATES_GRPC_SERVER_FINDMODELBY_FILENAME="server_grpc_table_findmodelby.go_"
+
+#TEMPLATES_GRPC_SERVER_FINDMODELBY_FUNCTION_FILENAME - short filename of "server_grpc_table_findmodelby_test.go_" file
+TEMPLATES_GRPC_SERVER_FINDMODELBY_FUNCTION_FILENAME="server_grpc_table_findmodelby_function.go_"
+
+#TEMPLATES_GRPC_SERVER_FINDMODELBY_TEST_FILENAME - short filename of "server_grpc_table_findmodelby_test.go_" file
+TEMPLATES_GRPC_SERVER_FINDMODELBY_TEST_FILENAME="server_grpc_table_findmodelby_test.go_"
+
+#TEMPLATES_GRPC_SERVER_FINDMODELBY_FUNCTION_TEST_FILENAME - short filename of "server_grpc_table_findmodelby_test.go_" file
+TEMPLATES_GRPC_SERVER_FINDMODELBY_FUNCTION_TEST_FILENAME="server_grpc_table_findmodelby_function_test.go_"
+
+
+#TEMPLATES_MODEL_FINDMODELBY_FILENAME - short filename of "model_table_findmodelby.go_" file
+TEMPLATES_MODEL_FINDMODELBY_FILENAME="model_table_findmodelby.go_"
+
+#TEMPLATES_MODEL_FINDMODELBY_FUNCTION_FILENAME - short filename of "model_table_findmodelby_function.go_" file
+TEMPLATES_MODEL_FINDMODELBY_FUNCTION_FILENAME="model_table_findmodelby_function.go_"
+
+
+#TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FILENAME - short filename of "grpc_client_table_findmodelby.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FILENAME="grpc_client_table_findmodelby.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_TEST_FILENAME - short filename of "grpc_client_table_findmodelby_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_TEST_FILENAME="grpc_client_table_findmodelby_test.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_FILENAME - short filename of "grpc_client_table_findmodelby_function.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_FILENAME="grpc_client_table_findmodelby_function.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_findmodelby_function_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_TEST_FILENAME="grpc_client_table_findmodelby_function_test.go_"
+
+#

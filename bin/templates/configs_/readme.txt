@@ -85,6 +85,15 @@ readall_function.json
 Need for automatic create functions ReadAll() returning all rows in table (exclude is_deleted rows)
 example:
 {
-      "lawsuits": ""
+      "table_name1": ""
 }
+
+
+findmodelby_functions.json
+Need for automatic create FindModelBy() functions searching 1 value in table_name1 filtered by column_name1,
+this value will be searched in foreign table as identifier, and return this 1 row model
+example:
+[
+	{"TableName":"table_name1","ColumnName":"column_name1"}
+]
 
