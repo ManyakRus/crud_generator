@@ -100,6 +100,10 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		TextProto, TextProtoNew1 = FindText_ReadAll(TextProto, Table1)
 		TextProtoNew = TextProtoNew + TextProtoNew1
 
+		//добавим текст FindModelBy
+		TextProto, TextProtoNew1 = FindText_FindModelBy(TextProto, Table1)
+		TextProtoNew = TextProtoNew + TextProtoNew1
+
 		//
 		if config.Settings.NEED_CREATE_CACHE_API == true {
 			TextProtoNew = TextProtoNew + FindText_ProtoTable1_Cache(TextProto, Table1)
@@ -367,6 +371,41 @@ message ` + TextRequest + ` {
 		TextMessage = TextMessage + `
     ` + ProtoType + ` ` + ProtoName + ` = ` + strconv.Itoa(i+2) + `; //значение поиска`
 	}
+
+	TextMessage = TextMessage + `
+}`
+	Otvet = TextMessage
+
+	return Otvet
+}
+
+// AddTextMessageRequestModel_Column - в текст .proto добавляет message из присланных колонок
+func AddTextMessageRequestModel_Column(Text string, Column1 *types.Column) string {
+	Otvet := Text
+
+	ProtoName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
+	TextRequest := "Request_Model_" + ProtoName
+
+	//найдём уже есть message
+	TextFind := "message " + TextRequest + " {"
+	pos1 := strings.Index(Otvet, TextFind)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	TextMessage := `
+// ` + TextRequest + ` - параметры запроса на сервер
+message ` + TextRequest + ` {
+    uint32 VersionModel = 1; //версия структуры модели
+    string ModelString = 2; //объект-модель в формате json
+`
+
+	//
+	//for i, Column1 := range Columns {
+	ProtoType := create_files.Convert_GolangTypeNameToProtobufTypeName(Column1.TypeGo)
+	//ProtoName := create_files.Find_RequestFieldName(Table1, Column1)
+	TextMessage = TextMessage + "\t" + ProtoType + ` ` + ProtoName + ` = 3; //значение поиска`
+	//}
 
 	TextMessage = TextMessage + `
 }`
