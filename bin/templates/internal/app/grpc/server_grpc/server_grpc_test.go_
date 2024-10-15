@@ -193,7 +193,7 @@ func Test_server_LawsuitStatusType_Save(t *testing.T) {
 	var ModelString string
 	ModelString = Response1.ModelString
 
-	// sModel, _ := GetJSON(Otvet)
+	//sModel, _ := GetJSON(Otvet)
 	RequestModel := grpc_proto.RequestModel{}
 	RequestModel.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	RequestModel.ModelString = ModelString

@@ -32,7 +32,7 @@ func TestServerGRPC_LawsuitStatusType_UpdateManyFields(t *testing.T) {
 		return
 	}
 
-	// запишем в БД с пустым списком полей (не запишется)
+	//запишем в БД с пустым списком полей (не запишется)
 	var ModelString string
 	ModelString = Response1.ModelString
 	RequestModel := grpc_proto.Request_Model_MassString{}

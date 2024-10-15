@@ -3,7 +3,7 @@ func (s *ServerGRPC) LawsuitStatusType_ReadAll(ctx context.Context, Request *grp
 	var Otvet grpc_proto.ResponseMass
 	var err error
 
-	// проверим совпадения версии модели
+	//проверим совпадения версии модели
 	VersionServer := lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	VersionClient := Request.VersionModel
 	if VersionServer != VersionClient {
@@ -11,14 +11,14 @@ func (s *ServerGRPC) LawsuitStatusType_ReadAll(ctx context.Context, Request *grp
 		return &Otvet, err
 	}
 
-	// запрос в БД
+	//запрос в БД
 	db := postgres_gorm.GetConnection()
 	Mass, err := crud_lawsuit_status_types.ReadAll_ctx(ctx, db)
 	if err != nil {
 		return &Otvet, err
 	}
 
-	// заполяем ответ
+	//заполяем ответ
 	for _, v := range Mass {
 		ModelString, err := v.GetJSON()
 		if err != nil {

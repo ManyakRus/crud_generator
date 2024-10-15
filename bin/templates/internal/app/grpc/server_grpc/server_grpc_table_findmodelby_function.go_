@@ -1,9 +1,9 @@
-// LawsuitStatusType_FindByFieldNamesWithUnderline - находит lawsuit_status_types в БД по FieldNamesWithPlus
-func (s *ServerGRPC) LawsuitStatusType_FindBy_FieldNamesWithUnderline(ctx context.Context, Request *grpc_proto.RequestName) (*grpc_proto.Response, error) {
+// LawsuitStatusType_FindModelByFieldNamesWithUnderline - находит ForeignModel в БД по FieldNamesWithPlus
+func (s *ServerGRPC) LawsuitStatusType_FindModelBy_FieldNamesWithUnderline(ctx context.Context, Request *grpc_proto.RequestName) (*grpc_proto.Response, error) {
 	var Otvet grpc_proto.Response
 	var err error
 
-	// проверим совпадения версии модели
+	//проверим совпадения версии модели
 	VersionServer := lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	VersionClient := Request.VersionModel
 	if VersionServer != VersionClient {
@@ -11,18 +11,29 @@ func (s *ServerGRPC) LawsuitStatusType_FindBy_FieldNamesWithUnderline(ctx contex
 		return &Otvet, err
 	}
 
-	// запрос в БД
+	//клиент БД
 	db := postgres_gorm.GetConnection()
+
+	//модель из строки
+	sModel := Request.ModelString
 	Model := &lawsuit_status_types.LawsuitStatusType{}
-	Model.FieldName = Request.RequestFieldName
-	err = crud_lawsuit_status_types.FindBy_FieldNamesWithUnderline_ctx(ctx, db, Model)
+	err = json.Unmarshal([]byte(sModel), Model)
 	if err != nil {
+		err = fmt.Errorf("json.Unmarshal() error: %w", err)
 		return &Otvet, err
 	}
 
-	// заполяем ответ
-	ModelString, err := Model.GetJSON()
+	//запрос crud
+	ModelOtvet, err := crud_lawsuit_status_types.FindModelBy_FieldNamesWithUnderline_ctx(ctx, db, Model)
 	if err != nil {
+		err = fmt.Errorf("FindModelBy_FieldNamesWithUnderline_ctx() error: %w", err)
+		return &Otvet, err
+	}
+
+	//заполяем ответ
+	ModelString, err := ModelOtvet.GetJSON()
+	if err != nil {
+		err = fmt.Errorf("GetJSON() error: %w", err)
 		return &Otvet, err
 	}
 	Otvet.ModelString = ModelString
