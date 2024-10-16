@@ -1,4 +1,4 @@
-// FieldNamesWithUnderline - находит массив записей в БД по FieldNamesWithPlus
+// FindMassBy_FieldNamesWithUnderline - находит массив записей в БД по FieldNamesWithPlus
 func (crud Crud_GRPC) FindMassBy_FieldNamesWithUnderline(m *lawsuit_status_types.LawsuitStatusType) ([]lawsuit_status_types.LawsuitStatusType, error) {
 	Otvet := make([]lawsuit_status_types.LawsuitStatusType, 0)
 	var err error
@@ -25,6 +25,7 @@ func (crud Crud_GRPC) FindMassBy_FieldNamesWithUnderline(m *lawsuit_status_types
 		Response, err = grpc_client_func.Client.LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(ctx, Request)
 	}
 	if err != nil {
+		err = fmt.Errorf("LawsuitStatusType_FindMassBy_FieldNamesWithUnderline() error: %w", err)
 		if grpc_client_func.IsErrorModelVersion(err) == true {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
@@ -36,6 +37,7 @@ func (crud Crud_GRPC) FindMassBy_FieldNamesWithUnderline(m *lawsuit_status_types
 	for _, v := range Response.MassModelString {
 		err = json.Unmarshal([]byte(v), &m1)
 		if err != nil {
+			err = fmt.Errorf("Unmarshal() error: %w", err)
 			return Otvet, err
 		}
 		Otvet = append(Otvet, m1)

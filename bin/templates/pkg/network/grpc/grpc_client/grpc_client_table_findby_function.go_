@@ -1,4 +1,4 @@
-// FieldNamesWithUnderline - находит модель в БД по FieldNamesWithPlus
+// FindBy_FieldNamesWithUnderline - находит модель в БД по FieldNamesWithPlus
 func (crud Crud_GRPC) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
@@ -24,6 +24,7 @@ func (crud Crud_GRPC) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.Law
 		Response, err = grpc_client_func.Client.LawsuitStatusType_FindBy_FieldNamesWithUnderline(ctx, Request)
 	}
 	if err != nil {
+		err = fmt.Errorf("LawsuitStatusType_FindBy_FieldNamesWithUnderline() error: %w", err)
 		if grpc_client_func.IsErrorModelVersion(err) == true {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
@@ -34,6 +35,7 @@ func (crud Crud_GRPC) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.Law
 	sModel := Response.ModelString
 	err = json.Unmarshal([]byte(sModel), m)
 	if err != nil {
+		err = fmt.Errorf("Unmarshal() error: %w", err)
 		return err
 	}
 
