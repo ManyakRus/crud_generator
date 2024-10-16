@@ -45,14 +45,15 @@ func FindText_FindModelBy1(Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := "\n\trpc "
 
 	TextFields := ""
-	TextRequest := "Request_Model_"
+	//TextRequest := "Request_"
 	Underline := ""
 	//for _, Column1 := range TableColumns1.Columns {
 	TextFields = TextFields + Underline + Column1.NameGo_translit
-	TextRequest1 := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
-	TextRequest = TextRequest + Underline + TextRequest1
+	//TextRequest1 := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
+	//TextRequest = TextRequest + Underline + TextRequest1
 	Underline = "_"
 	//}
+	TextRequest := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
 
 	Otvet = Otvet + Table1.NameGo_translit + "_FindModelBy_" + TextFields + "(" + TextRequest + ") returns (Response) {}\n"
 

@@ -140,7 +140,7 @@ func CreateFiles_FindModelBy_Table1(MapAll map[string]*types.Table, Table1 *type
 	TextFind := "\t" + `Model.FieldName = Request.RequestFieldName` + "\n"
 	Underline := ""
 	Plus := ""
-	RequestName := "Request_Model_"
+	//RequestName := "Request_"
 	//RequestFieldName := create_files.Find_RequestFieldName_FromMass(Column1, MassColumns)
 	TextRequest, TextRequestCode := create_files.Convert_ProtobufVariableToGolangVariable(Table1, Column1, "Request.")
 	if TextRequestCode != "" {
@@ -151,8 +151,9 @@ func CreateFiles_FindModelBy_Table1(MapAll map[string]*types.Table, Table1 *type
 	FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo_translit
 	FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
 
-	ProtoTypeName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
-	RequestName = RequestName + Underline + ProtoTypeName
+	//ProtoTypeName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
+	//RequestName = RequestName + Underline + ProtoTypeName
+	RequestName := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
 
 	Underline = "_"
 	Plus = "+"
@@ -177,6 +178,23 @@ func CreateFiles_FindModelBy_Table1(MapAll map[string]*types.Table, Table1 *type
 	//
 	TextForeignModel := ForeignTable.NameGo
 	Otvet = strings.ReplaceAll(Otvet, "ForeignModel", TextForeignModel)
+
+	//
+	TextIDEqual := ""
+	TextModelFieldName := ""
+	MassPK := create_files.Find_PrimaryKeyColumns(Table1)
+	MassPK_and_Column := create_files.AppendColumn(MassPK, Column1)
+	for _, ColumnPK1 := range MassPK_and_Column {
+		RequestColumnName, GolangCode := create_files.Convert_ProtobufVariableToGolangVariable(Table1, ColumnPK1, "Request.")
+		if GolangCode == "" {
+			TextIDEqual = TextIDEqual + "\t" + ColumnPK1.NameGo + " := " + RequestColumnName + "\n"
+		} else {
+			TextIDEqual = TextIDEqual + GolangCode
+		}
+		TextModelFieldName = TextModelFieldName + "\t" + "Model." + ColumnPK1.NameGo + " = " + ColumnPK1.NameGo + "\n"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "\tID := Request.RequestFieldName", TextIDEqual)
+	Otvet = strings.ReplaceAll(Otvet, "\tModel.FieldName = ID", TextModelFieldName)
 
 	return Otvet
 }
@@ -308,7 +326,6 @@ func CreateFiles_FindModelBy_Test_Table1(Table1 *types.Table, TextTemplateFuncti
 	FieldNamesWithComma := ""
 
 	//
-	TextAssignFind := "\t" + `Request.RequestFieldName = 0` + "\n"
 	TextAssign := ""
 	TextFieldName_TEST := ""
 
@@ -316,23 +333,31 @@ func CreateFiles_FindModelBy_Test_Table1(Table1 *types.Table, TextTemplateFuncti
 
 	Underline := ""
 	Comma := ""
-	RequestName := "Request_Model_"
+	//RequestName := "Request_Model_"
 	//for _, ColumnName1 := range MassColumnsString {
 	DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
-	RequestFieldName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
-	TextAssign = TextAssign + "\t" + `Request.` + RequestFieldName + ` = ` + DefaultValue + "\n"
 	FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo_translit
 	FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
 	TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue
 
-	ProtoTypeName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
-	RequestName = RequestName + Underline + ProtoTypeName
+	//ProtoTypeName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
+	//RequestName = RequestName + Underline + ProtoTypeName
+	RequestName := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
+
+	MassPK := create_files.Find_PrimaryKeyColumns(Table1)
+	MassPK_and_Column := create_files.AppendColumn(MassPK, Column1)
+	for _, ColumnPK1 := range MassPK_and_Column {
+		RequestFieldName, _ := create_files.Convert_ProtobufVariableToGolangVariable(Table1, ColumnPK1, "Request.")
+		TextAssign = TextAssign + "\t" + `` + RequestFieldName + ` = ` + DefaultValue + "\n"
+	}
+	//RequestFieldName := create_files.Convert_GolangTypeNameToProtobufFieldName(Column1.TypeGo)
+	//TextAssign = TextAssign + "\t" + `` + RequestFieldName + ` = ` + DefaultValue + "\n"
 
 	Underline = "_"
 	Comma = ", "
 	//}
 	Otvet = strings.ReplaceAll(Otvet, "RequestName", RequestName)
-	Otvet = strings.ReplaceAll(Otvet, TextAssignFind, TextAssign)
+	Otvet = strings.ReplaceAll(Otvet, "\t"+`Request.RequestFieldName = 0`+"\n", TextAssign)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithComma", FieldNamesWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesDefault", TextFieldName_TEST)

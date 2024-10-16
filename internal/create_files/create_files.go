@@ -10,6 +10,7 @@ import (
 	"github.com/ManyakRus/starter/micro"
 	"github.com/gobeam/stringy"
 	"github.com/jinzhu/inflection"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -2688,6 +2689,18 @@ func Find_PrimaryKeysDefaultValues(Table1 *types.Table) string {
 		Otvet = Otvet + Comma + DefaultValue
 
 		Comma = ", "
+	}
+
+	return Otvet
+}
+
+// AppendColumn - добавляет колонку в слайс, если ее нет
+func AppendColumn(MassPK []*types.Column, Column1 *types.Column) []*types.Column {
+	Otvet := make([]*types.Column, len(MassPK))
+	copy(Otvet, MassPK)
+
+	if slices.Contains(MassPK, Column1) == false {
+		Otvet = append(Otvet, Column1)
 	}
 
 	return Otvet

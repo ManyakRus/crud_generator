@@ -14,17 +14,13 @@ func (s *ServerGRPC) LawsuitStatusType_FindModelBy_FieldNamesWithUnderline(ctx c
 	//клиент БД
 	db := postgres_gorm.GetConnection()
 
-	//модель из строки
-	sModel := Request.ModelString
-	Model := &lawsuit_status_types.LawsuitStatusType{}
-	err = json.Unmarshal([]byte(sModel), Model)
-	if err != nil {
-		err = fmt.Errorf("json.Unmarshal() error: %w", err)
-		return &Otvet, err
-	}
+	//модель
+	Model := lawsuit_status_types.LawsuitStatusType{}
+	ID := Request.RequestFieldName
+	Model.FieldName = ID
 
 	//запрос crud
-	ModelOtvet, err := crud_lawsuit_status_types.FindModelBy_FieldNamesWithUnderline_ctx(ctx, db, Model)
+	ModelOtvet, err := crud_lawsuit_status_types.FindModelBy_FieldNamesWithUnderline_ctx(ctx, db, &Model)
 	if err != nil {
 		err = fmt.Errorf("FindModelBy_FieldNamesWithUnderline_ctx() error: %w", err)
 		return &Otvet, err

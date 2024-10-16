@@ -2,7 +2,6 @@ package server_grpc
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
