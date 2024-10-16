@@ -15,7 +15,7 @@ import (
 )
 
 // CreateFiles - создаёт 1 файл в папке model
-func CreateFiles(Table1 *types.Table) error {
+func CreateFiles(MapAll map[string]*types.Table, Table1 *types.Table) error {
 	var err error
 
 	TableName := strings.ToLower(Table1.Name)
@@ -41,7 +41,7 @@ func CreateFiles(Table1 *types.Table) error {
 
 	// создание файла crud
 	if config.Settings.NEED_CREATE_MODEL_CRUD == true {
-		err = CreateFiles_Model_crud(Table1, DirTemplatesModel, DirReadyModel)
+		err = CreateFiles_Model_crud(MapAll, Table1, DirTemplatesModel, DirReadyModel)
 		if err != nil {
 			log.Error("CreateFiles_Model_crud() table: ", Table1.Name, " error: ", err)
 			return err
@@ -116,7 +116,7 @@ func CreateFiles_Model_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMo
 }
 
 // CreateFiles_Model_crud - создаёт 1 файл с crud операциями
-func CreateFiles_Model_crud(Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
+func CreateFiles_Model_crud(MapAll map[string]*types.Table, Table1 *types.Table, DirTemplatesModel, DirReadyModel string) error {
 	var err error
 
 	//ModelName := Table1.NameGo
@@ -179,6 +179,9 @@ func CreateFiles_Model_crud(Table1 *types.Table, DirTemplatesModel, DirReadyMode
 
 		//
 		TextModel = AddInterfaces_FindMassBy(TextModel, Table1)
+
+		//
+		TextModel = AddInterfaces_FindModelBy(MapAll, TextModel, Table1)
 
 		//
 		TextModel = AddInterfaces_ReadAll(TextModel, Table1)
