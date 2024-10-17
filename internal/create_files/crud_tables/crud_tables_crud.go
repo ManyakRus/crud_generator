@@ -99,6 +99,11 @@ func CreateFiles(Table1 *types.Table) error {
 	//id := m.ID
 	TextDB = ReplaceColumnNamePK(TextDB, Table1)
 
+	//PrimaryKeysWithQuotes
+	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	PrimaryKeysWithQuotes := create_files.ColumnNamesGo_WithQuotes(ColumnsPK)
+	TextDB = strings.ReplaceAll(TextDB, "PrimaryKeysWithQuotes", PrimaryKeysWithQuotes)
+
 	//"Replace_ColumnNameM(m.ID)"
 	//TextDB = create_files.Replace_ColumnNameM(TextDB, Table1)
 

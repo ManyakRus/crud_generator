@@ -118,7 +118,7 @@ func CreateFiles_FindMassBy_Table(Table1 *types.Table, TextTemplateFunction stri
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFiles_FindMassBy_Table1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFiles_FindMassBy_Table1(Table1, TextTemplateFunction, TableColumns1.ColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 
@@ -290,7 +290,7 @@ func CreateFiles_FindMassBy_Test_Table(Table1 *types.Table, TextTemplateFunction
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFiles_FindMassBy_Test_Table1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFiles_FindMassBy_Test_Table1(Table1, TextTemplateFunction, TableColumns1.ColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 

@@ -58,8 +58,8 @@ var MapRenameFunctions = make(map[string][]ReplaceStruct, 0)
 
 // TableColumns_String - структура строк для загрузки из JSON
 type TableColumns_String struct {
-	TableName       string   `json:"Table"`
-	MassColumnNames []string `json:"Column"`
+	TableName   string   `json:"Table"`
+	ColumnNames []string `json:"Columns"`
 }
 
 // MassFindBy_String - карта функций которые будут созданы для поиска 1 строки в таблице

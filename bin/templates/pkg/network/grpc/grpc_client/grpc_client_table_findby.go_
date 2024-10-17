@@ -3,6 +3,7 @@ package grpc_lawsuit_status_types
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client_func"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"

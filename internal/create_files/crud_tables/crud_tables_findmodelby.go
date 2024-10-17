@@ -187,6 +187,16 @@ func CreateFiles_FindModelBy_Table1(MapAll map[string]*types.Table, Table1 *type
 	ModelTableURL := create_files.Find_ModelTableURL(ForeignTableName)
 	*TextCrud = create_files.AddImport(*TextCrud, ModelTableURL)
 
+	//ForeignPrimaryKeysWithQuotes
+	ForeignColumnsPK := create_files.Find_PrimaryKeyColumns(ForeignTable)
+	ForeignPrimaryKeysWithQuotes := create_files.ColumnNamesGo_WithQuotes(ForeignColumnsPK)
+	Otvet = strings.ReplaceAll(Otvet, "ForeignPrimaryKeysWithQuotes", ForeignPrimaryKeysWithQuotes)
+
+	//PrimaryKeysWithQuotes
+	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	PrimaryKeysWithQuotes := create_files.ColumnNamesGo_WithQuotes(ColumnsPK)
+	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeysWithQuotes", PrimaryKeysWithQuotes)
+
 	return Otvet
 }
 
@@ -317,11 +327,18 @@ func CreateFiles_FindModelBy_Test_Table1(MapAll map[string]*types.Table, Table1 
 
 	Underline := ""
 	Comma := ""
-	DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
-	TextAssign = TextAssign + "\t" + `Otvet.` + Column1.NameGo + ` = ` + DefaultValue + "\n"
 	FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 	FieldNamesWithComma = FieldNamesWithComma + Comma + Column1.NameGo
-	TextFieldName_TEST = TextFieldName_TEST + Comma + DefaultValue
+
+	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+
+	for _, ColumnPK1 := range ColumnsPK {
+		//DefaultValue := create_files.FindText_DefaultValue(ColumnPK1.TypeGo)
+		Value := create_files.FindText_ColumnNameTest(ColumnPK1)
+		TextAssign = TextAssign + "\t" + `Otvet.` + ColumnPK1.NameGo + ` = ` + Value + "\n"
+		TextFieldName_TEST = TextFieldName_TEST + Comma + Value
+		Comma = ", "
+	}
 
 	Underline = "_"
 	Comma = ", "

@@ -22,10 +22,10 @@ func FindModelBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m
 	
 	//находим запись в этой таблице
 	//tx = tx.Where("ColumnName = ?", m.PrimaryKeyName)
-	tx = tx.First(m)
+	tx = tx.Where(m, PrimaryKeysWithQuotes).Take(m)
 	err = tx.Error
 	if err != nil {
-		err = fmt.Errorf("tx.First() error: %w", err)
+		err = fmt.Errorf("tx.Take() error: %w", err)
 		return Otvet, err
 	}
 
@@ -33,10 +33,10 @@ func FindModelBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m
 	tx = db.WithContext(ctx)
 	ID := m.FieldName
 	Otvet.ForeignPrimaryKeyName = ID
-	tx = tx.First(&Otvet)
+	tx = tx.Where(&Otvet, ForeignPrimaryKeysWithQuotes).Take(&Otvet)
 	err = tx.Error
 	if err != nil {
-		err = fmt.Errorf("tx.First() error: %w", err)
+		err = fmt.Errorf("tx.Take() error: %w", err)
 		return Otvet, err
 	}
 

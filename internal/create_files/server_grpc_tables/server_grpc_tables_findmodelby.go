@@ -164,7 +164,7 @@ func CreateFiles_FindModelBy_Table1(MapAll map[string]*types.Table, Table1 *type
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
 
-	//
+	//найдём внешнюю таблицу
 	ForeignTableName := Column1.TableKey
 	ForeignTable, ok := MapAll[ForeignTableName]
 	if ok == false {
@@ -266,7 +266,7 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 	}
 
 	//создание функций
-	TextGRPCServerFunc := CreateFiles_FindModelBy_Test_Table(Table1, TextTemplatedFunction)
+	TextGRPCServerFunc := CreateFiles_FindModelBy_Test_Table(MapAll, Table1, TextTemplatedFunction)
 	if TextGRPCServerFunc == "" {
 		return err
 	}
@@ -303,14 +303,14 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 }
 
 // CreateFiles_FindModelBy_Test_Table - создаёт текст всех функций
-func CreateFiles_FindModelBy_Test_Table(Table1 *types.Table, TextTemplateFunction string) string {
+func CreateFiles_FindModelBy_Test_Table(MapAll map[string]*types.Table, Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := ""
 
 	for _, TableColumns1 := range types.MassFindModelBy {
 		if TableColumns1.Table != Table1 {
 			continue
 		}
-		Otvet1 := CreateFiles_FindModelBy_Test_Table1(Table1, TextTemplateFunction, TableColumns1.Column)
+		Otvet1 := CreateFiles_FindModelBy_Test_Table1(MapAll, Table1, TextTemplateFunction, TableColumns1.Column)
 		Otvet = Otvet + Otvet1
 	}
 
@@ -318,7 +318,7 @@ func CreateFiles_FindModelBy_Test_Table(Table1 *types.Table, TextTemplateFunctio
 }
 
 // CreateFiles_FindModelBy_Test_Table1 - создаёт текст всех функций
-func CreateFiles_FindModelBy_Test_Table1(Table1 *types.Table, TextTemplateFunction string, Column1 *types.Column) string {
+func CreateFiles_FindModelBy_Test_Table1(MapAll map[string]*types.Table, Table1 *types.Table, TextTemplateFunction string, Column1 *types.Column) string {
 	Otvet := TextTemplateFunction
 
 	//
@@ -361,6 +361,17 @@ func CreateFiles_FindModelBy_Test_Table1(Table1 *types.Table, TextTemplateFuncti
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithComma", FieldNamesWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesDefault", TextFieldName_TEST)
+
+	//найдём внешнюю таблицу
+	ForeignTableName := Column1.TableKey
+	ForeignTable, ok := MapAll[ForeignTableName]
+	if ok == false {
+		log.Panic("Table not found: ", ForeignTableName)
+	}
+
+	//
+	TextFindModelBy := "Find" + ForeignTable.NameGo_translit + "By"
+	Otvet = strings.ReplaceAll(Otvet, "FindModelBy", TextFindModelBy)
 
 	return Otvet
 }

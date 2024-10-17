@@ -20,7 +20,7 @@ func FindBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m *law
 	tx := db.WithContext(ctx)
 
 	tx = tx.Where("ColumnName = ?", m.FieldName)
-	tx = tx.First(m)
+	tx = tx.Take(m)
 	err = tx.Error
 
 	return err

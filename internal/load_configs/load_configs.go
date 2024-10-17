@@ -333,7 +333,8 @@ func LoadFindModelBy(MapTables map[string]*types.Table) {
 	for _, TableColumn_string1 := range MassTableColumn_string {
 		Table1, ok := MapTables[TableColumn_string1.TableName]
 		if ok == false {
-			log.Panic("Table not found: ", TableColumn_string1.TableName)
+			log.Error("Table not found: ", TableColumn_string1.TableName)
+			continue
 		}
 
 		Column1, ok := Table1.MapColumns[TableColumn_string1.ColumnName]

@@ -2552,7 +2552,7 @@ func FindMass_TableColumns(MapAll map[string]*types.Table, MassTableColumns_Stri
 			log.Warn(" Error: not found table: ", TableColumns_string1.TableName)
 			continue
 		}
-		Columns1 := FindMass_Columns_from_MassColumnsString(Table1, TableColumns_string1.MassColumnNames)
+		Columns1 := FindMass_Columns_from_MassColumnsString(Table1, TableColumns_string1.ColumnNames)
 		TableColumns1 := types.TableColumns{}
 		TableColumns1.Table = Table1
 		TableColumns1.Columns = Columns1
@@ -2701,6 +2701,32 @@ func AppendColumn(MassPK []*types.Column, Column1 *types.Column) []*types.Column
 
 	if slices.Contains(MassPK, Column1) == false {
 		Otvet = append(Otvet, Column1)
+	}
+
+	return Otvet
+}
+
+// ColumnNamesGo_WithComma - возвращает строку с именами колонок БД, через запятую
+func ColumnNamesGo_WithComma(ColumnsPK []*types.Column) string {
+	Otvet := ""
+
+	Comma := ""
+	for _, v := range ColumnsPK {
+		Otvet = Otvet + Comma + v.NameGo
+		Comma = ", "
+	}
+
+	return Otvet
+}
+
+// ColumnNamesGo_WithQuotes - возвращает строку с именами колонок БД в кавычках, через запятую
+func ColumnNamesGo_WithQuotes(ColumnsPK []*types.Column) string {
+	Otvet := ""
+
+	Comma := ""
+	for _, v := range ColumnsPK {
+		Otvet = Otvet + Comma + `"` + v.NameGo + `"`
+		Comma = ", "
 	}
 
 	return Otvet

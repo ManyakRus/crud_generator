@@ -29,10 +29,9 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 	}
 
 	//
-	db.WithContext(ctx)
+	tx := db.WithContext(ctx)
 
 	//
-	var tx *gorm.DB
 	Value := m.ColumnNameField
 	if Value == 0 {
 		tx = db.Model(&m).Update("ColumnNameField", gorm.Expr("NULL"))

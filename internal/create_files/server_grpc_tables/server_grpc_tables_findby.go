@@ -118,7 +118,7 @@ func CreateFiles_FindBy_Table(Table1 *types.Table, TextTemplateFunction string) 
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFiles_FindBy_Table1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFiles_FindBy_Table1(Table1, TextTemplateFunction, TableColumns1.ColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 
@@ -282,7 +282,7 @@ func CreateFiles_FindBy_Test_Table(Table1 *types.Table, TextTemplateFunction str
 		if TableColumns1.TableName != Table1.Name {
 			continue
 		}
-		Otvet1 := CreateFiles_FindBy_Test_Table1(Table1, TextTemplateFunction, TableColumns1.MassColumnNames)
+		Otvet1 := CreateFiles_FindBy_Test_Table1(Table1, TextTemplateFunction, TableColumns1.ColumnNames)
 		Otvet = Otvet + Otvet1
 	}
 

@@ -44,9 +44,9 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 		return err
 	}
 
-	db.WithContext(ctx)
+	tx := db.WithContext(ctx)
 
-	tx := db.First(m)
+	tx = tx.Where(m, PrimaryKeysWithQuotes).Take(m)
 	err = tx.Error
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Read() ColumnNamePK: %v, error: %w", m.ColumnNamePK, err)
@@ -288,9 +288,9 @@ func Find_ByExtID_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.
 		return err
 	}
 
-	db.WithContext(ctx)
+	tx := db.WithContext(ctx)
 
-	tx := db.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).First(m)
+	tx = tx.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).Take(m)
 	err = tx.Error
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Find_ByExtID() ExtID: %v, ConnectionID: %v, error: %w", m.ExtID, m.ConnectionID, err)
@@ -324,9 +324,9 @@ func Delete_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 		return err
 	}
 
-	db.WithContext(ctx)
+	tx := db.WithContext(ctx)
 
-	tx := db.Delete(m)
+	tx = tx.Delete(m)
 	err = tx.Error
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Delete() ColumnNamePK: %v, error: %w", m.ColumnNamePK, err)
