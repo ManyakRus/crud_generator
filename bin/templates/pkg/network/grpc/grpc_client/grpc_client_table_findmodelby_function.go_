@@ -1,5 +1,6 @@
 // FindModelBy_FieldNamesWithUnderline - находит модель в БД по FieldNamesWithPlus
 func (crud Crud_GRPC) FindModelBy_FieldNamesWithUnderline(m *lawsuit_status_types.LawsuitStatusType) (foreign_package.ForeignModel, error) {
+	Otvet := foreign_package.ForeignModel{}
 	var err error
 
 	// подключение
@@ -28,17 +29,17 @@ func (crud Crud_GRPC) FindModelBy_FieldNamesWithUnderline(m *lawsuit_status_type
 		if grpc_client_func.IsErrorModelVersion(err) == true {
 			log.Panic("table: ", TableName, " error: ", err)
 		}
-		return err
+		return Otvet, err
 	}
 
 	// ответ
 	sModel := Response.ModelString
-	err = json.Unmarshal([]byte(sModel), m)
+	err = json.Unmarshal([]byte(sModel), &Otvet)
 	if err != nil {
 		err = fmt.Errorf("Unmarshal() error: %w", err)
-		return err
+		return Otvet, err
 	}
 
-	return err
+	return Otvet, err
 }
 

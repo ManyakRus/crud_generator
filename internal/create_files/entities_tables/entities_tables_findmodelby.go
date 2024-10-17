@@ -195,6 +195,10 @@ func AddInterfaces_FindModelBy(MapAll map[string]*types.Table, TextModel string,
 		TextFunc1 := "\n\tFind" + ForeignTable.NameGo + "By_" + FieldNamesWithUnderline + "(*" + Table1.NameGo + ") (" + ForeignTable.Name + "." + ForeignTable.NameGo + ",error)"
 		TextFunc = TextFunc + TextFunc1
 
+		//добавим URL
+		ModelTableURL := create_files.Find_ModelTableURL(ForeignTableName)
+		Otvet = create_files.AddImport(Otvet, ModelTableURL)
+
 	}
 
 	Otvet = create_files.AddInterfaceFunction(Otvet, TextFunc)

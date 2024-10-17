@@ -3,11 +3,12 @@ package protobuf
 import (
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/types"
+	"github.com/ManyakRus/starter/log"
 	"strings"
 )
 
 // FindText_FindModelBy - возвращает TextProto и текст FindModelBy
-func FindText_FindModelBy(TextProto string, Table1 *types.Table) (string, string) {
+func FindText_FindModelBy(MapAll map[string]*types.Table, TextProto string, Table1 *types.Table) (string, string) {
 	Otvet := TextProto
 
 	Otvet2 := ""
@@ -16,7 +17,7 @@ func FindText_FindModelBy(TextProto string, Table1 *types.Table) (string, string
 			continue
 		}
 
-		Text1 := FindText_FindModelBy1(TableColumns1.Table, TableColumns1.Column)
+		Text1 := FindText_FindModelBy1(MapAll, TableColumns1.Table, TableColumns1.Column)
 
 		//проверим такой текст функции уже есть
 		pos1 := strings.Index(TextProto, Text1)
@@ -41,7 +42,7 @@ func FindText_FindModelBy(TextProto string, Table1 *types.Table) (string, string
 }
 
 // FindText_FindModelBy1 - находит текст FindModelBy
-func FindText_FindModelBy1(Table1 *types.Table, Column1 *types.Column) string {
+func FindText_FindModelBy1(MapAll map[string]*types.Table, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := "\n\trpc "
 
 	TextFields := ""
@@ -55,7 +56,15 @@ func FindText_FindModelBy1(Table1 *types.Table, Column1 *types.Column) string {
 	//}
 	TextRequest := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
 
-	Otvet = Otvet + Table1.NameGo_translit + "_FindModelBy_" + TextFields + "(" + TextRequest + ") returns (Response) {}\n"
+	//
+	ForeignTableName := Column1.TableKey
+	ForeignTable, ok := MapAll[ForeignTableName]
+	if ok == false {
+		log.Panic("Table not found: ", ForeignTableName)
+	}
+
+	//
+	Otvet = Otvet + Table1.NameGo_translit + "_Find" + ForeignTable.NameGo_translit + "By_" + TextFields + "(" + TextRequest + ") returns (Response) {}\n"
 
 	return Otvet
 }

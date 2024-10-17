@@ -1700,7 +1700,7 @@ func DeleteCommentFromString(TextFrom string) string {
 	return Otvet
 }
 
-// Convert_GolangVariableToProtobufVariable - возвращает имя переменной +  имя колонки, преобразованное в тип protobuf
+// Convert_GolangVariableToProtobufVariable - возвращает имя переменной  + "." +  имя колонки, преобразованное в тип protobuf
 func Convert_GolangVariableToProtobufVariable(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := ""
 

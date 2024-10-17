@@ -101,7 +101,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		TextProtoNew = TextProtoNew + TextProtoNew1
 
 		//добавим текст FindModelBy
-		TextProto, TextProtoNew1 = FindText_FindModelBy(TextProto, Table1)
+		TextProto, TextProtoNew1 = FindText_FindModelBy(MapAll, TextProto, Table1)
 		TextProtoNew = TextProtoNew + TextProtoNew1
 
 		//
