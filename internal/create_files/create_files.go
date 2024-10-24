@@ -519,6 +519,11 @@ func IsGood_Table(Table1 *types.Table) error {
 		return err
 	}
 
+	err = IsGood_TableCommentPrefix(Table1)
+	if err != nil {
+		return err
+	}
+
 	err = IsGood_PrimaryKeyColumnsCount(Table1)
 	if err != nil {
 		return err
@@ -546,6 +551,19 @@ func IsGood_TableNamePrefix(Table1 *types.Table) error {
 	TableName := Table1.Name
 	if strings.HasPrefix(TableName, "DELETED_") == true {
 		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: name = DELETED_")
+		err = errors.New(TextError)
+	}
+
+	return err
+}
+
+// IsGood_TableNamePrefix - возвращает ошибку если префикс таблицы = "DELETED_"
+func IsGood_TableCommentPrefix(Table1 *types.Table) error {
+	var err error
+
+	TableComment := Table1.Comment
+	if strings.HasPrefix(TableComment, "DELETED") == true || strings.HasPrefix(TableComment, "УДАЛИТЬ") == true {
+		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: comment: ", TableComment)
 		err = errors.New(TextError)
 	}
 

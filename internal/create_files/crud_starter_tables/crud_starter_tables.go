@@ -68,7 +68,7 @@ func CreateFiles(Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile() + "starter_tables" + micro.SeparatorFile()
+	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 
 	FilenameTemplateDB := DirTemplatesDB + config.Settings.STARTER_TABLES_FILENAME
@@ -135,7 +135,7 @@ func CreateFiles_Test(Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile() + "starter_tables" + micro.SeparatorFile()
+	DirTemplatesDB := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER + micro.SeparatorFile()
 
 	FilenameTemplateDB := DirTemplatesDB + config.Settings.STARTER_TABLES_TEST_FILENAME

@@ -78,7 +78,9 @@ Start microservice:
 >make run
 >
 
-
+Features:
+1. Tables with a prefix in the name or comments = "DELETED" or "УДАЛИТЬ" are ignored
+2. Columns with a prefix in the name or comments = "DELETED" or "УДАЛИТЬ" are ignored
 
 P.S.
 I generated myself 420,000 lines of code, from 70 tables in the database, for my service.

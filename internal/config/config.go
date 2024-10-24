@@ -220,6 +220,7 @@ type SettingsINI struct {
 	NEED_USE_DB_VIEWS bool
 }
 
+// Getenv - возвращает переменную окружения
 func Getenv(Name string, IsRequired bool) string {
 	TextError := "Need fill OS environment variable: "
 	Otvet := os.Getenv(Name)
