@@ -1,4 +1,7 @@
 [{"Table":"connections","Columns":["branch_id"]},
 {"Table":"briefcases_hashtags","Columns":["briefcase_id"]},
-{"Table":"employees_hashtags","Columns":["employee_id"]}
+{"Table":"employees_hashtags","Columns":["employee_id"]},
+{"Table":"user_roles_memberships","Columns":["employee_id"]},
+{"Table":"user_roles_memberships","Columns":["user_role_id"]}
+
 ]
