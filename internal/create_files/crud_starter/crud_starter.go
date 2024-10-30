@@ -25,13 +25,13 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 	}
 
 	//crud_starter_manual.go
-	if config.Settings.NEED_CREATE_MANUAL_FILES == true {
-		err = CreateFileCrudStarter_manual(MapAll)
-		if err != nil {
-			log.Error("CreateFileCrudStarter_manual() error: ", err)
-			return err
-		}
+	//if config.Settings.NEED_CREATE_MANUAL_FILES == true {
+	err = CreateFileCrudStarter_manual(MapAll)
+	if err != nil {
+		log.Error("CreateFileCrudStarter_manual() error: ", err)
+		return err
 	}
+	//}
 
 	return err
 }
