@@ -61,6 +61,9 @@ func CreateFiles(MapAll map[string]*types.Table, Table1 *types.Table) error {
 	////замена импортов на новые URL
 	//TextGo = create_files.Replace_RepositoryImportsURL(TextGo)
 
+	//заменим имя модели
+	TextGo = create_files.Replace_ModelAndTableName(TextGo, Table1)
+
 	//uuid
 	TextGo = create_files.CheckAndAdd_ImportUUID_FromText(TextGo)
 
@@ -128,7 +131,11 @@ func CreateFiles1(MapAll map[string]*types.Table, Table1 *types.Table, TextGo st
 
 	}
 
+	//новые поля
 	Otvet = strings.ReplaceAll(Otvet, "//TextNewFields\n", TextField)
+
+	//описание таблицы
+	Otvet = strings.ReplaceAll(Otvet, "//TextDescription", Table1.Comment)
 
 	return Otvet
 }

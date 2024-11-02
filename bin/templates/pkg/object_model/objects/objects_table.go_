@@ -4,7 +4,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 )
 
-// ObjectLawsuitStatusType - объект для таблицы lawsuit_status_types: Статусы дел (справочник).
+// ObjectLawsuitStatusType - объект для таблицы lawsuit_status_types: //TextDescription
 type ObjectLawsuitStatusType struct {
 	lawsuit_status_types.LawsuitStatusType
 //TextNewFields
