@@ -31,13 +31,7 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_SERVER_GRPC + TableName + "_findmodelby.go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
+	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
 	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)
@@ -220,13 +214,7 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_SERVER_GRPC + TableName + "_findmodelby_test.go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
+	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
 	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)

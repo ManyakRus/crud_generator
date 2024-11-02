@@ -77,13 +77,7 @@ func CreateFiles(Table1 *types.Table) error {
 	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.STARTER_TABLES_PREFIX + TableName + ".go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
+	create_files.CreateDirectory(DirReadyTable)
 
 	bytes, err := os.ReadFile(FilenameTemplateDB)
 	if err != nil {
@@ -202,14 +196,9 @@ func CreateFiles_manual(Table1 *types.Table) error {
 	FilenameReadyManual := DirReadyTable + micro.SeparatorFile() + config.Settings.STARTER_TABLES_PREFIX + TableName + "_manual.go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
+	create_files.CreateDirectory(DirReadyTable)
 
+	//
 	bytes, err := os.ReadFile(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
@@ -266,14 +255,9 @@ func CreateFiles_manual_test(Table1 *types.Table) error {
 	FilenameReadyManual := DirReadyTable + micro.SeparatorFile() + config.Settings.STARTER_TABLES_PREFIX + TableName + "_manual_test.go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
+	create_files.CreateDirectory(DirReadyTable)
 
+	//
 	bytes, err := os.ReadFile(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)

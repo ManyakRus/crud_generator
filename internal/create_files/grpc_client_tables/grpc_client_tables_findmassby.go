@@ -31,13 +31,7 @@ func CreateFiles_FindMassBy(Table1 *types.Table) error {
 	FilenameReady := DirReadyTable + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_findmassby.go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
+	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
 	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
@@ -210,13 +204,7 @@ func CreateFiles_FindMassBy_Test(Table1 *types.Table) error {
 	FilenameReady := DirReadyTable + config.Settings.PREFIX_CLIENT_GRPC + TableName + "_findmassby_test.go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
+	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
 	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)

@@ -18,6 +18,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/main_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/makefile"
 	"github.com/ManyakRus/crud_generator/internal/create_files/nrpc_client"
+	"github.com/ManyakRus/crud_generator/internal/create_files/object_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/protobuf"
 	"github.com/ManyakRus/crud_generator/internal/create_files/readme_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/server_grpc_func"
@@ -226,6 +227,13 @@ func StartFillAll() error {
 
 	//crud
 	err = crud.CreateAllFiles()
+	if err != nil {
+		//log.Error("env_file.CreateAllFiles() error: ", err)
+		return err
+	}
+
+	//objects
+	err = object_tables.CreateAllFiles(MapAll)
 	if err != nil {
 		//log.Error("env_file.CreateAllFiles() error: ", err)
 		return err

@@ -218,6 +218,17 @@ type SettingsINI struct {
 	TEXT_READALL string
 
 	NEED_USE_DB_VIEWS bool
+
+	//Objects
+	PREFIX_OBJECT               string
+	TEMPLATE_FOLDERNAME_OBJECTS string
+	TEMPLATES_OBJECTS_FILENAME  string
+
+	//Text DELETED
+	TEXT_DELETED_TABLE      string
+	TEXT_DELETED_TABLE_RUS  string
+	TEXT_DELETED_COLUMN     string
+	TEXT_DELETED_COLUMN_RUS string
 }
 
 // Getenv - возвращает переменную окружения
@@ -1140,6 +1151,41 @@ func FillSettings() {
 	Name = "TEMPLATES_NAME_PRIMARYKEYS_FILENAME"
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_NAME_PRIMARYKEYS_FILENAME = s
+
+	//
+	Name = "TEMPLATE_FOLDERNAME_OBJECTS"
+	s = Getenv(Name, true)
+	Settings.TEMPLATE_FOLDERNAME_OBJECTS = s
+
+	//
+	Name = "TEMPLATES_OBJECTS_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_OBJECTS_FILENAME = s
+
+	//
+	Name = "PREFIX_OBJECT"
+	s = Getenv(Name, true)
+	Settings.PREFIX_OBJECT = s
+
+	//
+	Name = "TEXT_DELETED_TABLE"
+	s = Getenv(Name, true)
+	Settings.TEXT_DELETED_TABLE = s
+
+	//
+	Name = "TEXT_DELETED_TABLE_RUS"
+	s = Getenv(Name, true)
+	Settings.TEXT_DELETED_TABLE_RUS = s
+
+	//
+	Name = "TEXT_DELETED_COLUMN"
+	s = Getenv(Name, true)
+	Settings.TEXT_DELETED_COLUMN = s
+
+	//
+	Name = "TEXT_DELETED_COLUMN_RUS"
+	s = Getenv(Name, true)
+	Settings.TEXT_DELETED_COLUMN_RUS = s
 
 }
 

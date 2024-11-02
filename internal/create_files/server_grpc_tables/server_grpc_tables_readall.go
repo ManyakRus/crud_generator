@@ -31,13 +31,7 @@ func CreateFiles_ReadAll(Table1 *types.Table) error {
 	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_SERVER_GRPC + TableName + "_readall.go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
+	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
 	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)
@@ -153,13 +147,7 @@ func CreateFiles_ReadAll_Test(Table1 *types.Table) error {
 	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_SERVER_GRPC + TableName + "_readall_test.go"
 
 	//создадим каталог
-	ok, err := micro.FileExists(DirReadyTable)
-	if ok == false {
-		err = os.MkdirAll(DirReadyTable, 0777)
-		if err != nil {
-			log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
-		}
-	}
+	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
 	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)

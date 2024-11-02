@@ -10,6 +10,7 @@ import (
 	"github.com/ManyakRus/starter/micro"
 	"github.com/gobeam/stringy"
 	"github.com/jinzhu/inflection"
+	"os"
 	"slices"
 	"sort"
 	"strconv"
@@ -549,7 +550,9 @@ func IsGood_TableNamePrefix(Table1 *types.Table) error {
 	var err error
 
 	TableName := Table1.Name
-	if strings.HasPrefix(TableName, "DELETED_") == true {
+	HasPrefix := strings.HasPrefix(TableName, config.Settings.TEXT_DELETED_TABLE)
+	HasPrefixRus := strings.HasPrefix(TableName, config.Settings.TEXT_DELETED_TABLE_RUS)
+	if HasPrefix == true || HasPrefixRus == true {
 		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: name = DELETED_")
 		err = errors.New(TextError)
 	}
@@ -562,7 +565,9 @@ func IsGood_TableCommentPrefix(Table1 *types.Table) error {
 	var err error
 
 	TableComment := Table1.Comment
-	if strings.HasPrefix(TableComment, "DELETED") == true || strings.HasPrefix(TableComment, "УДАЛИТЬ") == true {
+	HasPrefix := strings.HasPrefix(TableComment, config.Settings.TEXT_DELETED_TABLE)
+	HasPrefixRus := strings.HasPrefix(TableComment, config.Settings.TEXT_DELETED_TABLE_RUS)
+	if HasPrefix == true || HasPrefixRus == true {
 		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: comment: ", TableComment)
 		err = errors.New(TextError)
 	}
@@ -2748,4 +2753,65 @@ func ColumnNamesGo_WithQuotes(ColumnsPK []*types.Column) string {
 	}
 
 	return Otvet
+}
+
+// IsGood_Column - возвращает ошибку если колонка неправильная
+func IsGood_Column(Column1 *types.Column) error {
+	var err error
+
+	err = IsGood_ColumnNamePrefix(Column1)
+	if err != nil {
+		return err
+	}
+
+	err = IsGood_ColumnCommentPrefix(Column1)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+// IsGood_ColumnNamePrefix - возвращает ошибку если префикс таблицы = "DELETED_"
+func IsGood_ColumnNamePrefix(Column1 *types.Column) error {
+	var err error
+
+	ColumnName := Column1.Name
+	HasPrefix := strings.HasPrefix(ColumnName, config.Settings.TEXT_DELETED_COLUMN)
+	HasPrefixRus := strings.HasPrefix(ColumnName, config.Settings.TEXT_DELETED_COLUMN_RUS)
+	if HasPrefix == true || HasPrefixRus == true {
+		TextError := fmt.Sprint("Wrong column: ", ColumnName, " error: name = DELETED_")
+		err = errors.New(TextError)
+	}
+
+	return err
+}
+
+// IsGood_ColumnCommentPrefix - возвращает ошибку если префикс комментария колонки = "DELETED_"
+func IsGood_ColumnCommentPrefix(Column1 *types.Column) error {
+	var err error
+
+	ColumnComment := Column1.Description
+	HasPrefix := strings.HasPrefix(ColumnComment, config.Settings.TEXT_DELETED_COLUMN)
+	HasPrefixRus := strings.HasPrefix(ColumnComment, config.Settings.TEXT_DELETED_COLUMN_RUS)
+	if HasPrefix == true || HasPrefixRus == true {
+		TextError := fmt.Sprint("Wrong table: ", ColumnComment, " error: comment: ", ColumnComment)
+		err = errors.New(TextError)
+	}
+
+	return err
+}
+
+// CreateDirectory - создает каталог на диске, если его нет
+func CreateDirectory(DirectoryName string) {
+	var err error
+
+	//создадим каталог
+	ok, err := micro.FileExists(DirectoryName)
+	if ok == false {
+		err = os.MkdirAll(DirectoryName, 0777)
+		if err != nil {
+			log.Panic("Mkdir() ", DirectoryName, " error: ", err)
+		}
+	}
 }
