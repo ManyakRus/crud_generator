@@ -715,6 +715,15 @@ func Find_ModelTableURL(TableName string) string {
 	return Otvet
 }
 
+// Find_ObjectTableURL - возвращает URL репозитория object для таблицы TableName
+func Find_ObjectTableURL(TableName string) string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_OBJECTS_FOLDERNAME + "/" + TableName
+
+	return Otvet
+}
+
 // Find_CrudFuncURL - возвращает URL репозитория crud_func
 func Find_CrudFuncURL(string) string {
 	Otvet := ""
@@ -2814,4 +2823,88 @@ func CreateDirectory(DirectoryName string) {
 			log.Panic("Mkdir() ", DirectoryName, " error: ", err)
 		}
 	}
+}
+
+// IsForeignColumn - возвращает true если у этой колонки есть ссылка на другую таблицу (foreign key)
+func IsForeignColumn(MapAll map[string]*types.Table, Column1 *types.Column) bool {
+	Otvet := false
+
+	TableNameF := Column1.TableKey
+	ColumnNameF := Column1.ColumnKey
+	if TableNameF == "" || ColumnNameF == "" {
+		return Otvet
+	}
+
+	Otvet = true
+
+	return Otvet
+}
+
+// Find_TableF_ColumnF - для колонки с foreign keys возвращает связанные Table и Column
+func Find_TableF_ColumnF(MapAll map[string]*types.Table, Column1 *types.Column) (*types.Table, *types.Column) {
+	TableF := &types.Table{}
+	ColumnF := &types.Column{}
+
+	TableNameF := Column1.TableKey
+	ColumnNameF := Column1.ColumnKey
+	if TableNameF == "" || ColumnNameF == "" {
+		return TableF, ColumnF
+	}
+
+	TableF, ok := MapAll[TableNameF]
+	if ok == false {
+		return TableF, ColumnF
+	}
+
+	ColumnF, ok = TableF.MapColumns[ColumnNameF]
+	if ok == false {
+		return TableF, ColumnF
+	}
+
+	return TableF, ColumnF
+}
+
+// Find_FieldNamesWithPercent_from_Mass - возвращает строку в формате "Имя1: %v, Имя2: %v"
+func Find_FieldNamesWithPercent_from_Mass(MassColumns []*types.Column) string {
+	Otvet := ""
+
+	Comma := ""
+	for _, ColumnPK1 := range MassColumns {
+		Otvet = Otvet + Comma + ColumnPK1.NameGo + ": %v"
+		Comma = ", "
+	}
+
+	return Otvet
+}
+
+// Find_FieldNamesWithComma_from_Mass - возвращает строку в формате "Имя1: %v, Имя2: %v"
+func Find_FieldNamesWithComma_from_Mass(MassColumns []*types.Column) string {
+	Otvet := ""
+	Comma := ""
+	for _, ColumnPK1 := range MassColumns {
+		Otvet = Otvet + Comma + ColumnPK1.NameGo
+		Comma = ", "
+	}
+
+	return Otvet
+}
+
+// Find_FieldNamesWithPercent_from_Table - возвращает строку в формате "Имя1: %v, Имя2: %v"
+func Find_FieldNamesWithPercent_from_Table(Table1 *types.Table) string {
+	Otvet := ""
+
+	MassPK := Find_PrimaryKeyColumns(Table1)
+	Otvet = Find_FieldNamesWithPercent_from_Mass(MassPK)
+
+	return Otvet
+}
+
+// Find_FieldNamesWithComma_from_Table - возвращает строку в формате "Имя1: %v, Имя2: %v"
+func Find_FieldNamesWithComma_from_Table(Table1 *types.Table) string {
+	Otvet := ""
+
+	MassPK := Find_PrimaryKeyColumns(Table1)
+	Otvet = Find_FieldNamesWithComma_from_Mass(MassPK)
+
+	return Otvet
 }

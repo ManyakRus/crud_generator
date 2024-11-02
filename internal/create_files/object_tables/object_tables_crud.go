@@ -18,10 +18,10 @@ func CreateFiles(MapAll map[string]*types.Table, Table1 *types.Table) error {
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesObjects := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_OBJECTS + micro.SeparatorFile()
-	DirReadyDB := DirReady + config.Settings.TEMPLATE_FOLDERNAME_OBJECTS + micro.SeparatorFile()
+	DirTemplatesObjects := DirTemplates + config.Settings.TEMPLATES_OBJECTS_FOLDERNAME + micro.SeparatorFile()
+	DirReadyDB := DirReady + config.Settings.TEMPLATES_OBJECTS_FOLDERNAME + micro.SeparatorFile()
 
-	FilenameTemplateObject := DirTemplatesObjects + config.Settings.TEMPLATES_OBJECTS_FILENAME
+	FilenameTemplateObject := DirTemplatesObjects + config.Settings.TEMPLATES_MODEL_OBJECTS_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyDB + config.Settings.PREFIX_OBJECT + TableName
 	FilenameReadyObjects := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_OBJECT + TableName + ".go"
