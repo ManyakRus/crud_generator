@@ -94,8 +94,8 @@ func CreateFiles1(MapAll map[string]*types.Table, Table1 *types.Table, TextGo st
 	TextField := ""
 	for _, Column1 := range Table1.MapColumns {
 		//проверка имени колонки "DELETED_"
-		err1 := create_files.IsGood_Column(Column1)
-		if err1 != nil {
+		err = create_files.IsGood_Column(Column1)
+		if err != nil {
 			log.Warn("CreateFiles1() table: ", Table1.Name, " column: ", Column1.Name, " warning: ", err)
 		}
 

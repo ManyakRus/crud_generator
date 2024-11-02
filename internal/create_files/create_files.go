@@ -2780,7 +2780,7 @@ func IsGood_ColumnNamePrefix(Column1 *types.Column) error {
 	HasPrefix := strings.HasPrefix(ColumnName, config.Settings.TEXT_DELETED_COLUMN)
 	HasPrefixRus := strings.HasPrefix(ColumnName, config.Settings.TEXT_DELETED_COLUMN_RUS)
 	if HasPrefix == true || HasPrefixRus == true {
-		TextError := fmt.Sprint("Wrong column: ", ColumnName, " error: name = DELETED_")
+		TextError := fmt.Sprint("Wrong column: ", ColumnName, ", error: name prefix= "+config.Settings.TEXT_DELETED_COLUMN)
 		err = errors.New(TextError)
 	}
 
@@ -2795,7 +2795,7 @@ func IsGood_ColumnCommentPrefix(Column1 *types.Column) error {
 	HasPrefix := strings.HasPrefix(ColumnComment, config.Settings.TEXT_DELETED_COLUMN)
 	HasPrefixRus := strings.HasPrefix(ColumnComment, config.Settings.TEXT_DELETED_COLUMN_RUS)
 	if HasPrefix == true || HasPrefixRus == true {
-		TextError := fmt.Sprint("Wrong table: ", ColumnComment, " error: comment: ", ColumnComment)
+		TextError := fmt.Sprint("Wrong column: ", Column1.Name, ", error: comment prefix: ", ColumnComment)
 		err = errors.New(TextError)
 	}
 

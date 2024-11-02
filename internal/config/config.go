@@ -220,6 +220,7 @@ type SettingsINI struct {
 	NEED_USE_DB_VIEWS bool
 
 	//Objects
+	NEED_CREATE_OBJECTS         bool
 	PREFIX_OBJECT               string
 	TEMPLATE_FOLDERNAME_OBJECTS string
 	TEMPLATES_OBJECTS_FILENAME  string
@@ -1186,6 +1187,11 @@ func FillSettings() {
 	Name = "TEXT_DELETED_COLUMN_RUS"
 	s = Getenv(Name, true)
 	Settings.TEXT_DELETED_COLUMN_RUS = s
+
+	//
+	Name = "NEED_CREATE_OBJECTS"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_OBJECTS = BoolFromString(s)
 
 }
 
