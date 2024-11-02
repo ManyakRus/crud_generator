@@ -1,4 +1,4 @@
-package crud_object
+package crud_object_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/config"
@@ -133,6 +133,11 @@ func CreateFiles_ReadObject_Table1(MapAll map[string]*types.Table, Table1 *types
 	Otvet := TextTemplateFunction
 
 	TableF, ColumnF := create_files.Find_TableF_ColumnF(MapAll, Column1)
+	ColumnPKF := create_files.Find_PrimaryKeyColumn(TableF)
+
+	//PrimaryKeyNameF
+	PrimaryKeyNameF := ColumnPKF.NameGo
+	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeyNameF", PrimaryKeyNameF)
 
 	//FieldNameForeign
 	FieldNameForeign := ColumnF.Name
@@ -166,7 +171,7 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 
 	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD_OBJECT + TableName
+	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD_OBJECT + TableName + micro.SeparatorFile() + config.Settings.TESTS_FOLDERNAME
 	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD_OBJECT + TableName
 
 	//создадим каталог
@@ -179,13 +184,13 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 	}
 	TextCrud := string(bytes)
 
-	//загрузим шаблон файла функции
-	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
-	if err != nil {
-		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
-	}
-	TextTemplatedFunction := string(bytes)
+	////загрузим шаблон файла функции
+	//FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME
+	//bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
+	//if err != nil {
+	//	log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
+	//}
+	//TextTemplatedFunction := string(bytes)
 
 	//заменим имя пакета на новое
 	TextCrud = create_files.Replace_PackageName(TextCrud, DirReadyTable)
@@ -195,20 +200,34 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
 
-		//ModelTableURL := create_files.Find_ModelTableURL(TableName)
-		//TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+		//
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
+		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
-		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
+		//
+		ObjectTableURL := create_files.Find_ObjectTableURL(TableName)
+		TextCrud = create_files.AddImport(TextCrud, ObjectTableURL)
+
+		//
+		CrudObjectTableURL := create_files.Find_CrudObjectTableURL(TableName)
+		TextCrud = create_files.AddImport(TextCrud, CrudObjectTableURL)
+
+		//
+		ConstantsURL := create_files.Find_ConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
+
+		//
+		CrudStarterURL := create_files.Find_CrudStarterURL()
+		TextCrud = create_files.AddImport(TextCrud, CrudStarterURL)
+
+		////
+		//CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
+		//TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
 
 	}
 
 	//создание функций
-	TextCrudFunc := CreateFiles_ReadObject_TestTable(Table1, TextTemplatedFunction)
-	if TextCrudFunc == "" {
-		return err
-	}
-	TextCrud = TextCrud + TextCrudFunc
+	TextCrud = CreateFiles_ReadObject_TableTest(MapAll, Table1, TextCrud)
 
 	//создание текста
 	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
@@ -240,34 +259,9 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 	return err
 }
 
-// CreateFiles_ReadObject_TestTable - создаёт текст всех функций
-func CreateFiles_ReadObject_TestTable(MapAll map[string]*types.Table, Table1 *types.Table, TextTemplateFunction string) string {
-	Otvet := ""
-
-	for TableReadObject1, _ := range types.MapReadObject {
-		if TableReadObject1.Name != Table1.Name {
-			continue
-		}
-		Otvet1 := CreateFiles_ReadObject_Test_Table1(Table1, TextTemplateFunction)
-		Otvet = Otvet + Otvet1
-	}
-
-	return Otvet
-}
-
-// CreateFiles_ReadObject_Test_Table1 - создаёт текст всех функций
-func CreateFiles_ReadObject_Test_Table1(Table1 *types.Table, TextTemplateFunction string) string {
-	Otvet := TextTemplateFunction
-
-	//
-	TextFieldsDefaultValue := create_files.Find_PrimaryKeysDefaultValues(Table1)
-
-	//
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesDefaultValues", TextFieldsDefaultValue)
-
-	//
-	PrimaryKeyNamesWithComma := create_files.Find_PrimaryKeyNamesWithComma(Table1)
-	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeyNamesWithComma", PrimaryKeyNamesWithComma)
+// CreateFiles_ReadObject_TableTest - создаёт текст функции
+func CreateFiles_ReadObject_TableTest(MapAll map[string]*types.Table, Table1 *types.Table, TextGo string) string {
+	Otvet := TextGo
 
 	return Otvet
 }

@@ -1,0 +1,25 @@
+package tests
+
+import (
+	"github.com/ManyakRus/starter/config_main"
+	"github.com/ManyakRus/starter/postgres_gorm"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_objects/crud_object_lawsuit_status_types"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/objects/object_lawsuit_status_types"
+	"testing"
+)
+
+func TestReadObject(t *testing.T) {
+	config_main.LoadEnv()
+
+	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	defer postgres_gorm.CloseConnection()
+	crud_starter.InitCrudTransport_DB()
+
+	crud := crud_object_lawsuit_status_types.Crud_DB{}
+	Otvet := object_lawsuit_status_types.ObjectLawsuitStatusType{}
+	err := crud.ReadObject(&Otvet)
+	if err != nil && crud_func.IsRecordNotFound(err) == false {
+		t.Error("TestReadObject() error: ", err)
+	}
+}

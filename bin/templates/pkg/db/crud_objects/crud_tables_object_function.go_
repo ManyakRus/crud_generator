@@ -1,5 +1,6 @@
 	//заполним FieldNameForeign
 	FieldNameForeign := TableNameForeign.FieldNameForeign{}
+	FieldNameForeign.PrimaryKeyNameF = m.FieldNameForeign
 	err = crud_TableNameForeign.Read_ctx(ctx, db, &FieldNameForeign)
 	if err != nil {
 		err = fmt.Errorf(FieldNameForeign.TableNameDB()+" Read() FieldNamesWithPercent, error: %w", FieldNamesWithComma, err)

@@ -218,6 +218,7 @@ type SettingsINI struct {
 	TEXT_READALL string
 
 	NEED_USE_DB_VIEWS bool
+	TESTS_FOLDERNAME  string
 
 	//Objects
 	NEED_CREATE_OBJECTS              bool
@@ -1280,6 +1281,11 @@ func FillSettings() {
 	Name = "PREFIX_CRUD_OBJECT"
 	s = Getenv(Name, true)
 	Settings.PREFIX_CRUD_OBJECT = s
+
+	//
+	Name = "TESTS_FOLDERNAME"
+	s = Getenv(Name, true)
+	Settings.TESTS_FOLDERNAME = s
 
 }
 

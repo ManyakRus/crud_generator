@@ -724,6 +724,15 @@ func Find_ObjectTableURL(TableName string) string {
 	return Otvet
 }
 
+// Find_CrudObjectTableURL - возвращает URL репозитория crud_object для таблицы TableName
+func Find_CrudObjectTableURL(TableName string) string {
+	Otvet := ""
+
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_CRUD_OBJECTS_FOLDERNAME + "/" + TableName
+
+	return Otvet
+}
+
 // Find_CrudFuncURL - возвращает URL репозитория crud_func
 func Find_CrudFuncURL(string) string {
 	Otvet := ""
