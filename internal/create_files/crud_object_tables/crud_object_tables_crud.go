@@ -18,13 +18,13 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATES_CRUD_OBJECTS_FOLDERNAME + micro.SeparatorFile()
-	DirReadyCrud := DirReady + config.Settings.TEMPLATES_CRUD_OBJECTS_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATES_CRUD_READOBJECT_FOLDERNAME + micro.SeparatorFile()
+	DirReadyCrud := DirReady + config.Settings.TEMPLATES_CRUD_READOBJECT_FOLDERNAME + micro.SeparatorFile()
 
 	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READOBJECT_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD_OBJECT + TableName
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD_OBJECT + TableName
+	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD_READOBJECT + TableName
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD_READOBJECT + TableName
 
 	//создадим каталог
 	create_files.CreateDirectory(DirReadyTable)
@@ -37,7 +37,7 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 	TextCrud := string(bytes)
 
 	//загрузим шаблон файла функции
-	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_FILENAME
+	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_FILENAME
 	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
@@ -166,13 +166,13 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 	DirBin := micro.ProgramDir_bin()
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
-	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATES_CRUD_OBJECTS_FOLDERNAME + micro.SeparatorFile()
-	DirReadyCrud := DirReady + config.Settings.TEMPLATES_CRUD_OBJECTS_FOLDERNAME + micro.SeparatorFile()
+	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATES_CRUD_READOBJECT_FOLDERNAME + micro.SeparatorFile()
+	DirReadyCrud := DirReady + config.Settings.TEMPLATES_CRUD_READOBJECT_FOLDERNAME + micro.SeparatorFile()
 
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_TEST_FILENAME
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READOBJECT_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
-	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD_OBJECT + TableName + micro.SeparatorFile() + config.Settings.TESTS_FOLDERNAME
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD_OBJECT + TableName
+	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD_READOBJECT + TableName + micro.SeparatorFile() + config.Settings.TESTS_FOLDERNAME
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD_READOBJECT + TableName
 
 	//создадим каталог
 	create_files.CreateDirectory(DirReadyTable)
@@ -185,7 +185,7 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 	TextCrud := string(bytes)
 
 	////загрузим шаблон файла функции
-	//FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME
+	//FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_TEST_FILENAME
 	//bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
 	//if err != nil {
 	//	log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)

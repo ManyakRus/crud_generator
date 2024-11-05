@@ -234,7 +234,7 @@ func StartFillAll() error {
 	}
 
 	//objects
-	if config.Settings.NEED_CREATE_OBJECTS == true {
+	if config.Settings.NEED_CREATE_READOBJECT == true {
 		err = object_tables.CreateAllFiles(MapAll)
 		if err != nil {
 			//log.Error("env_file.CreateAllFiles() error: ", err)

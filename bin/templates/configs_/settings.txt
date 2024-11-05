@@ -540,24 +540,24 @@ TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_FILENAME="grpc_client_table_fi
 TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_TEST_FILENAME="grpc_client_table_findmodelby_function_test.go_"
 
 
-#-------------------------------------------OBJECTS--------------------------------------------
-#NEED_CREATE_OBJECTS - need create files for objects (entity + foreign columns)
-NEED_CREATE_OBJECTS=true
+#-------------------------------------------READOBJECT--------------------------------------------
+#NEED_CREATE_READOBJECT - need create files for objects (entity + foreign columns)
+NEED_CREATE_READOBJECT=true
 
-#PREFIX_OBJECT - prefix for "object_" files
-PREFIX_OBJECT="object_"
+#PREFIX_READOBJECT - prefix for "object_" files
+PREFIX_READOBJECT="object_"
 
-#PREFIX_CRUD_OBJECT - prefix for "crud_object_" files
-PREFIX_CRUD_OBJECT="crud_object_"
+#PREFIX_CRUD_READOBJECT - prefix for "crud_object_" files
+PREFIX_CRUD_READOBJECT="crud_object_"
 
-#TEMPLATES_OBJECTS_FOLDERNAME - folder name for "pkg/objects" files
-TEMPLATES_OBJECTS_FOLDERNAME="pkg/object_model/objects"
+#TEMPLATES_READOBJECT_FOLDERNAME - folder name for "pkg/objects" files
+TEMPLATES_READOBJECT_FOLDERNAME="pkg/object_model/objects"
 
-#TEMPLATES_OBJECTS_FILENAME - short filename of "objects_table.go_" file
-TEMPLATES_OBJECTS_FILENAME="objects_table.go_"
+#TEMPLATES_MODEL_READOBJECT_FILENAME - short filename of "objects_table.go_" file
+TEMPLATES_MODEL_READOBJECT_FILENAME="objects_table.go_"
 
-#TEMPLATES_CRUD_OBJECTS_FOLDERNAME - folder name "pkg/db/crud_objects" for crud objects
-TEMPLATES_CRUD_OBJECTS_FOLDERNAME="pkg/db/crud_objects"
+#TEMPLATES_CRUD_READOBJECT_FOLDERNAME - folder name "pkg/db/crud_objects" for crud objects
+TEMPLATES_CRUD_READOBJECT_FOLDERNAME="pkg/db/crud_objects"
 
 
 

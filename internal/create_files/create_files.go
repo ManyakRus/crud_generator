@@ -719,7 +719,7 @@ func Find_ModelTableURL(TableName string) string {
 func Find_ObjectTableURL(TableName string) string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_OBJECTS_FOLDERNAME + "/" + TableName
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_READOBJECT_FOLDERNAME + "/" + TableName
 
 	return Otvet
 }
@@ -728,7 +728,7 @@ func Find_ObjectTableURL(TableName string) string {
 func Find_CrudObjectTableURL(TableName string) string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_CRUD_OBJECTS_FOLDERNAME + "/" + TableName
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_CRUD_READOBJECT_FOLDERNAME + "/" + TableName
 
 	return Otvet
 }
