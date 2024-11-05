@@ -515,17 +515,31 @@ func AddSkipNow(Text string, Table1 *types.Table) string {
 func IsGood_Table(Table1 *types.Table) error {
 	var err error
 
+	//есть Primary Key
+	err = IsGood_PrimaryKeyColumnsCount(Table1)
+	if err != nil {
+		return err
+	}
+
+	//название УДАЛИТЬ
+	err = IsGood_TableName(Table1)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+// IsGood_TableName - возвращает ошибку если таблица неправильная
+func IsGood_TableName(Table1 *types.Table) error {
+	var err error
+
 	err = IsGood_TableNamePrefix(Table1)
 	if err != nil {
 		return err
 	}
 
 	err = IsGood_TableCommentPrefix(Table1)
-	if err != nil {
-		return err
-	}
-
-	err = IsGood_PrimaryKeyColumnsCount(Table1)
 	if err != nil {
 		return err
 	}
@@ -538,7 +552,7 @@ func IsGood_PrimaryKeyColumnsCount(Table1 *types.Table) error {
 	var err error
 
 	if Table1.PrimaryKeyColumnsCount <= 0 {
-		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: can not use many Primary key columns count: ", Table1.PrimaryKeyColumnsCount)
+		TextError := fmt.Sprint("Wrong table: ", Table1.Name, ", error: can not use many Primary key columns count: ", Table1.PrimaryKeyColumnsCount)
 		err = errors.New(TextError)
 	}
 
@@ -553,7 +567,7 @@ func IsGood_TableNamePrefix(Table1 *types.Table) error {
 	HasPrefix := strings.HasPrefix(TableName, config.Settings.TEXT_DELETED_TABLE)
 	HasPrefixRus := strings.HasPrefix(TableName, config.Settings.TEXT_DELETED_TABLE_RUS)
 	if HasPrefix == true || HasPrefixRus == true {
-		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: name = DELETED_")
+		TextError := fmt.Sprint("Wrong table: ", Table1.Name, ", warning: name = DELETED_")
 		err = errors.New(TextError)
 	}
 
@@ -568,7 +582,7 @@ func IsGood_TableCommentPrefix(Table1 *types.Table) error {
 	HasPrefix := strings.HasPrefix(TableComment, config.Settings.TEXT_DELETED_TABLE)
 	HasPrefixRus := strings.HasPrefix(TableComment, config.Settings.TEXT_DELETED_TABLE_RUS)
 	if HasPrefix == true || HasPrefixRus == true {
-		TextError := fmt.Sprint("Wrong table: ", Table1.Name, " error: comment: ", TableComment)
+		TextError := fmt.Sprint("Wrong table: ", Table1.Name, ", warning: comment= ", TableComment)
 		err = errors.New(TextError)
 	}
 
@@ -719,7 +733,7 @@ func Find_ModelTableURL(TableName string) string {
 func Find_ObjectTableURL(TableName string) string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_READOBJECT_FOLDERNAME + "/" + TableName
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_READOBJECT_FOLDERNAME + "/object_" + TableName
 
 	return Otvet
 }
@@ -728,7 +742,7 @@ func Find_ObjectTableURL(TableName string) string {
 func Find_CrudObjectTableURL(TableName string) string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_CRUD_READOBJECT_FOLDERNAME + "/" + TableName
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_CRUD_READOBJECT_FOLDERNAME + "/" + config.Settings.PREFIX_CRUD_READOBJECT + TableName
 
 	return Otvet
 }
@@ -2898,6 +2912,23 @@ func Find_FieldNamesWithComma_from_Mass(MassColumns []*types.Column) string {
 	return Otvet
 }
 
+// Find_FieldNamesWithComma_from_Mass_VariableName - возвращает строку в формате "Имя1: %v, Имя2: %v"
+func Find_FieldNamesWithComma_from_Mass_VariableName(MassColumns []*types.Column, VariableName string) string {
+	Otvet := ""
+	Comma := ""
+
+	if VariableName != "" && strings.HasSuffix(VariableName, ".") == false {
+		VariableName = VariableName + "."
+	}
+
+	for _, ColumnPK1 := range MassColumns {
+		Otvet = Otvet + Comma + VariableName + ColumnPK1.NameGo
+		Comma = ", "
+	}
+
+	return Otvet
+}
+
 // Find_FieldNamesWithPercent_from_Table - возвращает строку в формате "Имя1: %v, Имя2: %v"
 func Find_FieldNamesWithPercent_from_Table(Table1 *types.Table) string {
 	Otvet := ""
@@ -2914,6 +2945,16 @@ func Find_FieldNamesWithComma_from_Table(Table1 *types.Table) string {
 
 	MassPK := Find_PrimaryKeyColumns(Table1)
 	Otvet = Find_FieldNamesWithComma_from_Mass(MassPK)
+
+	return Otvet
+}
+
+// Find_FieldNamesWithComma_from_Table_VariableName - возвращает строку в формате "VariableName.Имя1, VariableName.Имя2"
+func Find_FieldNamesWithComma_from_Table_VariableName(Table1 *types.Table, VariableName string) string {
+	Otvet := ""
+
+	MassPK := Find_PrimaryKeyColumns(Table1)
+	Otvet = Find_FieldNamesWithComma_from_Mass_VariableName(MassPK, VariableName)
 
 	return Otvet
 }

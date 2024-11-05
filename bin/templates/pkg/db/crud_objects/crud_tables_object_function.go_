@@ -1,9 +1,9 @@
-	//заполним FieldNameForeign
-	FieldNameForeign := TableNameForeign.FieldNameForeign{}
-	FieldNameForeign.PrimaryKeyNameF = m.FieldNameForeign
-	err = crud_TableNameForeign.Read_ctx(ctx, db, &FieldNameForeign)
+	//ObjectFieldNameTable
+	ObjectFieldNameTable := TableNameForeign.ModelNameForeign{}
+	ObjectFieldNameTable.PrimaryKeyNameF = m.FieldNameTable
+	err = crud_TableNameForeign.Read_ctx(ctx, db, &ObjectFieldNameTable)
 	if err != nil {
-		err = fmt.Errorf(FieldNameForeign.TableNameDB()+" Read() FieldNamesWithPercent, error: %w", FieldNamesWithComma, err)
+		err = fmt.Errorf(ObjectFieldNameTable.TableNameDB()+" Read() FieldNamesWithPercent, error: %w", FieldNamesWithCommaM, err)
 	}
-	m.Color = Color
+	m.ObjectFieldNameTable = ObjectFieldNameTable
 

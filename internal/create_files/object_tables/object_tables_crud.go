@@ -53,8 +53,8 @@ func CreateFiles(MapAll map[string]*types.Table, Table1 *types.Table) error {
 
 		TextGo = CreateFiles1(MapAll, Table1, TextGo)
 
-		//ModelTableURL := create_files.Find_ModelTableURL(TableName)
-		//TextGo = create_files.AddImport(TextGo, ModelTableURL)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
+		TextGo = create_files.AddImport(TextGo, ModelTableURL)
 
 	}
 
@@ -97,6 +97,7 @@ func CreateFiles1(MapAll map[string]*types.Table, Table1 *types.Table, TextGo st
 		err = create_files.IsGood_Column(Column1)
 		if err != nil {
 			log.Warn("CreateFiles1() table: ", Table1.Name, " column: ", Column1.Name, " warning: ", err)
+			continue
 		}
 
 		//проверка есть внешний ключ
@@ -123,10 +124,10 @@ func CreateFiles1(MapAll map[string]*types.Table, Table1 *types.Table, TextGo st
 
 		//добавим import
 		ModelTableURL := create_files.Find_ModelTableURL(TableNameFK)
-		TextGo = create_files.AddImport(TextGo, ModelTableURL)
+		Otvet = create_files.AddImport(Otvet, ModelTableURL)
 
 		//добавим поле
-		TextField1 := "\t" + Column1.NameGo + " " + TableFK.Name + "." + TableFK.NameGo + "\n"
+		TextField1 := "\tObject" + Column1.NameGo + " " + TableFK.Name + "." + TableFK.NameGo + "\n"
 		TextField = TextField + TextField1
 
 	}

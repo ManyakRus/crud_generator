@@ -24,7 +24,7 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READOBJECT_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD_READOBJECT + TableName
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD_READOBJECT + TableName
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD_READOBJECT + TableName + ".go"
 
 	//создадим каталог
 	create_files.CreateDirectory(DirReadyTable)
@@ -52,9 +52,13 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
 
-		//
-		ModelTableURL := create_files.Find_ModelTableURL(TableName)
-		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+		////
+		//ModelTableURL := create_files.Find_ModelTableURL(TableName)
+		//TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+
+		//crud foreign
+		CrudTableURL := create_files.Find_CrudTableURL(TableName)
+		TextCrud = create_files.AddImport(TextCrud, CrudTableURL)
 
 		//
 		ObjectTableURL := create_files.Find_ObjectTableURL(TableName)
@@ -71,16 +75,17 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 	FieldNamesWithPercent := create_files.Find_FieldNamesWithPercent_from_Table(Table1)
 	TextCrud = strings.ReplaceAll(TextCrud, "FieldNamesWithPercent", FieldNamesWithPercent)
 
-	//FieldNamesWithComma
-	FieldNamesWithComma := create_files.Find_FieldNamesWithComma_from_Table(Table1)
-	TextCrud = strings.ReplaceAll(TextCrud, "FieldNamesWithComma", FieldNamesWithComma)
+	//FieldNamesWithCommaM
+	FieldNamesWithCommaM := create_files.Find_FieldNamesWithComma_from_Table_VariableName(Table1, "m")
+	TextCrud = strings.ReplaceAll(TextCrud, "FieldNamesWithCommaM", FieldNamesWithCommaM)
 
 	//создание функций
-	TextCrudFunc := CreateFiles_ReadObjectTable(MapAll, Table1, TextTemplatedFunction)
-	if TextCrudFunc == "" {
-		return err
-	}
-	TextCrud = TextCrud + TextCrudFunc
+	TextCrud, TextCrudFunc := CreateFiles_ReadObjectTable(MapAll, Table1, TextCrud, TextTemplatedFunction)
+	//if TextCrudFunc == "" {
+	//	return err
+	//}
+	//TextCrud = TextCrud + TextCrudFunc
+	TextCrud = strings.ReplaceAll(TextCrud, "\t//TextFillManyFields", TextCrudFunc)
 
 	//создание текста
 	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
@@ -113,19 +118,44 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 }
 
 // CreateFiles_ReadObjectTable - создаёт текст всех функций
-func CreateFiles_ReadObjectTable(MapAll map[string]*types.Table, Table1 *types.Table, TextTemplateFunction string) string {
-	Otvet := ""
+func CreateFiles_ReadObjectTable(MapAll map[string]*types.Table, Table1 *types.Table, TextCrud0, TextTemplateFunction0 string) (TextCrud, TextTemplateFunction string) {
+	TextCrud = TextCrud0
+	TextTemplateFunction = ""
 
+	//
+	MassImports := make([]string, 0)
+
+	//
 	for _, Column1 := range Table1.MapColumns {
 		IsForeignColumn := create_files.IsForeignColumn(MapAll, Column1)
 		if IsForeignColumn == false {
 			continue
 		}
-		Otvet1 := CreateFiles_ReadObject_Table1(MapAll, Table1, Column1, TextTemplateFunction)
-		Otvet = Otvet + Otvet1
+
+		TableF, _ := create_files.Find_TableF_ColumnF(MapAll, Column1)
+		TableNameF := TableF.Name
+
+		//шаблон функции
+		TextTemplateFunction1 := CreateFiles_ReadObject_Table1(MapAll, Table1, Column1, TextTemplateFunction0)
+		TextTemplateFunction = TextTemplateFunction + TextTemplateFunction1
+
+		//добавим импорты
+		//Model
+		ModelFTableURL := create_files.Find_ModelTableURL(TableNameF)
+		TextCrud = create_files.AddImport(TextCrud, ModelFTableURL)
+
+		//crud foreign
+		MassImports = append(MassImports, TableNameF)
 	}
 
-	return Otvet
+	//заполним импорты отсортированно
+	for _, Import1 := range MassImports {
+		CrudFTableURL := create_files.Find_CrudTableURL(Import1)
+		TextCrud = create_files.AddImport(TextCrud, CrudFTableURL)
+
+	}
+
+	return TextCrud, TextTemplateFunction
 }
 
 // CreateFiles_ReadObject_Table1 - создаёт текст всех функций
@@ -140,7 +170,7 @@ func CreateFiles_ReadObject_Table1(MapAll map[string]*types.Table, Table1 *types
 	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeyNameF", PrimaryKeyNameF)
 
 	//FieldNameForeign
-	FieldNameForeign := ColumnF.Name
+	FieldNameForeign := ColumnF.NameGo
 	Otvet = strings.ReplaceAll(Otvet, "FieldNameForeign", FieldNameForeign)
 
 	//TableNameForeign
@@ -151,9 +181,24 @@ func CreateFiles_ReadObject_Table1(MapAll map[string]*types.Table, Table1 *types
 	FieldNamesWithPercent := create_files.Find_FieldNamesWithPercent_from_Table(Table1)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPercent", FieldNamesWithPercent)
 
+	//FieldNamesWithCommaM
+	FieldNamesWithCommaM := create_files.Find_FieldNamesWithComma_from_Table_VariableName(Table1, "m")
+	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithCommaM", FieldNamesWithCommaM)
+
 	//FieldNamesWithComma
 	FieldNamesWithComma := create_files.Find_FieldNamesWithComma_from_Table(Table1)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithComma", FieldNamesWithComma)
+
+	//ModelNameForeign
+	ModelNameForeign := TableF.NameGo
+	Otvet = strings.ReplaceAll(Otvet, "ModelNameForeign", ModelNameForeign)
+
+	//FieldName
+	FieldNameTable := Column1.NameGo
+	Otvet = strings.ReplaceAll(Otvet, "FieldNameTable", FieldNameTable)
+
+	//crud_
+	Otvet = strings.ReplaceAll(Otvet, " crud_", " "+config.Settings.PREFIX_CRUD)
 
 	return Otvet
 }
@@ -172,7 +217,7 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READOBJECT_TEST_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyCrud + config.Settings.PREFIX_CRUD_READOBJECT + TableName + micro.SeparatorFile() + config.Settings.TESTS_FOLDERNAME
-	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD_READOBJECT + TableName
+	FilenameReady := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD_READOBJECT + TableName + "_test.go"
 
 	//создадим каталог
 	create_files.CreateDirectory(DirReadyTable)
@@ -200,9 +245,9 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextCrud = create_files.Delete_TemplateRepositoryImports(TextCrud)
 
-		//
-		ModelTableURL := create_files.Find_ModelTableURL(TableName)
-		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
+		////
+		//ModelTableURL := create_files.Find_ModelTableURL(TableName)
+		//TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
 		//
 		ObjectTableURL := create_files.Find_ObjectTableURL(TableName)
@@ -220,9 +265,9 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 		CrudStarterURL := create_files.Find_CrudStarterURL()
 		TextCrud = create_files.AddImport(TextCrud, CrudStarterURL)
 
-		////
-		//CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
-		//TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
+		//
+		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
+		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
 
 	}
 

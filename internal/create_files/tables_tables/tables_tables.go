@@ -17,9 +17,10 @@ import (
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
-	for _, Table1 := range MapAll {
+	MassAll := micro.MassFrom_Map(MapAll)
+	for _, Table1 := range MassAll {
 		//проверка имени таблицы "DELETED_"
-		err1 := create_files.IsGood_TableNamePrefix(Table1)
+		err1 := create_files.IsGood_TableName(Table1)
 		if err1 != nil {
 			log.Warn("CreateFiles() table: ", Table1.Name, " warning: ", err)
 			continue

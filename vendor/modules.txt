@@ -1,7 +1,7 @@
 # github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792
 ## explicit; go 1.13
 github.com/ManyakRus/logrus
-# github.com/ManyakRus/starter v1.0.58
+# github.com/ManyakRus/starter v1.0.66
 ## explicit; go 1.22.0
 github.com/ManyakRus/starter/config_main
 github.com/ManyakRus/starter/constants
@@ -84,6 +84,9 @@ github.com/serenize/snaker
 # golang.org/x/crypto v0.28.0
 ## explicit; go 1.20
 golang.org/x/crypto/pbkdf2
+# golang.org/x/exp v0.0.0-20240909161429-701f63a606c0
+## explicit; go 1.22.0
+golang.org/x/exp/constraints
 # golang.org/x/mod v0.21.0
 ## explicit; go 1.22.0
 golang.org/x/mod/internal/lazyregexp

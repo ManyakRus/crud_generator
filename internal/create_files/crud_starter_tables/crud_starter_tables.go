@@ -16,7 +16,8 @@ import (
 func CreateAllFiles(MapAll map[string]*types.Table) error {
 	var err error
 
-	for _, Table1 := range MapAll {
+	MassAll := micro.MassFrom_Map(MapAll)
+	for _, Table1 := range MassAll {
 		//проверка что таблица нормальная
 		err1 := create_files.IsGood_Table(Table1)
 		if err1 != nil {

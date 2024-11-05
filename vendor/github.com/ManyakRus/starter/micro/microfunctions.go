@@ -9,7 +9,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
+	"golang.org/x/exp/constraints"
 	"hash/fnv"
+	"os/exec"
 	"reflect"
 	"runtime"
 	"sort"
@@ -1003,4 +1005,204 @@ func Int32FromString(s string) (int32, error) {
 	Otvet = int32(Otvet64)
 
 	return Otvet, err
+}
+
+// ExecuteShellCommand - выполняет команду в shell, и возвращает строку результата
+func ExecuteShellCommand(TextCommand string, args ...string) (string, error) {
+	Otvet := ""
+	var err error
+
+	MassByte, err := exec.Command(TextCommand, args...).CombinedOutput()
+	Otvet = string(MassByte)
+	if err != nil {
+		return Otvet, err
+	}
+
+	return Otvet, err
+}
+
+// DeleteEndEndline - убирает в конце "\n"
+func DeleteEndEndline(Text string) string {
+	Otvet := Text
+
+	if Otvet == "" {
+		return Otvet
+	}
+
+	LastSymbol := Otvet[len(Otvet)-1:]
+	if LastSymbol == "\n" {
+		Otvet = Otvet[0 : len(Otvet)-1]
+	}
+
+	return Otvet
+}
+
+// Find_Directory_ModifiedTime - возвращает дату последнего изменения в папке internal
+func Find_Directory_ModifiedTime(FolderName string) (time.Time, error) {
+	var Otvet time.Time
+	var err error
+
+	dir := ProgramDir()
+	dir = dir + FolderName
+
+	ok, err := FileExists(dir)
+	if err != nil {
+		err = fmt.Errorf("Find_Directory_ModifiedTime() FileExists() error: %w", err)
+		return Otvet, err
+	}
+
+	if ok == false {
+		err = fmt.Errorf("Find_Directory_ModifiedTime() FileExists() error: file not exists: %s", dir)
+		return Otvet, err
+	}
+
+	//найдём дату папки
+	f, err := os.Open(dir)
+	if err != nil {
+		err = fmt.Errorf("Find_Directory_ModifiedTime() os.Open() error: %w", err)
+		return Otvet, err
+	}
+	defer f.Close()
+
+	stat, err := f.Stat()
+	if err != nil {
+		err = fmt.Errorf("Find_Directory_ModifiedTime() f.Stat() error: %w", err)
+		return Otvet, err
+	}
+
+	Otvet = stat.ModTime()
+
+	return Otvet, err
+}
+
+// Show_Repository_Code_ModifiedTime - выводит дату последнего изменения в папках cmd, internal, pkg, vendor
+func Show_Repository_Code_ModifiedTime() {
+	Date, err := Find_Repository_Code_ModifiedTime()
+	if err != nil {
+		println("Find_Repository_Code_ModifiedTime() error: ", err.Error())
+		return
+	}
+
+	if Date.IsZero() {
+		println("Last repository code modified time: not found")
+		return
+	}
+
+	println("Last repository code modified time: ", Date.String())
+
+}
+
+// Find_Repository_Code_ModifiedTime - возвращает дату последнего изменения в папках cmd, internal, pkg, vendor
+func Find_Repository_Code_ModifiedTime() (time.Time, error) {
+	var Otvet time.Time
+	var err error
+
+	//cmd
+	Time_cmd, err := Find_Directory_ModifiedTime("cmd")
+	if err != nil {
+		//return Otvet, err
+	}
+
+	//internal
+	Time_internal, err := Find_Directory_ModifiedTime("internal")
+	if err != nil {
+		//return Otvet, err
+	}
+
+	//pkg
+	Time_pkg, err := Find_Directory_ModifiedTime("pkg")
+	if err != nil {
+		//return Otvet, err
+	}
+
+	//vendor
+	Time_vendor, err := Find_Directory_ModifiedTime("vendor")
+	if err != nil {
+		//return Otvet, err
+	}
+
+	//выбираем максимальную дату
+	Otvet = TimeMax(Time_cmd, Time_internal, Time_pkg, Time_vendor)
+
+	return Otvet, err
+}
+
+// TimeMax - возвращает максимальную дату
+func TimeMax(x time.Time, y ...time.Time) time.Time {
+	maxTime := x
+	for _, val := range y {
+		if val.After(maxTime) {
+			maxTime = val
+		}
+	}
+	return maxTime
+}
+
+// TimeMin - возвращает минимальную дату
+func TimeMin(x time.Time, y ...time.Time) time.Time {
+	minTime := x
+	for _, val := range y {
+		if val.Before(minTime) {
+			minTime = val
+		}
+	}
+	return minTime
+}
+
+// Show_Version - выводит версию сервиса на экран
+func Show_Version(Version string) {
+	println("Service version: ", Version)
+}
+
+// MassFrom_MapString - сортирует map по названию колонок и возвращает слайс
+func MassFrom_MapString[V any](Map map[string]V) []V {
+	Otvet := make([]V, 0)
+
+	//сортировка по названию колонок
+	keys := make([]string, 0, len(Map))
+	for k := range Map {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	//
+	for _, key1 := range keys {
+		Value, ok := Map[key1]
+		if ok == false {
+			fmt.Printf("Map[%s] not found\n", key1)
+		}
+		Otvet = append(Otvet, Value)
+	}
+
+	return Otvet
+}
+
+// SortMass - сортирует слайс
+func SortMass[T constraints.Ordered](s []T) {
+	sort.Slice(s, func(i, j int) bool {
+		return s[i] < s[j]
+	})
+}
+
+// MassFrom_Map - сортирует map по названию колонок и возвращает слайс
+func MassFrom_Map[C constraints.Ordered, V any](Map map[C]V) []V {
+	Otvet := make([]V, 0)
+
+	//сортировка по названию колонок
+	keys := make([]C, 0, len(Map))
+	for k := range Map {
+		keys = append(keys, k)
+	}
+	SortMass(keys)
+
+	//
+	for _, key1 := range keys {
+		Value, ok := Map[key1]
+		if ok == false {
+			fmt.Printf("Map[%v] not found\n", key1)
+		}
+		Otvet = append(Otvet, Value)
+	}
+
+	return Otvet
 }
