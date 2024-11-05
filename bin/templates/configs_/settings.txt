@@ -539,4 +539,82 @@ TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_FILENAME="grpc_client_table_fi
 #TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_findmodelby_function_test.go_" file
 TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_TEST_FILENAME="grpc_client_table_findmodelby_function_test.go_"
 
-#
+
+#-------------------------------------------OBJECTS--------------------------------------------
+#NEED_CREATE_OBJECTS - need create files for objects (entity + foreign columns)
+NEED_CREATE_OBJECTS=true
+
+#PREFIX_OBJECT - prefix for "object_" files
+PREFIX_OBJECT="object_"
+
+#PREFIX_CRUD_OBJECT - prefix for "crud_object_" files
+PREFIX_CRUD_OBJECT="crud_object_"
+
+#TEMPLATES_OBJECTS_FOLDERNAME - folder name for "pkg/objects" files
+TEMPLATES_OBJECTS_FOLDERNAME="pkg/object_model/objects"
+
+#TEMPLATES_OBJECTS_FILENAME - short filename of "objects_table.go_" file
+TEMPLATES_OBJECTS_FILENAME="objects_table.go_"
+
+#TEMPLATES_CRUD_OBJECTS_FOLDERNAME - folder name "pkg/db/crud_objects" for crud objects
+TEMPLATES_CRUD_OBJECTS_FOLDERNAME="pkg/db/crud_objects"
+
+
+
+
+#TEMPLATES_CRUD_TABLE_READOBJECT_FILENAME - short filename of "crud_tables_object.go_" file
+TEMPLATES_CRUD_TABLE_READOBJECT_FILENAME="crud_tables_object.go_"
+
+#TEMPLATES_CRUD_TABLE_READOBJECT_TEST_FILENAME - short filename of "crud_tables_object_test.go_" file
+TEMPLATES_CRUD_TABLE_READOBJECT_TEST_FILENAME="crud_tables_object_test.go_"
+
+#TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_FILENAME - short filename of "crud_tables_object_function.go_" file
+TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_FILENAME="crud_tables_object_function.go_"
+
+#TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_TEST_FILENAME - short filename of "crud_tables_object_function_test.go_" file
+TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_TEST_FILENAME="crud_tables_object_function_test.go_"
+
+
+#TEMPLATES_GRPC_SERVER_READOBJECT_FILENAME - short filename of "server_grpc_table_object.go_" file
+TEMPLATES_GRPC_SERVER_READOBJECT_FILENAME="server_grpc_table_object.go_"
+
+#TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_FILENAME - short filename of "server_grpc_table_object_test.go_" file
+TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_FILENAME="server_grpc_table_object_function.go_"
+
+#TEMPLATES_GRPC_SERVER_READOBJECT_TEST_FILENAME - short filename of "server_grpc_table_object_test.go_" file
+TEMPLATES_GRPC_SERVER_READOBJECT_TEST_FILENAME="server_grpc_table_object_test.go_"
+
+#TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_TEST_FILENAME - short filename of "server_grpc_table_object_test.go_" file
+TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_TEST_FILENAME="server_grpc_table_object_function_test.go_"
+
+
+#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FILENAME - short filename of "grpc_client_table_object.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FILENAME="grpc_client_table_object.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_TEST_FILENAME - short filename of "grpc_client_table_object_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_TEST_FILENAME="grpc_client_table_object_test.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_FILENAME - short filename of "grpc_client_table_object_function.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_FILENAME="grpc_client_table_object_function.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_object_function_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_TEST_FILENAME="grpc_client_table_object_function_test.go_"
+
+
+
+#-------------------------------------------TEXT DELETED--------------------------------------------
+#TEXT_DELETED_TABLE - text prefix for ignore this table
+TEXT_DELETED_TABLE="DELETED_"
+
+#TEXT_DELETED_TABLE_RUS - text prefix for ignore this table
+TEXT_DELETED_TABLE_RUS="УДАЛИТЬ_"
+
+#TEXT_DELETED_COLUMN - text prefix for ignore this column
+TEXT_DELETED_COLUMN="DELETED"
+
+#TEXT_DELETED_COLUMN_RUS - text prefix for ignore this column
+TEXT_DELETED_COLUMN_RUS="УДАЛИТЬ"
+
+#---------------------------------------------------------------------------------------
+#TESTS_FOLDERNAME - text "tests", for testing folders
+TESTS_FOLDERNAME = "tests"
