@@ -183,7 +183,7 @@ func ReplaceCacheRemove_1PK(Text string, Table1 *types.Table) string {
 
 	ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
 	TextOld := "cache.Remove(IntFromAlias(m.ID))"
-	Value := create_files.ConvertFromAlias(Table1, ColumnPK, "m")
+	Value := create_files.ConvertFromAliasID(Table1, ColumnPK, "m")
 	TextNew := "cache.Remove(" + Value + ")"
 	Otvet = strings.ReplaceAll(Otvet, TextOld, TextNew)
 

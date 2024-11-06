@@ -1,6 +1,7 @@
 	//FieldNameTable
 	ModelNameColumn:= TableNameForeign.ModelNameForeign{}
-	ModelNameColumn.PrimaryKeyNameF = m.FieldNameTable
+	ModelNameColumnID := m.FieldNameTable
+	ModelNameColumn.PrimaryKeyNameFK = IntFromAlias(ModelNameColumnID)
 	err = crud_TableNameForeign.Read_ctx(ctx, db, &ModelNameColumn)
 	if err != nil {
 		err = fmt.Errorf(ModelNameColumn.TableNameDB()+" Read() FieldNamesWithPercent, error: %w", FieldNamesWithCommaM, err)

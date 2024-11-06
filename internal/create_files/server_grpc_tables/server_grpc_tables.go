@@ -195,7 +195,7 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	for _, Column1 := range MassPK {
 		Name := strings.ToUpper(Column1.NameGo)
 		VariableName := Table1.NameGo + "_" + Name + "_Test"
-		//Text1 := Convert_GolangVariableToProtobufVariable(Table1, Column1, VariableName)
+		//Text1 := Convert_GolangVariableToProtobufVariableID(Table1, Column1, VariableName)
 		RequestColumnName := create_files.Find_RequestFieldName(Table1, Column1)
 		TextNew = TextNew + "\tRequest." + RequestColumnName + " = " + VariableName + "\n"
 	}
@@ -207,7 +207,7 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 	for _, Column1 := range MassPK {
 		Name := strings.ToUpper(Column1.NameGo)
 		VariableName := Table1.NameGo + "_" + Name + "_Test"
-		//Text1 := Convert_GolangVariableToProtobufVariable(Table1, Column1, VariableName)
+		//Text1 := Convert_GolangVariableToProtobufVariableID(Table1, Column1, VariableName)
 		RequestColumnName := create_files.Find_RequestFieldName(Table1, Column1)
 		TextNew = TextNew + "\tRequest2." + RequestColumnName + " = " + VariableName + "\n"
 	}

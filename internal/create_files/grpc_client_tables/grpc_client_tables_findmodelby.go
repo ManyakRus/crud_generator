@@ -147,7 +147,7 @@ func CreateFiles_FindModelByTable1(MapAll map[string]*types.Table, Table1 *types
 	//RequestName := "Request_"
 	RequestName := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
 	//TextRequest := create_files.Find_RequestFieldName(Table1, Column1)
-	//ValueM := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
+	//ValueM := create_files.Convert_GolangVariableToProtobufVariableID(Table1, Column1, "m")
 	//TextAssign = TextAssign + "\tRequest." + TextRequest + " = " + ValueM + "\n"
 	ColumnNameTranslit := Column1.NameGo
 	FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + ColumnNameTranslit
@@ -188,7 +188,7 @@ func CreateFiles_FindModelByTable1(MapAll map[string]*types.Table, Table1 *types
 	MassPK := create_files.Find_PrimaryKeyColumns(Table1)
 	MassPK_and_Column := create_files.AppendColumn(MassPK, Column1)
 	for _, ColumnPK1 := range MassPK_and_Column {
-		RequestColumnName := create_files.Convert_GolangVariableToProtobufVariable(Table1, ColumnPK1, "m")
+		RequestColumnName := create_files.Convert_GolangVariableToProtobufVariableID(Table1, ColumnPK1, "m")
 		//TextIDEqual = TextIDEqual + "\t" + ColumnPK1.NameGo + " := m." + ColumnPK1.NameGo + "\n"
 		TextRequest := create_files.Find_RequestFieldName(Table1, ColumnPK1)
 		TextRequestColumnName = TextRequestColumnName + "\t" + "Request." + TextRequest + " = " + RequestColumnName + "\n"

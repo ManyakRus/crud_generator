@@ -1,6 +1,7 @@
 package crud_object_tables
 
 import (
+	"fmt"
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/create_files"
 	"github.com/ManyakRus/crud_generator/internal/types"
@@ -139,6 +140,11 @@ func CreateFiles_ReadObjectTable(MapAll map[string]*types.Table, Table1 *types.T
 		}
 
 		TableF, _ := create_files.Find_TableF_ColumnF(MapAll, Column1)
+		if TableF == nil {
+			err := fmt.Errorf("Find_TableF_ColumnF() error: Foreign table for column %s not found", Column1.Name)
+			log.Error(err)
+			break
+		}
 		TableNameF := TableF.Name
 
 		//шаблон функции
@@ -171,9 +177,13 @@ func CreateFiles_ReadObject_Table1(MapAll map[string]*types.Table, Table1 *types
 	TableFK, ColumnFK := create_files.Find_TableF_ColumnF(MapAll, Column1)
 	ColumnPKF := create_files.Find_PrimaryKeyColumn(TableFK)
 
-	//PrimaryKeyNameF
-	PrimaryKeyNameF := ColumnPKF.NameGo
-	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeyNameF", PrimaryKeyNameF)
+	//IntFromAlias
+	IntFromAlias := create_files.Convert_GolangVariableToProtobufVariableType(Table1, Column1, "ModelNameColumnID", ColumnFK.TypeGo)
+	Otvet = strings.ReplaceAll(Otvet, "IntFromAlias(ModelNameColumnID)", IntFromAlias)
+
+	//PrimaryKeyNameFK
+	PrimaryKeyNameFK := ColumnPKF.NameGo
+	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeyNameFK", PrimaryKeyNameFK)
 
 	//FieldNameForeign
 	FieldNameForeign := ColumnFK.NameGo

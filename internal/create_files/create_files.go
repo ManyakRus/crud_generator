@@ -395,9 +395,9 @@ func Replace_PrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variabl
 		} else {
 			TextIDRequestID = TextIDRequestID + "\t" + GolangCode + "\n"
 		}
-		TextM := Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
+		TextM := Convert_GolangVariableToProtobufVariableID(Table1, Column1, "m")
 		TextRequestIDmID = TextRequestIDmID + "\t" + VariableName + "." + RequestColumnName + " = " + TextM + "\n"
-		TextInt64ID := Convert_GolangVariableToProtobufVariable(Table1, Column1, "")
+		TextInt64ID := Convert_GolangVariableToProtobufVariableID(Table1, Column1, "")
 		TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
 		TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
 
@@ -422,7 +422,7 @@ func Replace_PrimaryKeyOtvetID_ManyPK1(Text string, Table1 *types.Table, Variabl
 	Otvet = strings.ReplaceAll(Otvet, "\tm2.ID = int64(m.ID)", TextM2ID)
 	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", TextIfMId)
 	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", TextIfMIdNot0)
-	//Value := Convert_GolangVariableToProtobufVariable(Table1, ColumnPK, "m")
+	//Value := Convert_GolangVariableToProtobufVariableID(Table1, ColumnPK, "m")
 	//Otvet = strings.ReplaceAll(Otvet, "ProtoFromInt(m.ID)", Value) //protobuf
 
 	//заменим ID := Request.ID
@@ -457,14 +457,14 @@ func Replace_PrimaryKeyM_ManyPK(Text string, Table1 *types.Table) string {
 func ReplaceIntFromAlias(Text string, Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := Text
 
-	Value := ConvertFromAlias(Table1, Column1, VariableName)
+	Value := ConvertFromAliasID(Table1, Column1, VariableName)
 	Otvet = strings.ReplaceAll(Otvet, "IntFromAlias("+VariableName+".ID)", Value)
 
 	return Otvet
 }
 
-// ConvertFromAlias - возвращает текст m.ID или int64(m.ID)
-func ConvertFromAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+// ConvertFromAliasID - возвращает текст m.ID или int64(m.ID)
+func ConvertFromAliasID(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := VariableName + "." + Column1.NameGo
 
 	TextConvert, ok := types.MapConvertID[Table1.Name+"."+Column1.Name]
@@ -477,6 +477,24 @@ func ConvertFromAlias(Table1 *types.Table, Column1 *types.Column, VariableName s
 	}
 
 	Otvet = Column1.TypeGo + "(" + VariableName + "." + Column1.NameGo + ")"
+
+	return Otvet
+}
+
+// ConvertFromAlias - возвращает текст VariableName или int64(VariableName)
+func ConvertFromAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+	Otvet := VariableName
+
+	TextConvert, ok := types.MapConvertID[Table1.Name+"."+Column1.Name]
+	if ok == false {
+		return Otvet
+	}
+
+	if TextConvert[:6] != "alias." {
+		return Otvet
+	}
+
+	Otvet = Column1.TypeGo + "(" + VariableName + ")"
 
 	return Otvet
 }
@@ -1755,8 +1773,8 @@ func DeleteCommentFromString(TextFrom string) string {
 	return Otvet
 }
 
-// Convert_GolangVariableToProtobufVariable - возвращает имя переменной  + "." +  имя колонки, преобразованное в тип protobuf
-func Convert_GolangVariableToProtobufVariable(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
+// Convert_GolangVariableToProtobufVariableID - возвращает имя переменной  + "." +  имя колонки, преобразованное в тип protobuf
+func Convert_GolangVariableToProtobufVariableID(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := ""
 
 	if Column1 == nil {
@@ -1811,6 +1829,73 @@ func Convert_GolangVariableToProtobufVariable(Table1 *types.Table, Column1 *type
 			Otvet = VariableName + Dot + Column1.NameGo
 		case "uuid.UUID":
 			Otvet = VariableName + Dot + Column1.NameGo + ".String()"
+		}
+	}
+
+	return Otvet
+}
+
+// Convert_GolangVariableToProtobufVariableType - возвращает имя переменной  преобразованное в тип protobuf
+func Convert_GolangVariableToProtobufVariableType(Table1 *types.Table, Column1 *types.Column, VariableName, VariableType string) string {
+	Otvet := VariableName
+
+	if Column1 == nil {
+		return Otvet
+	}
+
+	//Dot := ""
+	//if VariableName != "" {
+	//	Dot = "."
+	//}
+	//Otvet = VariableName + Dot + Column1.NameGo
+
+	//найдём alias
+	_, HasAlias := types.MapConvertID[Table1.Name+"."+Column1.Name]
+
+	TextVariableName := VariableName
+	if VariableType != Column1.TypeGo {
+		TextVariableName = VariableType + "(" + VariableName + ")"
+	}
+
+	//преобразуем alias в обычный тип, и дату в timestamp
+	if HasAlias == true {
+		switch Column1.TypeGo {
+		case "time.Time":
+			Otvet = "timestamppb.New(" + VariableName + ")"
+		case "string":
+			Otvet = VariableType + "(" + VariableName + ")"
+		case "int64":
+			Otvet = VariableType + "(" + VariableName + ")"
+		case "int32":
+			Otvet = VariableType + "(" + VariableName + ")"
+		case "bool":
+			Otvet = VariableType + "(" + VariableName + ")"
+		case "float32":
+			Otvet = VariableType + "(" + VariableName + ")"
+		case "float64":
+			Otvet = VariableType + "(" + VariableName + ")"
+		case "uuid.UUID":
+			Otvet = VariableName + ".String()"
+		}
+
+	} else {
+		switch Column1.TypeGo {
+		case "time.Time":
+			Otvet = "timestamppb.New(" + VariableName + ")"
+		case "string":
+			Otvet = TextVariableName
+		case "int64":
+			Otvet = TextVariableName
+		case "int32":
+			Otvet = TextVariableName
+		case "bool":
+			Otvet = TextVariableName
+		case "float32":
+			Otvet = TextVariableName
+		case "float64":
+			Otvet = TextVariableName
+		case "uuid.UUID":
+			Otvet = VariableName + ".String()"
 		}
 	}
 
@@ -2276,7 +2361,7 @@ func FindText_IDMany(Table1 *types.Table) (TextNames, TextNamesTypes, TextProtoN
 	//Comma := ""
 	//MassPrimaryKey := Find_PrimaryKeyColumns(Table1)
 	//for _, PrimaryKey1 := range MassPrimaryKey {
-	//	OtvetColumnName := Convert_GolangVariableToProtobufVariable(Table1, PrimaryKey1, "")
+	//	OtvetColumnName := Convert_GolangVariableToProtobufVariableID(Table1, PrimaryKey1, "")
 	//	if OtvetColumnName == "" {
 	//		continue
 	//	}
@@ -2304,7 +2389,7 @@ func FindText_ID_VariableName_Many(Table1 *types.Table, VariableName string) (Te
 	Comma := ""
 	MassPrimaryKey := Find_PrimaryKeyColumns(Table1)
 	for _, PrimaryKey1 := range MassPrimaryKey {
-		OtvetColumnName := Convert_GolangVariableToProtobufVariable(Table1, PrimaryKey1, "")
+		OtvetColumnName := Convert_GolangVariableToProtobufVariableID(Table1, PrimaryKey1, "")
 		if OtvetColumnName == "" {
 			continue
 		}

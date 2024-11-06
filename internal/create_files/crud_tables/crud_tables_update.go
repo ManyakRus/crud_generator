@@ -376,9 +376,9 @@ func Replace_PrimaryKeyOtvetID(Text string, Table1 *types.Table) string {
 		} else {
 			TextIDRequestID = TextIDRequestID + "\t" + GolangCode + "\n"
 		}
-		TextM := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "m")
+		TextM := create_files.Convert_GolangVariableToProtobufVariableID(Table1, Column1, "m")
 		TextRequestIDmID = TextRequestIDmID + "\t" + VariableName + "." + RequestColumnName + " = " + TextM + "\n"
-		TextInt64ID := create_files.Convert_GolangVariableToProtobufVariable(Table1, Column1, "")
+		TextInt64ID := create_files.Convert_GolangVariableToProtobufVariableID(Table1, Column1, "")
 		TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
 		TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
 
