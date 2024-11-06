@@ -1,0 +1,49 @@
+package server_grpc
+
+import (
+	"context"
+	"github.com/ManyakRus/starter/postgres_gorm"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/objects/object_lawsuit_status_types"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_objects/crud_object_lawsuit_status_types"
+)
+
+// LawsuitStatusType_ReadObject - читает и возвращает модель из БД
+func (s *ServerGRPC) LawsuitStatusType_ReadObject(ctx context.Context, Request *grpc_proto.RequestId) (*grpc_proto.Response, error) {
+	var Otvet grpc_proto.Response
+	var err error
+
+	//проверим контекст уже отменён
+	if ctx.Err() != nil {
+		err = ctx.Err()
+		return &Otvet, err
+	}
+
+	//проверим совпадения версии модели
+	VersionServer := object_lawsuit_status_types.ObjectLawsuitStatusType{}.GetStructVersion()
+	VersionClient := Request.VersionModel
+	if VersionServer != VersionClient {
+		err = ErrorModelVersion(object_lawsuit_status_types.ObjectLawsuitStatusType{})
+		return &Otvet, err
+	}
+
+	//запрос в БД
+	db := postgres_gorm.GetConnection()
+	ID := Request.ID
+	m := &object_lawsuit_status_types.ObjectLawsuitStatusType{}
+	m.ID = AliasFromInt(ID)
+	err = crud_object_lawsuit_status_types.ReadObject_ctx(ctx, db, m)
+	if err != nil {
+		return &Otvet, err
+	}
+
+	//заполяем ответ
+	ModelString, err := m.GetJSON()
+	if err != nil {
+		return &Otvet, err
+	}
+	Otvet.ModelString = ModelString
+
+	return &Otvet, err
+}
+

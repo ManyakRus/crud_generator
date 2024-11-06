@@ -104,10 +104,18 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 		TextProto, TextProtoNew1 = FindText_FindModelBy(MapAll, TextProto, Table1)
 		TextProtoNew = TextProtoNew + TextProtoNew1
 
-		//
+		//cache
 		if config.Settings.NEED_CREATE_CACHE_API == true {
 			TextProtoNew = TextProtoNew + FindText_ProtoTable1_Cache(TextProto, Table1)
 		}
+
+		//ReadObject
+		if config.Settings.NEED_CREATE_READOBJECT == true {
+			TextProto, TextProtoNew1 = FindText_ReadObject(TextProto, Table1)
+		}
+		TextProtoNew = TextProtoNew + TextProtoNew1
+
+		//
 		TextProto = AddTextMessageRequestID(TextProto, Table1)
 	}
 

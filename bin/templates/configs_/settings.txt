@@ -581,31 +581,30 @@ TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_FILENAME="crud_tables_object_function.g
 TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_TEST_FILENAME="crud_tables_object_function_test.go_"
 
 
-#TEMPLATES_GRPC_SERVER_READOBJECT_FILENAME - short filename of "server_grpc_table_object.go_" file
-TEMPLATES_GRPC_SERVER_READOBJECT_FILENAME="server_grpc_table_object.go_"
+#TEMPLATES_GRPC_SERVER_READOBJECT_FILENAME - short filename of "server_grpc_table_readobject.go_" file
+TEMPLATES_GRPC_SERVER_READOBJECT_FILENAME="server_grpc_table_readobject.go_"
 
-#TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_FILENAME - short filename of "server_grpc_table_object_test.go_" file
-TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_FILENAME="server_grpc_table_object_function.go_"
+#TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_FILENAME - short filename of "server_grpc_table_readobject_test.go_" file
+TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_FILENAME="server_grpc_table_readobject_function.go_"
 
-#TEMPLATES_GRPC_SERVER_READOBJECT_TEST_FILENAME - short filename of "server_grpc_table_object_test.go_" file
-TEMPLATES_GRPC_SERVER_READOBJECT_TEST_FILENAME="server_grpc_table_object_test.go_"
+#TEMPLATES_GRPC_SERVER_READOBJECT_TEST_FILENAME - short filename of "server_grpc_table_readobject_test.go_" file
+TEMPLATES_GRPC_SERVER_READOBJECT_TEST_FILENAME="server_grpc_table_readobject_test.go_"
 
-#TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_TEST_FILENAME - short filename of "server_grpc_table_object_test.go_" file
-TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_TEST_FILENAME="server_grpc_table_object_function_test.go_"
+#TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_TEST_FILENAME - short filename of "server_grpc_table_readobject_test.go_" file
+TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_TEST_FILENAME="server_grpc_table_readobject_function_test.go_"
 
 
-#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FILENAME - short filename of "grpc_client_table_object.go_" file
-TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FILENAME="grpc_client_table_object.go_"
+#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FILENAME - short filename of "grpc_client_table_readobject.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FILENAME="grpc_client_table_readobject.go_"
 
-#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_TEST_FILENAME - short filename of "grpc_client_table_object_test.go_" file
-TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_TEST_FILENAME="grpc_client_table_object_test.go_"
+#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_TEST_FILENAME - short filename of "grpc_client_table_readobject_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_TEST_FILENAME="grpc_client_table_readobject_test.go_"
 
-#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_FILENAME - short filename of "grpc_client_table_object_function.go_" file
-TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_FILENAME="grpc_client_table_object_function.go_"
+#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_FILENAME - short filename of "grpc_client_table_readobject_function.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_FILENAME="grpc_client_table_readobject_function.go_"
 
-#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_object_function_test.go_" file
-TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_TEST_FILENAME="grpc_client_table_object_function_test.go_"
-
+#TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_readobject_function_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_TEST_FILENAME="grpc_client_table_readobject_function_test.go_"
 
 
 #-------------------------------------------TEXT DELETED--------------------------------------------
