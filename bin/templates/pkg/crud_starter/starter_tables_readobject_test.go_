@@ -1,0 +1,12 @@
+package starter_crud_starter_lawsuit_status_types
+
+import (
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud/crud_object_lawsuit_status_types"
+	"testing"
+)
+
+func TestSetCrudInterface(t *testing.T) {
+	crud := crud_object_lawsuit_status_types.Crud_DB{}
+
+	SetCrudInterface(crud)
+}

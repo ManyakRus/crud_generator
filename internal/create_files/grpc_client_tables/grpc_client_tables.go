@@ -133,6 +133,22 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			return err
 		}
 
+		//
+		if config.Settings.NEED_CREATE_READOBJECT == true {
+			err = CreateFiles_ReadObject(Table1)
+			if err != nil {
+				log.Error("CreateFiles_ReadObject() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			err = CreateFiles_ReadObject_Test(Table1)
+			if err != nil {
+				log.Error("CreateFiles_ReadObject_Test() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+		}
+
 	}
 
 	return err

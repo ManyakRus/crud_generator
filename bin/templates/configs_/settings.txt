@@ -606,6 +606,13 @@ TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_FILENAME="grpc_client_table_rea
 #TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_readobject_function_test.go_" file
 TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_TEST_FILENAME="grpc_client_table_readobject_function_test.go_"
 
+#STARTER_TABLES_READOBJECT_FILENAME - filename of "starter_tables_readobject.go_" file
+STARTER_TABLES_READOBJECT_FILENAME = "starter_tables_readobject.go_"
+
+#STARTER_TABLES_READOBJECT_TEST_FILENAME - filename of "starter_tables_readobject_test.go_" file
+STARTER_TABLES_READOBJECT_TEST_FILENAME = "starter_tables_readobject_test.go_"
+
+
 
 #-------------------------------------------TEXT DELETED--------------------------------------------
 #TEXT_DELETED_TABLE - text prefix for ignore this table

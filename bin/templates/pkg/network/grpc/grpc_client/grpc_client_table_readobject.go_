@@ -1,0 +1,58 @@
+package grpc_lawsuit_status_types
+
+import (
+	"context"
+	"encoding/json"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/objects/object_lawsuit_status_types"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
+	"github.com/ManyakRus/starter/log"
+	"time"
+)
+
+// ReadObject - возвращает модель из БД, и все модели имеющие foreign key
+func (crud Crud_GRPC) ReadObject(m *object_lawsuit_status_types.ObjectLawsuitStatusType) error {
+	var err error
+
+	// подключение
+	grpc_client_func.Func_Connect_GRPC_NRPC.Connect_GRPC_NRPC()
+
+	// подготовка запроса
+	var versionModel = crud.GetVersionModel()
+
+	Request := &grpc_proto.RequestId{}
+	Request.ID = ProtoFromInt(m.ID)
+	Request.VersionModel = versionModel
+
+	ctxMain := context.Background()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(grpc_constants.GetTimeoutSeconds()))
+	defer ctxCancelFunc()
+
+	// запрос
+	var Response *grpc_proto.Response
+	if grpc_nrpc.NeedNRPC == true {
+		Response, err = nrpc_client.Client.LawsuitStatusType_ReadObject(Request)
+	} else {
+		Response, err = grpc_client_func.Client.LawsuitStatusType_ReadObject(ctx, Request)
+	}
+	if err != nil {
+		if grpc_client_func.IsErrorModelVersion(err) == true {
+			log.Panic(err)
+		}
+		return err
+	}
+
+	// ответ
+	sModel := Response.ModelString
+	err = json.Unmarshal([]byte(sModel), m)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
