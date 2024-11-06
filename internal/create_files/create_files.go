@@ -2958,3 +2958,44 @@ func Find_FieldNamesWithComma_from_Table_VariableName(Table1 *types.Table, Varia
 
 	return Otvet
 }
+
+// Find_ObjectColumnModelName - возвращает имя модели для колонки у Object = "ModelИмяКолонкиБезИД"
+func Find_ObjectColumnModelName(ColumnName string) string {
+	Otvet := ColumnName
+
+	//добавим _model если не кончается на ID
+	Otvet = Otvet + "_model"
+
+	//
+	len1 := len(ColumnName)
+	if len1 >= 3 && strings.HasSuffix(ColumnName, "ID") == true {
+		Otvet1 := strings.TrimSuffix(ColumnName, "ID")
+		len2 := len(Otvet1)
+		if len2 > 0 {
+			s2 := Otvet1[len2-1:]
+			if s2 == strings.ToLower(s2) {
+				Otvet = Otvet1
+			}
+		}
+	}
+
+	return Otvet
+}
+
+//// DeleteSuffixID_small_previous - убирает ID суффикс, только если последняя буква маленькая
+//func DeleteSuffixID_small_previous(ModelName string) string {
+//	Otvet := ModelName
+//
+//	//убираем ID суффикс
+//	//только если последняя буква маленькая
+//	Otvet1 := strings.TrimSuffix(ModelName, "ID")
+//	len1 := len(Otvet1)
+//	if len1 > 0 {
+//		s2 := Otvet1[len1-2:]
+//		if s2 == strings.ToLower(s2) {
+//			Otvet = Otvet1
+//		}
+//	}
+//
+//	return Otvet
+//}

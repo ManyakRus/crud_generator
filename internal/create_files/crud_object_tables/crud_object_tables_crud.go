@@ -162,19 +162,19 @@ func CreateFiles_ReadObjectTable(MapAll map[string]*types.Table, Table1 *types.T
 func CreateFiles_ReadObject_Table1(MapAll map[string]*types.Table, Table1 *types.Table, Column1 *types.Column, TextTemplateFunction string) string {
 	Otvet := TextTemplateFunction
 
-	TableF, ColumnF := create_files.Find_TableF_ColumnF(MapAll, Column1)
-	ColumnPKF := create_files.Find_PrimaryKeyColumn(TableF)
+	TableFK, ColumnFK := create_files.Find_TableF_ColumnF(MapAll, Column1)
+	ColumnPKF := create_files.Find_PrimaryKeyColumn(TableFK)
 
 	//PrimaryKeyNameF
 	PrimaryKeyNameF := ColumnPKF.NameGo
 	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeyNameF", PrimaryKeyNameF)
 
 	//FieldNameForeign
-	FieldNameForeign := ColumnF.NameGo
+	FieldNameForeign := ColumnFK.NameGo
 	Otvet = strings.ReplaceAll(Otvet, "FieldNameForeign", FieldNameForeign)
 
 	//TableNameForeign
-	TableNameForeign := TableF.Name
+	TableNameForeign := TableFK.Name
 	Otvet = strings.ReplaceAll(Otvet, "TableNameForeign", TableNameForeign)
 
 	//FieldNamesWithPercent
@@ -190,12 +190,16 @@ func CreateFiles_ReadObject_Table1(MapAll map[string]*types.Table, Table1 *types
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithComma", FieldNamesWithComma)
 
 	//ModelNameForeign
-	ModelNameForeign := TableF.NameGo
+	ModelNameForeign := TableFK.NameGo
 	Otvet = strings.ReplaceAll(Otvet, "ModelNameForeign", ModelNameForeign)
 
-	//FieldName
+	//FieldNameTable
 	FieldNameTable := Column1.NameGo
 	Otvet = strings.ReplaceAll(Otvet, "FieldNameTable", FieldNameTable)
+
+	//ModelNameColumn
+	ModelNameColumn := create_files.Find_ObjectColumnModelName(Column1.NameGo)
+	Otvet = strings.ReplaceAll(Otvet, "ModelNameColumn", ModelNameColumn)
 
 	//crud_
 	Otvet = strings.ReplaceAll(Otvet, " crud_", " "+config.Settings.PREFIX_CRUD)

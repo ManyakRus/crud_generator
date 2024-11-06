@@ -127,7 +127,8 @@ func CreateFiles1(MapAll map[string]*types.Table, Table1 *types.Table, TextGo st
 		Otvet = create_files.AddImport(Otvet, ModelTableURL)
 
 		//добавим поле
-		TextField1 := "\tObject" + Column1.NameGo + " " + TableFK.Name + "." + TableFK.NameGo + "\n"
+		ModelNameColumn := create_files.Find_ObjectColumnModelName(Column1.NameGo)
+		TextField1 := "\t" + ModelNameColumn + " " + TableFK.Name + "." + TableFK.NameGo + "\n"
 		TextField = TextField + TextField1
 
 	}

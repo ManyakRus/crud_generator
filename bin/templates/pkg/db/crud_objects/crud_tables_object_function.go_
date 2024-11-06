@@ -1,9 +1,9 @@
 	//ObjectFieldNameTable
-	ObjectFieldNameTable := TableNameForeign.ModelNameForeign{}
-	ObjectFieldNameTable.PrimaryKeyNameF = m.FieldNameTable
-	err = crud_TableNameForeign.Read_ctx(ctx, db, &ObjectFieldNameTable)
+	ModelNameColumn:= TableNameForeign.ModelNameForeign{}
+	ModelNameColumn.PrimaryKeyNameF = m.FieldNameTable
+	err = crud_TableNameForeign.Read_ctx(ctx, db, &ModelNameColumn)
 	if err != nil {
-		err = fmt.Errorf(ObjectFieldNameTable.TableNameDB()+" Read() FieldNamesWithPercent, error: %w", FieldNamesWithCommaM, err)
+		err = fmt.Errorf(ModelNameColumn.TableNameDB()+" Read() FieldNamesWithPercent, error: %w", FieldNamesWithCommaM, err)
 	}
-	m.ObjectFieldNameTable = ObjectFieldNameTable
+	m.ModelNameColumn = ModelNameColumn
 
