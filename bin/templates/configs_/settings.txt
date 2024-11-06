@@ -169,6 +169,9 @@ PREFIX_SERVER_GRPC="server_grpc_"
 #PREFIC_CRUD - filename prefix for crud database files
 PREFIX_CRUD="crud_"
 
+#SUFFIX_CRUD - filename suffix for crud files
+SUFFIX_CRUD="_crud"
+
 #PREFIX_TABLE - filename prefix for database table model files
 PREFIX_TABLE="table_"
 
@@ -555,6 +558,9 @@ TEMPLATES_READOBJECT_FOLDERNAME="pkg/object_model/objects"
 
 #TEMPLATES_MODEL_READOBJECT_FILENAME - short filename of "objects_table.go_" file
 TEMPLATES_MODEL_READOBJECT_FILENAME="objects_table.go_"
+
+#TEMPLATES_MODEL_CRUD_READOBJECT_FILENAME - short filename of "objects_table_crud.go_" file
+TEMPLATES_MODEL_CRUD_READOBJECT_FILENAME="objects_table_crud.go_"
 
 #TEMPLATES_CRUD_READOBJECT_FOLDERNAME - folder name "pkg/db/crud_objects" for crud objects
 TEMPLATES_CRUD_READOBJECT_FOLDERNAME="pkg/db/crud_objects"

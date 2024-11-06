@@ -10,8 +10,8 @@ import (
 	"strings"
 )
 
-// CreateFiles_crud - создаёт 1 файл в папке db
-func CreateFiles_crud(MapAll map[string]*types.Table, Table1 *types.Table) error {
+// CreateFiles - создаёт 1 файл в папке db
+func CreateFiles(MapAll map[string]*types.Table, Table1 *types.Table) error {
 	var err error
 
 	//чтение файлов
@@ -21,13 +21,20 @@ func CreateFiles_crud(MapAll map[string]*types.Table, Table1 *types.Table) error
 	DirTemplatesObjects := DirTemplates + config.Settings.TEMPLATES_READOBJECT_FOLDERNAME + micro.SeparatorFile()
 	DirReadyDB := DirReady + config.Settings.TEMPLATES_READOBJECT_FOLDERNAME + micro.SeparatorFile()
 
-	FilenameTemplateObject := DirTemplatesObjects + config.Settings.TEMPLATES_MODEL_CRUD_READOBJECT_FILENAME
+	FilenameTemplateObject := DirTemplatesObjects + config.Settings.TEMPLATES_MODEL_READOBJECT_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyDB + config.Settings.PREFIX_READOBJECT + TableName
-	FilenameReadyObjects := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_READOBJECT + TableName + config.Settings.SUFFIX_CRUD + ".go"
+	FilenameReadyObjects := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_READOBJECT + TableName + ".go"
 
 	//создадим каталог
 	create_files.CreateDirectory(DirReadyTable)
+	//ok, err := micro.FileExists(DirReadyTable)
+	//if ok == false {
+	//	err = os.MkdirAll(DirReadyTable, 0777)
+	//	if err != nil {
+	//		log.Panic("Mkdir() ", DirReadyTable, " error: ", err)
+	//	}
+	//}
 
 	//загрузим шаблон файла
 	bytes, err := os.ReadFile(FilenameTemplateObject)
@@ -44,18 +51,10 @@ func CreateFiles_crud(MapAll map[string]*types.Table, Table1 *types.Table) error
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGo = create_files.Delete_TemplateRepositoryImports(TextGo)
 
-		//TextGo = CreateFiles1(MapAll, Table1, TextGo)
+		TextGo = CreateFiles1(MapAll, Table1, TextGo)
 
-		//ModelTableURL := create_files.Find_ModelTableURL(TableName)
-		//TextGo = create_files.AddImport(TextGo, ModelTableURL)
-
-		//Find_DBConstants
-		ConstantsURL := create_files.Find_DBConstantsURL()
-		TextGo = create_files.AddImport(TextGo, ConstantsURL)
-
-		//calc_struct_version
-		CalcStructVersionURL := create_files.Find_CalcStructVersionURL()
-		TextGo = create_files.AddImport(TextGo, CalcStructVersionURL)
+		ModelTableURL := create_files.Find_ModelTableURL(TableName)
+		TextGo = create_files.AddImport(TextGo, ModelTableURL)
 
 	}
 
@@ -84,4 +83,61 @@ func CreateFiles_crud(MapAll map[string]*types.Table, Table1 *types.Table) error
 	err = os.WriteFile(FilenameReadyObjects, []byte(TextGo), config.Settings.FILE_PERMISSIONS)
 
 	return err
+}
+
+// CreateFiles1 - возвращает текст заполненный
+func CreateFiles1(MapAll map[string]*types.Table, Table1 *types.Table, TextGo string) string {
+	Otvet := TextGo
+	var err error
+
+	//
+	TextField := ""
+	for _, Column1 := range Table1.MapColumns {
+		//проверка имени колонки "DELETED_"
+		err = create_files.IsGood_Column(Column1)
+		if err != nil {
+			log.Warn("CreateFiles1() table: ", Table1.Name, " column: ", Column1.Name, " warning: ", err)
+			continue
+		}
+
+		//проверка есть внешний ключ
+		TableNameFK := Column1.TableKey
+		if TableNameFK == "" {
+			continue
+		}
+
+		//ColumnNameFK := Column1.ColumnKey
+		//if ColumnNameFK == "" {
+		//	continue
+		//}
+
+		//
+		TableFK, ok := MapAll[TableNameFK]
+		if ok == false {
+			continue
+		}
+
+		//ColumnFK := TableFK.MapColumns[ColumnNameFK]
+		//if ColumnFK == nil {
+		//	continue
+		//}
+
+		//добавим import
+		ModelTableURL := create_files.Find_ModelTableURL(TableNameFK)
+		Otvet = create_files.AddImport(Otvet, ModelTableURL)
+
+		//добавим поле
+		ModelNameColumn := create_files.Find_ObjectColumnModelName(Column1.NameGo)
+		TextField1 := "\t" + ModelNameColumn + " " + TableFK.Name + "." + TableFK.NameGo + "\n"
+		TextField = TextField + TextField1
+
+	}
+
+	//новые поля
+	Otvet = strings.ReplaceAll(Otvet, "//TextNewFields\n", TextField)
+
+	//описание таблицы
+	Otvet = strings.ReplaceAll(Otvet, "//TextDescription", Table1.Comment)
+
+	return Otvet
 }

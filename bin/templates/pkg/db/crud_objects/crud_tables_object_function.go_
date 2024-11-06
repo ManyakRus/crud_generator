@@ -1,4 +1,4 @@
-	//ObjectFieldNameTable
+	//FieldNameTable
 	ModelNameColumn:= TableNameForeign.ModelNameForeign{}
 	ModelNameColumn.PrimaryKeyNameF = m.FieldNameTable
 	err = crud_TableNameForeign.Read_ctx(ctx, db, &ModelNameColumn)

@@ -21,8 +21,15 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			continue
 		}
 
-		//создание файлов
+		//model
 		err = CreateFiles(MapAll, Table1)
+		if err != nil {
+			log.Error("CreateFiles() table: ", Table1.Name, ", error: ", err)
+			return err
+		}
+
+		//crud
+		err = CreateFiles_crud(MapAll, Table1)
 		if err != nil {
 			log.Error("CreateFiles() table: ", Table1.Name, ", error: ", err)
 			return err

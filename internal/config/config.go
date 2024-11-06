@@ -92,6 +92,7 @@ type SettingsINI struct {
 	PREFIX_SERVER_GRPC                               string
 	PREFIX_CLIENT_GRPC                               string
 	PREFIX_CRUD                                      string
+	SUFFIX_CRUD                                      string
 	PREFIX_MODEL                                     string
 	PREFIX_TABLE                                     string
 	COMMENT_MODEL_STRUCT                             string
@@ -221,11 +222,12 @@ type SettingsINI struct {
 	TESTS_FOLDERNAME  string
 
 	//Objects
-	NEED_CREATE_READOBJECT              bool
-	PREFIX_READOBJECT                   string
-	PREFIX_CRUD_READOBJECT              string
-	TEMPLATES_READOBJECT_FOLDERNAME     string
-	TEMPLATES_MODEL_READOBJECT_FILENAME string
+	NEED_CREATE_READOBJECT                   bool
+	PREFIX_READOBJECT                        string
+	PREFIX_CRUD_READOBJECT                   string
+	TEMPLATES_READOBJECT_FOLDERNAME          string
+	TEMPLATES_MODEL_READOBJECT_FILENAME      string
+	TEMPLATES_MODEL_CRUD_READOBJECT_FILENAME string
 
 	TEMPLATES_CRUD_READOBJECT_FOLDERNAME string
 
@@ -1286,6 +1288,16 @@ func FillSettings() {
 	Name = "TESTS_FOLDERNAME"
 	s = Getenv(Name, true)
 	Settings.TESTS_FOLDERNAME = s
+
+	//
+	Name = "TEMPLATES_MODEL_CRUD_READOBJECT_FILENAME"
+	s = Getenv(Name, true)
+	Settings.TEMPLATES_MODEL_CRUD_READOBJECT_FILENAME = s
+
+	//
+	Name = "SUFFIX_CRUD"
+	s = Getenv(Name, true)
+	Settings.SUFFIX_CRUD = s
 
 }
 
