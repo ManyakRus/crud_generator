@@ -127,6 +127,12 @@ func CreateFiles_ReadObjectTable(MapAll map[string]*types.Table, Table1 *types.T
 
 	//
 	for _, Column1 := range Table1.MapColumns {
+
+		IsGoodColumn := create_files.IsGood_Column(Column1)
+		if IsGoodColumn != nil {
+			continue
+		}
+
 		IsForeignColumn := create_files.IsForeignColumn(MapAll, Column1)
 		if IsForeignColumn == false {
 			continue
