@@ -243,7 +243,7 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
+		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
 
 	}

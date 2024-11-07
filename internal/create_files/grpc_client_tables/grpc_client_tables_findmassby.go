@@ -241,7 +241,7 @@ func CreateFiles_FindMassBy_Test(Table1 *types.Table) error {
 		GRPClientTableURL := create_files.Find_GRPCClientTableURL(Table1.Name)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientTableURL)
 
-		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
+		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, CrudFuncURL)
 	}
 

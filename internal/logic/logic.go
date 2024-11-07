@@ -6,7 +6,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/create_files/alias"
 	"github.com/ManyakRus/crud_generator/internal/create_files/constants_file"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud"
-	"github.com/ManyakRus/crud_generator/internal/create_files/crud_object_tables"
+	"github.com/ManyakRus/crud_generator/internal/create_files/crud_readobject_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_starter_tables"
 	"github.com/ManyakRus/crud_generator/internal/create_files/crud_tables"
@@ -241,7 +241,7 @@ func StartFillAll() error {
 			return err
 		}
 
-		err = crud_object_tables.CreateAllFiles(MapAll)
+		err = crud_readobject_tables.CreateAllFiles(MapAll)
 		if err != nil {
 			//log.Error("env_file.CreateAllFiles() error: ", err)
 			return err

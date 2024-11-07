@@ -203,7 +203,7 @@ func CreateFiles_FindBy_Test(Table1 *types.Table) error {
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
+		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
 
 	}

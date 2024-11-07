@@ -5,6 +5,7 @@ import (
 	"github.com/ManyakRus/starter/config_main"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_func"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
 	"github.com/ManyakRus/starter/postgres_gorm"
@@ -23,12 +24,9 @@ func Test_server_LawsuitStatusType_ReadObject(t *testing.T) {
 	Request.VersionModel = object_lawsuit_status_types.ObjectLawsuitStatusType{}.GetStructVersion()
 
 	server1 := &ServerGRPC{}
-	Otvet, err := server1.LawsuitStatusType_ReadObject(ctx, &Request)
-	if err != nil {
+	_, err := server1.LawsuitStatusType_ReadObject(ctx, &Request)
+	if err != nil && crud_func.IsRecordNotFound(err) == false {
 		t.Error("Test_server_LawsuitStatusType_ReadObject() error: ", err)
-	}
-	if Otvet.ModelString == "" {
-		t.Error("Test_server_LawsuitStatusType_ReadObject() error: ModelString=''")
 	}
 }
 

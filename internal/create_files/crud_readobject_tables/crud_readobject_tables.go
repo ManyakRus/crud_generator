@@ -1,4 +1,4 @@
-package crud_object_tables
+package crud_readobject_tables
 
 import (
 	"github.com/ManyakRus/crud_generator/internal/create_files"

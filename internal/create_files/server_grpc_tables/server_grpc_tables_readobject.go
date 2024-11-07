@@ -147,12 +147,19 @@ func CreateFiles_ReadObject_Test(Table1 *types.Table) error {
 		ProtoURL := create_files.Find_ProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
+		//
 		CrudStarterURL := create_files.Find_CrudStarterURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudStarterURL)
 
+		//
+		CrudFuncURL := create_files.Find_CrudFuncURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudFuncURL)
+
+		//
 		ConstantsURL := create_files.Find_ConstantsURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
 
+		//
 		TextGRPCServer = create_files.CheckAndAdd_Import(TextGRPCServer, "encoding/json")
 
 		//замена "postgres_gorm.Connect_WithApplicationName("

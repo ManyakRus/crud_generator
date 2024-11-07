@@ -1,4 +1,4 @@
-package crud_object_tables
+package crud_readobject_tables
 
 import (
 	"fmt"
@@ -80,6 +80,11 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 	FieldNamesWithCommaM := create_files.Find_FieldNamesWithComma_from_Table_VariableName(Table1, "m")
 	TextCrud = strings.ReplaceAll(TextCrud, "FieldNamesWithCommaM", FieldNamesWithCommaM)
 
+	//создание текста
+	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
+	TextCrud = create_files.Replace_TemplateTableName_to_TableName(TextCrud, Table1.Name)
+	TextCrud = create_files.AddText_ModuleGenerated(TextCrud)
+
 	//создание функций
 	TextCrud, TextCrudFunc := CreateFiles_ReadObjectTable(MapAll, Table1, TextCrud, TextTemplatedFunction)
 	//if TextCrudFunc == "" {
@@ -87,11 +92,6 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 	//}
 	//TextCrud = TextCrud + TextCrudFunc
 	TextCrud = strings.ReplaceAll(TextCrud, "\t//TextFillManyFields", TextCrudFunc)
-
-	//создание текста
-	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
-	TextCrud = create_files.Replace_TemplateTableName_to_TableName(TextCrud, Table1.Name)
-	TextCrud = create_files.AddText_ModuleGenerated(TextCrud)
 
 	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
@@ -286,7 +286,7 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 		TextCrud = create_files.AddImport(TextCrud, CrudStarterURL)
 
 		//
-		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
+		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
 
 	}

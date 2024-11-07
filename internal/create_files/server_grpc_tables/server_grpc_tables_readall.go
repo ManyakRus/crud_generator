@@ -181,7 +181,7 @@ func CreateFiles_ReadAll_Test(Table1 *types.Table) error {
 		ProtoURL := create_files.Find_ProtoURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ProtoURL)
 
-		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
+		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudFuncURL)
 
 	}

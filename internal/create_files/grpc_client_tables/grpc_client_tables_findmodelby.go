@@ -260,7 +260,7 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 		GRPClientTableURL := create_files.Find_GRPCClientTableURL(Table1.Name)
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPClientTableURL)
 
-		CrudFuncURL := create_files.Find_CrudFuncURL(TableName)
+		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, CrudFuncURL)
 
 	}
