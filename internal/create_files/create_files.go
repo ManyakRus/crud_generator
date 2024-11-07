@@ -3084,3 +3084,14 @@ func Find_ObjectColumnModelName(ColumnName string) string {
 //
 //	return Otvet
 //}
+
+// SnakeCase_lower - возвращает строку в формате snake_case, в нижнем регистре
+func SnakeCase_lower(Text string) string {
+	Otvet := Text
+
+	str := stringy.New(Otvet)
+	Otvet = str.SnakeCase("?", "").Get()
+	Otvet = strings.ToLower(Otvet)
+
+	return Otvet
+}

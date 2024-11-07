@@ -122,14 +122,15 @@ func CreateFiles1(MapAll map[string]*types.Table, Table1 *types.Table, TextGo st
 		//	continue
 		//}
 
+		//добавим поле
+		ModelNameColumn := create_files.Find_ObjectColumnModelName(Column1.NameGo)
+		JsonName := create_files.SnakeCase_lower(ModelNameColumn)
+		TextField1 := "\t" + ModelNameColumn + " " + TableFK.Name + "." + TableFK.NameGo + "\t`" + `json:"` + JsonName + `"	gorm:"-:all"` + "`" + "\n"
+		TextField = TextField + TextField1
+
 		//добавим import
 		ModelTableURL := create_files.Find_ModelTableURL(TableNameFK)
 		Otvet = create_files.AddImport(Otvet, ModelTableURL)
-
-		//добавим поле
-		ModelNameColumn := create_files.Find_ObjectColumnModelName(Column1.NameGo)
-		TextField1 := "\t" + ModelNameColumn + " " + TableFK.Name + "." + TableFK.NameGo + "\n"
-		TextField = TextField + TextField1
 
 	}
 
