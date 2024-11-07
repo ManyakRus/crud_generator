@@ -22,7 +22,7 @@ func (crud Crud_GRPC) ReadObject(m *object_lawsuit_status_types.ObjectLawsuitSta
 	grpc_client_func.Func_Connect_GRPC_NRPC.Connect_GRPC_NRPC()
 
 	// подготовка запроса
-	var versionModel = crud.GetVersionModel()
+	var versionModel = m.GetStructVersion()
 
 	Request := &grpc_proto.RequestId{}
 	Request.ID = ProtoFromInt(m.ID)
