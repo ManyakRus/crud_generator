@@ -46,6 +46,9 @@ func CreateFiles(MapAll map[string]*types.Table, Table1 *types.Table) error {
 	//заменим имя пакета на новое
 	TextGo = create_files.Replace_PackageName(TextGo, DirReadyTable)
 
+	//заменим имя модели
+	TextGo = create_files.Replace_ModelAndTableName(TextGo, Table1)
+
 	//ModelName := Table1.NameGo
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
@@ -60,9 +63,6 @@ func CreateFiles(MapAll map[string]*types.Table, Table1 *types.Table) error {
 
 	////замена импортов на новые URL
 	//TextGo = create_files.Replace_RepositoryImportsURL(TextGo)
-
-	//заменим имя модели
-	TextGo = create_files.Replace_ModelAndTableName(TextGo, Table1)
 
 	//uuid
 	TextGo = create_files.CheckAndAdd_ImportUUID_FromText(TextGo)

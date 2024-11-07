@@ -170,6 +170,7 @@ func InitCrudTransport_DB() {`
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		Otvet = Otvet + ` 
 	initCrudTransport_manual_DB()
+	InitCrudTransport_ReadObject_DB()
 `
 	}
 	//сортировка по названию таблиц
@@ -217,6 +218,7 @@ func InitCrudTransport_GRPC() {`
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		Otvet = Otvet + ` 
 	initCrudTransport_manual_GRPC()
+	InitCrudTransport_ReadObject_GRPC()
 `
 	}
 
@@ -265,6 +267,7 @@ func InitCrudTransport_NRPC() {`
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		Otvet = Otvet + ` 
 	initCrudTransport_manual_NRPC()
+	InitCrudTransport_ReadObject_NRPC()
 `
 	}
 	//сортировка по названию таблиц
