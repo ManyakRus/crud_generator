@@ -170,8 +170,11 @@ func InitCrudTransport_DB() {`
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		Otvet = Otvet + ` 
 	initCrudTransport_manual_DB()
-	InitCrudTransport_ReadObject_DB()
 `
+		if config.Settings.NEED_CREATE_READOBJECT == true {
+			Otvet = Otvet + `	InitCrudTransport_ReadObject_DB()
+`
+		}
 	}
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(MapAll))
@@ -216,10 +219,13 @@ func FindTextGRPC(MapAll map[string]*types.Table, ModelURL string) string {
 func InitCrudTransport_GRPC() {`
 
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
-		Otvet = Otvet + ` 
+		Otvet = Otvet + `
 	initCrudTransport_manual_GRPC()
-	InitCrudTransport_ReadObject_GRPC()
 `
+		if config.Settings.NEED_CREATE_READOBJECT == true {
+			Otvet = Otvet + `	InitCrudTransport_ReadObject_GRPC()
+`
+		}
 	}
 
 	//сортировка по названию таблиц
@@ -267,8 +273,11 @@ func InitCrudTransport_NRPC() {`
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		Otvet = Otvet + ` 
 	initCrudTransport_manual_NRPC()
-	InitCrudTransport_ReadObject_NRPC()
 `
+		if config.Settings.NEED_CREATE_READOBJECT == true {
+			Otvet = Otvet + `	InitCrudTransport_ReadObject_NRPC()
+`
+		}
 	}
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(MapAll))
