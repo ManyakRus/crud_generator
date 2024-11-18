@@ -232,9 +232,9 @@ func SetTimeoutSeconds(seconds int) {
 // Connect_GRPC_NRPC - подключается к серверу GRPC или NRPC, при ошибке вызывает панику
 func (Object_Connect_GRPC_NRPC) Connect_GRPC_NRPC() {
 	if grpc_nrpc.NeedNRPC == true {
-		if nrpc_client.Client == nil {
-			nrpc_client.Connect()
-		}
+		//if nrpc_client.Client == nil {
+		//	nrpc_client.Connect()
+		//}
 	} else {
 		if grpc_client_func.Client == nil {
 			Connect()

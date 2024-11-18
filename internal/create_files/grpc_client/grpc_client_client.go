@@ -53,9 +53,17 @@ func CreateGRPCClient() error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
 
 		//nrpc_client
-		if config.Settings.NEED_CREATE_NRPC == false {
+		if config.Settings.NEED_CREATE_NRPC == true {
 			NRPC_CLIENT_URL := create_files.Find_NRPC_Client_URL()
 			TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_CLIENT_URL)
+
+			//
+			TextTemplate := `		//if nrpc_client.Client == nil {
+		//	nrpc_client.Connect()
+		//}
+`
+			TextNew := strings.ReplaceAll(TextTemplate, "//", "")
+			TextGRPCClient = strings.ReplaceAll(TextGRPCClient, TextTemplate, TextNew)
 		}
 
 		//grpc_client_func
