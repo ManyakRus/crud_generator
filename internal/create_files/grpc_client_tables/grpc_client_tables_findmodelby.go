@@ -71,9 +71,15 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
 
-		NRPC_Client_URL := create_files.Find_NRPC_Client_URL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_Client_URL)
+		//NRPC
+		if config.Settings.NEED_CREATE_NRPC == true {
+			//
+			NRPC_Client_URL := create_files.Find_NRPC_Client_URL()
+			TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_Client_URL)
 
+			//уберём "//"
+			TextGRPCClient = Replace_NRPC_CLIENT(TextGRPCClient)
+		}
 	}
 
 	//создание функций

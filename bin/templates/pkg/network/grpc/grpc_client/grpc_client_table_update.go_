@@ -8,7 +8,6 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 )
 
@@ -37,7 +36,7 @@ func (crud Crud_GRPC) UpdateManyFields(m *lawsuit_status_types.LawsuitStatusType
 
 	// запрос
 	if grpc_nrpc.NeedNRPC == true {
-		_, err = nrpc_client.Client.LawsuitStatusType_UpdateManyFields(Request)
+		//_, err = nrpc_client.Client.LawsuitStatusType_UpdateManyFields(Request)
 	} else {
 		_, err = grpc_client_func.Client.LawsuitStatusType_UpdateManyFields(ctx, Request)
 	}

@@ -9,7 +9,7 @@ import (
 func CreateAllFiles() error {
 	var err error
 
-	if config.Settings.NEED_CREATE_GRPC == false {
+	if config.Settings.NEED_CREATE_NRPC == false {
 		return err
 	}
 

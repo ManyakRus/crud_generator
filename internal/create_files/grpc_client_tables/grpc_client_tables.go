@@ -355,3 +355,13 @@ func Replace_PrimaryKeyRequest_ID(Text string, Table1 *types.Table) string {
 
 	return Otvet
 }
+
+// Replace_NRPC_CLIENT - включает NRPC, заменяет //Response, err = nrpc_client. на Response, err = nrpc_client.
+func Replace_NRPC_CLIENT(Text string) string {
+	Otvet := Text
+
+	Otvet = strings.ReplaceAll(Otvet, "//Response, err = nrpc_client.", "Response, err = nrpc_client.")
+	Otvet = strings.ReplaceAll(Otvet, "//_, err = nrpc_client.Client.", "_, err = nrpc_client.Client.")
+
+	return Otvet
+}

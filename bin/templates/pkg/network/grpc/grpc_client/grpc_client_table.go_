@@ -7,7 +7,6 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
 	"github.com/ManyakRus/starter/log"
@@ -60,7 +59,7 @@ func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	// запрос
 	var Response *grpc_proto.Response
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_Read(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_Read(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_Read(ctx, Request)
 	}
@@ -106,7 +105,7 @@ func (crud Crud_GRPC) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 	// запрос
 	var Response *grpc_proto.Response
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_Create(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_Create(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_Create(ctx, Request)
 	}
@@ -152,7 +151,7 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	// запрос
 	var Response *grpc_proto.Response
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_Update(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_Update(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_Update(ctx, Request)
 	}
@@ -198,7 +197,7 @@ func (crud Crud_GRPC) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 	// запрос
 	var Response *grpc_proto.Response
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_Save(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_Save(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_Save(ctx, Request)
 	}
@@ -240,7 +239,7 @@ func (crud Crud_GRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	// запрос
 	var Response *grpc_proto.Response
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_Delete(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_Delete(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_Delete(ctx, Request)
 	}
@@ -282,7 +281,7 @@ func (crud Crud_GRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	// запрос
 	var Response *grpc_proto.Response
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_Restore(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_Restore(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_Restore(ctx, Request)
 	}
@@ -325,7 +324,7 @@ func (crud Crud_GRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) er
 	//запрос
 	var Response *grpc_proto.Response
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_FindByExtID(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_FindByExtID(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_FindByExtID(ctx, Request)
 	}

@@ -71,8 +71,12 @@ func CreateFiles_FindMassBy(Table1 *types.Table) error {
 		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
 
-		NRPC_Client_URL := create_files.Find_NRPC_Client_URL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_Client_URL)
+		//NRPC
+		if config.Settings.NEED_CREATE_NRPC == true {
+			//
+			NRPC_Client_URL := create_files.Find_NRPC_Client_URL()
+			TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_Client_URL)
+		}
 
 	}
 
@@ -82,6 +86,12 @@ func CreateFiles_FindMassBy(Table1 *types.Table) error {
 		return err
 	}
 	TextGRPCClient = TextGRPCClient + TextGRPCClientFunc
+
+	//NRPC
+	if config.Settings.NEED_CREATE_NRPC == true {
+		//уберём "//"
+		TextGRPCClient = Replace_NRPC_CLIENT(TextGRPCClient)
+	}
 
 	//создание текста
 	TextGRPCClient = create_files.Replace_TemplateModel_to_Model(TextGRPCClient, Table1.NameGo)

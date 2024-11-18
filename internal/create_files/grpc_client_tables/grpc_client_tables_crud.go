@@ -62,8 +62,13 @@ func CreateFiles(Table1 *types.Table) error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPCClientFuncURL)
 
 		//nrpc client
-		RepositoryNRPCClientlURL := create_files.Find_NRPClientURL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryNRPCClientlURL)
+		if config.Settings.NEED_CREATE_NRPC == true {
+			RepositoryNRPCClientlURL := create_files.Find_NRPClientURL()
+			TextGRPCClient = create_files.AddImport(TextGRPCClient, RepositoryNRPCClientlURL)
+
+			//уберём "//"
+			TextGRPCClient = Replace_NRPC_CLIENT(TextGRPCClient)
+		}
 
 		//constants GRPC
 		RepositoryGRPCConstantsURL := create_files.Find_GRPCConstantsURL()

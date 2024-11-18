@@ -73,8 +73,10 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 		GRPC_NRPC_URL := create_files.Find_GRPC_NRPC_URL()
 		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, GRPC_NRPC_URL)
 
-		NRPCClientURL := create_files.Find_NRPClientURL()
-		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, NRPCClientURL)
+		if config.Settings.NEED_CREATE_NRPC == true {
+			NRPCClientURL := create_files.Find_NRPClientURL()
+			TextGRPC_Client = create_files.AddImport(TextGRPC_Client, NRPCClientURL)
+		}
 
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextGRPC_Client = create_files.AddImport(TextGRPC_Client, ModelTableURL)
@@ -88,6 +90,12 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	//if TextUpdateEveryColumn == "" {
 	//	return err
 	//}
+
+	//NRPC
+	if config.Settings.NEED_CREATE_NRPC == true {
+		//уберём "//"
+		TextGRPC_Client = Replace_NRPC_CLIENT(TextGRPC_Client)
+	}
 
 	//ModelName := Table1.NameGo
 	//TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)

@@ -19,7 +19,7 @@ func (crud Crud_GRPC) ReadAll() ([]lawsuit_status_types.LawsuitStatusType, error
 	// запрос
 	var Response *grpc_proto.ResponseMass
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_ReadAll(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_ReadAll(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_ReadAll(ctx, Request)
 	}

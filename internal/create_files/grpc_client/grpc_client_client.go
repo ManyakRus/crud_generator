@@ -53,8 +53,10 @@ func CreateGRPCClient() error {
 		TextGRPCClient = create_files.AddImport(TextGRPCClient, GRPC_NRPC_URL)
 
 		//nrpc_client
-		NRPC_CLIENT_URL := create_files.Find_NRPC_Client_URL()
-		TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_CLIENT_URL)
+		if config.Settings.NEED_CREATE_NRPC == false {
+			NRPC_CLIENT_URL := create_files.Find_NRPC_Client_URL()
+			TextGRPCClient = create_files.AddImport(TextGRPCClient, NRPC_CLIENT_URL)
+		}
 
 		//grpc_client_func
 		GRPC_CLIENT_FUNC_URL := create_files.Find_GRPCClient_func_URL()

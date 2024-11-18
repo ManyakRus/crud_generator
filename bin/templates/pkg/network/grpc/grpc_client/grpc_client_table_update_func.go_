@@ -19,7 +19,7 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 
 	// запрос
 	if grpc_nrpc.NeedNRPC == true {
-		_, err = nrpc_client.Client.LawsuitStatusType_Update(Request)
+		//_, err = nrpc_client.Client.LawsuitStatusType_Update(Request)
 	} else {
 		_, err = grpc_client_func.Client.LawsuitStatusType_Update(ctx, Request)
 	}

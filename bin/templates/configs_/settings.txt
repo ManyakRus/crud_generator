@@ -137,7 +137,7 @@ NEED_CREATE_CRUD=true
 NEED_CREATE_GRPC=true
 
 #NEED_CREATE_NRPC - fill "true" if you want create nrpc operations files (need NATS message query server)
-NEED_CREATE_NRPC=true
+NEED_CREATE_NRPC=false
 
 #NEED_CREATE_MODEL_CRUD - fill "true" if you want create crud operations in model files
 NEED_CREATE_MODEL_CRUD=true

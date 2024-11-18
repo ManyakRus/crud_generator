@@ -8,7 +8,6 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"time"
 )
@@ -35,7 +34,7 @@ func (crud Crud_GRPC) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatu
 	// запрос
 	var Response *grpc_proto.Response
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_ReadFromCache(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_ReadFromCache(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_ReadFromCache(ctx, Request)
 	}

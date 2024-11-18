@@ -20,7 +20,7 @@ func (crud Crud_GRPC) FindMassBy_FieldNamesWithUnderline(m *lawsuit_status_types
 	// запрос
 	var Response *grpc_proto.ResponseMass
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(ctx, Request)
 	}

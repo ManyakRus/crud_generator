@@ -7,7 +7,6 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_client"
-	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/nrpc/nrpc_client"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/objects/object_lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc_nrpc"
 	"github.com/ManyakRus/starter/log"
@@ -35,7 +34,7 @@ func (crud Crud_GRPC) ReadObject(m *object_lawsuit_status_types.ObjectLawsuitSta
 	// запрос
 	var Response *grpc_proto.Response
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_ReadObject(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_ReadObject(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_ReadObject(ctx, Request)
 	}

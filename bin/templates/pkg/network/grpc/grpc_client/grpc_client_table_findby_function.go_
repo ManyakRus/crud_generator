@@ -19,7 +19,7 @@ func (crud Crud_GRPC) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.Law
 	// запрос
 	var Response *grpc_proto.Response
 	if grpc_nrpc.NeedNRPC == true {
-		Response, err = nrpc_client.Client.LawsuitStatusType_FindBy_FieldNamesWithUnderline(Request)
+		//Response, err = nrpc_client.Client.LawsuitStatusType_FindBy_FieldNamesWithUnderline(Request)
 	} else {
 		Response, err = grpc_client_func.Client.LawsuitStatusType_FindBy_FieldNamesWithUnderline(ctx, Request)
 	}
