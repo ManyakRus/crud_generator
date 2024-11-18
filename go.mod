@@ -1,11 +1,9 @@
 module github.com/ManyakRus/crud_generator
 
-go 1.22.0
-
-toolchain go1.22.1
+go 1.22.1
 
 require (
-	github.com/ManyakRus/starter v1.0.66
+	github.com/ManyakRus/starter v1.0.84
 	github.com/alexsergivan/transliterator v1.0.1
 	github.com/bxcodec/faker/v3 v3.8.1
 	github.com/davecgh/go-spew v1.1.1
@@ -17,7 +15,7 @@ require (
 	github.com/ompluscator/dynamic-struct v1.4.0
 	github.com/otiai10/copy v1.14.0
 	github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e
-	golang.org/x/tools v0.26.0
+	golang.org/x/tools v0.27.0
 	gorm.io/gorm v1.25.12
 )
 
@@ -30,11 +28,11 @@ require (
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
-	golang.org/x/crypto v0.28.0 // indirect
-	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
-	golang.org/x/mod v0.21.0 // indirect
-	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/crypto v0.29.0 // indirect
+	golang.org/x/exp v0.0.0-20241108190413-2d47ceb2692f // indirect
+	golang.org/x/mod v0.22.0 // indirect
+	golang.org/x/sync v0.9.0 // indirect
+	golang.org/x/sys v0.27.0 // indirect
+	golang.org/x/text v0.20.0 // indirect
 	gorm.io/driver/postgres v1.5.9 // indirect
 )

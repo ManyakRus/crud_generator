@@ -575,6 +575,15 @@ func StringDate(t time.Time) string {
 	return Otvet
 }
 
+// StringDateTime - возвращает строку дата и время, без миллисекунд
+func StringDateTime(t time.Time) string {
+	Otvet := ""
+
+	Otvet = t.Format("02.01.2006 15:04:05")
+
+	return Otvet
+}
+
 // ProgramDir_bin - возвращает каталог "bin" или каталог программы
 func ProgramDir_bin() string {
 	Otvet := ""
@@ -1204,5 +1213,64 @@ func MassFrom_Map[C constraints.Ordered, V any](Map map[C]V) []V {
 		Otvet = append(Otvet, Value)
 	}
 
+	return Otvet
+}
+
+// Substring - take at most last n characters, from start index
+func Substring(input string, StartIndex int, length int) string {
+	//asRunes := []rune(input)
+
+	if StartIndex >= len(input) {
+		return ""
+	}
+
+	if (StartIndex + length) >= len(input) {
+		length = len(input) - StartIndex
+	}
+
+	//if StartIndex+length > len(asRunes) {
+	//	length = len(asRunes) - StartIndex
+	//}
+
+	Otvet := string(input[StartIndex : StartIndex+length])
+	return Otvet
+}
+
+// IntNot0 - возвращает первое ненулевое значение
+func IntNot0(MassInt ...int) int {
+	Otvet := 0
+
+	for _, v := range MassInt {
+		if v != 0 {
+			Otvet = v
+			break
+		}
+	}
+
+	return Otvet
+}
+
+// InsertTextFrom - вставляет текст в середину строки
+func InsertTextFrom(Text string, TextAdd string, IndexFrom int) string {
+	var buffer bytes.Buffer
+
+	//
+	if IndexFrom >= len(Text) {
+		return Text + TextAdd
+	}
+
+	//
+	if IndexFrom < 0 {
+		return TextAdd + Text
+	}
+
+	//
+	s2 := SubstringLeft(Text, IndexFrom+1)
+	buffer.WriteString(s2)
+	buffer.WriteString(TextAdd)
+	s3 := Substring(Text, IndexFrom, len(Text+TextAdd))
+	buffer.WriteString(s3)
+
+	Otvet := buffer.String()
 	return Otvet
 }

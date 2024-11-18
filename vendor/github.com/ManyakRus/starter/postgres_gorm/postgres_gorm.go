@@ -52,7 +52,7 @@ type SettingsINI struct {
 // NamingStrategy - структура для хранения настроек наименования таблиц
 var NamingStrategy = schema.NamingStrategy{}
 
-// Connect_err - подключается к базе данных
+// Connect - подключается к базе данных
 func Connect() {
 
 	if Settings.DB_HOST == "" {
@@ -63,16 +63,6 @@ func Connect() {
 
 	err := Connect_err()
 	LogInfo_Connected(err)
-
-}
-
-// LogInfo_Connected - выводит сообщение в Лог, или паника при ошибке
-func LogInfo_Connected(err error) {
-	if err != nil {
-		log.Panicln("POSTGRES gorm Connect() to database host: ", Settings.DB_HOST, ", Error: ", err)
-	} else {
-		log.Info("POSTGRES gorm Connected. host: ", Settings.DB_HOST, ", base name: ", Settings.DB_NAME, ", schema: ", Settings.DB_SCHEMA)
-	}
 
 }
 
@@ -117,6 +107,11 @@ func Connect_WithApplicationName_err(ApplicationName string) error {
 
 	if Settings.DB_HOST == "" {
 		FillSettings()
+	}
+
+	//
+	if contextmain.GetContext().Err() != nil {
+		return contextmain.GetContext().Err()
 	}
 
 	//get the database connection URL.
@@ -329,9 +324,10 @@ func Start_ctx(ctx *context.Context, WaitGroup *sync.WaitGroup) error {
 // Start - делает соединение с БД, отключение и др.
 func Start(ApplicationName string) {
 	err := Connect_WithApplicationName_err(ApplicationName)
-	if err != nil {
-		log.Panic("Postgres gorm Start() error: ", err)
-	}
+	LogInfo_Connected(err)
+	//if err != nil {
+	//	log.Panic("Postgres gorm Start() error: ", err)
+	//}
 
 	stopapp.GetWaitGroup_Main().Add(1)
 	go WaitStop()
@@ -627,4 +623,14 @@ func ReplaceTemporaryTableNamesToUnique(TextSQL string) string {
 // true = не переименовывать
 func SetSingularTableNames(IsSingular bool) {
 	NamingStrategy.SingularTable = IsSingular
+}
+
+// LogInfo_Connected - выводит сообщение в Лог, или паника при ошибке
+func LogInfo_Connected(err error) {
+	if err != nil {
+		log.Panicln("POSTGRES gorm Connect() to database host: ", Settings.DB_HOST, ", Error: ", err)
+	} else {
+		log.Info("POSTGRES gorm Connected. host: ", Settings.DB_HOST, ", base name: ", Settings.DB_NAME, ", schema: ", Settings.DB_SCHEMA)
+	}
+
 }

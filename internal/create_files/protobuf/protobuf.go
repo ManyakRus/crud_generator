@@ -68,8 +68,22 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	}
 	sort.Strings(keys)
 
+	//найдём куда вставить текст
+	sFind := "\nservice "
+	PosProtoService := strings.Index(TextProto, sFind)
+	if PosProtoService < 0 {
+		log.Panic("Not found text ", sFind)
+	}
+
+	s2 := TextProto[PosProtoService+1:]
+	sFind = "\n"
+	posEnd := strings.Index(s2, sFind)
+	if posEnd < 0 {
+		log.Panic("Not found text ", sFind)
+	}
+	PosProtoService = PosProtoService + posEnd + 1
+
 	//найдём новый текст для каждой таблицы
-	TextProtoNew := ""
 	for _, key1 := range keys {
 		Table1, ok := MapAll[key1]
 		if ok == false {
@@ -83,8 +97,22 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 			continue
 		}
 
+		//Найдём место куда добавить текст
+		TextProtoNew := ""
+		Text1 := ""
+
+		//
+		Text1 = Find_CommentModel(TextProto, Table1)
+		TextProtoNew = TextProtoNew + Text1
+		//TextProto = micro.InsertTextFrom(TextProto, Text1, PosProtoService)
+
+		//
 		TextProtoNew = TextProtoNew + FindText_ProtoTable1(TextProto, Table1)
+
+		//
 		TextProtoNew = TextProtoNew + FindText_ProtoTable1_UpdateManyFields(TextProto, Table1)
+
+		//
 		TextProtoNew = TextProtoNew + FindText_ProtoTable1_UpdateEveryColumn(TextProto, Table1)
 
 		//добавим текст FindBy
@@ -94,48 +122,43 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 
 		//добавим текст FindMassBy
 		TextProto, TextProtoNew1 = FindText_FindMassBy(TextProto, Table1)
-		TextProtoNew = TextProtoNew + TextProtoNew1
+		Text1 = TextProtoNew1
+		TextProtoNew = TextProtoNew + Text1
 
 		//добавим текст ReadAll
 		TextProto, TextProtoNew1 = FindText_ReadAll(TextProto, Table1)
-		TextProtoNew = TextProtoNew + TextProtoNew1
+		Text1 = TextProtoNew1
+		TextProtoNew = TextProtoNew + Text1
 
 		//добавим текст FindModelBy
 		TextProto, TextProtoNew1 = FindText_FindModelBy(MapAll, TextProto, Table1)
-		TextProtoNew = TextProtoNew + TextProtoNew1
+		Text1 = TextProtoNew1
+		TextProtoNew = TextProtoNew + Text1
 
 		//cache
 		if config.Settings.NEED_CREATE_CACHE_API == true {
-			TextProtoNew = TextProtoNew + FindText_ProtoTable1_Cache(TextProto, Table1)
+			Text1 = FindText_ProtoTable1_Cache(TextProto, Table1)
+			TextProtoNew = TextProtoNew + Text1
 		}
 
 		//ReadObject
 		if config.Settings.NEED_CREATE_READOBJECT == true {
 			TextProto, TextProtoNew1 = FindText_ReadObject(TextProto, Table1)
+			TextProtoNew = TextProtoNew + TextProtoNew1
 		}
-		TextProtoNew = TextProtoNew + TextProtoNew1
+
+		//TextProtoNew = TextProtoNew + TextProtoNew1
 
 		//
 		TextProto = AddTextMessageRequestID(TextProto, Table1)
-	}
 
-	//найдём куда вставить текст
-	sFind := "\nservice "
-	pos1 := strings.Index(TextProto, sFind)
-	if pos1 < 0 {
-		log.Panic("Not found text ", sFind)
+		//
+		PosProto_ForInsert := FindPosProto_ForInsert(TextProto, Table1, PosProtoService)
+		TextProto = micro.InsertTextFrom(TextProto, TextProtoNew, PosProto_ForInsert)
+		//TextProto = TextProto[:PosProto_ForInsert] + TextProtoNew + TextProto[PosProtoService:]
 	}
-
-	s2 := TextProto[pos1+1:]
-	sFind = "\n"
-	posEnd := strings.Index(s2, sFind)
-	if posEnd < 0 {
-		log.Panic("Not found text ", sFind)
-	}
-	PosStart := pos1 + posEnd + 1
 
 	//
-	TextProto = TextProto[:PosStart] + TextProtoNew + TextProto[PosStart:]
 
 	//
 	TextProto = create_files.Delete_EmptyLines(TextProto)
@@ -444,6 +467,53 @@ func AddTextMessageRequestID(TextProto string, Table1 *types.Table) string {
 
 		Otvet = AddTextMessageRequestID_ColumnType_ManyPK(Otvet, Table1, Column1)
 	}
+
+	return Otvet
+}
+
+// Find_CommentModel - возвращает комментарий //ИмяМодели
+func Find_CommentModel(TextProto string, Table1 *types.Table) string {
+	Otvet := ""
+
+	TextComment := "\n\t//" + Table1.NameGo + "\n"
+	pos1 := strings.Index(TextProto, TextComment)
+	if pos1 >= 0 {
+		return Otvet
+	}
+
+	Otvet = TextComment
+
+	return Otvet
+}
+
+// FindPosAfterCommentModel - возвращает позицию комментария //ИмяМодели
+func FindPosAfterCommentModel(TextProto string, Table1 *types.Table) int {
+	//найдём начало где комментарий
+	TextComment := "\t//" + Table1.NameGo + "\n"
+	pos1 := strings.Index(TextProto, TextComment)
+	if pos1 < 0 {
+		return -1
+	}
+	pos1 = pos1 + len(TextComment)
+
+	//найдём конец "\n\n"
+	s2 := TextProto[pos1:]
+	TextFind := "\n\n"
+	pos2 := strings.Index(s2, TextFind)
+	if pos2 < 0 {
+		return pos1
+	}
+	pos2 = pos1 + pos2 + len(TextFind) - 2
+
+	return pos2
+}
+
+// FindPosProto_ForInsert - возвращает позицию .proto для вставки, = ищет "//ИмяМодели\т" или "service"
+func FindPosProto_ForInsert(TextProto string, Table1 *types.Table, PosProtoService int) int {
+	Otvet := PosProtoService
+
+	PosProtoTable := FindPosAfterCommentModel(TextProto, Table1)
+	Otvet = micro.Max(PosProtoTable, PosProtoService)
 
 	return Otvet
 }

@@ -9,7 +9,7 @@ import (
 
 // FindText_ProtoTable1 - возвращает текст всех функций .proto для таблицы
 func FindText_ProtoTable1(TextProto string, Table1 *types.Table) string {
-	Otvet := "\n" //"\n\t//\n"
+	Otvet := "" //"\n\t//\n"
 
 	ModelName := Table1.NameGo_translit
 	//Otvet = Otvet + AddTextMessageRequestID(TextProto, Table1)

@@ -27,7 +27,7 @@ func FindText_ReadObject(TextProto string, Table1 *types.Table) (TextProtoNew st
 
 // FindText_ReadObject1 - находит текст FindBy
 func FindText_ReadObject1(Table1 *types.Table) string {
-	Otvet := ""
+	Otvet := "\n"
 
 	ModelName := Table1.NameGo_translit
 	//PrimaryKeyColumn := create_files.Find_PrimaryKeyColumn(Table1)
