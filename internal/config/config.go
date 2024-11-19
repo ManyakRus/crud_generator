@@ -79,6 +79,7 @@ type SettingsINI struct {
 	NEED_CREATE_CACHE_API                            bool
 	NEED_CREATE_CACHE_FILES                          bool
 	NEED_CREATE_CACHE_TEST_FILES                     bool
+	NEED_CREATE_MAIN_FILE                            bool
 	SERVICE_NAME                                     string
 	SERVICE_REPOSITORY_URL                           string
 	TEXT_TEMPLATE_MODEL                              string
@@ -1311,6 +1312,11 @@ func FillSettings() {
 	Name = "STARTER_TABLES_READOBJECT_TEST_FILENAME"
 	s = Getenv(Name, true)
 	Settings.STARTER_TABLES_READOBJECT_TEST_FILENAME = s
+
+	//
+	Name = "NEED_CREATE_MAIN_FILE"
+	s = Getenv(Name, true)
+	Settings.NEED_CREATE_MAIN_FILE = BoolFromString(s)
 
 }
 

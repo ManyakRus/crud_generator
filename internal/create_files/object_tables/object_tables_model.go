@@ -123,7 +123,7 @@ func CreateFiles1(MapAll map[string]*types.Table, Table1 *types.Table, TextGo st
 		//}
 
 		//добавим поле
-		ModelNameColumn := create_files.Find_ObjectColumnModelName(Column1.NameGo)
+		ModelNameColumn := create_files.Find_ObjectColumnModelName(Table1, Column1.NameGo)
 		JsonName := create_files.SnakeCase_lower(ModelNameColumn)
 		TextField1 := "\t" + ModelNameColumn + " " + TableFK.Name + "." + TableFK.NameGo + "\t`" + `json:"` + JsonName + `"	gorm:"-:all"` + "`" + "\n"
 		TextField = TextField + TextField1

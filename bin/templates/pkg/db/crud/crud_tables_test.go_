@@ -24,7 +24,7 @@ func TestRead(t *testing.T) {
 		t.Error("TestRead() error: ", err)
 	}
 
-	if int64(Otvet.ID) != Postgres_ID_Test {
+	if Otvet.ID != Postgres_ID_Test {
 		t.Error(TableName + "_test.TestRead() error ID != ", Postgres_ID_Test)
 	} else {
 		t.Log(TableName+"_test.TestRead() Otvet: ", Otvet.ID)
@@ -45,7 +45,7 @@ func TestSave(t *testing.T) {
 		t.Error("TestSave() error: ", err)
 	}
 
-	if int64(Otvet.ID) != Postgres_ID_Test {
+	if Otvet.ID != Postgres_ID_Test {
 		t.Error(TableName + "_test.TestSave() error ID != ", Postgres_ID_Test)
 	}
 

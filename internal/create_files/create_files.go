@@ -984,7 +984,7 @@ func AddImport(Text, RepositoryURL string) string {
 	Otvet := Text
 
 	//если уже есть импорт
-	pos1 := strings.Index(Otvet, `"`+RepositoryURL+`"`)
+	pos1 := strings.Index(Otvet, `"`+RepositoryURL+`"`+"\n")
 	if pos1 >= 0 {
 		return Otvet
 	}
@@ -2251,6 +2251,9 @@ func FindText_IDMinimum(Column1 *types.Column) string {
 		}
 	case "string":
 		{
+			if Column1.IDMinimum == "" {
+				return `""`
+			}
 			Otvet = `"` + IDMinimum + `"`
 		}
 	default:
@@ -2290,6 +2293,9 @@ func Replace_Model_ID_Test1(Text string, Table1 *types.Table, Column1 *types.Col
 		}
 	case "string":
 		{
+			if Column1.IDMinimum == "" {
+				IDMinimum = ""
+			}
 			Otvet = strings.ReplaceAll(Otvet, TextFind, `const `+ModelName+`_`+Name+` = "`+IDMinimum+`"`)
 		}
 	default:
@@ -3045,11 +3051,14 @@ func Find_FieldNamesWithComma_from_Table_VariableName(Table1 *types.Table, Varia
 }
 
 // Find_ObjectColumnModelName - возвращает имя модели для колонки у Object = "ModelИмяКолонкиБезИД"
-func Find_ObjectColumnModelName(ColumnName string) string {
+func Find_ObjectColumnModelName(Table1 *types.Table, ColumnName string) string {
 	Otvet := ColumnName
 
+	//
+	SuffixModel := "_model"
+
 	//добавим _model если не кончается на ID
-	Otvet = Otvet + "_model"
+	Otvet = Otvet + SuffixModel
 
 	//
 	len1 := len(ColumnName)
@@ -3062,6 +3071,11 @@ func Find_ObjectColumnModelName(ColumnName string) string {
 				Otvet = Otvet1
 			}
 		}
+	}
+
+	//
+	if Otvet == Table1.NameGo {
+		Otvet = Otvet + SuffixModel
 	}
 
 	return Otvet

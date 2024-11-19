@@ -130,9 +130,12 @@ func FindText_ModelStruct(TextModel string, Table1 *types.Table) (string, string
 	var err error
 
 	TableName := Table1.Name
-	ModelName = create_files.Find_SingularName(TableName)
-	ModelName = create_files.FormatName(ModelName)
-	Table1.NameGo = ModelName
+	ModelName = Table1.NameGo
+	//if config.Settings.SINGULAR_TABLE_NAMES == true {
+	//	ModelName = create_files.Find_SingularName(TableName)
+	//}
+	//ModelName = create_files.FormatName(ModelName)
+	//Table1.NameGo = ModelName
 
 	//удалим старые импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {

@@ -14,6 +14,10 @@ import (
 func CreateAllFiles() error {
 	var err error
 
+	if config.Settings.NEED_CREATE_MAIN_FILE == false {
+		return err
+	}
+
 	err = CreateFileMain()
 	if err != nil {
 		log.Error("CreateFileMain() error: ", err)

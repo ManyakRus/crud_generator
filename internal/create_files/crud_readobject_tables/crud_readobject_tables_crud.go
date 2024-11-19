@@ -214,7 +214,7 @@ func CreateFiles_ReadObject_Table1(MapAll map[string]*types.Table, Table1 *types
 	Otvet = strings.ReplaceAll(Otvet, "FieldNameTable", FieldNameTable)
 
 	//ModelNameColumn
-	ModelNameColumn := create_files.Find_ObjectColumnModelName(Column1.NameGo)
+	ModelNameColumn := create_files.Find_ObjectColumnModelName(Table1, Column1.NameGo)
 	Otvet = strings.ReplaceAll(Otvet, "ModelNameColumn", ModelNameColumn)
 
 	//crud_
