@@ -97,10 +97,11 @@ var MapReadAll = make(map[*Table]bool, 0)
 
 // SettingsFillFromDatabase - настройки для заполнения данных из базы данных
 type SettingsFillFromDatabase struct {
-	INCLUDE_TABLES    string
-	EXCLUDE_TABLES    string
-	NEED_USE_DB_VIEWS bool
-	MapDBTypes        map[string]*dbmeta.SQLMapping //карта соответсвий типов в базе данных и типов в golang
+	INCLUDE_TABLES       string
+	EXCLUDE_TABLES       string
+	NEED_USE_DB_VIEWS    bool
+	SINGULAR_TABLE_NAMES bool
+	MapDBTypes           map[string]*dbmeta.SQLMapping //карта соответсвий типов в базе данных и типов в golang
 	//MapPrimaryKeys    map[string][]string
 }
 

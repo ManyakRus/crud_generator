@@ -24,7 +24,7 @@ func FillMapTable(SettingsFill types.SettingsFillFromDatabase) (map[string]*type
 
 	//заполним NameGo + TypeGo + NameGo_translit
 	MapDBTypes := dbmeta.GetMappings()
-	err = FillNameGoAll(MapTable, MapDBTypes)
+	err = FillNameGoAll(SettingsFill, MapTable, MapDBTypes)
 
 	//зазполним PrimaryKeys ручные
 	err = FillPrimaryKeysAll_from_MapPrimaryKeys(MapTable, types.MapPrimaryKeys)
@@ -33,14 +33,17 @@ func FillMapTable(SettingsFill types.SettingsFillFromDatabase) (map[string]*type
 }
 
 // FillNameGoAll - заполняет NameGo во всех таблицах, а также NameGo_translit
-func FillNameGoAll(MapTable map[string]*types.Table, MapDBTypes map[string]*dbmeta.SQLMapping) error {
+func FillNameGoAll(SettingsFill types.SettingsFillFromDatabase, MapTable map[string]*types.Table, MapDBTypes map[string]*dbmeta.SQLMapping) error {
 	var err error
 
 	trans := transliterator.NewTransliterator(nil)
 
 	for TableName, Table1 := range MapTable {
 		//заполним имя колонки
-		ModelName := create_files.Find_SingularName(TableName)
+		ModelName := TableName
+		if SettingsFill.SINGULAR_TABLE_NAMES == false {
+			ModelName = create_files.Find_SingularName(TableName)
+		}
 		ModelName = create_files.FormatName(ModelName)
 		NameGo_translit := trans.Transliterate(ModelName, "en")
 		Table1.NameGo = ModelName

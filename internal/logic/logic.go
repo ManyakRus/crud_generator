@@ -46,6 +46,7 @@ func StartFillAll() error {
 	SettingsFillFromDatabase.INCLUDE_TABLES = config.Settings.INCLUDE_TABLES
 	SettingsFillFromDatabase.EXCLUDE_TABLES = config.Settings.EXCLUDE_TABLES
 	SettingsFillFromDatabase.NEED_USE_DB_VIEWS = config.Settings.NEED_USE_DB_VIEWS
+	SettingsFillFromDatabase.SINGULAR_TABLE_NAMES = config.Settings.SINGULAR_TABLE_NAMES
 	SettingsFillFromDatabase.MapDBTypes = dbmeta.GetMappings()
 	MapAll, err := database.FillMapTable(SettingsFillFromDatabase)
 	if err != nil {

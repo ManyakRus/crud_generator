@@ -68,16 +68,18 @@ func CreateFiles_ServerGRPCStarter() error {
 	}
 
 	//заменим имя сервиса на новое
-	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
-	ServiceName := config.Settings.SERVICE_NAME
-	TextAfterImport = strings.ReplaceAll(TextAfterImport, ServiceNameTemplate, ServiceName)
-	TextAfterImport = strings.ReplaceAll(TextAfterImport, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+	TextAfterImport = create_files.Replace_ServiceName(TextAfterImport)
+	//ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+	//ServiceName := config.Settings.SERVICE_NAME
+	//TextAfterImport = strings.ReplaceAll(TextAfterImport, ServiceNameTemplate, ServiceName)
+	//TextAfterImport = strings.ReplaceAll(TextAfterImport, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
 	//заменим имя сервиса на новое с CamelCase
-	ServiceNameTemplate = create_files.FormatName(ServiceNameTemplate)
-	ServiceName = create_files.FormatName(ServiceName)
-	TextAfterImport = strings.ReplaceAll(TextAfterImport, ServiceNameTemplate, ServiceName)
-	TextAfterImport = strings.ReplaceAll(TextAfterImport, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+	TextAfterImport = create_files.Replace_ServiceName_CamelCase(TextAfterImport)
+	//ServiceNameTemplate = create_files.FormatName(ServiceNameTemplate)
+	//ServiceName = create_files.FormatName(ServiceName)
+	//TextAfterImport = strings.ReplaceAll(TextAfterImport, ServiceNameTemplate, ServiceName)
+	//TextAfterImport = strings.ReplaceAll(TextAfterImport, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 	TextGRPCStarter = TextGRPCStarter[:pos1+2] + TextAfterImport
 
 	//удаление пустого импорта

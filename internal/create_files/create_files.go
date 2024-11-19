@@ -3095,3 +3095,31 @@ func SnakeCase_lower(Text string) string {
 
 	return Otvet
 }
+
+// Replace_ServiceName_CamelCase - заменяет ServiceNameTemplate на ServiceName + CamelCase
+func Replace_ServiceName_CamelCase(Text string) string {
+	Otvet := Text
+
+	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+	ServiceName := config.Settings.SERVICE_NAME
+
+	ServiceNameTemplate = FormatName(ServiceNameTemplate)
+	ServiceName = FormatName(ServiceName)
+	Otvet = strings.ReplaceAll(Otvet, ServiceNameTemplate, ServiceName)
+	Otvet = strings.ReplaceAll(Otvet, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+
+	return Otvet
+}
+
+// Replace_ServiceName - заменяет ServiceNameTemplate на ServiceName
+func Replace_ServiceName(Text string) string {
+	Otvet := Text
+
+	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+	ServiceName := config.Settings.SERVICE_NAME
+
+	Otvet = strings.ReplaceAll(Otvet, ServiceNameTemplate, ServiceName)
+	Otvet = strings.ReplaceAll(Otvet, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+
+	return Otvet
+}

@@ -62,11 +62,6 @@ func CreateFileGRPCClientFunc() error {
 	}
 	TextGRPCClientFunc := string(bytes)
 
-	//заменим название сервиса
-	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
-	ServiceNameNew := config.Settings.SERVICE_NAME
-	TextGRPCClientFunc = strings.ReplaceAll(TextGRPCClientFunc, ServiceNameTemplate, ServiceNameNew)
-
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPCClientFunc = create_files.Delete_TemplateRepositoryImports(TextGRPCClientFunc)
@@ -84,6 +79,22 @@ func CreateFileGRPCClientFunc() error {
 		TextGRPCClientFunc = create_files.AddImport(TextGRPCClientFunc, GRPCConstantsURL)
 
 	}
+
+	//заменим имя сервиса на новое
+	TextGRPCClientFunc = create_files.Replace_ServiceName(TextGRPCClientFunc)
+	//ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+	//ServiceName := config.Settings.SERVICE_NAME
+	//TextAfterImport = strings.ReplaceAll(TextAfterImport, ServiceNameTemplate, ServiceName)
+	//TextAfterImport = strings.ReplaceAll(TextAfterImport, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+
+	//заменим имя сервиса на новое с CamelCase
+	TextGRPCClientFunc = create_files.Replace_ServiceName_CamelCase(TextGRPCClientFunc)
+
+	////заменим название сервиса
+	//ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+	//ServiceNameNew := config.Settings.SERVICE_NAME
+	//TextGRPCClientFunc = strings.ReplaceAll(TextGRPCClientFunc, ServiceNameTemplate, ServiceNameNew)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCClientFunc, []byte(TextGRPCClientFunc), config.Settings.FILE_PERMISSIONS)
 
@@ -122,11 +133,6 @@ func CreateFileGRPCClientFuncTest() error {
 	}
 	TextGRPCClientFunc := string(bytes)
 
-	//заменим название сервиса
-	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
-	ServiceNameNew := config.Settings.SERVICE_NAME
-	TextGRPCClientFunc = strings.ReplaceAll(TextGRPCClientFunc, ServiceNameTemplate, ServiceNameNew)
-
 	//добавим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextGRPCClientFunc = create_files.Delete_TemplateRepositoryImports(TextGRPCClientFunc)
@@ -136,6 +142,12 @@ func CreateFileGRPCClientFuncTest() error {
 		TextGRPCClientFunc = create_files.AddImport(TextGRPCClientFunc, DBConstantsURL)
 
 	}
+
+	//заменим название сервиса
+	ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME
+	ServiceNameNew := config.Settings.SERVICE_NAME
+	TextGRPCClientFunc = strings.ReplaceAll(TextGRPCClientFunc, ServiceNameTemplate, ServiceNameNew)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyGRPCClientFunc, []byte(TextGRPCClientFunc), config.Settings.FILE_PERMISSIONS)
 

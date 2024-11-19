@@ -27,3 +27,4 @@
 /bin/templates/configs_/.env*
 /bin/notifier_service/
 
+/bin/tinkoff_invest/

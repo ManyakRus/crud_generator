@@ -354,7 +354,7 @@ func FillSettings() {
 	//
 	Name = "SERVICE_REPOSITORY_URL"
 	s = Getenv(Name, true)
-	s = strings.ToLower(s)
+	//s = strings.ToLower(s)
 	Settings.SERVICE_REPOSITORY_URL = s
 
 	//
