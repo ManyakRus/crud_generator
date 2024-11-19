@@ -5,6 +5,8 @@ github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792 h1:bxwxD0H3kSUAH3
 github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792/go.mod h1:OUyxCVbPW/2lC1e6cM7Am941SJiC88BhNnb24x2R3a8=
 github.com/ManyakRus/starter v1.0.84 h1:qvKAiV/ujX9dHMiIF1FCRvvfeNNOHY0fwFTrk/fA4Js=
 github.com/ManyakRus/starter v1.0.84/go.mod h1:fvTy6+PHRIDeNXvXAAkYBSJl1kkupiNe/CpCgcB0mZM=
+github.com/ManyakRus/starter v1.0.85 h1:2dw2anyMhkhQaKkdz+C0b0Ys2M7HKeuZ0yeyUzEhIjY=
+github.com/ManyakRus/starter v1.0.85/go.mod h1:ildteZO1poRllhuCistAbG14f/BGjCkCG4dnf5DwfUE=
 github.com/alexsergivan/transliterator v1.0.1 h1:vON2ilWCHjq+S5Y4obhLGhHK4Y1VIhsHEtQlij5d9pI=
 github.com/alexsergivan/transliterator v1.0.1/go.mod h1:0IrumukulURJ4PD0z6UcdJKP2job1DYDhnHAP5y+5pE=
 github.com/bxcodec/faker/v3 v3.8.1 h1:qO/Xq19V6uHt2xujwpaetgKhraGCapqY2CRWGD/SqcM=
