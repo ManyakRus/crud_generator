@@ -1,6 +1,7 @@
 #!/bin/bash 
 
-ADAPT_PATH=./
+PATH_FROM=./
+PATH_TO=./grpc_proto/
 
 clear
-protoc --go_out=${ADAPT_PATH} --go_opt=paths=import --go-grpc_out=${ADAPT_PATH} --go-grpc_opt=paths=import ${ADAPT_PATH}sync_service.proto
+protoc --go_out=${PATH_TO} --go_opt=paths=import --go-grpc_out=${PATH_TO} --go-grpc_opt=paths=import ${PATH_FROM}sync_service.proto
