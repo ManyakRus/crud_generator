@@ -22,6 +22,7 @@ mod:
 	go fmt ./...
 build:
 	clear
+	go fmt ./...
 	go build -race -o $(FILEAPP) $(FILEMAIN)
 lint:
 	clear
