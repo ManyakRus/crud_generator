@@ -277,6 +277,7 @@ TEMPLATES_CONSTANTS_FILENAME="constants.go_"
 #TEMPLATES_FINDBY_FILENAME - short filename of "findby_functions.json" file
 TEMPLATES_FINDBY_FILENAME="findby_functions.json"
 
+#---FINDBY---
 #TEMPLATES_CRUD_TABLE_FINDBY_FILENAME - short filename of "crud_tables_findby.go_" file
 TEMPLATES_CRUD_TABLE_FINDBY_FILENAME="crud_tables_findby.go_"
 
@@ -288,6 +289,36 @@ TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_FILENAME="crud_tables_findby_function.go_"
 
 #TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME - short filename of "crud_tables_findby_function_test.go_" file
 TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME="crud_tables_findby_function_test.go_"
+
+#TEMPLATES_GRPC_SERVER_FINDBY_FILENAME - short filename of "server_grpc_table_findby.go_" file
+TEMPLATES_GRPC_SERVER_FINDBY_FILENAME="server_grpc_table_findby.go_"
+
+#TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME - short filename of "server_grpc_table_findby_function.go_" file
+TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME="server_grpc_table_findby_function.go_"
+
+#TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME - short filename of "server_grpc_table_findby_test.go_" file
+TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME="server_grpc_table_findby_test.go_"
+
+#TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME - short filename of "server_grpc_table_findby_function_test.go_" file
+TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME="server_grpc_table_findby_function_test.go_"
+
+#TEMPLATES_MODEL_FINDBY_FILENAME - short filename of "model_table_findby.go_" file
+TEMPLATES_MODEL_FINDBY_FILENAME="model_table_findby.go_"
+
+#TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME - short filename of "model_table_findby_function.go_" file
+TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME="model_table_findby_function.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME - short filename of "grpc_client_table_findby.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME="grpc_client_table_findby.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME - short filename of "grpc_client_table_findby_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME="grpc_client_table_findby_test.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME - short filename of "grpc_client_table_findby_function.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME="grpc_client_table_findby_function.go_"
+
+#TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME - short filename of "grpc_client_table_findby_function_test.go_" file
+TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME="grpc_client_table_findby_function_test.go_"
 
 
 #---FINDMASSBY---
