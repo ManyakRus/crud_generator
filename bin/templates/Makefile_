@@ -23,9 +23,6 @@ mod:
 build:
 	clear
 	go build -race -o $(FILEAPP) $(FILEMAIN)
-	cd ./scripts && \
-	./VersionToFile.py
-
 lint:
 	clear
 	go fmt ./...
@@ -40,7 +37,7 @@ lint:
 run.test:
 	clear
 	go fmt ./...
-	go test -coverprofile cover.out ./internal/v0/app/...
+	go test -coverprofile cover.out ./internal/...
 	go tool cover -func=cover.out
 newrepo:
 	sed -i 's+$(SERVICEURL)+$(NEW_REPO)+g' go.mod
@@ -54,7 +51,7 @@ conn:
 init:
 	clear
 	rm -f ./go.mod
-	go mod init gitlab.aescorp.ru/dsp_dev/claim/sync_service
+	go mod init gitlab.aescorp.ru/dsp_dev/claim/$(SERVICENAME)
 	$(CD_GENERATION_PROTO)
 	$(GENERATION_PROTO)
 	go mod tidy
