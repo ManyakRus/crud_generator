@@ -1,4 +1,4 @@
-// Update - изменяет 1 поле Name в базе данных
+// Update - изменяет 1 поле ColumnName в базе данных
 func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
