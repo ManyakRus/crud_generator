@@ -15,6 +15,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 // Find_SingularName - возвращает наименование в единственном числе
@@ -49,6 +50,7 @@ func FormatName(Name string) string {
 
 	str := stringy.New(Otvet)
 	Otvet = str.PascalCase("?", "").Get()
+	Otvet = pascalCaseReformatNumbers(Otvet)
 
 	//_id в конце заменяем на ID
 	lenName := len(Name)
@@ -58,6 +60,22 @@ func FormatName(Name string) string {
 		if last3 == "_id" {
 			Otvet = Otvet[:lenOtvet-2] + "ID"
 		}
+	}
+
+	return Otvet
+}
+
+// pascalCaseReformatNumbers - после цифр буквы должны быть в верхнем регистре
+func pascalCaseReformatNumbers(s string) string {
+	Otvet := ""
+
+	var last rune
+	for _, s1 := range s {
+		if last >= 48 && last <= 57 {
+			s1 = unicode.ToUpper(s1)
+		}
+		Otvet = Otvet + string(s1)
+		last = s1
 	}
 
 	return Otvet
@@ -705,7 +723,7 @@ func Find_NRPCServerlURL() string {
 func Find_ProtobufURL() string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.FOLDERNAME_GRPC_PROTO
 
 	return Otvet
 }
@@ -732,8 +750,8 @@ func Find_TableNameURL(TableName string) string {
 func Find_ProtoURL() string {
 	Otvet := ""
 
-	TEMPLATE_FOLDERNAME_GRPC_PROTO := strings.ToLower(config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO)
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + TEMPLATE_FOLDERNAME_GRPC_PROTO + "/" + "grpc_proto"
+	FOLDERNAME_GRPC_PROTO := strings.ToLower(config.Settings.FOLDERNAME_GRPC_PROTO)
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + FOLDERNAME_GRPC_PROTO
 
 	return Otvet
 }
@@ -2349,9 +2367,10 @@ func ReplaceText_RequestID_PrimaryKey_ManyPK(Text string, Table1 *types.Table) s
 	Otvet := Text
 
 	TextRequestID := FindText_ProtobufRequest_ManyPK(Table1)
+	TextProto := TextProto()
 
 	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
-	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*grpc_proto."+TextRequestID)
+	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*"+TextProto+"."+TextRequestID)
 
 	return Otvet
 }
@@ -3135,5 +3154,11 @@ func Replace_ServiceName(Text string) string {
 	Otvet = strings.ReplaceAll(Otvet, ServiceNameTemplate, ServiceName)
 	Otvet = strings.ReplaceAll(Otvet, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 
+	return Otvet
+}
+
+// TextProto - возвращает текст "grpc_proto"
+func TextProto() string {
+	Otvet := micro.LastWord(config.Settings.FOLDERNAME_GRPC_PROTO)
 	return Otvet
 }

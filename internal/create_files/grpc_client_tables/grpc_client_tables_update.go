@@ -102,6 +102,10 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	//TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextGRPC_Client = TextGRPC_Client + TextUpdateEveryColumn
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, "grpc_proto.", TextProto+".")
+
 	TextGRPC_Client = config.Settings.TEXT_MODULE_GENERATED + TextGRPC_Client
 
 	//удаление пустого импорта
@@ -164,7 +168,8 @@ func FindTextUpdateEveryColumn1(TextGRPC_ClientUpdateFunc string, Table1 *types.
 	FuncName := "Update_" + ColumnNameTranslit
 	_, TextRequestFieldName, _, _ := create_files.FindText_ProtobufRequest_ID_Type(Table1, Column1, "Request.")
 	TextRequest := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	TextProto := create_files.TextProto()
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", TextProto+"."+TextRequest)
 
 	//замена RequestId{}
 	Otvet = ReplaceText_RequestID_and_Column(Otvet, Table1, Column1)
@@ -365,7 +370,8 @@ func FindTextUpdateEveryColumnTest1(TextGRPC_ClientUpdateFunc string, Table1 *ty
 
 	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	TextProto := create_files.TextProto()
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", TextProto+"."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnNameTranslit", ColumnNameTranslit)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)

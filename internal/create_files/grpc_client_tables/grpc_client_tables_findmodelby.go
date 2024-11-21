@@ -89,6 +89,10 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 	}
 	TextGRPCClient = TextGRPCClient + TextClientGRPCFunc
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, "grpc_proto.", TextProto+".")
+
 	//создание текста
 	TextGRPCClient = create_files.Replace_TemplateModel_to_Model(TextGRPCClient, Table1.NameGo)
 	TextGRPCClient = create_files.Replace_TemplateTableName_to_TableName(TextGRPCClient, Table1.Name)

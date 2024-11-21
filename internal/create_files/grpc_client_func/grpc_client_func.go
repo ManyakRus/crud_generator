@@ -80,6 +80,10 @@ func CreateFileGRPCClientFunc() error {
 
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCClientFunc = strings.ReplaceAll(TextGRPCClientFunc, "grpc_proto.", TextProto+".")
+
 	//заменим имя сервиса на новое
 	TextGRPCClientFunc = create_files.Replace_ServiceName(TextGRPCClientFunc)
 	//ServiceNameTemplate := config.Settings.TEMPLATE_SERVICE_NAME

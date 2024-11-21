@@ -181,7 +181,8 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	Otvet = create_files.Replace_TemplateModel_to_Model(Otvet, Table1.NameGo)
 	Otvet = create_files.Replace_TemplateTableName_to_TableName(Otvet, Table1.Name)
 
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	TextProto := create_files.TextProto()
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", TextProto+"."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnNamePK", ColumnPK.NameGo)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnNameField", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
@@ -329,7 +330,8 @@ func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Tab
 	//Otvet = create_files.Replace_PrimaryKeyM_ID(Otvet, Table1)
 	//Otvet = create_files.Replace_PrimaryKeyOtvetID(Otvet, Table1)
 
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	TextProto := create_files.TextProto()
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", TextProto+"."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
 	Otvet = strings.ReplaceAll(Otvet, "TestUpdate(", "Test"+FuncName+"(")

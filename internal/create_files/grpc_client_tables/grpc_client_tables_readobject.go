@@ -101,6 +101,10 @@ func CreateFiles_ReadObject(Table1 *types.Table) error {
 
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, "grpc_proto.", TextProto+".")
+
 	//удалим лишние функции
 	TextGRPCClient = create_files.DeleteFunc_Delete(TextGRPCClient, Table1)
 	TextGRPCClient = create_files.DeleteFunc_Restore(TextGRPCClient, Table1)

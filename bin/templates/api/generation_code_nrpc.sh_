@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 PATH_FROM=./
-PATH_TO=./grpc_proto/
+PATH_TO=./
 
 clear
 protoc --go_out=${PATH_TO} --nrpc_out=./ --go_opt=paths=import --go-grpc_out=${PATH_TO} --go-grpc_opt=paths=import ${PATH_FROM}sync_service.proto

@@ -82,6 +82,10 @@ func CreateFiles_ServerGRPCStarter() error {
 	//TextAfterImport = strings.ReplaceAll(TextAfterImport, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
 	TextGRPCStarter = TextGRPCStarter[:pos1+2] + TextAfterImport
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCStarter = strings.ReplaceAll(TextGRPCStarter, "grpc_proto.", TextProto+".")
+
 	//удаление пустого импорта
 	TextGRPCStarter = create_files.Delete_EmptyImport(TextGRPCStarter)
 

@@ -89,6 +89,10 @@ func CreateFiles_ReadAll(Table1 *types.Table) error {
 	}
 	TextGRPCClient = TextGRPCClient + TextGRPCClientFunc
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, "grpc_proto.", TextProto+".")
+
 	//создание текста
 	TextGRPCClient = create_files.Replace_TemplateModel_to_Model(TextGRPCClient, Table1.NameGo)
 	TextGRPCClient = create_files.Replace_TemplateTableName_to_TableName(TextGRPCClient, Table1.Name)

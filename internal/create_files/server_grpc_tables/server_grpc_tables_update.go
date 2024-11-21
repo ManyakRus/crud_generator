@@ -91,6 +91,10 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "grpc_proto.", TextProto+".")
+
 	TextGRPCServer = config.Settings.TEXT_MODULE_GENERATED + TextGRPCServer
 
 	//удаление пустого импорта
@@ -167,7 +171,8 @@ func FindText_UpdateEveryColumn1(TextGRPCServerUpdateFunc string, Table1 *types.
 	} else if TextGolangLine != "" {
 		Otvet = strings.ReplaceAll(Otvet, "ColumnName := Request.FieldName", TextGolangLine)
 	}
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", "grpc_proto."+TextRequest)
+	TextProto := create_files.TextProto()
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", TextProto+"."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "Request.FieldName", TextRequestFieldGolang)
 	Otvet = strings.ReplaceAll(Otvet, "Model.ColumnName", "Model."+ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnNameTranslit", ColumnNameTranslit)
@@ -262,6 +267,10 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	//создание текста
 	TextUpdateEveryColumn := FindText_UpdateEveryColumn_Test(TextGRPCServerUpdateFunc, Table1)
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "grpc_proto.", TextProto+".")
+
 	//Postgres_ID_Test = ID Minimum
 	TextGRPCServer = Replace_Model_ID_Test(TextGRPCServer, Table1)
 
@@ -353,12 +362,13 @@ func FindText_UpdateEveryColumn_Test1(TextGRPCServerUpdateFunc string, Table1 *t
 	//if Table1.PrimaryKeyColumnsCount == 1 {
 	//} else {
 	TextRequestString := create_files.FindText_ProtobufRequest_Column_ManyPK(Table1, Column1)
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId{}", "grpc_proto."+TextRequestID+"{}")
+	TextProto := create_files.TextProto()
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId{}", TextProto+"."+TextRequestID+"{}")
 	//}
 
 	Otvet = strings.ReplaceAll(Otvet, "Request.ColumnName", TextRequestFieldGolang)
 	Otvet = strings.ReplaceAll(Otvet, "Request2.ColumnName", "Request2."+TextRequestField)
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", "grpc_proto."+TextRequestString)
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestString", TextProto+"."+TextRequestString)
 	Otvet = strings.ReplaceAll(Otvet, "m.ColumnName", TextModelColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnNameTranslit", ColumnNameTranslit)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)

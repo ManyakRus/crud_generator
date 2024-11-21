@@ -78,6 +78,10 @@ func CreateFiles(Table1 *types.Table) error {
 		TextGRPCServer = DeleteFunc_Find_byExtID(TextGRPCServer, Table1)
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "grpc_proto.", TextProto+".")
+
 	//создание текста
 	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
 	TextGRPCServer = create_files.Replace_TemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
@@ -174,6 +178,10 @@ func CreateFiles_Test(Table1 *types.Table) error {
 		//
 		TextGRPCServer = Replace_OtvetIDEqual0(TextGRPCServer, Table1)
 	}
+
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "grpc_proto.", TextProto+".")
 
 	//создание текста
 	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
@@ -449,9 +457,10 @@ func ReplaceText_RequestID_PrimaryKey(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	TextRequestID := create_files.FindText_ProtobufRequest_ManyPK(Table1)
+	TextProto := create_files.TextProto()
 
 	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
-	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*grpc_proto."+TextRequestID)
+	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*"+TextProto+"."+TextRequestID)
 
 	return Otvet
 }

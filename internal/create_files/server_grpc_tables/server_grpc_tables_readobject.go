@@ -78,6 +78,10 @@ func CreateFiles_ReadObject(Table1 *types.Table) error {
 		TextGRPCServer = DeleteFunc_Find_byExtID(TextGRPCServer, Table1)
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "grpc_proto.", TextProto+".")
+
 	//создание текста
 	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
 	TextGRPCServer = create_files.Replace_TemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
@@ -183,6 +187,10 @@ func CreateFiles_ReadObject_Test(Table1 *types.Table) error {
 		//
 		TextGRPCServer = Replace_OtvetIDEqual0(TextGRPCServer, Table1)
 	}
+
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "grpc_proto.", TextProto+".")
 
 	//создание текста
 	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)

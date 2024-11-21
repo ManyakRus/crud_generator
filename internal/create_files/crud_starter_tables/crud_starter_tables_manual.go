@@ -49,6 +49,10 @@ func CreateFiles_manual(Table1 *types.Table) error {
 
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextManual = strings.ReplaceAll(TextManual, "grpc_proto.", TextProto+".")
+
 	//создание текста
 	TextManual = create_files.Replace_TemplateModel_to_Model(TextManual, Table1.NameGo)
 	TextManual = create_files.Replace_TemplateTableName_to_TableName(TextManual, Table1.Name)

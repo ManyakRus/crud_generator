@@ -36,12 +36,16 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesProto := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile()
-	DirReadyProto := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile()
+	DirReadyProto := DirReady + config.Settings.FOLDERNAME_API + micro.SeparatorFile()
 	FilenameReadyProto := DirReadyProto + config.Settings.SERVICE_NAME + ".proto"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyProto)
 
+	//создадим папку grpc_proto
+	folders.CreateFolder(DirReady + config.Settings.FOLDERNAME_GRPC_PROTO)
+
+	//
 	FilenameTemplateProto := DirTemplatesProto + "service.proto_"
 	if config.Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME != "" {
 		FilenameTemplateProto = config.Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME
@@ -60,6 +64,8 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	//заменим ещё раз с большой буквы
 	TEMPLATE_SERVICE_NAME = micro.StringFromUpperCase(TEMPLATE_SERVICE_NAME)
 	TextProto = strings.ReplaceAll(TextProto, TEMPLATE_SERVICE_NAME, ServiceNameProto)
+	TextGrpcProto := create_files.TextProto()
+	TextProto = strings.ReplaceAll(TextProto, "/grpc_proto", "/"+TextGrpcProto)
 
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(MapAll))

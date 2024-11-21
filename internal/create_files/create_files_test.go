@@ -1,6 +1,9 @@
 package create_files
 
-import "testing"
+import (
+	"github.com/gobeam/stringy"
+	"testing"
+)
 
 func TestFindSingularName(t *testing.T) {
 	Otvet := Find_SingularName("lawsuit_status_types")
@@ -10,7 +13,7 @@ func TestFindSingularName(t *testing.T) {
 }
 
 func TestFormatName(t *testing.T) {
-	Name := "document_invoice_id"
+	Name := "first_1min_candle_date"
 	Otvet := FormatName(Name)
 	if Otvet == "" {
 		t.Error("TestFormatName() error")
@@ -38,5 +41,14 @@ func TestPrintableString(t *testing.T) {
 	Otvet := PrintableString(s)
 	if Otvet == "" {
 		t.Error("TestPrintableString() error: Otvet = ''")
+	}
+}
+
+func TestPascalCase(t *testing.T) {
+	Name := "first_1min_candle_date"
+	str := stringy.New(Name)
+	Otvet := str.PascalCase("1m", "1M").Get()
+	if Otvet == "" {
+		t.Error("TestFormatName() error")
 	}
 }

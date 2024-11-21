@@ -255,6 +255,10 @@ type SettingsINI struct {
 	TEXT_DELETED_TABLE_RUS  string
 	TEXT_DELETED_COLUMN     string
 	TEXT_DELETED_COLUMN_RUS string
+
+	//
+	FOLDERNAME_GRPC_PROTO string
+	FOLDERNAME_API        string
 }
 
 // Getenv - возвращает переменную окружения
@@ -1317,6 +1321,16 @@ func FillSettings() {
 	Name = "NEED_CREATE_MAIN_FILE"
 	s = Getenv(Name, true)
 	Settings.NEED_CREATE_MAIN_FILE = BoolFromString(s)
+
+	//
+	Name = "FOLDERNAME_GRPC_PROTO"
+	s = Getenv(Name, true)
+	Settings.FOLDERNAME_GRPC_PROTO = s
+
+	//
+	Name = "FOLDERNAME_API"
+	s = Getenv(Name, true)
+	Settings.FOLDERNAME_API = s
 
 }
 

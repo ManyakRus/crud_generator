@@ -87,6 +87,10 @@ func CreateFiles_FindMassBy(Table1 *types.Table) error {
 	}
 	TextGRPCClient = TextGRPCClient + TextGRPCClientFunc
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, "grpc_proto.", TextProto+".")
+
 	//NRPC
 	if config.Settings.NEED_CREATE_NRPC == true {
 		//уберём "//"

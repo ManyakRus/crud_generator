@@ -105,6 +105,10 @@ func CreateFiles_GRPC_Client_Cache(Table1 *types.Table) error {
 
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, "grpc_proto.", TextProto+".")
+
 	//удаление пустого импорта
 	TextGRPCClient = create_files.Delete_EmptyImport(TextGRPCClient)
 
@@ -218,9 +222,10 @@ func ReplaceText_RequestID_PrimaryKey(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	TextRequestID := create_files.FindText_ProtobufRequest_ManyPK(Table1)
+	TextProto := create_files.TextProto()
 
 	Otvet = strings.ReplaceAll(Otvet, "RequestId{}", TextRequestID+"{}")
-	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*grpc_proto."+TextRequestID)
+	Otvet = strings.ReplaceAll(Otvet, "*grpc_proto.RequestId", "*"+TextProto+"."+TextRequestID)
 
 	return Otvet
 }

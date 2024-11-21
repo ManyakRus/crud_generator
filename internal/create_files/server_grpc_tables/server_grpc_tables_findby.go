@@ -74,6 +74,10 @@ func CreateFiles_FindBy(Table1 *types.Table) error {
 	}
 	TextGRPCServer = TextGRPCServer + TextServerGRPCFunc
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "grpc_proto.", TextProto+".")
+
 	//создание текста
 	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
 	TextGRPCServer = create_files.Replace_TemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
@@ -231,6 +235,10 @@ func CreateFiles_FindBy_Test(Table1 *types.Table) error {
 		return err
 	}
 	TextGRPCServer = TextGRPCServer + TextGRPCServerFunc
+
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "grpc_proto.", TextProto+".")
 
 	//создание текста
 	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)

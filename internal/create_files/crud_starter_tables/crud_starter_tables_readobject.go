@@ -49,6 +49,10 @@ func CreateFiles_ReadObject(Table1 *types.Table) error {
 
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextDB = strings.ReplaceAll(TextDB, "grpc_proto.", TextProto+".")
+
 	//создание текста
 	TextDB = create_files.Replace_TemplateModel_to_Model(TextDB, Table1.NameGo)
 	TextDB = create_files.Replace_TemplateTableName_to_TableName(TextDB, Table1.Name)

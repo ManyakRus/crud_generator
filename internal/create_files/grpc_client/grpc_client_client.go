@@ -80,6 +80,10 @@ func CreateGRPCClient() error {
 
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, "grpc_proto.", TextProto+".")
+
 	//добавим импорт uuid
 	TextGRPCClient = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCClient)
 

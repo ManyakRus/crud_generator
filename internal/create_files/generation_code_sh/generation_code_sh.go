@@ -43,7 +43,7 @@ func CreateFileGenerationCodeSh() error {
 	DirTemplates := DirBin + config.Settings.TEMPLATE_FOLDERNAME + micro.SeparatorFile()
 	DirReady := DirBin + config.Settings.READY_FOLDERNAME + micro.SeparatorFile()
 	DirTemplatesProto := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile()
-	DirReadyProto := DirReady + config.Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO + micro.SeparatorFile()
+	DirReadyProto := DirReady + config.Settings.FOLDERNAME_API + micro.SeparatorFile()
 	FilenameReadyProto := DirReadyProto + "generation_code.sh"
 	FilenameTemplateProto := DirTemplatesProto + "generation_code.sh_"
 
@@ -58,6 +58,8 @@ func CreateFileGenerationCodeSh() error {
 
 	//replace
 	TextGenerationCode = strings.ReplaceAll(TextGenerationCode, config.Settings.TEMPLATE_SERVICE_NAME, config.Settings.SERVICE_NAME)
+	//TextGrpcProto := create_files.TextProto()
+	//TextGenerationCode = strings.ReplaceAll(TextGenerationCode, "/grpc_proto/", "/"+TextGrpcProto+"/")
 
 	//запись файла
 	err = os.WriteFile(FilenameReadyProto, []byte(TextGenerationCode), 0777)

@@ -60,6 +60,10 @@ func CreateFile_CrudStarter(MapAll map[string]*types.Table) error {
 		TextCrudStarter = TextCrudStarter + "\n" + TextNRPC
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextCrudStarter = strings.ReplaceAll(TextCrudStarter, "grpc_proto.", TextProto+".")
+
 	//замена импортов на новые URL
 	TextCrudStarter = create_files.Replace_RepositoryImportsURL(TextCrudStarter)
 

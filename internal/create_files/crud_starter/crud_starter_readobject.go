@@ -59,6 +59,10 @@ func CreateFile_CrudStarter_ReadObject(MapAll map[string]*types.Table) error {
 		TextCrudStarter = TextCrudStarter + "\n" + TextNRPC
 	}
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextCrudStarter = strings.ReplaceAll(TextCrudStarter, "grpc_proto.", TextProto+".")
+
 	////GRPC
 	//if config.Settings.NEED_CREATE_GRPC == true {
 	//	TextGRPC := FindTextGRPC(MapAll, ModelURL)

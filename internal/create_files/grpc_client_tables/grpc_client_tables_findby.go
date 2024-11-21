@@ -86,6 +86,10 @@ func CreateFiles_FindBy(Table1 *types.Table) error {
 	}
 	TextGRPCClient = TextGRPCClient + TextClientGRPCFunc
 
+	//заменим grpc_proto на новое
+	TextProto := create_files.TextProto()
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, "grpc_proto.", TextProto+".")
+
 	//NRPC
 	if config.Settings.NEED_CREATE_NRPC == true {
 		//уберём "//"
