@@ -31,7 +31,7 @@ func Find_SingularName(s string) string {
 	return Otvet
 }
 
-// FormatName - возвращает наименование в формате CamelCase
+// FormatName - возвращает наименование в формате PascalCase
 func FormatName(Name string) string {
 	Otvet := Name
 
