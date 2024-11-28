@@ -292,6 +292,20 @@ func AddTextOmit(TextDB string, Table1 *types.Table) string {
 	}
 
 `
+		} else if TypeGo == "string" && (Column1.TableKey != "" || is_nullable_config == true) {
+			NullableCount = NullableCount + 1
+			TextFind := `if m.` + ColumnNameGo + ` == "" {`
+			pos1 := strings.Index(TextDB, TextFind)
+			if pos1 >= 0 {
+				continue
+			}
+
+			TextOmit = TextOmit + "\t" + `ColumnName = "` + ColumnNameGo + `"
+	if m.` + ColumnNameGo + ` == "" {
+		MassOmit = append(MassOmit, ColumnName)
+	}
+
+`
 		}
 
 	}
