@@ -3,7 +3,7 @@ module github.com/ManyakRus/crud_generator
 go 1.22.1
 
 require (
-	github.com/ManyakRus/starter v1.0.85
+	github.com/ManyakRus/starter v1.0.90
 	github.com/alexsergivan/transliterator v1.0.1
 	github.com/bxcodec/faker/v3 v3.8.1
 	github.com/davecgh/go-spew v1.1.1
@@ -34,5 +34,6 @@ require (
 	golang.org/x/sync v0.9.0 // indirect
 	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/text v0.20.0 // indirect
-	gorm.io/driver/postgres v1.5.9 // indirect
+	google.golang.org/protobuf v1.35.2 // indirect
+	gorm.io/driver/postgres v1.5.10 // indirect
 )

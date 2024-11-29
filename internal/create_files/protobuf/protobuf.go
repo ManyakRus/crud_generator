@@ -67,12 +67,12 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	TextGrpcProto := create_files.TextProto()
 	TextProto = strings.ReplaceAll(TextProto, "/grpc_proto", "/"+TextGrpcProto)
 
-	//сортировка по названию таблиц
-	keys := make([]string, 0, len(MapAll))
-	for k := range MapAll {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
+	////сортировка по названию таблиц
+	//keys := make([]string, 0, len(MapAll))
+	//for k := range MapAll {
+	//	keys = append(keys, k)
+	//}
+	//sort.Strings(keys)
 
 	//найдём куда вставить текст
 	sFind := "\nservice "
@@ -89,12 +89,15 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	}
 	PosProtoService = PosProtoService + posEnd + 1
 
+	//сортировка по названию таблиц, обратная
+	MassAll := micro.MassFrom_Map_DESC(MapAll)
+
 	//найдём новый текст для каждой таблицы
-	for _, key1 := range keys {
-		Table1, ok := MapAll[key1]
-		if ok == false {
-			log.Panic("MapAll[key1] not found")
-		}
+	for _, Table1 := range MassAll {
+		//Table1, ok := MapAll[key1]
+		//if ok == false {
+		//	log.Panic("MapAll[key1] not found")
+		//}
 
 		//проверка что таблица нормальная
 		err1 := create_files.IsGood_Table(Table1)

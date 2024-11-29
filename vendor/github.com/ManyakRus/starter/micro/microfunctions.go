@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"golang.org/x/exp/constraints"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"hash/fnv"
 	"os/exec"
 	"reflect"
@@ -1193,6 +1194,13 @@ func SortMass[T constraints.Ordered](s []T) {
 	})
 }
 
+// SortMass_DESC - сортирует слайс, в обратном порядке
+func SortMass_DESC[T constraints.Ordered](s []T) {
+	sort.Slice(s, func(i, j int) bool {
+		return s[i] > s[j]
+	})
+}
+
 // MassFrom_Map - сортирует map по названию колонок и возвращает слайс
 func MassFrom_Map[C constraints.Ordered, V any](Map map[C]V) []V {
 	Otvet := make([]V, 0)
@@ -1203,6 +1211,29 @@ func MassFrom_Map[C constraints.Ordered, V any](Map map[C]V) []V {
 		keys = append(keys, k)
 	}
 	SortMass(keys)
+
+	//
+	for _, key1 := range keys {
+		Value, ok := Map[key1]
+		if ok == false {
+			fmt.Printf("Map[%v] not found\n", key1)
+		}
+		Otvet = append(Otvet, Value)
+	}
+
+	return Otvet
+}
+
+// MassFrom_Map_DESC - сортирует map по названию колонок и возвращает слайс, с обратной сортировкой
+func MassFrom_Map_DESC[C constraints.Ordered, V any](Map map[C]V) []V {
+	Otvet := make([]V, 0)
+
+	//сортировка по названию колонок
+	keys := make([]C, 0, len(Map))
+	for k := range Map {
+		keys = append(keys, k)
+	}
+	SortMass_DESC(keys)
 
 	//
 	for _, key1 := range keys {
@@ -1273,4 +1304,53 @@ func InsertTextFrom(Text string, TextAdd string, IndexFrom int) string {
 
 	Otvet := buffer.String()
 	return Otvet
+}
+
+// Date_from_TimestampReference - возвращает дату из *Timestamp
+func Date_from_TimestampReference(Timestamp *timestamppb.Timestamp) time.Time {
+	Otvet := time.Time{}
+
+	if Timestamp != nil {
+		Otvet = Timestamp.AsTime()
+	}
+
+	return Otvet
+}
+
+// SetFieldValue - устанавливает значение поля в структуре
+// Параметры:
+// Object - ссылка(&) на структуру
+// FieldName - название поля
+// Value - значение нужного типа
+// Возвращает ошибку
+func SetFieldValue(Object any, FieldName string, Value any) error {
+	var err error
+
+	ref := reflect.ValueOf(Object)
+
+	//sanek
+	if ref.Kind() != reflect.Ptr {
+		err = fmt.Errorf("expected pointer but got %s", ref.Kind().String())
+		return err
+	}
+
+	// if its a pointer, resolve its Value
+	if ref.Kind() == reflect.Ptr {
+		ref = reflect.Indirect(ref)
+	}
+
+	if ref.Kind() == reflect.Interface {
+		ref = ref.Elem()
+	}
+
+	//should double check we now have a struct (could still be anything)
+	if ref.Kind() != reflect.Struct {
+		err = fmt.Errorf("expected struct but got %s", ref.Kind().String())
+		return err
+	}
+
+	prop := ref.FieldByName(FieldName)
+	prop.Set(reflect.ValueOf(Value))
+
+	return err
 }
