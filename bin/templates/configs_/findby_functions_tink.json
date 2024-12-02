@@ -1,0 +1,5 @@
+[
+{"Table":"instrument","Columns":["ticker"]},
+{"Table":"instrument","Columns":["figi"]},
+{"Table":"instrument","Columns":["isin"]}
+]

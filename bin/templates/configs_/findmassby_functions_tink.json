@@ -1,0 +1,5 @@
+[
+{"Table":"instrument","Columns":["instrument_type"]},
+{"Table":"instrument","Columns":["instrument_type", "name"]},
+{"Table":"instrument","Columns":["instrument_type", "currency"]}
+]
