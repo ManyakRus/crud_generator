@@ -20,15 +20,15 @@ func FindText_FindMassBy(TextProto string, Table1 *types.Table) (string, string)
 		Text1 := FindText_FindMassBy1(TableColumns1)
 
 		//проверим такой текст уже есть
-		pos1 := strings.Index(TextProto, Text1)
+		pos1 := strings.Index(Otvet, Text1)
 		if pos1 >= 0 {
 			continue
 		}
 
 		//добавим message
-		TextMess := AddTextMessageRequestID_Columns(TextProto, TableColumns1.Columns)
+		TextMess := AddTextMessageRequestID_Columns(Otvet, TableColumns1.Columns)
 		//проверим такой текст message уже есть
-		pos1 = strings.Index(TextProto, TextMess)
+		pos1 = strings.Index(Otvet, TextMess)
 		if pos1 < 0 {
 			Otvet = Otvet + "\n" + TextMess
 		}

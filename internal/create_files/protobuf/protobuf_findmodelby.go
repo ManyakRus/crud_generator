@@ -20,16 +20,16 @@ func FindText_FindModelBy(MapAll map[string]*types.Table, TextProto string, Tabl
 		Text1 := FindText_FindModelBy1(MapAll, TableColumns1.Table, TableColumns1.Column)
 
 		//проверим такой текст функции уже есть
-		pos1 := strings.Index(TextProto, Text1)
+		pos1 := strings.Index(Otvet, Text1)
 		if pos1 >= 0 {
 			continue
 		}
 
 		//добавим message
-		TextMess := AddTextMessageRequestModel_Column(TextProto, TableColumns1.Column)
+		TextMess := AddTextMessageRequestModel_Column(Otvet, TableColumns1.Column)
 
 		//проверим такой текст message уже есть
-		pos1 = strings.Index(TextProto, TextMess)
+		pos1 = strings.Index(Otvet, TextMess)
 		if pos1 < 0 {
 			Otvet = TextMess
 		}
