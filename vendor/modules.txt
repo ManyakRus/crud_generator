@@ -1,7 +1,7 @@
 # github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792
 ## explicit; go 1.13
 github.com/ManyakRus/logrus
-# github.com/ManyakRus/starter v1.0.90
+# github.com/ManyakRus/starter v1.0.92
 ## explicit; go 1.22.1
 github.com/ManyakRus/starter/config_main
 github.com/ManyakRus/starter/constants
@@ -9,6 +9,7 @@ github.com/ManyakRus/starter/contextmain
 github.com/ManyakRus/starter/log
 github.com/ManyakRus/starter/logger
 github.com/ManyakRus/starter/micro
+github.com/ManyakRus/starter/microl
 github.com/ManyakRus/starter/port_checker
 github.com/ManyakRus/starter/postgres_gorm
 github.com/ManyakRus/starter/stopapp
@@ -156,7 +157,7 @@ google.golang.org/protobuf/reflect/protoregistry
 google.golang.org/protobuf/runtime/protoiface
 google.golang.org/protobuf/runtime/protoimpl
 google.golang.org/protobuf/types/known/timestamppb
-# gorm.io/driver/postgres v1.5.10
+# gorm.io/driver/postgres v1.5.11
 ## explicit; go 1.19
 gorm.io/driver/postgres
 # gorm.io/gorm v1.25.12

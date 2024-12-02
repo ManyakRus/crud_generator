@@ -154,6 +154,9 @@ NEED_CREATE_DB_TABLES=true
 #NEED_CREATE_MAIN_FILE - true = need create main.go file
 NEED_CREATE_MAIN_FILE=true
 
+#NEED_CREATE_CONSTANTS_FILE - fill "true" if you want to create "constants.go" file
+NEED_CREATE_CONSTANTS_FILE=true
+
 #NEED_CREATE_GRPC_SERVER_TEST - fill "true" if you want create GRPC server _test.go files
 NEED_CREATE_GRPC_SERVER_TEST=true
 

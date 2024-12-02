@@ -15,6 +15,12 @@ import (
 func CreateAllFiles() error {
 	var err error
 
+	//
+	if config.Settings.NEED_CREATE_CONSTANTS_FILE == false {
+		return err
+	}
+
+	//
 	err = CreateFileConstants()
 	if err != nil {
 		log.Error("CreateFileConstants() error: ", err)

@@ -5,6 +5,7 @@ import (
 	ConfigMain "github.com/ManyakRus/starter/config_main"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"github.com/ManyakRus/starter/microl"
 	"io/fs"
 	"os"
 	"strconv"
@@ -80,6 +81,7 @@ type SettingsINI struct {
 	NEED_CREATE_CACHE_FILES                          bool
 	NEED_CREATE_CACHE_TEST_FILES                     bool
 	NEED_CREATE_MAIN_FILE                            bool
+	NEED_CREATE_CONSTANTS_FILE                       bool
 	SERVICE_NAME                                     string
 	SERVICE_REPOSITORY_URL                           string
 	TEXT_TEMPLATE_MODEL                              string
@@ -1331,6 +1333,10 @@ func FillSettings() {
 	Name = "FOLDERNAME_API"
 	s = Getenv(Name, true)
 	Settings.FOLDERNAME_API = s
+
+	//
+	Name = "NEED_CREATE_CONSTANTS_FILE"
+	microl.Set_FieldFromEnv_Bool(&Settings, Name, true)
 
 }
 
