@@ -30,7 +30,7 @@ func FindText_FindBy(TextProto string, Table1 *types.Table) (string, string) {
 		//проверим такой текст message уже есть
 		pos1 = strings.Index(TextProto, TextMess)
 		if pos1 < 0 {
-			Otvet = TextMess
+			Otvet = Otvet + "\n" + TextMess
 		}
 
 		//

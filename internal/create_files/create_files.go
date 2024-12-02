@@ -1640,7 +1640,8 @@ func FindText_ProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column
 	if IsStringOrUUID(Column1.TypeGo) == true {
 		sNumber = strconv.Itoa(Number)
 		sNumber = "_" + sNumber
-	} else if Number != 1 {
+	} else {
+		//} else if Number != 1 {
 		sNumber = strconv.Itoa(Number)
 		sNumber = "_" + sNumber
 	}
@@ -2598,7 +2599,7 @@ func Find_RequestFieldName_FromMass(Column *types.Column, MassColumns []*types.C
 
 	TypeProto := Convert_GolangTypeNameToProtobufTypeName(Column.TypeGo)
 
-	Number := 0
+	Number := 1
 	for _, Column1 := range MassColumns {
 		TypeProto1 := Convert_GolangTypeNameToProtobufTypeName(Column1.TypeGo)
 		if TypeProto == TypeProto1 && Column != Column1 {
@@ -2613,9 +2614,9 @@ func Find_RequestFieldName_FromMass(Column *types.Column, MassColumns []*types.C
 	Suffix := "_" + strconv.Itoa(Number)
 
 	Otvet = Convert_GolangTypeNameToProtobufFieldName(Column.TypeGo)
-	if Number > 1 {
-		Otvet = Otvet + Suffix
-	}
+	//if Number > 1 {
+	Otvet = Otvet + Suffix
+	//}
 
 	return Otvet
 }
