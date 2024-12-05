@@ -1,5 +1,5 @@
 [
-{"Table":"instrument","Columns":["instrument_type"]},
-{"Table":"instrument","Columns":["instrument_type", "name"]},
-{"Table":"instrument","Columns":["instrument_type", "currency"]}
+{"Table":"tinkoff_instrument","Columns":["instrument_type"]},
+{"Table":"tinkoff_instrument","Columns":["instrument_type", "name"]},
+{"Table":"tinkoff_instrument","Columns":["instrument_type", "currency"]}
 ]
