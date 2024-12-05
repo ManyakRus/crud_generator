@@ -8,6 +8,26 @@ import (
 	"strings"
 )
 
+// Has_Column_ExtID_ConnectionID - возвращает true если есть поля ExtId и ConnectionID, если они int64
+func Has_Column_ExtID_ConnectionID(Table1 *types.Table) bool {
+	Otvet := false
+
+	//
+	_, ok := Table1.MapColumns["ext_id"]
+	if ok == false {
+		return Otvet
+	}
+
+	//
+	_, ok = Table1.MapColumns["connection_id"]
+	if ok == false {
+		return Otvet
+	}
+
+	Otvet = true
+	return Otvet
+}
+
 // Has_Column_ExtID_ConnectionID_Int64 - возвращает true если есть поля ExtId и ConnectionID, если они int64
 func Has_Column_ExtID_ConnectionID_Int64(Table1 *types.Table) bool {
 	Otvet := false
@@ -422,4 +442,13 @@ func Is_Need_Сolumn(Column1 *types.Column) bool {
 	}
 
 	return Otvet
+}
+
+// GetColumn_ExtID - возвращает колонку ExtID
+func GetColumn_ExtID(Table1 *types.Table) *types.Column {
+	Column1, ok := Table1.MapColumns["ext_id"]
+	if ok == false {
+		return nil
+	}
+	return Column1
 }

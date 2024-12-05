@@ -85,6 +85,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextDB = ReplaceText_created_at(TextDB, Table1)
 	TextDB = ReplaceText_is_deleted_deleted_at(TextDB, Table1)
 	TextDB = create_files.DeleteImportModel(TextDB)
+	TextDB = ReplaceText_ExtID0(TextDB, Table1)
 
 	TextDB = ReplaceCacheRemove(TextDB, Table1)
 
@@ -180,6 +181,7 @@ func CreateFiles_Test(Table1 *types.Table) error {
 		TextDB = DeleteFunc_TestDelete(TextDB, Table1)
 		TextDB = DeleteFunc_TestRestore(TextDB, Table1)
 		TextDB = DeleteFunc_TestFind_byExtID(TextDB, Table1)
+		TextDB = ReplaceText_ExtID0(TextDB, Table1)
 
 		//Postgres_ID_Test = ID Minimum
 		TextDB = create_files.Replace_Postgres_ID_Test(TextDB, Table1)
@@ -488,7 +490,7 @@ func DeleteFunc_TestFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверка есть ли колонки ExtID и ConnectionID
-	if create_files.Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
+	if create_files.Has_Column_ExtID_ConnectionID(Table1) == true {
 		return Otvet
 	}
 
@@ -504,7 +506,7 @@ func DeleteFunc_Find_byExtIDCtx(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверка есть ли колонки ExtID и ConnectionID
-	if create_files.Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
+	if create_files.Has_Column_ExtID_ConnectionID(Table1) == true {
 		return Otvet
 	}
 
@@ -540,6 +542,21 @@ func DeleteFunc_DeleteCtx(TextModel string, Table1 *types.Table) string {
 
 	Otvet = create_files.DeleteFuncFromComment(Otvet, "\n// Delete_ctx ")
 	Otvet = create_files.DeleteFuncFromFuncName(Otvet, "Delete_ctx")
+
+	return Otvet
+}
+
+// ReplaceText_ExtID0 - заменяет текст "ExtID ==0"
+func ReplaceText_ExtID0(TextDB string, Table1 *types.Table) string {
+	Otvet := TextDB
+
+	ColumnExtID := create_files.GetColumn_ExtID(Table1)
+	if ColumnExtID == nil {
+		return Otvet
+	}
+
+	DefaultValue := create_files.FindText_DefaultValue(ColumnExtID.TypeGo)
+	Otvet = strings.ReplaceAll(Otvet, "ExtID ==0", "ExtID == "+DefaultValue)
 
 	return Otvet
 }

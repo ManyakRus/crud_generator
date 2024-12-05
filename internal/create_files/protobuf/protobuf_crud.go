@@ -18,7 +18,7 @@ func FindText_ProtoTable1(TextProto string, Table1 *types.Table) string {
 	Otvet = Otvet + FindText_Create(TextProto, ModelName)
 	Otvet = Otvet + FindText_Update(TextProto, ModelName)
 	Otvet = Otvet + FindText_Save(TextProto, ModelName)
-	if create_files.Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
+	if create_files.Has_Column_ExtID_ConnectionID(Table1) == true {
 		Otvet = Otvet + FindText_FindByExtId(TextProto, ModelName)
 	}
 

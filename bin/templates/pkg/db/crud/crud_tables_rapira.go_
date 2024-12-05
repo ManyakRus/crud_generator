@@ -325,7 +325,7 @@ func Find_ByExtID_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.
 	}
 
 	if m.ExtID == 0 {
-		err = errors.New(m.TableNameDB()+" Find_ByExtID() error: ExtID=0")
+		err = errors.New(m.TableNameDB()+` Find_ByExtID() error: ExtID == 0`)
 		return err
 	}
 

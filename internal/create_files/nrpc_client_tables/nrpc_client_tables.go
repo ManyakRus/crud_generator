@@ -259,7 +259,7 @@ package nrpc_client_tables
 //	Otvet := Text
 //
 //	//если есть обе колонки - ничего не делаем
-//	ok := create_files.Has_Column_ExtID_ConnectionID_Int64(Table1)
+//	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
 //	if ok == true {
 //		return Otvet
 //	}
@@ -303,7 +303,7 @@ package nrpc_client_tables
 //	Otvet := Text
 //
 //	//если есть обе колонки - ничего не делаем
-//	ok := create_files.Has_Column_ExtID_ConnectionID_Int64(Table1)
+//	ok := create_files.Has_Column_ExtID_ConnectionID(Table1)
 //	if ok == true {
 //		return Otvet
 //	}

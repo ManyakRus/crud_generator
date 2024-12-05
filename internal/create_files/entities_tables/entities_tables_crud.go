@@ -478,7 +478,7 @@ func DeleteFromInterface_Find_ByExtID(TextModel string, Table1 *types.Table) str
 	Otvet := TextModel
 
 	//проверим есть ли колонки ExtID и ConnectionID
-	if create_files.Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
+	if create_files.Has_Column_ExtID_ConnectionID(Table1) == true {
 		return Otvet
 	}
 

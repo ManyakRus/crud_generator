@@ -1417,7 +1417,7 @@ func DeleteFunc_Find_byExtID(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
 	//проверка есть ли колонки ExtID и ConnectionID
-	if Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
+	if Has_Column_ExtID_ConnectionID(Table1) == true {
 		return Otvet
 	}
 
