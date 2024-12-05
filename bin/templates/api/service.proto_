@@ -44,6 +44,13 @@ message RequestExtID {
     int64 Connection_id	=3; // Connection_id записи в БД
 }
 
+// RequestExtIDString - параметры запроса на сервер
+message RequestExtIDString {
+    uint32 VersionModel= 1; //версия структуры модели
+    string ExtID   = 2; // ext_id записи в БД
+    int64 Connection_id	=3; // Connection_id записи в БД
+}
+
 // RequestModel - параметры запроса на сервер
 message RequestModel {
     uint32 VersionModel= 1; //версия структуры модели
