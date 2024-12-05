@@ -550,7 +550,7 @@ func DeleteFunc_DeleteCtx(TextModel string, Table1 *types.Table) string {
 func ReplaceText_ExtID0(TextDB string, Table1 *types.Table) string {
 	Otvet := TextDB
 
-	ColumnExtID := create_files.GetColumn_ExtID(Table1)
+	ColumnExtID := create_files.FindColumn_ExtID(Table1)
 	if ColumnExtID == nil {
 		return Otvet
 	}

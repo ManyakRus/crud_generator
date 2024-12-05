@@ -365,3 +365,34 @@ func Replace_NRPC_CLIENT(Text string) string {
 
 	return Otvet
 }
+
+// Replace_RequestExtID - заменяет RequestExtID{} на Request_Int64_String{}
+func Replace_RequestExtID(TextGRPCServer string, Table1 *types.Table) string {
+	Otvet := TextGRPCServer
+
+	//если нет таких колонок - ничего не делаем
+	if create_files.Has_Column_ExtID_ConnectionID(Table1) == false {
+		return Otvet
+	}
+
+	//если обе колонки Int64 - ничего не делаем
+	if create_files.Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
+		return Otvet
+	}
+
+	//
+	ColumnExtID := create_files.FindColumn_ExtID(Table1)
+	if ColumnExtID == nil {
+		return Otvet
+	}
+
+	//
+	if ColumnExtID.TypeGo != "string" {
+		return Otvet
+	}
+
+	//
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestExtID", "grpc_proto.RequestExtIDString")
+
+	return Otvet
+}

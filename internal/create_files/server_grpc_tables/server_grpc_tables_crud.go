@@ -86,6 +86,7 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
 	TextGRPCServer = create_files.Replace_TemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
 	TextGRPCServer = create_files.AddText_ModuleGenerated(TextGRPCServer)
+	TextGRPCServer = Replace_RequestExtID(TextGRPCServer, Table1)
 
 	//ModelName := Table1.NameGo
 	//TextGRPCServer = strings.ReplaceAll(TextGRPCServer, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
@@ -517,6 +518,37 @@ func Replace_OtvetIDEqual0(Text string, Table1 *types.Table) string {
 		Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 		break
 	}
+
+	return Otvet
+}
+
+// Replace_RequestExtID - заменяет RequestExtID{} на Request_Int64_String{}
+func Replace_RequestExtID(TextGRPCServer string, Table1 *types.Table) string {
+	Otvet := TextGRPCServer
+
+	//если нет таких колонок - ничего не делаем
+	if create_files.Has_Column_ExtID_ConnectionID(Table1) == false {
+		return Otvet
+	}
+
+	//если обе колонки Int64 - ничего не делаем
+	if create_files.Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
+		return Otvet
+	}
+
+	//
+	ColumnExtID := create_files.FindColumn_ExtID(Table1)
+	if ColumnExtID == nil {
+		return Otvet
+	}
+
+	//
+	if ColumnExtID.TypeGo != "string" {
+		return Otvet
+	}
+
+	//
+	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestExtID", "grpc_proto.RequestExtIDString")
 
 	return Otvet
 }

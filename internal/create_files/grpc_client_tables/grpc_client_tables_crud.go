@@ -110,6 +110,8 @@ func CreateFiles(Table1 *types.Table) error {
 	TextGRPCClient = create_files.Replace_TemplateTableName_to_TableName(TextGRPCClient, Table1.Name)
 	TextGRPCClient = create_files.AddText_ModuleGenerated(TextGRPCClient)
 
+	TextGRPCClient = Replace_RequestExtID(TextGRPCClient, Table1)
+
 	//ModelName := Table1.NameGo
 	//TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_MODEL, ModelName)
 	//TextGRPCClient = strings.ReplaceAll(TextGRPCClient, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)

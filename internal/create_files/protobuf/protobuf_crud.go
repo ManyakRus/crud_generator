@@ -19,7 +19,7 @@ func FindText_ProtoTable1(TextProto string, Table1 *types.Table) string {
 	Otvet = Otvet + FindText_Update(TextProto, ModelName)
 	Otvet = Otvet + FindText_Save(TextProto, ModelName)
 	if create_files.Has_Column_ExtID_ConnectionID(Table1) == true {
-		Otvet = Otvet + FindText_FindByExtId(TextProto, ModelName)
+		Otvet = Otvet + FindText_FindByExtId(TextProto, Table1)
 	}
 
 	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
@@ -130,9 +130,9 @@ func FindText_Restore(TextProto string, Table1 *types.Table) string {
 }
 
 // FindText_FindByExtId - возвращает текст .proto
-func FindText_FindByExtId(TextProto string, ModelName string) string {
+func FindText_FindByExtId(TextProto string, Table1 *types.Table) string {
 	Otvet := ""
-	Otvet2 := Text_FindByExtId(ModelName)
+	Otvet2 := Text_FindByExtId(Table1)
 
 	//проверка такой текст уже есть
 	pos1 := strings.Index(TextProto, Otvet2)
@@ -215,8 +215,18 @@ func Text_Restore(Table1 *types.Table) string {
 }
 
 // Text_FindByExtId - возвращает текст .proto
-func Text_FindByExtId(ModelName string) string {
-	Otvet := "rpc " + ModelName + "_FindByExtID(RequestExtID) returns (Response) {}"
+func Text_FindByExtId(Table1 *types.Table) string {
+	Otvet := ""
+	ModelName := Table1.NameGo_translit
+	ColumnExtID := create_files.FindColumn_ExtID(Table1)
+	if ColumnExtID == nil {
+		return Otvet
+	}
+	if ColumnExtID.TypeGo == "string" {
+		Otvet = "rpc " + ModelName + "_FindByExtID(RequestExtIDString) returns (Response) {}"
+	} else {
+		Otvet = "rpc " + ModelName + "_FindByExtID(RequestExtID) returns (Response) {}"
+	}
 
 	return Otvet
 }

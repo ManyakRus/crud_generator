@@ -444,8 +444,8 @@ func Is_Need_Сolumn(Column1 *types.Column) bool {
 	return Otvet
 }
 
-// GetColumn_ExtID - возвращает колонку ExtID
-func GetColumn_ExtID(Table1 *types.Table) *types.Column {
+// FindColumn_ExtID - возвращает колонку ExtID
+func FindColumn_ExtID(Table1 *types.Table) *types.Column {
 	Column1, ok := Table1.MapColumns["ext_id"]
 	if ok == false {
 		return nil
