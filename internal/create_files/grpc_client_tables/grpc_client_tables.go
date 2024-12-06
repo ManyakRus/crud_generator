@@ -393,6 +393,7 @@ func Replace_RequestExtID(TextGRPCServer string, Table1 *types.Table) string {
 
 	//
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestExtID", "grpc_proto.RequestExtIDString")
+	Otvet = strings.ReplaceAll(Otvet, ".ExtID == 0", `.ExtID == ""`)
 
 	return Otvet
 }

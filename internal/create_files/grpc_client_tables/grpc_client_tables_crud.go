@@ -205,6 +205,7 @@ func CreateFiles_Test(Table1 *types.Table) error {
 		TextGRPCClient = DeleteFuncTestRestore(TextGRPCClient, ModelName, Table1)
 	}
 	TextGRPCClient = DeleteFuncTestFind_byExtID(TextGRPCClient, ModelName, Table1)
+	TextGRPCClient = Replace_RequestExtID(TextGRPCClient, Table1)
 
 	//SkipNow()
 	TextGRPCClient = create_files.AddSkipNow(TextGRPCClient, Table1)
