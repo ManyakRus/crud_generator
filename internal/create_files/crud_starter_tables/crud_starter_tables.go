@@ -40,18 +40,18 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 		}
 
 		// создание файла manual
-		if config.Settings.NEED_CREATE_MANUAL_FILES == true {
-			err = CreateFiles_manual(Table1)
-			if err != nil {
-				log.Error("CreateFilesModel_manual() table: ", Table1.Name, " error: ", err)
-				return err
-			}
-			err = CreateFiles_manual_test(Table1)
-			if err != nil {
-				log.Error("CreateFiles_manual_test() table: ", Table1.Name, " error: ", err)
-				return err
-			}
+		//if config.Settings.NEED_CREATE_MANUAL_FILES == true {
+		err = CreateFiles_manual(Table1)
+		if err != nil {
+			log.Error("CreateFiles_manual() table: ", Table1.Name, " error: ", err)
+			return err
 		}
+		err = CreateFiles_manual_test(Table1)
+		if err != nil {
+			log.Error("CreateFiles_manual_test() table: ", Table1.Name, " error: ", err)
+			return err
+		}
+		//}
 
 		//ReadObject
 		if config.Settings.NEED_CREATE_READOBJECT == true {
