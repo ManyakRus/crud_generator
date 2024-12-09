@@ -645,14 +645,14 @@ func FillTypeGo(SettingsFill types.SettingsFillFromDatabase, Column1 *types.Colu
 
 	SQLMapping1, ok := SettingsFill.MapDBTypes[Column1.Type]
 	if ok == false {
-		log.Panic("FillTypeGo() Column1.Type: ", Column1.Type, " error: not found")
+		log.Panic("FillTypeGo() Column1.Type: ", Column1.Type, ", error: not found")
 	}
 
 	ColumnName := Column1.Name
 	Type_go := SQLMapping1.GoType
 	Column1.TypeGo = Type_go
 	if Type_go == "" {
-		err = errors.New("FillTypeGo() error: Column: " + ColumnName + " Type: " + Column1.Type + " TypeGo= \"\"")
+		err = errors.New("FillTypeGo() error: Column: " + ColumnName + ", Type: " + Column1.Type + ", TypeGo= \"\"")
 		log.Panic(err)
 	}
 
