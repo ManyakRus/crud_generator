@@ -32,6 +32,13 @@ NEED_USE_DB_VIEWS=false
 
 #---------------------Template settings---------------------
 
+#NEED_CREATE_MODEL_STRUCT - fill "true" if you want create model files with golang struct with all database fields
+NEED_CREATE_MODEL_STRUCT=true
+
+#NEED_CREATE_MANUAL_FILES - fill "true" if you want create "_manual.go" files, intended for user manual changes
+NEED_CREATE_MANUAL_FILES=true
+
+
 #SERVICE_REPOSITORY_URL - URL of your new service repository (Github, gitlab, etc.)
 SERVICE_REPOSITORY_URL="gitlab.aescorp.ru/dsp_dev/claim/crud_service"
 
@@ -123,12 +130,6 @@ HAS_IS_DELETED=true
 TEMPLATE_EXTERNAL_PROTO_FILENAME=/home/user/GolandProjects/!sanek/sync_service/api/sync_service.proto
 
 #---------------------Create files settings---------------------
-
-#NEED_CREATE_MODEL_STRUCT - fill "true" if you want create model files with golang struct with all database fields
-NEED_CREATE_MODEL_STRUCT=true
-
-#NEED_CREATE_MANUAL_FILES - fill "true" if you want create "_manual.go" files, intended for user manual changes
-NEED_CREATE_MANUAL_FILES=true
 
 #NEED_CREATE_CRUD - fill "true" if you want create crud operations files
 NEED_CREATE_CRUD=true
