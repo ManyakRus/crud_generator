@@ -603,6 +603,9 @@ TEMPLATES_MODEL_CRUD_READOBJECT_FILENAME="objects_table_crud.go_"
 #TEMPLATES_CRUD_READOBJECT_FOLDERNAME - folder name "pkg/db/crud_objects" for crud objects
 TEMPLATES_CRUD_READOBJECT_FOLDERNAME="pkg/db/crud_objects"
 
+#TEMPLATES_MODEL_CRUD_OBJECT_MANUAL_FILENAME - short filename of "objects_table_crud_manual.go_" file
+TEMPLATES_MODEL_CRUD_OBJECT_MANUAL_FILENAME="objects_table_crud_manual.go_"
+
 
 
 

@@ -15,6 +15,7 @@ var Crud_ObjectLawsuitStatusType ICrud_ObjectLawsuitStatusType
 
 // интерфейс стандартных CRUD операций, для использования в DB или GRPC или NRPC
 type ICrud_ObjectLawsuitStatusType interface {
+	ICrud_ObjectLawsuitStatusType_manual
 	ReadObject(*ObjectLawsuitStatusType) error
 }
 

@@ -1,0 +1,12 @@
+package object_lawsuit_status_types
+
+import (
+)
+
+// Crud_LawsuitStatusType - объект контроллер crud операций, созданных вручную
+var Crud_ObjectLawsuitStatusType_manual ICrud_ObjectLawsuitStatusType_manual
+
+// интерфейс CRUD операций, созданных вручную, для использования в DB или GRPC или NRPC
+type ICrud_ObjectLawsuitStatusType_manual interface {
+}
+
