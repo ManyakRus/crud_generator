@@ -1,7 +1,7 @@
 func TestFindBy_FieldNamesWithUnderline(t *testing.T) {
 	config_main.LoadEnv()
 
-	postgres_gorm.Connect()
+	postgres_gorm.Connect_WithApplicationName_SingularTableName(constants.SERVICE_NAME + "_test")
 	defer postgres_gorm.CloseConnection()
 
 	crud := Crud_DB{}

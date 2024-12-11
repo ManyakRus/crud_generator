@@ -124,9 +124,10 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 	FieldNamesWithUnderline := ""
 	FieldNamesWithComma := ""
 	ColumnNamesWithComma := ""
+	ColumnNamesWithCommaQuotes := ""
 
 	//
-	TextFind := "\t" + `tx = tx.Where("ColumnName = ?", m.FieldName)` + "\n"
+	TextFind := "\t" + `tx = tx.Where(` + "`" + `"ColumnName" = ?` + "`" + `, m.FieldName)` + "\n"
 	TextWhere := ""
 	Underline := ""
 	Plus := ""
@@ -136,10 +137,11 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 		if ok == false {
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
-		TextWhere = TextWhere + "\t" + `tx = tx.Where("` + ColumnName1 + ` = ?", m.` + Column1.NameGo + `)` + "\n"
+		TextWhere = TextWhere + "\t" + `tx = tx.Where(` + "`" + `"` + ColumnName1 + `"` + ` = ?` + "`" + `, m.` + Column1.NameGo + `)` + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
 		ColumnNamesWithComma = ColumnNamesWithComma + Comma + Column1.Name
+		ColumnNamesWithCommaQuotes = ColumnNamesWithCommaQuotes + Comma + `"` + Column1.Name + `"`
 
 		Underline = "_"
 		Plus = "+"
@@ -166,6 +168,7 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextWhere)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
+	Otvet = strings.ReplaceAll(Otvet, "ColumnNamesWithCommaQuotes", ColumnNamesWithCommaQuotes)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnNamesWithComma", ColumnNamesWithComma)
 
 	return Otvet
@@ -222,6 +225,12 @@ func CreateFiles_FindMassBy_Test(Table1 *types.Table) error {
 
 		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
+
+		ConstantsURL := create_files.Find_ConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
+
+		//замена "postgres_gorm.Connect_WithApplicationName("
+		TextCrud = create_files.Replace_Connect_WithApplicationName(TextCrud)
 
 	}
 

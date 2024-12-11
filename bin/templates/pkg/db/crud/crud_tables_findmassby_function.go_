@@ -21,8 +21,8 @@ func FindMassBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m 
 
 	tx := db.WithContext(ctx)
 
-	tx = tx.Where("ColumnName = ?", m.FieldName)
-	tx = tx.Order("ColumnNamesWithComma")
+	tx = tx.Where(`"ColumnName" = ?`, m.FieldName)
+	tx = tx.Order(`ColumnNamesWithCommaQuotes`)
 	tx = tx.Find(&Otvet)
 	err = tx.Error
 

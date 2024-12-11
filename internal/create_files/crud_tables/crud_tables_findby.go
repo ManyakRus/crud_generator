@@ -62,6 +62,9 @@ func CreateFiles_FindBy(Table1 *types.Table) error {
 		ConstantsURL := create_files.Find_DBConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
 
+		//замена "postgres_gorm.Connect_WithApplicationName("
+		TextCrud = create_files.Replace_Connect_WithApplicationName(TextCrud)
+
 	}
 
 	//создание функций
@@ -126,7 +129,7 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 	TextWhere := ""
 
 	//
-	TextFind := "\t" + `tx = tx.Where("ColumnName = ?", m.FieldName)` + "\n"
+	TextFind := "\t" + `tx = tx.Where(` + "`" + `"ColumnName" = ?` + "`" + `, m.FieldName)` + "\n"
 	Underline := ""
 	Plus := ""
 	for _, ColumnName1 := range MassColumns1 {
@@ -134,7 +137,7 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 		if ok == false {
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
-		TextWhere = TextWhere + "\t" + `tx = tx.Where("` + ColumnName1 + ` = ?", m.` + Column1.NameGo + `)` + "\n"
+		TextWhere = TextWhere + "\t" + `tx = tx.Where(` + "`" + `"` + ColumnName1 + `" = ?` + "`" + `, m.` + Column1.NameGo + `)` + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
 		Underline = "_"

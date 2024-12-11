@@ -1,5 +1,6 @@
 [
 {"Table":"tinkoff_instrument","Columns":["instrument_type"]},
 {"Table":"tinkoff_instrument","Columns":["instrument_type", "name"]},
-{"Table":"tinkoff_instrument","Columns":["instrument_type", "currency"]}
+{"Table":"tinkoff_instrument","Columns":["instrument_type", "currency"]},
+{"Table":"moex_securities_all","Columns":["group", "is_traded"]}
 ]
