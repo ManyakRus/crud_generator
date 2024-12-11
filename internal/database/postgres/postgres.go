@@ -503,7 +503,7 @@ func FillIDMinimum_ManyPK(MapTable map[string]*types.Table) error {
 
 			for _, Column1 := range ColumnsPK {
 				DefaultValueSQL := create_files.FindText_DefaultValueSQL(Column1.TypeGo)
-				TextSQL += `and ` + Column1.Name + ` <> ` + DefaultValueSQL
+				TextSQL += `and ` + Column1.Name + ` <> ` + DefaultValueSQL + "\n"
 			}
 		} else {
 			TextSQL = `SELECT 
@@ -521,7 +521,7 @@ func FillIDMinimum_ManyPK(MapTable map[string]*types.Table) error {
 `
 
 			for _, Column1 := range ColumnsPK {
-				TextSQL += `and ` + Column1.Name + ` is not null `
+				TextSQL += `and ` + Column1.Name + ` is not null ` + "\n"
 			}
 			TextSQL = TextSQL + `
 			ORDER BY
