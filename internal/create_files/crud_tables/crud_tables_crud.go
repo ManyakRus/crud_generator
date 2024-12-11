@@ -439,8 +439,8 @@ func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 
 		TextM2ID = TextM2ID + "\t" + "m2." + Column1.NameGo + " = " + "m." + Column1.NameGo + "\n"
 		TextIfMId = TextIfMId + TextOR + TextEqual0
-		//TextIfMId = TextIfMId + TextOR + "m." + Column1.NameGo + " == " + DefaultValue
 		TextIfMIdNot0 = TextIfMIdNot0 + TextOR + TextNotEqual0
+		//TextIfMId = TextIfMId + TextOR + "m." + Column1.NameGo + " == " + DefaultValue
 		//TextIfMIdNot0 = TextIfMIdNot0 + TextOR + "m." + Column1.NameGo + " != " + DefaultValue
 
 		TextMID0 = TextMID0 + TextOR + " (" + VariableName + "." + Column1.NameGo + " == " + DefaultValue + ")"

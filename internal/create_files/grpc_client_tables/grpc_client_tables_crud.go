@@ -462,8 +462,11 @@ func Replace_OtvetIDEqual0(Text string, Table1 *types.Table) string {
 	//
 	TextFind = " Otvet.ID == 0"
 	for _, ColumnPK1 := range ColumnsPK {
-		Value := create_files.FindText_DefaultValue(ColumnPK1.TypeGo)
-		TextNew = " Otvet." + ColumnPK1.NameGo + " == " + Value + ""
+		TextEqual0 := create_files.FindText_EqualEmpty(ColumnPK1, "Otvet."+ColumnPK1.NameGo)
+		//TextNotEqual0 := create_files.FindText_NotEqualEmpty(Column1, "m."+Column1.NameGo)
+		//Value := create_files.FindText_DefaultValue(ColumnPK1.TypeGo)
+		TextNew = " " + TextEqual0
+		//TextNew = " Otvet." + ColumnPK1.NameGo + " == " + Value + ""
 		Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 		break
 	}
