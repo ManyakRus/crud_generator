@@ -35,7 +35,7 @@ func StringIdentifier(` + TextNamesTypes + `) string {
 			continue
 		}
 		TextConvert := create_files.FindText_ConvertToString(Column1, Column1.NameGo)
-		Text = Text + "\tOtvet = Otvet + " + `"_" + ` + TextConvert + "\n"
+		Text = Text + "\tOtvet = Otvet + " + TextConvert + ` + "_"` + "\n"
 	}
 
 	Text = Text + `

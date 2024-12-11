@@ -2534,7 +2534,8 @@ func FindText_ConvertToString(Column1 *types.Column, VariableName string) string
 	if Column1 == nil {
 		return Otvet
 	}
-	Otvet = VariableName + "." + Column1.NameGo
+	Otvet = VariableName
+	//Otvet = VariableName + "." + Column1.NameGo
 	switch Column1.TypeGo {
 	case "time.Time":
 		Otvet = VariableName + ".String()"
