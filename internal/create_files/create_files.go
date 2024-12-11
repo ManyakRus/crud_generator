@@ -2019,6 +2019,20 @@ func FindText_EqualEmpty(Column1 *types.Column, VariableName string) string {
 	return Otvet
 }
 
+// FindText_NotEqualEmpty - находит текст сравнение с пустым значением
+func FindText_NotEqualEmpty(Column1 *types.Column, VariableName string) string {
+	Otvet := ""
+
+	DefaultValue := FindText_DefaultValue(Column1.TypeGo)
+	Otvet = VariableName + " != " + DefaultValue
+
+	if DefaultValue == "time.Time{}" {
+		Otvet = VariableName + ".IsZero() == false"
+	}
+
+	return Otvet
+}
+
 //// AddSkipNowEveryFunc - добавляет функцию SkipNow() для каждой тестовой функции
 //func AddSkipNowEveryFunc(Text string) string {
 //	Otvet := ""

@@ -434,10 +434,14 @@ func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 		TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
 
 		DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
+		TextEqual0 := create_files.FindText_EqualEmpty(Column1, "m."+Column1.NameGo)
+		TextNotEqual0 := create_files.FindText_NotEqualEmpty(Column1, "m."+Column1.NameGo)
 
 		TextM2ID = TextM2ID + "\t" + "m2." + Column1.NameGo + " = " + "m." + Column1.NameGo + "\n"
-		TextIfMId = TextIfMId + TextOR + "m." + Column1.NameGo + " == " + DefaultValue
-		TextIfMIdNot0 = TextIfMIdNot0 + TextOR + "m." + Column1.NameGo + " != " + DefaultValue
+		TextIfMId = TextIfMId + TextOR + TextEqual0
+		//TextIfMId = TextIfMId + TextOR + "m." + Column1.NameGo + " == " + DefaultValue
+		TextIfMIdNot0 = TextIfMIdNot0 + TextOR + TextNotEqual0
+		//TextIfMIdNot0 = TextIfMIdNot0 + TextOR + "m." + Column1.NameGo + " != " + DefaultValue
 
 		TextMID0 = TextMID0 + TextOR + " (" + VariableName + "." + Column1.NameGo + " == " + DefaultValue + ")"
 		TextAlias := create_files.Convert_IDToAlias(Table1, Column1, Column1.NameGo)
