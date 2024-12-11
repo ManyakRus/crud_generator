@@ -102,6 +102,9 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	//TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
 	TextGRPC_Client = TextGRPC_Client + TextUpdateEveryColumn
 
+	//добавим импорт timestamp
+	TextGRPC_Client = create_files.CheckAndAdd_ImportTimestamp_FromText(TextGRPC_Client)
+
 	//заменим grpc_proto на новое
 	TextProto := create_files.TextProto()
 	TextGRPC_Client = strings.ReplaceAll(TextGRPC_Client, "grpc_proto.", TextProto+".")

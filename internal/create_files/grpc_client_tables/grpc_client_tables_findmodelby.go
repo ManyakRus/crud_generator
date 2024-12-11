@@ -89,6 +89,9 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 	}
 	TextGRPCClient = TextGRPCClient + TextClientGRPCFunc
 
+	//добавим импорт timestamp
+	TextGRPCClient = create_files.CheckAndAdd_ImportTimestamp_FromText(TextGRPCClient)
+
 	//заменим grpc_proto на новое
 	TextProto := create_files.TextProto()
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, "grpc_proto.", TextProto+".")
