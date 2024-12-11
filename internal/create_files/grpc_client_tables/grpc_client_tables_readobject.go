@@ -99,6 +99,9 @@ func CreateFiles_ReadObject(Table1 *types.Table) error {
 		//добавим импорт uuid
 		TextGRPCClient = create_files.CheckAndAdd_ImportUUID_FromText(TextGRPCClient)
 
+		//добавим импорт timestamp
+		TextGRPCClient = create_files.CheckAndAdd_ImportTimestamp_FromText(TextGRPCClient)
+
 	}
 
 	//заменим grpc_proto на новое
