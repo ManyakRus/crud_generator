@@ -185,6 +185,9 @@ func CreateFiles_ReadAll_Test(Table1 *types.Table) error {
 		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
 
+		ConstantsURL := create_files.Find_ConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
+
 	}
 
 	//создание функций

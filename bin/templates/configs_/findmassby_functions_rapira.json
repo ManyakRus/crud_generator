@@ -2,6 +2,9 @@
 {"Table":"briefcases_hashtags","Columns":["briefcase_id"]},
 {"Table":"employees_hashtags","Columns":["employee_id"]},
 {"Table":"user_roles_memberships","Columns":["employee_id"]},
-{"Table":"user_roles_memberships","Columns":["user_role_id"]}
+{"Table":"user_roles_memberships","Columns":["user_role_id"]},
+{"Table":"briefcases_files","Columns":["briefcase_id"]},
+{"Table":"court_suits_files","Columns":["court_suit_id"]},
+{"Table":"lawsuits_files","Columns":["lawsuit_id"]}
 
 ]

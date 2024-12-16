@@ -192,7 +192,7 @@ func CreateFiles_Test(Table1 *types.Table) error {
 		//добавим импорт uuid
 		TextDB = create_files.CheckAndAdd_ImportUUID_FromText(TextDB)
 
-		//замена "postgres_gorm.Connect_WithApplicationName("
+		//замена "postgres_gorm.Connect_WithApplicationName"
 		TextDB = create_files.Replace_Connect_WithApplicationName(TextDB)
 
 	}

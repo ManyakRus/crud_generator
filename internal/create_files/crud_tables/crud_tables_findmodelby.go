@@ -249,6 +249,9 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
 
+		ConstantsURL := create_files.Find_ConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
+
 	}
 
 	//создание функций

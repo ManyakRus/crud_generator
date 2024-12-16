@@ -228,10 +228,6 @@ func CreateFiles_FindMassBy_Test(Table1 *types.Table) error {
 
 		ConstantsURL := create_files.Find_ConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
-
-		//замена "postgres_gorm.Connect_WithApplicationName("
-		TextCrud = create_files.Replace_Connect_WithApplicationName(TextCrud)
-
 	}
 
 	//создание функций
@@ -240,6 +236,9 @@ func CreateFiles_FindMassBy_Test(Table1 *types.Table) error {
 		return err
 	}
 	TextCrud = TextCrud + TextCrudFunc
+
+	//замена "postgres_gorm.Connect_WithApplicationName"
+	TextCrud = create_files.Replace_Connect_WithApplicationName(TextCrud)
 
 	//создание текста
 	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)

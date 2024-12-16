@@ -209,6 +209,9 @@ func CreateFiles_FindBy_Test(Table1 *types.Table) error {
 		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
 
+		ConstantsURL := create_files.Find_ConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
+
 	}
 
 	//создание функций
@@ -217,6 +220,9 @@ func CreateFiles_FindBy_Test(Table1 *types.Table) error {
 		return err
 	}
 	TextCrud = TextCrud + TextCrudFunc
+
+	//замена "postgres_gorm.Connect_WithApplicationName("
+	TextCrud = create_files.Replace_Connect_WithApplicationName(TextCrud)
 
 	//создание текста
 	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
