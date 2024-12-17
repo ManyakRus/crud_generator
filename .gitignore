@@ -28,3 +28,4 @@
 /bin/notifier_service/
 
 /bin/tinkoff_invest/
+/bin/postgres_migrate/

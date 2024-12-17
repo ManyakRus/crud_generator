@@ -676,5 +676,5 @@ TESTS_FOLDERNAME = "tests"
 FOLDERNAME_GRPC_PROTO="api/grpc_proto"
 
 #FOLDERNAME_API - folder name for create .proto file
-FOLDERNAME_API="api/crud_api"
+FOLDERNAME_API="api"
 

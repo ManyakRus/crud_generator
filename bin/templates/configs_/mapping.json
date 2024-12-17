@@ -584,6 +584,87 @@
       "guregu_type": "null.Time",
       "go_nullable_type": "time.Time",
       "swagger_type": "time.Time"
+    },
+    {
+      "sql_type": "_aclitem",
+      "go_type": "string",
+      "json_type": "Text",
+      "protobuf_type": "string",
+      "guregu_type": "null.String",
+      "go_nullable_type": "sql.NullString",
+      "swagger_type": "string"
+    },
+    {
+      "sql_type": "_text",
+      "go_type": "string",
+      "json_type": "Text",
+      "protobuf_type": "string",
+      "guregu_type": "null.String",
+      "go_nullable_type": "sql.NullString",
+      "swagger_type": "string"
+    },
+    {
+      "sql_type": "name",
+      "go_type": "string",
+      "json_type": "Text",
+      "protobuf_type": "string",
+      "guregu_type": "null.String",
+      "go_nullable_type": "sql.NullString",
+      "swagger_type": "string"
+    },
+    {
+      "sql_type": "xid",
+      "go_type": "int32",
+      "json_type": "Integer",
+      "protobuf_type": "int32",
+      "guregu_type": "null.Int",
+      "go_nullable_type": "sql.NullInt32",
+      "swagger_type": "int32"
+    },
+    {
+      "sql_type": "_oid",
+      "go_type": "string",
+      "json_type": "Text",
+      "protobuf_type": "string",
+      "guregu_type": "null.String",
+      "go_nullable_type": "sql.NullString",
+      "swagger_type": "string"
+    },
+    {
+      "sql_type": "_int2",
+      "go_type": "string",
+      "json_type": "Text",
+      "protobuf_type": "string",
+      "guregu_type": "null.String",
+      "go_nullable_type": "sql.NullString",
+      "swagger_type": "string"
+    },
+    {
+      "sql_type": "oidvector",
+      "go_type": "string",
+      "json_type": "Text",
+      "protobuf_type": "string",
+      "guregu_type": "null.String",
+      "go_nullable_type": "sql.NullString",
+      "swagger_type": "string"
+    },
+    {
+      "sql_type": "int2vector",
+      "go_type": "string",
+      "json_type": "Text",
+      "protobuf_type": "string",
+      "guregu_type": "null.String",
+      "go_nullable_type": "sql.NullString",
+      "swagger_type": "string"
+    },
+    {
+      "sql_type": "pg_node_tree",
+      "go_type": "string",
+      "json_type": "Text",
+      "protobuf_type": "string",
+      "guregu_type": "null.String",
+      "go_nullable_type": "sql.NullString",
+      "swagger_type": "string"
     }
   ]
 }
