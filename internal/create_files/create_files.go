@@ -1636,15 +1636,16 @@ func FindText_ProtobufRequest_ID_Type(Table1 *types.Table, Column1 *types.Column
 	if isPrimaryKey == false {
 		Number = Number + 1
 	}
-	sNumber := ""
-	if IsStringOrUUID(Column1.TypeGo) == true {
-		sNumber = strconv.Itoa(Number)
-		sNumber = "_" + sNumber
-	} else {
-		//} else if Number != 1 {
-		sNumber = strconv.Itoa(Number)
-		sNumber = "_" + sNumber
-	}
+	sNumber := "_" + strconv.Itoa(Number)
+	//sNumber := "_"
+	//if IsStringOrUUID(Column1.TypeGo) == true {
+	//	sNumber = strconv.Itoa(Number)
+	//	sNumber = "_" + sNumber
+	//} else {
+	//	//} else if Number != 1 {
+	//	sNumber = strconv.Itoa(Number)
+	//	sNumber = "_" + sNumber
+	//}
 
 	//RequestName, _ = FindText_ProtobufRequest(Table1)
 

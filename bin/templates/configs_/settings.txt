@@ -127,7 +127,7 @@ USE_DEFAULT_TEMPLATE=true
 HAS_IS_DELETED=true
 
 #TEMPLATE_EXTERNAL_PROTO_FILENAME - can fill real .proto file full filename with folder, from external real project - for use as template
-TEMPLATE_EXTERNAL_PROTO_FILENAME=/home/user/GolandProjects/!sanek/sync_service/api/sync_service.proto
+TEMPLATE_EXTERNAL_PROTO_FILENAME=
 
 #---------------------Create files settings---------------------
 
