@@ -1537,11 +1537,11 @@ func FindText_ProtobufRequest1(Table1 *types.Table) (OtvetRequestType string, Ot
 
 	switch PrimaryKeyTypeGo {
 	case "string", "uuid.UUID":
-		OtvetRequestName = "String_1"
 		OtvetRequestType = TextRequest + "String"
+		OtvetRequestName = "String_1"
 	case "time.Time":
-		OtvetRequestName = "Date"
 		OtvetRequestType = TextRequest + "Date"
+		OtvetRequestName = "Date"
 	default:
 		OtvetRequestName = PrimaryKeyColumn.TypeGo
 		OtvetRequestName = micro.StringFromUpperCase(OtvetRequestName)
@@ -2787,7 +2787,9 @@ func Find_RequestFieldNames_FromMass(MassColumns []*types.Column) string {
 	Underline := ""
 	for _, Column1 := range MassColumns {
 		TextFields = TextFields + Underline + Column1.NameGo
-		TextRequest1 := Find_RequestFieldName_FromMass(Column1, MassColumns)
+		TextRequest1 := Convert_GolangTypeNameToProtobufTypeName(Column1.TypeGo)
+		TextRequest1 = micro.StringFromUpperCase(TextRequest1)
+		//TextRequest1 := Find_RequestFieldName_FromMass(Column1, MassColumns)
 		Otvet = Otvet + Underline + TextRequest1
 		Underline = "_"
 	}

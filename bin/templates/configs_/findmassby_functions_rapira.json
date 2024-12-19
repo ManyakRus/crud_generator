@@ -15,6 +15,16 @@
 {"Table":"lawsuits","Columns":["reason_id"]},
 {"Table":"lawsuits","Columns":["connection_id","reason_id"]},
 {"Table":"lawsuits","Columns":["connection_id"]},
-{"Table":"lawsuits","Columns":["branch_id"]}
+{"Table":"lawsuits","Columns":["branch_id"]},
+{"Table":"contracts","Columns":["is_group","is_organization"]},
+{"Table":"contracts","Columns":["is_group","is_ind_organization"]},
+{"Table":"contracts","Columns":["is_group","email"]},
+{"Table":"contracts","Columns":["is_group","is_valid_email"]},
+{"Table":"contracts","Columns":["is_group"]},
+{"Table":"contracts","Columns":["is_group","department_id"]},
+{"Table":"contracts","Columns":["is_group","sector_id"]},
+{"Table":"contracts","Columns":["type_id"]},
+{"Table":"contracts","Columns":["branch_id"]},
+{"Table":"contracts","Columns":["parent_id"]}
 
 ]
