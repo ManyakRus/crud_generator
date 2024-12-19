@@ -8,6 +8,9 @@ import (
 )
 
 // FindText_FindMassBy - добавляет текст FindBy
+// возвращает:
+// TextProto
+// Text для добавления
 func FindText_FindMassBy(TextProto string, Table1 *types.Table) (string, string) {
 	Otvet := TextProto
 
@@ -30,7 +33,7 @@ func FindText_FindMassBy(TextProto string, Table1 *types.Table) (string, string)
 		//проверим такой текст message уже есть
 		pos1 = strings.Index(Otvet, TextMess)
 		if pos1 < 0 {
-			Otvet = Otvet + "\n" + TextMess
+			Otvet = Otvet + TextMess
 		}
 
 		//
@@ -42,7 +45,7 @@ func FindText_FindMassBy(TextProto string, Table1 *types.Table) (string, string)
 
 // FindText_FindMassBy1 - находит текст FindBy
 func FindText_FindMassBy1(TableColumns1 types.TableColumns) string {
-	Otvet := "\n\trpc "
+	Otvet := "\trpc "
 
 	TextFields := ""
 	TextRequest := "Request_"

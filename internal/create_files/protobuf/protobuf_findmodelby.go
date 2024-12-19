@@ -43,7 +43,7 @@ func FindText_FindModelBy(MapAll map[string]*types.Table, TextProto string, Tabl
 
 // FindText_FindModelBy1 - находит текст FindModelBy
 func FindText_FindModelBy1(MapAll map[string]*types.Table, Table1 *types.Table, Column1 *types.Column) string {
-	Otvet := "\n\trpc "
+	Otvet := "\trpc "
 
 	TextFields := ""
 	//TextRequest := "Request_"

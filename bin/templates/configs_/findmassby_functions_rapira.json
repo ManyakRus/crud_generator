@@ -5,6 +5,16 @@
 {"Table":"user_roles_memberships","Columns":["user_role_id"]},
 {"Table":"briefcases_files","Columns":["briefcase_id"]},
 {"Table":"court_suits_files","Columns":["court_suit_id"]},
-{"Table":"lawsuits_files","Columns":["lawsuit_id"]}
+{"Table":"lawsuits_files","Columns":["lawsuit_id"]},
+{"Table":"lawsuits","Columns":["type_id"]},
+{"Table":"lawsuits","Columns":["connection_id","type_id"]},
+{"Table":"lawsuits","Columns":["contract_id"]},
+{"Table":"lawsuits","Columns":["connection_id","contract_id"]},
+{"Table":"lawsuits","Columns":["status_id"]},
+{"Table":"lawsuits","Columns":["connection_id","status_id"]},
+{"Table":"lawsuits","Columns":["reason_id"]},
+{"Table":"lawsuits","Columns":["connection_id","reason_id"]},
+{"Table":"lawsuits","Columns":["connection_id"]},
+{"Table":"lawsuits","Columns":["branch_id"]}
 
 ]

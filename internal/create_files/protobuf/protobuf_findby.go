@@ -42,7 +42,7 @@ func FindText_FindBy(TextProto string, Table1 *types.Table) (string, string) {
 
 // FindText_FindBy1 - находит текст FindBy
 func FindText_FindBy1(TableColumns1 types.TableColumns) string {
-	Otvet := "\n\trpc "
+	Otvet := "\trpc "
 
 	TextFields := ""
 	TextRequest := "Request_"

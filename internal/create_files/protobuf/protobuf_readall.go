@@ -31,7 +31,7 @@ func FindText_ReadAll(TextProto string, Table1 *types.Table) (TextProtoNew strin
 
 // FindText_ReadAll1 - находит текст FindBy
 func FindText_ReadAll1(Table1 *types.Table) string {
-	Otvet := "\n\trpc "
+	Otvet := "\trpc "
 
 	FuncName := "ReadAll"
 	TextRequest := "Request_Empty"
