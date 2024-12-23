@@ -38,6 +38,9 @@ var mutex_Connect = &sync.Mutex{}
 // NeedReconnect - флаг необходимости переподключения
 var NeedReconnect bool
 
+// maxMsgSize - максимальный размер сообщения GRPC
+const maxMsgSize = 1024 * 1024 * 1024 //1Гб
+
 // Объект с функцией Connect_GRPC_NRPC()
 type Object_Connect_GRPC_NRPC struct {
 }
@@ -78,7 +81,7 @@ func Connect_err() error {
 	}
 
 	addr := Settings.SYNC_SERVICE_HOST + ":" + Settings.SYNC_SERVICE_PORT
-	Conn, err = grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	Conn, err = grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(maxMsgSize), grpc.MaxCallSendMsgSize(maxMsgSize)))
 	if err != nil {
 		return err
 	}
