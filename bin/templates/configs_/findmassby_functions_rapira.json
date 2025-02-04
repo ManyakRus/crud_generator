@@ -25,6 +25,16 @@
 {"Table":"contracts","Columns":["is_group","sector_id"]},
 {"Table":"contracts","Columns":["type_id"]},
 {"Table":"contracts","Columns":["branch_id"]},
-{"Table":"contracts","Columns":["parent_id"]}
+{"Table":"contracts","Columns":["parent_id"]},
+{"Table":"organization_casebooks","Columns":["organization_id"]},
+{"Table":"organization_casebooks","Columns":["inn"]},
+{"Table":"employees","Columns":["email"]},
+{"Table":"employees","Columns":["login"]},
+{"Table":"employees","Columns":["is_active"]},
+{"Table":"employees","Columns":["is_group","is_active"]},
+{"Table":"employees","Columns":["connection_id","is_group","is_active"]},
+{"Table":"employees","Columns":["branch_id","is_group","is_active"]},
+{"Table":"employees","Columns":["name","second_name","parent_name"]},
+{"Table":"employees","Columns":["parent_id"]}
 
 ]

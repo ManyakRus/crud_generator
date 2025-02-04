@@ -614,12 +614,12 @@
     },
     {
       "sql_type": "xid",
-      "go_type": "int32",
+      "go_type": "int64",
       "json_type": "Integer",
-      "protobuf_type": "int32",
+      "protobuf_type": "int64",
       "guregu_type": "null.Int",
-      "go_nullable_type": "sql.NullInt32",
-      "swagger_type": "int32"
+      "go_nullable_type": "sql.NullInt64",
+      "swagger_type": "int64"
     },
     {
       "sql_type": "_oid",
