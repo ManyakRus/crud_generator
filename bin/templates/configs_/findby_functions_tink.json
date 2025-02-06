@@ -2,5 +2,6 @@
 {"Table":"tinkoff_instrument","Columns":["ticker"]},
 {"Table":"tinkoff_instrument","Columns":["figi"]},
 {"Table":"tinkoff_instrument","Columns":["isin"]},
-{"Table":"my_account","Columns":["account_number"]}
+{"Table":"my_account","Columns":["account_number"]},
+{"Table":"tinkoff_bond","Columns":["class_code", "isin"]}
 ]
