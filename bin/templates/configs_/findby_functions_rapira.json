@@ -1,4 +1,8 @@
 [
 {"Table":"connections","Columns":["branch_id","is_legal"]},
-{"Table":"file_types","Columns":["code"]}
+{"Table":"file_types","Columns":["code"]},
+{"Table":"event_types","Columns":["code"]},
+{"Table":"lawsuit_reason_types","Columns":["code"]},
+{"Table":"lawsuit_stage_types","Columns":["code"]},
+{"Table":"lawsuit_status_types","Columns":["code"]}
 ]
