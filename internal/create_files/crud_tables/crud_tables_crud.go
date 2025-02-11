@@ -394,7 +394,7 @@ func Replace_ExtID_equal0_string(TextDB string, Table1 *types.Table) string {
 func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
-	VariableName := "m"
+	//VariableName := "m"
 
 	//сортировка по названию таблиц
 	keys := make([]string, 0, len(Table1.MapColumns))
@@ -403,53 +403,66 @@ func ReplacePrimaryKeyM_ID(Text string, Table1 *types.Table) string {
 	}
 	sort.Strings(keys)
 
-	TextOtvetIDAliasID := ""
 	TextIfMId := ""
 	TextIfMIdNot0 := ""
 	TextM2ID := ""
-	TextIDRequestID := ""
-	TextOtvetIDID := ""
-	TextRequestIDmID := ""
-	TextRequestIDInt64ID := ""
-	TextOtvetIDmID := ""
-	TextMID0 := ""
+	//TextOtvetIDAliasID := ""
+	//TextIDRequestID := ""
+	//TextOtvetIDID := ""
+	//TextRequestIDmID := ""
+	//TextRequestIDInt64ID := ""
+	//TextOtvetIDmID := ""
+	//TextMID0 := ""
 	TextOR := ""
 	for _, key1 := range keys {
 		Column1, _ := Table1.MapColumns[key1]
 		if Column1.IsPrimaryKey != true {
 			continue
 		}
-		TextOtvetIDID = TextOtvetIDID + "\t" + VariableName + "." + Column1.NameGo + " = " + Column1.NameGo + "\n"
-		RequestColumnName := create_files.Find_RequestFieldName(Table1, Column1)
-		Value, GolangCode := create_files.Convert_ProtobufVariableToGolangVariable(Table1, Column1, "Request.")
-		if GolangCode == "" {
-			TextIDRequestID = TextIDRequestID + "\t" + Column1.NameGo + " := " + Value + "\n"
-		} else {
-			TextIDRequestID = TextIDRequestID + "\t" + GolangCode + "\n"
-		}
-		TextM := create_files.Convert_GolangVariableToProtobufVariableID(Table1, Column1, "m")
-		TextRequestIDmID = TextRequestIDmID + "\t" + VariableName + "." + RequestColumnName + " = " + TextM + "\n"
-		TextInt64ID := create_files.Convert_GolangVariableToProtobufVariableID(Table1, Column1, "")
-		TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
-		TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
 
-		DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
-		TextEqual0 := create_files.FindText_EqualEmpty(Column1, "m."+Column1.NameGo)
-		TextNotEqual0 := create_files.FindText_NotEqualEmpty(Column1, "m."+Column1.NameGo)
-
+		//
 		TextM2ID = TextM2ID + "\t" + "m2." + Column1.NameGo + " = " + "m." + Column1.NameGo + "\n"
-		TextIfMId = TextIfMId + TextOR + TextEqual0
-		TextIfMIdNot0 = TextIfMIdNot0 + TextOR + TextNotEqual0
-		//TextIfMId = TextIfMId + TextOR + "m." + Column1.NameGo + " == " + DefaultValue
-		//TextIfMIdNot0 = TextIfMIdNot0 + TextOR + "m." + Column1.NameGo + " != " + DefaultValue
 
-		TextMID0 = TextMID0 + TextOR + " (" + VariableName + "." + Column1.NameGo + " == " + DefaultValue + ")"
-		TextAlias := create_files.Convert_IDToAlias(Table1, Column1, Column1.NameGo)
-		TextOtvetIDAliasID = TextOtvetIDAliasID + "\t" + VariableName + "." + Column1.NameGo + " = " + TextAlias + "\n"
+		//
+		if Column1.IsIdentity == true {
+			TextEqual0 := create_files.FindText_EqualEmpty(Column1, "m."+Column1.NameGo)
+			TextNotEqual0 := create_files.FindText_NotEqualEmpty(Column1, "m."+Column1.NameGo)
+
+			TextIfMId = TextIfMId + TextOR + TextEqual0
+			TextIfMIdNot0 = TextIfMIdNot0 + TextOR + TextNotEqual0
+		}
+
+		//TextOtvetIDID = TextOtvetIDID + "\t" + VariableName + "." + Column1.NameGo + " = " + Column1.NameGo + "\n"
+		//RequestColumnName := create_files.Find_RequestFieldName(Table1, Column1)
+		//Value, GolangCode := create_files.Convert_ProtobufVariableToGolangVariable(Table1, Column1, "Request.")
+		//if GolangCode == "" {
+		//	TextIDRequestID = TextIDRequestID + "\t" + Column1.NameGo + " := " + Value + "\n"
+		//} else {
+		//	TextIDRequestID = TextIDRequestID + "\t" + GolangCode + "\n"
+		//}
+		//TextM := create_files.Convert_GolangVariableToProtobufVariableID(Table1, Column1, "m")
+		//TextRequestIDmID = TextRequestIDmID + "\t" + VariableName + "." + RequestColumnName + " = " + TextM + "\n"
+		//TextInt64ID := create_files.Convert_GolangVariableToProtobufVariableID(Table1, Column1, "")
+		//TextRequestIDInt64ID = TextRequestIDInt64ID + "\t" + VariableName + "." + RequestColumnName + " = " + TextInt64ID + "\n"
+		//TextOtvetIDmID = TextOtvetIDmID + "\t" + "Otvet." + Column1.NameGo + " = " + VariableName + "." + Column1.NameGo + "\n"
+		//
+		//DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
+		////TextIfMId = TextIfMId + TextOR + "m." + Column1.NameGo + " == " + DefaultValue
+		////TextIfMIdNot0 = TextIfMIdNot0 + TextOR + "m." + Column1.NameGo + " != " + DefaultValue
+		//
+		//TextMID0 = TextMID0 + TextOR + " (" + VariableName + "." + Column1.NameGo + " == " + DefaultValue + ")"
+		//TextAlias := create_files.Convert_IDToAlias(Table1, Column1, Column1.NameGo)
+		//TextOtvetIDAliasID = TextOtvetIDAliasID + "\t" + VariableName + "." + Column1.NameGo + " = " + TextAlias + "\n"
 		TextOR = " || "
 	}
 
 	Otvet = strings.ReplaceAll(Otvet, "\tm2.ID = int64(m.ID)", TextM2ID)
+	if TextIfMId == "" {
+		TextIfMId = "0 == 1"
+	}
+	if TextIfMIdNot0 == "" {
+		TextIfMIdNot0 = "0 == 1"
+	}
 	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) == 0", TextIfMId)
 	Otvet = strings.ReplaceAll(Otvet, "int64(m.ID) != 0", TextIfMIdNot0)
 
