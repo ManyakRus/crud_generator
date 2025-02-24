@@ -3,7 +3,7 @@ package crud_lawsuit_status_types
 import (
 	"context"
 	"time"
-	"github.com/ManyakRus/starter/contextmain"
+	"github.com/ManyakRus/starter/stopapp"
 	"github.com/hashicorp/golang-lru/v2/expirable"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"

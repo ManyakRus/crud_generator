@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/ManyakRus/starter/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
-	"time"
-	"github.com/ManyakRus/starter/contextmain"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_functions"
 	"gorm.io/gorm"
 	"sync/atomic"
+	"time"
 )
 
 // TableName - имя таблицы в БД Postgres
