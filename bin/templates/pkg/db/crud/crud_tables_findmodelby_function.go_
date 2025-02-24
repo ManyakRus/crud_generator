@@ -2,7 +2,8 @@
 func (crud Crud_DB) FindModelBy_FieldNamesWithUnderline(m *lawsuit_status_types.LawsuitStatusType) (foreign_package.ForeignModel, error) {
 	var err error
 
-	ctxMain := context.Background()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -18,6 +19,11 @@ func FindModelBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m
 	Otvet := foreign_package.ForeignModel{}
 	var err error
 
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	tx := db.WithContext(ctx)
 	
 	//находим запись в этой таблице

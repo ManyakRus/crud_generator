@@ -6,6 +6,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gorm.io/gorm"
+	"sync/atomic"
 	"time"
 )
 

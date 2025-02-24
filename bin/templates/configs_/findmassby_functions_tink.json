@@ -4,6 +4,7 @@
 {"Table":"tinkoff_instrument","Columns":["instrument_type", "currency"]},
 {"Table":"tinkoff_instrument","Columns":["instrument_type", "trading_status_id", "for_qual_investor_flag"]},
 {"Table":"tinkoff_instrument","Columns":["instrument_type", "trading_status_id", "for_qual_investor_flag", "api_trade_available_flag"]},
+{"Table":"tinkoff_instrument","Columns":["instrument_type", "for_qual_investor_flag", "api_trade_available_flag"]},
 {"Table":"moex_securities_all","Columns":["group", "is_traded"]},
 {"Table":"my_bond","Columns":["account_id"]},
 {"Table":"my_bond_settings","Columns":["account_id"]},

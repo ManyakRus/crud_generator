@@ -9,6 +9,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gorm.io/gorm"
+	"sync/atomic"
 	"time"
 )
 
@@ -17,7 +18,8 @@ import (
 func (crud Crud_DB) UpdateManyFields(m *lawsuit_status_types.LawsuitStatusType, MassNeedUpdateFields []string) error {
 	var err error
 
-	ctxMain := contextmain.GetContext()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -32,6 +34,12 @@ func (crud Crud_DB) UpdateManyFields(m *lawsuit_status_types.LawsuitStatusType, 
 // MassNeedUpdateFields - список полей структуры golang для обновления
 func UpdateManyFields_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType, MassNeedUpdateFields []string) error {
 	var err error
+
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err

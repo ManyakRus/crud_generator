@@ -9,6 +9,7 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"gorm.io/gorm"
+	"sync/atomic"
 )
 
 // cache - кэш с данными
@@ -30,7 +31,8 @@ func (crud Crud_DB) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatusT
 	var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
-	ctxMain := contextmain.GetContext()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -46,6 +48,11 @@ func ReadFromCache_ctx(ctx context.Context, db *gorm.DB, ID int64) (lawsuit_stat
 	var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	// поищем сначала в кэше
 	Identifier := int64(ID)
 	Otvet, ok := cache.Get(Identifier)

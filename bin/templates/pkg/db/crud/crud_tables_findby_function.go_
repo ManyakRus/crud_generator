@@ -2,7 +2,8 @@
 func (crud Crud_DB) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
-	ctxMain := context.Background()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -17,6 +18,11 @@ func (crud Crud_DB) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.Lawsu
 func FindBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	tx := db.WithContext(ctx)
 
 	tx = tx.Where(`"ColumnName" = ?`, m.FieldName)

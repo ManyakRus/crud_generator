@@ -8,10 +8,11 @@ import (
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
-	"time"
 	"github.com/ManyakRus/starter/contextmain"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_functions"
 	"gorm.io/gorm"
+	"sync/atomic"
+	"time"
 )
 
 // TableName - имя таблицы в БД Postgres
@@ -25,7 +26,8 @@ type Crud_DB struct {
 func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
-	ctxMain := contextmain.GetContext()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -39,6 +41,11 @@ func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err
@@ -57,7 +64,8 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 
 // Save - записывает новый или существующий объект в базу данных
 func (crud Crud_DB) Save(m *lawsuit_status_types.LawsuitStatusType) error {
-	ctxMain := contextmain.GetContext()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -70,6 +78,12 @@ func (crud Crud_DB) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 // Save_ctx - записывает новый или существующий объект в базу данных
 func Save_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
+
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err
@@ -81,7 +95,8 @@ func Save_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 
 // Update - записывает существующий объект в базу данных
 func (crud Crud_DB) Update(m *lawsuit_status_types.LawsuitStatusType) error {
-	ctxMain := contextmain.GetContext()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -94,6 +109,12 @@ func (crud Crud_DB) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 // Update_ctx - записывает существующий объект в базу данных
 func Update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
+
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err
@@ -112,7 +133,8 @@ func Update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 
 // Create - записывает новый объект в базу данных
 func (crud Crud_DB) Create(m *lawsuit_status_types.LawsuitStatusType) error {
-	ctxMain := contextmain.GetContext()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -125,6 +147,12 @@ func (crud Crud_DB) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 // Create_ctx - записывает новый объект в базу данных
 func Create_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
+
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err
@@ -145,7 +173,8 @@ func Create_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
-	ctxMain := contextmain.GetContext()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -159,8 +188,11 @@ func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType) err
 func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType, MassNeedUpdateFields []string) error {
 	var err error
 
-	// log.Trace("start Save() ", TableName, " id: ", int64(m.ID))
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
+	//
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err
@@ -216,7 +248,8 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 func (crud Crud_DB) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
-	ctxMain := contextmain.GetContext()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -230,6 +263,11 @@ func (crud Crud_DB) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 func Delete_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err
@@ -257,7 +295,8 @@ func Delete_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 func (crud Crud_DB) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
-	ctxMain := contextmain.GetContext()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -271,6 +310,11 @@ func (crud Crud_DB) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 func Restore_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err
@@ -304,7 +348,8 @@ func (crud Crud_DB) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) erro
 	}
 
 	//
-	ctxMain := contextmain.GetContext()
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
@@ -319,6 +364,11 @@ func (crud Crud_DB) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) erro
 func Find_ByExtID_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
 	if micro.ContextDone(ctx) == true {
 		err = context.Canceled
 		return err
