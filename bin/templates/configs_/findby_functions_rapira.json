@@ -5,5 +5,6 @@
 {"Table":"lawsuit_reason_types","Columns":["code"]},
 {"Table":"lawsuit_stage_types","Columns":["code"]},
 {"Table":"lawsuit_status_types","Columns":["code"]},
-{"Table":"table_names","Columns":["name"]}
+{"Table":"table_names","Columns":["name"]},
+{"Table":"lawsuit_status_states","Columns":["lawsuit_id","status_id"]}
 ]
