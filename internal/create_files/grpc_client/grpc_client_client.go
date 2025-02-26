@@ -92,6 +92,7 @@ func CreateGRPCClient() error {
 	ServiceName := config.Settings.SERVICE_NAME
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, ServiceNameTemplate, ServiceName)
 	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, micro.StringFromUpperCase(ServiceNameTemplate), micro.StringFromUpperCase(ServiceName))
+	TextGRPCClient = strings.ReplaceAll(TextGRPCClient, strings.ToUpper(ServiceNameTemplate), strings.ToUpper(ServiceName))
 
 	//заменим имя сервиса на новое с CamelCase
 	ServiceNameTemplate = create_files.FormatName(ServiceNameTemplate)
