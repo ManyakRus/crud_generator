@@ -37,6 +37,8 @@
 {"Table":"employees","Columns":["name","second_name","parent_name"]},
 {"Table":"employees","Columns":["parent_id"]},
 {"Table":"state_duty_consumptions","Columns":["court_suit_id"]},
-{"Table":"state_duty_consumptions","Columns":["state_duty_registry_id"]}
+{"Table":"state_duty_consumptions","Columns":["state_duty_registry_id"]},
+{"Table":"briefcase_required_files","Columns":["stage_id"]},
+{"Table":"third_party","Columns":["briefcase_id"]}
 
 ]

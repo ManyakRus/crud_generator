@@ -6,5 +6,16 @@
 "contracts": "",
 "debt_types": "",
 "document_return_reasons": "",
-"employees": ""
+"employees": "",
+"court_types": "",
+"briefcase_required_files": "",
+"table_names": "",
+"day_types": "",
+"courts": "",
+"branches": "",
+"gender_types": "",
+"message_types": "",
+"priority_types": "",
+"repeat_types": "",
+"tax_offices": ""
 }
