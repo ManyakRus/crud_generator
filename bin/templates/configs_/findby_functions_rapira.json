@@ -8,5 +8,9 @@
 {"Table":"table_names","Columns":["name"]},
 {"Table":"lawsuit_status_states","Columns":["lawsuit_id","status_id"]},
 {"Table":"user_roles","Columns":["code"]},
-{"Table":"user_roles","Columns":["name"]}
+{"Table":"user_roles","Columns":["name"]},
+{"Table":"accounting_areas","Columns":["code"]},
+{"Table":"service_types","Columns":["code"]},
+{"Table":"debt_types","Columns":["ext_code"]},
+{"Table":"contract_category_types","Columns":["code"]}
 ]
