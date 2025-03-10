@@ -46,8 +46,8 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return err
 	}
 
@@ -84,8 +84,8 @@ func Save_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return err
 	}
 
@@ -115,8 +115,8 @@ func Update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return err
 	}
 
@@ -153,8 +153,8 @@ func Create_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return err
 	}
 
@@ -194,8 +194,8 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 
 	// log.Trace("start Save() ", TableName, " id: ", int64(m.ID))
 
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return err
 	}
 
@@ -269,8 +269,8 @@ func Restore_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsu
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return err
 	}
 
@@ -323,8 +323,8 @@ func Find_ByExtID_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return err
 	}
 
@@ -370,8 +370,8 @@ func Delete_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	if micro.ContextDone(ctx) == true {
-		err = context.Canceled
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return err
 	}
 
