@@ -177,6 +177,9 @@ func CreateFiles_Test(Table1 *types.Table) error {
 		ConstantsURL := create_files.Find_ConstantsURL()
 		TextDB = create_files.AddImport(TextDB, ConstantsURL)
 
+		CrudFuncURL := create_files.Find_CrudFuncURL()
+		TextDB = create_files.AddImport(TextDB, CrudFuncURL)
+
 		//удалим лишние функции
 		TextDB = DeleteFunc_TestDelete(TextDB, Table1)
 		TextDB = DeleteFunc_TestRestore(TextDB, Table1)

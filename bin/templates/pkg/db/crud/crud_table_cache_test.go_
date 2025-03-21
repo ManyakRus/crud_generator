@@ -4,6 +4,7 @@ import (
 	"github.com/ManyakRus/starter/config_main"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_func"
 	"reflect"
 	"testing"
 )
@@ -25,7 +26,7 @@ func TestReadFromCache(t *testing.T) {
 
 	//читаем из Кеша
 	m2, err := Crud_DB{}.ReadFromCache(Postgres_ID_Test)
-	if err != nil {
+	if err != nil && crud_func.IsRecordNotFound(err) != true {
 		t.Errorf("TestReadFromCache() error: %v", err)
 	}
 

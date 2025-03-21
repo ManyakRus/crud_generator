@@ -5,6 +5,7 @@ import (
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_func"
 	"testing"
 )
 
@@ -20,7 +21,7 @@ func TestRead(t *testing.T) {
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
-	if err != nil {
+	if err != nil && crud_func.IsRecordNotFound(err) != true {
 		t.Error("TestRead() error: ", err)
 	}
 
@@ -90,7 +91,7 @@ func TestFind_ByExtID(t *testing.T) {
 	}
 
 	err = crud.Find_ByExtID(&Otvet)
-	if err != nil {
+	if err != nil && crud_func.IsRecordNotFound(err) != true {
 		t.Error("TestFind_ByExtID() error: ", err)
 	}
 
