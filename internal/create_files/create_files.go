@@ -1750,15 +1750,17 @@ func Convert_IDToAlias(Table1 *types.Table, Column1 *types.Column, VariableName 
 	return Otvet
 }
 
-// Convert_ColumnToAlias - заменяет "Otvet.ID = ID" на "Otvet.ID = alias.Name(ID)"
+// Convert_ColumnToAlias - заменяет "Request.Int64_1" на "alias.Name(Request.Int64_1)"
+// VariableName = "Request.Int64_1"
 func Convert_ColumnToAlias(Table1 *types.Table, Column1 *types.Column, VariableName string) string {
 	Otvet := ""
 
-	Dot := ""
-	if VariableName != "" {
-		Dot = "."
-	}
-	Otvet = VariableName + Dot + Column1.NameGo
+	//Dot := ""
+	//if VariableName != "" {
+	//	Dot = "."
+	//}
+	Otvet = VariableName
+	//Otvet = VariableName + Dot + Column1.NameGo
 
 	TableName := Table1.Name
 	IDName := Column1.Name
@@ -1771,7 +1773,8 @@ func Convert_ColumnToAlias(Table1 *types.Table, Column1 *types.Column, VariableN
 		return Otvet
 	}
 
-	Otvet = TextConvert + "(" + VariableName + Dot + Column1.NameGo + ")"
+	Otvet = TextConvert + "(" + VariableName + ")"
+	//Otvet = TextConvert + "(" + VariableName + Dot + Column1.NameGo + ")"
 
 	//добавим испорт
 	//Text = CheckAndAdd_ImportAlias(Text)
