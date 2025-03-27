@@ -52,6 +52,10 @@
 {"Table":"document_links","Columns":["contract_id", "document1_id"]},
 {"Table":"document_links_rapira","Columns":["contract_id", "document2_id"]},
 {"Table":"document_links","Columns":["contract_id", "document2_id"]},
+{"Table":"document_links_rapira","Columns":["contract_id", "document1_id", "link_type_id"]},
+{"Table":"document_links","Columns":["contract_id", "document1_id", "link_type_id"]},
+{"Table":"document_links_rapira","Columns":["contract_id", "document2_id", "link_type_id"]},
+{"Table":"document_links","Columns":["contract_id", "document2_id", "link_type_id"]},
 {"Table":"lawsuit_invoices","Columns":["lawsuit_id"]},
 {"Table":"lawsuit_payments","Columns":["lawsuit_id"]},
 {"Table":"lawsuit_payments","Columns":["lawsuit_id","invoice_id"]}

@@ -170,9 +170,11 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
 		TextRequest := create_files.Find_RequestFieldName_FromMass(Column1, MassColumns)
-		ColumnName := Column1.NameGo
+		//ColumnName := Column1.NameGo
 		ColumnNameTranslit := Column1.NameGo_translit
-		TextAssign = TextAssign + "\tRequest." + TextRequest + " = m." + ColumnName + "\n"
+		//sColumnConvert := "m." + ColumnName
+		sColumnConvert := create_files.ConvertFromAlias(Table1, Column1, "m."+Column1.NameGo)
+		TextAssign = TextAssign + "\tRequest." + TextRequest + " = " + sColumnConvert + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + ColumnNameTranslit
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
 
