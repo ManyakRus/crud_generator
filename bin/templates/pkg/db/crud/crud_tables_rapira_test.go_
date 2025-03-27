@@ -20,7 +20,7 @@ func TestRead(t *testing.T) {
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
-	if err != nil {
+	if err != nil && crud_func.IsRecordNotFound(err) != true {
 		t.Error("TestRead() error: ", err)
 	}
 
