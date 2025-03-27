@@ -41,6 +41,19 @@
 {"Table":"briefcase_required_files","Columns":["stage_id"]},
 {"Table":"third_party","Columns":["briefcase_id"]},
 {"Table":"briefcases_lawsuits","Columns":["lawsuit_id"]},
-{"Table":"briefcases_lawsuits","Columns":["briefcase_id"]}
+{"Table":"briefcases_lawsuits","Columns":["briefcase_id"]},
+{"Table":"document_links_rapira","Columns":["document1_id"]},
+{"Table":"document_links_rapira","Columns":["document2_id"]},
+{"Table":"document_links","Columns":["document1_id"]},
+{"Table":"document_links","Columns":["document2_id"]},
+{"Table":"document_links_rapira","Columns":["contract_id", "link_type_id"]},
+{"Table":"document_links","Columns":["contract_id", "link_type_id"]},
+{"Table":"document_links_rapira","Columns":["contract_id", "document1_id"]},
+{"Table":"document_links","Columns":["contract_id", "document1_id"]},
+{"Table":"document_links_rapira","Columns":["contract_id", "document2_id"]},
+{"Table":"document_links","Columns":["contract_id", "document2_id"]},
+{"Table":"lawsuit_invoices","Columns":["lawsuit_id"]},
+{"Table":"lawsuit_payments","Columns":["lawsuit_id"]},
+{"Table":"lawsuit_payments","Columns":["lawsuit_id","invoice_id"]}
 
 ]

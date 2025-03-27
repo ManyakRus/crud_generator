@@ -12,5 +12,7 @@
 {"Table":"accounting_areas","Columns":["code"]},
 {"Table":"service_types","Columns":["code"]},
 {"Table":"debt_types","Columns":["ext_code"]},
-{"Table":"contract_category_types","Columns":["code"]}
+{"Table":"contract_category_types","Columns":["code"]},
+{"Table":"lawsuit_invoices","Columns":["lawsuit_id","document_id"]}
+
 ]
