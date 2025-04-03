@@ -61,6 +61,7 @@ func CreateFiles_Cache(Table1 *types.Table) error {
 	CACHE_ELEMENTS_COUNT_MAX := config.Settings.CACHE_ELEMENTS_COUNT_MAX
 	Count_Now := Table1.RowsCount
 	CACHE_ELEMENTS_COUNT := micro.MinInt64(Count_Now, CACHE_ELEMENTS_COUNT_MAX)
+	CACHE_ELEMENTS_COUNT = micro.MaxInt64(CACHE_ELEMENTS_COUNT, 1)
 	sCACHE_ELEMENTS_COUNT := micro.StringFromInt64(CACHE_ELEMENTS_COUNT)
 	TextCache = create_files.FillVariable(TextCache, "CACHE_SIZE", sCACHE_ELEMENTS_COUNT)
 
