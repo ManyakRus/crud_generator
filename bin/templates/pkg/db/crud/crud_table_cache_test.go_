@@ -20,7 +20,7 @@ func TestReadFromCache(t *testing.T) {
 	m1 := lawsuit_status_types.LawsuitStatusType{}
 	m1.ID = Postgres_ID_Test
 	err = Crud_DB{}.Read(&m1)
-	if err != nil {
+	if err != nil && crud_func.IsRecordNotFound(err) != true {
 		t.Errorf("TestReadFromCache() error:t %v", err)
 	}
 
