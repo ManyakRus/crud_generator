@@ -25,7 +25,8 @@ func ReadAll_ctx(ctx context.Context, db *gorm.DB) ([]lawsuit_status_types.Lawsu
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	tx := db.WithContext(ctx)
+	//tx := db.WithContext(ctx)
+	tx := db
 	
 	tx = tx.Where("is_deleted = ?", false)
 	tx = tx.Order("PrimaryKeyNamesWithComma")

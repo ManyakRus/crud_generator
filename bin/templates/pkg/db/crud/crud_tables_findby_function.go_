@@ -23,7 +23,8 @@ func FindBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m *law
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	tx := db.WithContext(ctx)
+	//tx := db.WithContext(ctx)
+	tx := db
 
 	tx = tx.Where(`"ColumnName" = ?`, m.FieldName)
 	tx = tx.Take(m)

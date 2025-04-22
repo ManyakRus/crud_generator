@@ -50,7 +50,8 @@ func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitS
 		return err
 	}
 
-	tx := db.WithContext(ctx)
+	//tx := db.WithContext(ctx)
+	tx := db
 
 	tx = tx.Where(m, PrimaryKeysWithQuotes).Take(m)
 	err = tx.Error
@@ -202,7 +203,8 @@ func create_update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types
 	//Text_is_deleted_deleted_at
 	
 	//
-	tx := db.WithContext(ctx).Model(&m)
+	//tx := db.WithContext(ctx).Model(&m)
+	tx := db
 
 	//колонки для обновления
 	MassNeedFields := crud_functions.MassNeedFields_from_MassNeedUpdateFields(MassNeedUpdateFields)
@@ -332,7 +334,8 @@ func Find_ByExtID_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.
 		return err
 	}
 
-	tx := db.WithContext(ctx)
+	//tx := db.WithContext(ctx)
+	tx := db
 
 	tx = tx.Where("ext_id = ?", m.ExtID).Where("connection_id = ?", m.ConnectionID).Take(m)
 	err = tx.Error
@@ -374,7 +377,8 @@ func Delete_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 		return err
 	}
 
-	tx := db.WithContext(ctx)
+	//tx := db.WithContext(ctx)
+	tx := db
 
 	tx = tx.Delete(m)
 	err = tx.Error

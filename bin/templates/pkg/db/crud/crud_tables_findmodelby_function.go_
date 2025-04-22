@@ -24,7 +24,8 @@ func FindModelBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	tx := db.WithContext(ctx)
+	//tx := db.WithContext(ctx)
+	tx := db
 	
 	//находим запись в этой таблице
 	//tx = tx.Where("ColumnName = ?", m.PrimaryKeyName)
@@ -36,7 +37,8 @@ func FindModelBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m
 	}
 
 	//находим запись в другой таблице
-	tx = db.WithContext(ctx)
+	//tx = db.WithContext(ctx)
+	tx = db
 	ID := m.FieldName
 	Otvet.ForeignPrimaryKeyName = ID
 	tx = tx.Where(&Otvet, ForeignPrimaryKeysWithQuotes).Take(&Otvet)
