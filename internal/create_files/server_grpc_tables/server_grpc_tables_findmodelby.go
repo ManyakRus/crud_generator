@@ -255,6 +255,9 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudFuncURL)
 
+		ConstantsURL := create_files.Find_ConstantsURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
+
 	}
 
 	//создание функций

@@ -236,6 +236,9 @@ func CreateFiles_FindMassBy_Test(Table1 *types.Table) error {
 		CrudFuncURL := create_files.Find_CrudFuncURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudFuncURL)
 
+		ConstantsURL := create_files.Find_ConstantsURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
+
 	}
 
 	//создание функций
