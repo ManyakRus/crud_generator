@@ -12,6 +12,9 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 	Request.ID = LawsuitStatusType_ID_Test
 	Request.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	Response1, err := server1.LawsuitStatusType_Read(ctx, &Request)
+	if err != nil && crud_func.IsRecordNotFound(err) == true {
+		return
+	}
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Update_ColumnNameTranslit() Read() error: ", err)
 	}

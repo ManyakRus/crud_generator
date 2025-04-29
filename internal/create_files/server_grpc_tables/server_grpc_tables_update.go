@@ -261,6 +261,9 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 		//замена "postgres_gorm.Connect_WithApplicationName("
 		TextGRPCServer = create_files.Replace_Connect_WithApplicationName(TextGRPCServer)
 
+		CrudFuncURL := create_files.Find_CrudFuncURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudFuncURL)
+
 		//TextGRPCServer = create_files.Convert_RequestIdToAlias(TextGRPCServer, Table1)
 	}
 

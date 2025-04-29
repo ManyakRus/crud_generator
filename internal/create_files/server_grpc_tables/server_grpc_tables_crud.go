@@ -156,6 +156,9 @@ func CreateFiles_Test(Table1 *types.Table) error {
 		ConstantsURL := create_files.Find_ConstantsURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
 
+		CrudFuncURL := create_files.Find_CrudFuncURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudFuncURL)
+
 		TextGRPCServer = create_files.CheckAndAdd_Import(TextGRPCServer, "encoding/json")
 
 		//замена "postgres_gorm.Connect_WithApplicationName("

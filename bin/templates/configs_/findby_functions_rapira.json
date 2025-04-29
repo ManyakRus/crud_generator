@@ -14,6 +14,7 @@
 {"Table":"debt_types","Columns":["ext_code"]},
 {"Table":"contract_category_types","Columns":["code"]},
 {"Table":"lawsuit_invoices","Columns":["lawsuit_id","document_id"]},
-{"Table":"debtor_category_types","Columns":["name"]}
+{"Table":"debtor_category_types","Columns":["name"]},
+{"Table":"debtor_category_types","Columns":["ext_id"]}
 
 ]

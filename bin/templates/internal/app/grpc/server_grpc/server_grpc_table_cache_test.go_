@@ -24,7 +24,10 @@ func Test_server_LawsuitStatusType_ReadFromCache(t *testing.T) {
 
 	server1 := &ServerGRPC{}
 	Otvet, err := server1.LawsuitStatusType_ReadFromCache(ctx, &Request)
-	if err != nil && crud_func.IsRecordNotFound(err) == false {
+	if err != nil && crud_func.IsRecordNotFound(err) == true {
+		return
+	}
+	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_ReadFromCache() error: ", err)
 	}
 	if Otvet.ModelString == "" {

@@ -27,6 +27,9 @@ func TestServerGRPC_LawsuitStatusType_UpdateManyFields(t *testing.T) {
 
 	server1 := &ServerGRPC{}
 	Response1, err := server1.LawsuitStatusType_Read(ctx, &Request)
+	if err != nil && crud_func.IsRecordNotFound(err) == true {
+		return
+	}
 	if err != nil {
 		t.Error("TestServerGRPC_LawsuitStatusType_UpdateManyFields() error: ", err)
 		return

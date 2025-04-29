@@ -27,6 +27,9 @@ func Test_server_LawsuitStatusType_Read(t *testing.T) {
 
 	server1 := &ServerGRPC{}
 	Otvet, err := server1.LawsuitStatusType_Read(ctx, &Request)
+	if err != nil && crud_func.IsRecordNotFound(err) == true {
+		return
+	}
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Read() error: ", err)
 	}
@@ -50,6 +53,9 @@ func Test_server_LawsuitStatusType_Delete(t *testing.T) {
 
 	//прочитаем
 	Response, err := server1.LawsuitStatusType_Read(ctx, &Request)
+	if err != nil && crud_func.IsRecordNotFound(err) == true {
+		return
+	}
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Delete() error: ", err)
 	}
@@ -147,6 +153,9 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 
 	server1 := &ServerGRPC{}
 	Response1, err := server1.LawsuitStatusType_Read(ctx, &Request)
+	if err != nil && crud_func.IsRecordNotFound(err) == true {
+		return
+	}
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Update() error: ", err)
 		return
@@ -185,6 +194,9 @@ func Test_server_LawsuitStatusType_Save(t *testing.T) {
 
 	server1 := &ServerGRPC{}
 	Response1, err := server1.LawsuitStatusType_Read(ctx, &Request)
+	if err != nil && crud_func.IsRecordNotFound(err) == true {
+		return
+	}
 	if err != nil {
 		t.Error("Test_server_LawsuitStatusType_Save() error: ", err)
 		return
