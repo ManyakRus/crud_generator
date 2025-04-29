@@ -154,6 +154,9 @@ func CreateFiles_Cache_Test(Table1 *types.Table) error {
 		ConstantsURL := create_files.Find_ConstantsURL()
 		TextGRPCServer = create_files.AddImport(TextGRPCServer, ConstantsURL)
 
+		CrudFuncURL := create_files.Find_CrudFuncURL()
+		TextGRPCServer = create_files.AddImport(TextGRPCServer, CrudFuncURL)
+
 		//замена "postgres_gorm.Connect_WithApplicationName("
 		TextGRPCServer = create_files.Replace_Connect_WithApplicationName(TextGRPCServer)
 
