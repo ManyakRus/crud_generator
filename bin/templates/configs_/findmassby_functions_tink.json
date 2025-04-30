@@ -9,5 +9,7 @@
 {"Table":"my_bond","Columns":["account_id"]},
 {"Table":"my_bond_settings","Columns":["account_id"]},
 {"Table":"my_currency","Columns":["account_id"]},
-{"Table":"my_transaction","Columns":["account_id"]}
+{"Table":"my_transaction","Columns":["account_id"]},
+{"Table":"my_bond_settings","Columns":["instrument_id", "can_buy"]},
+{"Table":"my_bond_settings","Columns":["instrument_id", "can_sell"]}
 ]
