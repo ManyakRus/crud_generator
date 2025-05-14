@@ -64,6 +64,16 @@
 {"Table":"bankruptcy_files","Columns":["bankruptcy_id"]},
 {"Table":"bankruptcy_files","Columns":["file_id"]},
 {"Table":"enforcement_files","Columns":["enforcement_id"]},
-{"Table":"enforcement_files","Columns":["file_id"]}
+{"Table":"enforcement_files","Columns":["file_id"]},
+{"Table":"enforcement_individual_accounts","Columns":["individuals_id"]},
+{"Table":"enforcement_individual_accounts","Columns":["account_number"]},
+{"Table":"enforcement_ofks","Columns":["enforcement_id"]},
+{"Table":"enforcement_organization_accounts","Columns":["organization_id"]},
+{"Table":"enforcement_organization_profile_files","Columns":["file_id"]},
+{"Table":"enforcement_organization_profile_files","Columns":["profile_id"]},
+{"Table":"enforcement_payment_schedules","Columns":["enforcement_id"]},
+{"Table":"enforcement_third_parties","Columns":["enforcement_id"]},
+{"Table":"enforcement_third_parties","Columns":["organization_id"]},
+{"Table":"enforcement_third_parties","Columns":["individual_id"]}
 
 ]
