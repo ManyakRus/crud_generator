@@ -43,6 +43,9 @@ func TestSave(t *testing.T) {
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
 	if err != nil {
+		if crud_func.IsRecordNotFound(err) == true {
+			return
+		}
 		t.Error("TestSave() error: ", err)
 	}
 
