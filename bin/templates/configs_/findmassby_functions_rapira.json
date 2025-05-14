@@ -58,6 +58,12 @@
 {"Table":"document_links","Columns":["contract_id", "document2_id", "link_type_id"]},
 {"Table":"lawsuit_invoices","Columns":["lawsuit_id"]},
 {"Table":"lawsuit_payments","Columns":["lawsuit_id"]},
-{"Table":"lawsuit_payments","Columns":["lawsuit_id","invoice_id"]}
+{"Table":"lawsuit_payments","Columns":["lawsuit_id","invoice_id"]},
+{"Table":"bankruptcy_briefcases","Columns":["bankruptcy_id"]},
+{"Table":"bankruptcy_briefcases","Columns":["briefcase_id"]},
+{"Table":"bankruptcy_files","Columns":["bankruptcy_id"]},
+{"Table":"bankruptcy_files","Columns":["file_id"]},
+{"Table":"enforcement_files","Columns":["enforcement_id"]},
+{"Table":"enforcement_files","Columns":["file_id"]}
 
 ]
