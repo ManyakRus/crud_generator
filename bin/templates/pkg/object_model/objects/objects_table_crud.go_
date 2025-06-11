@@ -2,6 +2,7 @@ package object_lawsuit_status_types
 
 import (
 	"encoding/json"
+	"github.com/vmihailenco/msgpack/v5"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/calc_struct_version"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"reflect"
@@ -52,6 +53,31 @@ func (m ObjectLawsuitStatusType) GetJSON() (string, error) {
 	Result = string(bytes)
 	return Result, err
 }
+
+// NewLawsuitStatusType - возвращает новый объект
+func NewLawsuitStatusType() LawsuitStatusType {
+	return LawsuitStatusType{}
+}
+
+// AsLawsuitStatusType - создаёт объект из упакованного объекта в массиве байтов
+func AsLawsuitStatusType(b []byte) (LawsuitStatusType, error) {
+	c := NewLawsuitStatusType()
+	err := msgpack.Unmarshal(b, &c)
+	if err != nil {
+		return NewLawsuitStatusType(), err
+	}
+	return c, nil
+}
+
+// LawsuitStatusTypeAsBytes - упаковывает объект в массив байтов
+func LawsuitStatusTypeAsBytes(m *LawsuitStatusType) ([]byte, error) {
+	b, err := msgpack.Marshal(m)
+	if err != nil {
+		return nil, err
+	}
+	return b, nil
+}
+
 
 // ---------------------------- CRUD операции ------------------------------------------------------------
 

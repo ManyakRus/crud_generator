@@ -32,7 +32,7 @@ func (m LawsuitStatusType) TableNameDB() string {
 	return "lawsuit_status_types"
 }
 
-// NewLawsuitStatusType - возвращает новый	объект
+// NewLawsuitStatusType - возвращает новый объект
 func NewLawsuitStatusType() LawsuitStatusType {
 	return LawsuitStatusType{}
 }
