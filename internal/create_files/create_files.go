@@ -1023,7 +1023,11 @@ func AddImport_WithAlias(Text, RepositoryURL, AliasName string) string {
 		return Otvet
 	}
 
-	Otvet = Otvet[:pos1+LenFind] + "\n\t" + AliasName + " " + `"` + RepositoryURL + `"` + Otvet[pos1+LenFind:]
+	if AliasName != "" {
+		AliasName = AliasName + " "
+	}
+
+	Otvet = Otvet[:pos1+LenFind] + "\n\t" + AliasName + `"` + RepositoryURL + `"` + Otvet[pos1+LenFind:]
 
 	return Otvet
 }
