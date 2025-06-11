@@ -585,6 +585,9 @@ TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_TEST_FILENAME="grpc_client_tab
 #NEED_CREATE_READOBJECT - need create files for objects (entity + foreign columns)
 NEED_CREATE_READOBJECT=true
 
+#PREFIX_OBJECT_MODEL - prefix for ObjectXXX struct
+PREFIX_OBJECT_MODEL="Object"
+
 #PREFIX_READOBJECT - prefix for "object_" files
 PREFIX_READOBJECT="object_"
 

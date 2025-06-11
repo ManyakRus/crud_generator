@@ -227,6 +227,7 @@ type SettingsINI struct {
 	//Objects
 	NEED_CREATE_READOBJECT                      bool
 	PREFIX_READOBJECT                           string
+	PREFIX_OBJECT_MODEL                         string
 	PREFIX_CRUD_READOBJECT                      string
 	TEMPLATES_READOBJECT_FOLDERNAME             string
 	TEMPLATES_MODEL_READOBJECT_FILENAME         string
@@ -1342,6 +1343,10 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_MODEL_CRUD_OBJECT_MANUAL_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "PREFIX_OBJECT_MODEL"
+	microl.Set_FieldFromEnv_String(&Settings, Name, false)
 
 }
 

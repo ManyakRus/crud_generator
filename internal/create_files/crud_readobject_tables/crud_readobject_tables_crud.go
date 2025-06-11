@@ -63,13 +63,17 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 
 		//
 		ObjectTableURL := create_files.Find_ObjectTableURL(TableName)
-		TextCrud = create_files.AddImport(TextCrud, ObjectTableURL)
+		TextCrud = create_files.AddImport_WithAlias(TextCrud, ObjectTableURL, "object_"+TableName)
 
 		//
 		ConstantsURL := create_files.Find_DBConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
 
 	}
+
+	//заменим Object
+	TextCrud = create_files.Replace_ObjectTemplateModel_to_Model(TextCrud, Table1.NameGo)
+	//TextCrud = create_files.Replace_ObjectTemplateTableName_to_TableName(TextCrud, Table1.Name)
 
 	//
 	//FieldNamesWithPercent
@@ -295,6 +299,8 @@ func CreateFiles_ReadObject_Test(MapAll map[string]*types.Table, Table1 *types.T
 	TextCrud = CreateFiles_ReadObject_TableTest(MapAll, Table1, TextCrud)
 
 	//создание текста
+	TextCrud = create_files.Replace_ObjectTemplateModel_to_Model(TextCrud, Table1.NameGo)
+	TextCrud = create_files.Replace_ObjectTemplateTableName_to_TableName(TextCrud, Table1.Name)
 	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
 	TextCrud = create_files.Replace_TemplateTableName_to_TableName(TextCrud, Table1.Name)
 	TextCrud = create_files.AddText_ModuleGenerated(TextCrud)

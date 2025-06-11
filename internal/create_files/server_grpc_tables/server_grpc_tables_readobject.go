@@ -83,6 +83,8 @@ func CreateFiles_ReadObject(Table1 *types.Table) error {
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "grpc_proto.", TextProto+".")
 
 	//создание текста
+	TextGRPCServer = create_files.Replace_ObjectTemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
+	TextGRPCServer = create_files.Replace_ObjectTemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
 	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
 	TextGRPCServer = create_files.Replace_TemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
 	TextGRPCServer = create_files.AddText_ModuleGenerated(TextGRPCServer)
@@ -193,6 +195,8 @@ func CreateFiles_ReadObject_Test(Table1 *types.Table) error {
 	TextGRPCServer = strings.ReplaceAll(TextGRPCServer, "grpc_proto.", TextProto+".")
 
 	//создание текста
+	TextGRPCServer = create_files.Replace_ObjectTemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
+	TextGRPCServer = create_files.Replace_ObjectTemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
 	TextGRPCServer = create_files.Replace_TemplateModel_to_Model(TextGRPCServer, Table1.NameGo)
 	TextGRPCServer = create_files.Replace_TemplateTableName_to_TableName(TextGRPCServer, Table1.Name)
 	TextGRPCServer = create_files.AddText_ModuleGenerated(TextGRPCServer)

@@ -54,6 +54,8 @@ func CreateFiles_ReadObject(Table1 *types.Table) error {
 	TextDB = strings.ReplaceAll(TextDB, "grpc_proto.", TextProto+".")
 
 	//создание текста
+	TextDB = create_files.Replace_ObjectTemplateModel_to_Model(TextDB, Table1.NameGo)
+	TextDB = create_files.Replace_ObjectTemplateTableName_to_TableName(TextDB, Table1.Name)
 	TextDB = create_files.Replace_TemplateModel_to_Model(TextDB, Table1.NameGo)
 	TextDB = create_files.Replace_TemplateTableName_to_TableName(TextDB, Table1.Name)
 	TextDB = create_files.AddText_ModuleGenerated(TextDB)

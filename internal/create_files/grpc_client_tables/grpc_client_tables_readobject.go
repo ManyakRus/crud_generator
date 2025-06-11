@@ -114,6 +114,8 @@ func CreateFiles_ReadObject(Table1 *types.Table) error {
 	TextGRPCClient = create_files.DeleteFunc_Find_byExtID(TextGRPCClient, Table1)
 
 	//замена имени таблицы
+	TextGRPCClient = create_files.Replace_ObjectTemplateModel_to_Model(TextGRPCClient, Table1.NameGo)
+	TextGRPCClient = create_files.Replace_ObjectTemplateTableName_to_TableName(TextGRPCClient, Table1.Name)
 	TextGRPCClient = create_files.Replace_TemplateModel_to_Model(TextGRPCClient, Table1.NameGo)
 	TextGRPCClient = create_files.Replace_TemplateTableName_to_TableName(TextGRPCClient, Table1.Name)
 	TextGRPCClient = create_files.AddText_ModuleGenerated(TextGRPCClient)
@@ -208,6 +210,8 @@ func CreateFiles_ReadObject_Test(Table1 *types.Table) error {
 	}
 
 	//создание текста
+	TextGRPCClient = create_files.Replace_ObjectTemplateModel_to_Model(TextGRPCClient, Table1.NameGo)
+	TextGRPCClient = create_files.Replace_ObjectTemplateTableName_to_TableName(TextGRPCClient, Table1.Name)
 	TextGRPCClient = create_files.Replace_TemplateModel_to_Model(TextGRPCClient, Table1.NameGo)
 	TextGRPCClient = create_files.Replace_TemplateTableName_to_TableName(TextGRPCClient, Table1.Name)
 	TextGRPCClient = create_files.AddText_ModuleGenerated(TextGRPCClient)

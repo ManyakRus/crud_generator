@@ -63,6 +63,8 @@ func CreateFiles_crud(MapAll map[string]*types.Table, Table1 *types.Table) error
 	//TextGo = create_files.Replace_RepositoryImportsURL(TextGo)
 
 	//заменим имя модели
+	TextGo = create_files.Replace_ObjectTemplateModel_to_Model(TextGo, Table1.NameGo)
+	TextGo = create_files.Replace_ObjectTemplateTableName_to_TableName(TextGo, Table1.Name)
 	TextGo = create_files.Replace_ModelAndTableName(TextGo, Table1)
 
 	//uuid

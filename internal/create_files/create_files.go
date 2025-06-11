@@ -769,7 +769,8 @@ func Find_ModelTableURL(TableName string) string {
 func Find_ObjectTableURL(TableName string) string {
 	Otvet := ""
 
-	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_READOBJECT_FOLDERNAME + "/object_" + TableName
+	prefix_object := config.Settings.PREFIX_READOBJECT
+	Otvet = config.Settings.SERVICE_REPOSITORY_URL + "/" + config.Settings.TEMPLATES_READOBJECT_FOLDERNAME + "/" + prefix_object + TableName
 
 	return Otvet
 }
@@ -999,6 +1000,12 @@ func FindURL_Tables() string {
 
 // AddImport - добавляет RepositoryURL в секцию Import, если его там нет
 func AddImport(Text, RepositoryURL string) string {
+	Otvet := AddImport_WithAlias(Text, RepositoryURL, "")
+	return Otvet
+}
+
+// AddImport - добавляет RepositoryURL в секцию Import, если его там нет
+func AddImport_WithAlias(Text, RepositoryURL, AliasName string) string {
 	Otvet := Text
 
 	//если уже есть импорт
@@ -1016,7 +1023,7 @@ func AddImport(Text, RepositoryURL string) string {
 		return Otvet
 	}
 
-	Otvet = Otvet[:pos1+LenFind] + "\n\t" + `"` + RepositoryURL + `"` + Otvet[pos1+LenFind:]
+	Otvet = Otvet[:pos1+LenFind] + "\n\t" + AliasName + " " + `"` + RepositoryURL + `"` + Otvet[pos1+LenFind:]
 
 	return Otvet
 }
@@ -2814,6 +2821,36 @@ func Replace_TemplateTableName_to_TableName(Text, TableName string) string {
 	Otvet := Text
 
 	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_TABLENAME, TableName)
+
+	return Otvet
+}
+
+// Replace_ObjectTemplateModel_to_Model - заменяет текст имя модели в шаблоне на имя модели новое
+func Replace_ObjectTemplateModel_to_Model(Text, ModelName string) string {
+	Otvet := Text
+
+	prefix_object := config.Settings.PREFIX_READOBJECT
+	TextFrom := "Object" + config.Settings.TEXT_TEMPLATE_MODEL
+	TextTo := prefix_object + ModelName
+	Otvet = strings.ReplaceAll(Otvet, " "+TextFrom, " "+TextTo)
+	Otvet = strings.ReplaceAll(Otvet, "*"+TextFrom, "*"+TextTo)
+	Otvet = strings.ReplaceAll(Otvet, "."+TextFrom, "."+TextTo)
+
+	return Otvet
+}
+
+// Replace_ObjectTemplateTableName_to_TableName - заменяет текст имя таблицы в шаблоне на имя таблицы новое
+func Replace_ObjectTemplateTableName_to_TableName(Text, TableName string) string {
+	Otvet := Text
+
+	prefix_object := config.Settings.PREFIX_READOBJECT
+	TextFrom := "object_" + config.Settings.TEXT_TEMPLATE_TABLENAME
+	TextTo := prefix_object + TableName
+	Otvet = strings.ReplaceAll(Otvet, " "+TextFrom, " "+TextTo)
+	Otvet = strings.ReplaceAll(Otvet, "\t"+TextFrom, "\t"+TextTo)
+	Otvet = strings.ReplaceAll(Otvet, "("+TextFrom, "("+TextTo)
+	Otvet = strings.ReplaceAll(Otvet, "*"+TextFrom, "*"+TextTo)
+	Otvet = strings.ReplaceAll(Otvet, "&"+TextFrom, "&"+TextTo)
 
 	return Otvet
 }
