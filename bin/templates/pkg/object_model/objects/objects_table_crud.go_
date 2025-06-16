@@ -55,22 +55,22 @@ func (m ObjectLawsuitStatusType) GetJSON() (string, error) {
 }
 
 // NewLawsuitStatusType - возвращает новый объект
-func NewLawsuitStatusType() LawsuitStatusType {
-	return LawsuitStatusType{}
+func NewObjectLawsuitStatusType() ObjectLawsuitStatusType {
+	return ObjectLawsuitStatusType{}
 }
 
 // AsLawsuitStatusType - создаёт объект из упакованного объекта в массиве байтов
-func AsLawsuitStatusType(b []byte) (LawsuitStatusType, error) {
-	c := NewLawsuitStatusType()
+func AsObjectLawsuitStatusType(b []byte) (ObjectLawsuitStatusType, error) {
+	c := NewObjectLawsuitStatusType()
 	err := msgpack.Unmarshal(b, &c)
 	if err != nil {
-		return NewLawsuitStatusType(), err
+		return NewObjectLawsuitStatusType(), err
 	}
 	return c, nil
 }
 
 // LawsuitStatusTypeAsBytes - упаковывает объект в массив байтов
-func LawsuitStatusTypeAsBytes(m *LawsuitStatusType) ([]byte, error) {
+func ObjectLawsuitStatusTypeAsBytes(m *ObjectLawsuitStatusType) ([]byte, error) {
 	b, err := msgpack.Marshal(m)
 	if err != nil {
 		return nil, err
