@@ -977,6 +977,26 @@ func FindText_DefaultValueSQL(Type_go string) string {
 	return Otvet
 }
 
+// FindText_DefaultValueSQL_NotNull - возвращает значение по умолчанию для типа, не null
+func FindText_DefaultValueSQL_NotNull(Type_go string) string {
+	var Otvet string
+
+	switch Type_go {
+	case "string":
+		Otvet = `''`
+	case "int", "int32", "int64", "float32", "float64", "uint", "uint32", "uint64":
+		Otvet = "0"
+	case "time.Time":
+		Otvet = "'0001-01-01'"
+	case "bool":
+		Otvet = "false"
+	case "uuid.UUID", "uuid.NullUUID":
+		Otvet = "''"
+	}
+
+	return Otvet
+}
+
 // FindURL_Alias - возвращает URL репозитория с пакетом "alias"
 func FindURL_Alias() string {
 	Otvet := ""
@@ -3223,5 +3243,34 @@ func Replace_ServiceName(Text string) string {
 // TextProto - возвращает текст "grpc_proto"
 func TextProto() string {
 	Otvet := micro.LastWord(config.Settings.FOLDERNAME_GRPC_PROTO)
+	return Otvet
+}
+
+// Find_TableAlias - возвращает алиас названия таблицы из 1-3 первых букв
+func Find_TableAlias(Table1 *types.Table) string {
+	Otvet := ""
+
+	TableName := Table1.Name
+	len1 := len(TableName)
+	if len1 == 0 {
+		return Otvet
+	}
+
+	MassRunes := []rune(TableName)
+	Otvet = string(MassRunes[0])
+	Otvet = strings.ToLower(Otvet)
+
+	var s1 rune
+	for _, Rune1 := range MassRunes {
+
+		if s1 == '_' {
+			s2 := string(Rune1)
+			s2 = strings.ToLower(s2)
+			Otvet = Otvet + s2
+		}
+
+		s1 = Rune1
+	}
+
 	return Otvet
 }

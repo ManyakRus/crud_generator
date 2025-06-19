@@ -21,47 +21,6 @@ const TableName string = "lawsuit_status_types"
 type Crud_DB struct {
 }
 
-// Read - находит запись в БД по ID
-func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
-	var err error
-
-	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
-	//ctxMain := contextmain.GetContext()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
-	defer ctxCancelFunc()
-
-	db := postgres_gorm.GetConnection()
-
-	err = Read_ctx(ctx, db, m)
-	return err
-}
-
-// Read_ctx - находит запись в БД по ID
-func Read_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
-	var err error
-
-	//количество невыполненных операций +1 -1
-	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
-	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
-
-	//
-	if ctx.Err() != nil {
-		err = ctx.Err()
-		return err
-	}
-
-	//tx := db.WithContext(ctx)
-	tx := db
-
-	tx = tx.Where(m, PrimaryKeysWithQuotes).Take(m)
-	err = tx.Error
-	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Read() ColumnNamePK: %v, error: %w", m.ColumnNamePK, err)
-	}
-
-	return err
-}
-
 // Save - записывает новый или существующий объект в базу данных
 func (crud Crud_DB) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
@@ -131,43 +90,6 @@ func Update_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.Lawsui
 	return err
 }
 
-// Create - записывает новый объект в базу данных
-func (crud Crud_DB) Create(m *lawsuit_status_types.LawsuitStatusType) error {
-	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
-	//ctxMain := contextmain.GetContext()
-	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
-	defer ctxCancelFunc()
-
-	db := postgres_gorm.GetConnection()
-
-	err := Create_ctx(ctx, db, m)
-	return err
-}
-
-// Create_ctx - записывает новый объект в базу данных
-func Create_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
-	var err error
-
-	//количество невыполненных операций +1 -1
-	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
-	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
-
-	//
-	if ctx.Err() != nil {
-		err = ctx.Err()
-		return err
-	}
-
-	// проверка ID
-	if int64(m.ID) != 0 {
-		TextError := fmt.Sprint(m.TableNameDB()+" Save() ", TableName, " error: ColumnNamePK !=0")
-		err = errors.New(TextError)
-		return err
-	}
-
-	err = create_update_ctx(ctx, db, m, nil)
-	return err
-}
 
 // create_update - записывает объект в базу данных
 func (crud Crud_DB) create_update(m *lawsuit_status_types.LawsuitStatusType) error {

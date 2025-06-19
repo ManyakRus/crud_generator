@@ -1,0 +1,61 @@
+package crud_lawsuit_status_types
+
+import (
+	"context"
+	"fmt"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
+	"github.com/ManyakRus/starter/stopapp"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"sync/atomic"
+	"time"
+)
+
+// TextSQL_Read - текст SQL запроса для чтения записи
+const TextSQL_Read = `ReplaceTextSQL`
+
+// Read - находит запись в БД по ID
+func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	db := postgres_pgxpool.GetConnection()
+
+	err = Read_ctx(ctx, db, m)
+	return err
+}
+
+// Read_ctx - находит запись в БД по ID
+func Read_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
+	if ctx.Err() != nil {
+		err = ctx.Err()
+		return err
+	}
+
+	//
+	TextSQL := TextSQL_Read + `
+WHERE 1=1
+ReplaceWhereID
+`
+
+	//
+	row := db.QueryRow(ctx, TextSQL, ReplacePKFieldsWithComma)
+	err = row.Scan(ReplaceAllFieldsWithComma)
+	if err != nil {
+		err = fmt.Errorf(m.TableNameDB()+" Read() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		return err
+	}
+
+	return err
+}

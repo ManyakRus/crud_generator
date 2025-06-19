@@ -1,0 +1,68 @@
+package crud_lawsuit_status_types
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
+	"github.com/ManyakRus/starter/stopapp"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"sync/atomic"
+	"time"
+)
+
+// TextSQL_Create - текст SQL запроса для добавления записи
+const TextSQL_Create = `
+INSERT INTO ReplaceTableName (ReplaceAllColumnNamesWithComma)
+VALUES (ReplaceDollarsWithComma)
+`
+
+
+// Create - записывает новый объект в базу данных
+func (crud Crud_DB) Create(m *lawsuit_status_types.LawsuitStatusType) error {
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	db := postgres_pgxpool.GetConnection()
+
+	err := Create_ctx(ctx, db, m)
+	return err
+}
+
+// Create_ctx - записывает новый объект в базу данных
+func Create_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
+	if ctx.Err() != nil {
+		err = ctx.Err()
+		return err
+	}
+
+	//проверка ID
+	if ReplaceIDNot0 {
+		TextError := fmt.Sprint(m.TableNameDB()+" Create() ", TableName, " error: ReplacePKFieldsWithComma is empty")
+		err = errors.New(TextError)
+		return err
+	}
+
+	//
+	TextSQL := TextSQL_Create
+	//
+	_, err = db.Exec(ctx, TextSQL, ReplaceAllFieldsWithComma)
+	if err != nil {
+		err = fmt.Errorf(m.TableNameDB()+" Create() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		return err
+	}
+
+
+	return err
+}
+

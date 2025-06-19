@@ -1,11 +1,12 @@
 package main
 
 import (
-	configmain "github.com/ManyakRus/starter/config_main"
+	"github.com/ManyakRus/starter/config_main"
 	"github.com/ManyakRus/starter/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
 	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
 )
 
 // main - старт приложения
@@ -15,11 +16,12 @@ func main() {
 
 // StartApp - выполнение всех операций для старта приложения
 func StartApp() {
-	configmain.LoadEnv()
+	config_main.LoadEnv()
 
 	stopapp.StartWaitStop()
 	crud_starter.InitCrudTransport_DB()
 	postgres_gorm.Start(constants.SERVICE_NAME)
+	postgres_pgxpool.Start(constants.SERVICE_NAME)
 	server_grpc.Start()
 	server_nrpc.Start()
 

@@ -263,6 +263,10 @@ type SettingsINI struct {
 	//
 	FOLDERNAME_GRPC_PROTO string
 	FOLDERNAME_API        string
+
+	//
+	TEMPLATES_CRUD_READ_FILENAME   string
+	TEMPLATES_CRUD_CREATE_FILENAME string
 }
 
 // Getenv - возвращает переменную окружения
@@ -1347,6 +1351,14 @@ func FillSettings() {
 	//
 	Name = "PREFIX_OBJECT_MODEL"
 	microl.Set_FieldFromEnv_String(&Settings, Name, false)
+
+	//
+	Name = "TEMPLATES_CRUD_READ_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "TEMPLATES_CRUD_CREATE_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
 
 }
 
