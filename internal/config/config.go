@@ -259,14 +259,19 @@ type SettingsINI struct {
 	TEXT_DELETED_TABLE_RUS  string
 	TEXT_DELETED_COLUMN     string
 	TEXT_DELETED_COLUMN_RUS string
+	NEED_SOFT_DELETE        bool
 
 	//
 	FOLDERNAME_GRPC_PROTO string
 	FOLDERNAME_API        string
 
 	//
-	TEMPLATES_CRUD_READ_FILENAME   string
-	TEMPLATES_CRUD_CREATE_FILENAME string
+	TEMPLATES_CRUD_READ_FILENAME         string
+	TEMPLATES_CRUD_CREATE_FILENAME       string
+	TEMPLATES_CRUD_UPDATE_FILENAME       string
+	TEMPLATES_CRUD_DELETE_FILENAME       string
+	TEMPLATES_CRUD_SOFT_DELETE_FILENAME  string
+	TEMPLATES_CRUD_SOFT_RESTORE_FILENAME string
 }
 
 // Getenv - возвращает переменную окружения
@@ -1358,6 +1363,26 @@ func FillSettings() {
 
 	//
 	Name = "TEMPLATES_CRUD_CREATE_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "TEMPLATES_CRUD_UPDATE_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "TEMPLATES_CRUD_DELETE_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "NEED_SOFT_DELETE"
+	microl.Set_FieldFromEnv_Bool(&Settings, Name, true)
+
+	//
+	Name = "TEMPLATES_CRUD_SOFT_DELETE_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "TEMPLATES_CRUD_SOFT_RESTORE_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
 
 }

@@ -147,6 +147,37 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			return err
 		}
 
+		//Update
+		err = CreateFiles_Update(MapAll, Table1)
+		if err != nil {
+			log.Error("CreateFiles_Update() table: ", Table1.Name, " error: ", err)
+			return err
+		}
+
+		//Delete
+		if config.Settings.NEED_SOFT_DELETE == true {
+			//delete
+			err = CreateFiles_Soft_Delete(MapAll, Table1)
+			if err != nil {
+				log.Error("CreateFiles_Soft_Delete() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+
+			//restore
+			err = CreateFiles_Soft_Restore(MapAll, Table1)
+			if err != nil {
+				log.Error("CreateFiles_Soft_Restore() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+		} else {
+			//delete
+			err = CreateFiles_Delete(MapAll, Table1)
+			if err != nil {
+				log.Error("CreateFiles_Delete() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+		}
+
 	}
 
 	return err

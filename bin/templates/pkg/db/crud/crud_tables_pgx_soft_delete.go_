@@ -13,27 +13,28 @@ import (
 	"time"
 )
 
-// TextSQL_Create - текст SQL запроса для добавления записи
-const TextSQL_Create = `
-INSERT INTO ReplaceTableName (ReplaceAllColumnNamesWithComma)
-VALUES (ReplaceDollarsWithComma)
+// TextSQL_Delete- текст SQL запроса для удаления записи
+const TextSQL_Delete = `
+UPDATE ReplaceTableName SET
+is_deleted = true
+ReplaceDeletedAtEqual
 `
 
 
-// Create - записывает новый объект в базу данных
-func (crud Crud_DB) Create(m *lawsuit_status_types.LawsuitStatusType) error {
+// Delete - удаляет объект в базе данных
+func (crud Crud_DB) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
 	db := postgres_pgxpool.GetConnection()
 
-	err := Create_ctx(ctx, db, m)
+	err := Delete_ctx(ctx, db, m)
 	return err
 }
 
-// Create_ctx - записывает новый объект в базу данных
-func Create_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+// Delete_ctx - удаляет объект в базу данных
+func Delete_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	//количество невыполненных операций +1 -1
@@ -47,21 +48,26 @@ func Create_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.L
 	}
 
 	//проверка ID
-	if ReplaceIDNot0 {
-		TextError := fmt.Sprint(m.TableNameDB()+" Create() ", TableName, " error: ReplacePKFieldsWithComma is not empty")
+	if ReplaceID0 {
+		TextError := fmt.Sprint(m.TableNameDB()+" Delete() ", TableName, " error: ReplacePKFieldsWithComma is empty")
 		err = errors.New(TextError)
 		return err
 	}
 
 	//
-	TextSQL := TextSQL_Create
+	TextSQL := TextSQL_Delete + `
+WHERE 1=1
+ReplaceWhereID
+`
 	//
-	_, err = db.Exec(ctx, TextSQL, ReplaceAllFieldsWithComma)
+	_, err = db.Exec(ctx, TextSQL, ReplacePKFieldsWithComma)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Create() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf(m.TableNameDB()+" Delete() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
 		return err
 	}
 
+	m.IsDeleted = true
+	ReplaceFieldDeletedAt
 
 	return err
 }

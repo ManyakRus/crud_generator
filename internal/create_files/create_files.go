@@ -3274,3 +3274,35 @@ func Find_TableAlias(Table1 *types.Table) string {
 
 	return Otvet
 }
+
+// FindText_NullValue - возвращает текст для NullValue (sql.NullString, sql.NullBool, sql.NullInt64)
+func FindText_NullValue(TypeGo string, TextVariable string) string {
+	Otvet := TextVariable
+
+	switch TypeGo {
+	case "time.Time":
+		Otvet = "postgres_func.NullTime_DefaultNull(" + TextVariable + ")"
+	case "string":
+		Otvet = "postgres_func.NullString_DefaultNull(" + TextVariable + ")"
+	case "int64", "int":
+		Otvet = "postgres_func.NullInt64_DefaultNull(" + TextVariable + ")"
+	case "int32":
+		Otvet = "postgres_func.NullInt32_DefaultNull(" + TextVariable + ")"
+	case "int16":
+		Otvet = "postgres_func.NullInt32_DefaultNull(" + TextVariable + ")"
+	case "int8":
+		Otvet = "postgres_func.NullInt32_DefaultNull(" + TextVariable + ")"
+	case "bool":
+		Otvet = "postgres_func.NullBool_DefaultNull(" + TextVariable + ")"
+	case "float64":
+		Otvet = "postgres_func.NullFloat64_DefaultNull(" + TextVariable + ")"
+	case "float32":
+		Otvet = "postgres_func.NullFloat64_DefaultNull(" + TextVariable + ")"
+	case "uuid.UUID":
+		Otvet = "postgres_func.NullString_DefaultNull(" + TextVariable + ".String())"
+	default:
+		log.Error("FindText_NullValue() - неизвестный тип: ", TypeGo)
+	}
+
+	return Otvet
+}
