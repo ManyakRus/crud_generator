@@ -70,3 +70,40 @@ ReplaceWhereID
 	return err
 }
 
+// Save - записывает новый или существующий объект в базу данных
+func (crud Crud_DB) Save(m *lawsuit_status_types.LawsuitStatusType) error {
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	db := postgres_pgxpool.GetConnection()
+
+	err := Save_ctx(ctx, db, m)
+	return err
+}
+
+// Save_ctx - записывает новый или существующий объект в базу данных
+func Save_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
+	if ctx.Err() != nil {
+		err = ctx.Err()
+		return err
+	}
+
+	//
+	if ReplaceID0 {
+		err = Create_ctx(ctx, db, m)
+	} else {
+		err = Update_ctx(ctx, db, m)
+	}
+
+	return err
+}
+

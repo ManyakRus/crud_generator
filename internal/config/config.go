@@ -272,6 +272,7 @@ type SettingsINI struct {
 	TEMPLATES_CRUD_DELETE_FILENAME       string
 	TEMPLATES_CRUD_SOFT_DELETE_FILENAME  string
 	TEMPLATES_CRUD_SOFT_RESTORE_FILENAME string
+	TEMPLATES_CRUD_FINDBY_EXTID_FILENAME string
 }
 
 // Getenv - возвращает переменную окружения
@@ -1383,6 +1384,10 @@ func FillSettings() {
 
 	//
 	Name = "TEMPLATES_CRUD_SOFT_RESTORE_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "TEMPLATES_CRUD_FINDBY_EXTID_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
 
 }

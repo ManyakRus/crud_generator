@@ -178,6 +178,15 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 			}
 		}
 
+		//FindBy_ExtID
+		if create_files.Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
+			err = CreateFiles_FindBy_ExtID(MapAll, Table1)
+			if err != nil {
+				log.Error("CreateFiles_FindBy_ExtID() table: ", Table1.Name, " error: ", err)
+				return err
+			}
+		}
+
 	}
 
 	return err

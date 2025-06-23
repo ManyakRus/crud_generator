@@ -1,0 +1,59 @@
+package crud_lawsuit_status_types
+
+import (
+	"context"
+	"fmt"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
+	"github.com/ManyakRus/starter/stopapp"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"sync/atomic"
+	"time"
+)
+
+// Find_ByExtID - находит запись в БД по ext_id и connection_id
+func (crud Crud_DB) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	db := postgres_pgxpool.GetConnection()
+
+	err = Find_ByExtID_ctx(ctx, db, m)
+	return err
+}
+
+// Find_ByExtID_ctx - находит запись в БД по ext_id и connection_id
+func Find_ByExtID_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
+	if ctx.Err() != nil {
+		err = ctx.Err()
+		return err
+	}
+
+	//
+	TextSQL := TextSQL_Read + `
+WHERE 1=1
+	and connection_id = $1
+	and ext_id = $2
+`
+
+	//
+	row := db.QueryRow(ctx, TextSQL, m.ConnectionID, m.ExtID)
+	err = row.Scan(ReplaceAllFieldsWithComma)
+	if err != nil {
+		err = fmt.Errorf(m.TableNameDB()+" Read() ConnectionID: %v, ExtID: %v, error: %w", m.ConnectionID, m.ExtID, err)
+		return err
+	}
+
+	return err
+}

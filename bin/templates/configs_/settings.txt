@@ -701,3 +701,6 @@ TEMPLATES_CRUD_SOFT_DELETE_FILENAME="crud_tables_pgx_soft_delete.go_"
 #TEMPLATES_CRUD_SOFT_RESTORE_FILENAME - short filename of "crud_tables_pgx_soft_restore.go_" file
 TEMPLATES_CRUD_SOFT_RESTORE_FILENAME="crud_tables_pgx_soft_restore.go_"
 
+#TEMPLATES_CRUD_FINDBY_EXTID_FILENAME - short filename of "crud_tables_pgx_findby_extid.go_" file
+TEMPLATES_CRUD_FINDBY_EXTID_FILENAME="crud_tables_pgx_findby_extid.go_"
+
