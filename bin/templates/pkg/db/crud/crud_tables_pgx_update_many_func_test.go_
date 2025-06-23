@@ -17,8 +17,8 @@ func TestUpdate(t *testing.T) {
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
 	Otvet.ID = Postgres_ID_Test
 	Otvet.ColumnName = m.ColumnName
-	err = crud.Update(&Otvet)
+	err = crud.Update_ReplaceFieldName(&Otvet)
 	if err != nil {
-		t.Error("TestUpdate() Update() error: ", err)
+		t.Error("TestUpdate() Update_ReplaceFieldName() error: ", err)
 	}
 }

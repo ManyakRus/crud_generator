@@ -2,7 +2,7 @@ package crud_lawsuit_status_types
 
 import (
 	"github.com/ManyakRus/starter/config_main"
-	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
 	"testing"
@@ -34,8 +34,8 @@ func TestRead(t *testing.T) {
 func TestSave(t *testing.T) {
 	config_main.LoadEnv()
 
-	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
-	defer postgres_gorm.CloseConnection()
+	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	defer postgres_pgxpool.CloseConnection()
 
 	crud := Crud_DB{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
@@ -63,8 +63,8 @@ func TestSave(t *testing.T) {
 func TestDelete(t *testing.T) {
 	config_main.LoadEnv()
 
-	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
-	defer postgres_gorm.CloseConnection()
+	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	defer postgres_pgxpool.CloseConnection()
 
 	crud := Crud_DB{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}
@@ -101,8 +101,8 @@ func TestDelete(t *testing.T) {
 
 func TestFind_ByExtID(t *testing.T) {
 	config_main.LoadEnv()
-	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
-	defer postgres_gorm.CloseConnection()
+	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	defer postgres_pgxpool.CloseConnection()
 
 	crud := Crud_DB{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}

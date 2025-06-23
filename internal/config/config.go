@@ -273,6 +273,11 @@ type SettingsINI struct {
 	TEMPLATES_CRUD_SOFT_DELETE_FILENAME  string
 	TEMPLATES_CRUD_SOFT_RESTORE_FILENAME string
 	TEMPLATES_CRUD_FINDBY_EXTID_FILENAME string
+
+	TEMPLATES_CRUD_UPDATE_MANY_FILENAME           string
+	TEMPLATES_CRUD_UPDATE_MANY_TEST_FILENAME      string
+	TEMPLATES_CRUD_UPDATE_MANY_FUNC_FILENAME      string
+	TEMPLATES_CRUD_UPDATE_MANY_FUNC_TEST_FILENAME string
 }
 
 // Getenv - возвращает переменную окружения
@@ -1388,6 +1393,22 @@ func FillSettings() {
 
 	//
 	Name = "TEMPLATES_CRUD_FINDBY_EXTID_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "TEMPLATES_CRUD_UPDATE_MANY_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "TEMPLATES_CRUD_UPDATE_MANY_TEST_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "TEMPLATES_CRUD_UPDATE_MANY_FUNC_FILENAME"
+	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+
+	//
+	Name = "TEMPLATES_CRUD_UPDATE_MANY_FUNC_TEST_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
 
 }

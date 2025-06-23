@@ -1,0 +1,58 @@
+// Update_ReplaceFieldName - изменяет 1 поле ReplaceFieldName в базе данных
+func (crud Crud_DB) Update_ReplaceFieldName(m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
+	//ctxMain := contextmain.GetContext()
+	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
+	defer ctxCancelFunc()
+
+	db := postgres_gorm.GetConnection()
+
+	err = Update_ReplaceFieldName_ctx(ctx, db, m)
+	return err
+}
+
+// Update_ReplaceFieldName_ctx - изменяет 1 поле ReplaceFieldName в базе данных
+// с учётом контекста и соединения к БД
+func Update_ReplaceFieldName_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+	var err error
+
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
+	if micro.ContextDone(ctx) == true {
+		err = context.Canceled
+		return err
+	}
+
+	//ID не должен быть =0
+	if ReplaceID0 {
+		err = errors.New(m.TableNameDB()+` Read() error: ColumnNamePK=0`)
+		return err
+	}
+
+	//
+	//tx := db.WithContext(ctx)
+	tx := db
+
+	//
+	Value := m.ReplaceFieldName
+	if ReplaceValue0 {
+		tx = db.Model(&m).Update("ReplaceFieldName", gorm.Expr("NULL"))
+	} else {
+		tx = db.Model(&m).Update("ReplaceFieldName", Value)
+	}
+	err = tx.Error
+	if err != nil {
+		err = fmt.Errorf(m.TableNameDB()+" Update_ReplaceFieldName() ReplaceFieldsPKFormat, error: %w", ReplaceFieldsPKWithComma, err)
+		return err
+	}
+
+	//удалим из кэша
+	//cache.Remove(ReplaceValueFromAlias(m.ID))
+
+	return err
+}

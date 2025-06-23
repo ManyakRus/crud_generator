@@ -2,7 +2,7 @@ package crud_lawsuit_status_types
 
 import (
 	"github.com/ManyakRus/starter/config_main"
-	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_func"
 	"reflect"
@@ -13,8 +13,8 @@ func TestReadFromCache(t *testing.T) {
 	var err error
 
 	config_main.LoadEnv()
-	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
-	defer postgres_gorm.CloseConnection()
+	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	defer postgres_pgxpool.CloseConnection()
 
 	//читаем из БД
 	m1 := lawsuit_status_types.LawsuitStatusType{}

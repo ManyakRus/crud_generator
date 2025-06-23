@@ -704,3 +704,16 @@ TEMPLATES_CRUD_SOFT_RESTORE_FILENAME="crud_tables_pgx_soft_restore.go_"
 #TEMPLATES_CRUD_FINDBY_EXTID_FILENAME - short filename of "crud_tables_pgx_findby_extid.go_" file
 TEMPLATES_CRUD_FINDBY_EXTID_FILENAME="crud_tables_pgx_findby_extid.go_"
 
+#TEMPLATES_CRUD_UPDATE_MANY_FILENAME - short filename of "crud_tables_pgx_update_many.go_" file
+TEMPLATES_CRUD_UPDATE_MANY_FILENAME="crud_tables_pgx_update_many.go_"
+
+#TEMPLATES_CRUD_UPDATE_MANY_TEST_FILENAME - short filename of "crud_tables_pgx_update_many_test.go_" file
+TEMPLATES_CRUD_UPDATE_MANY_TEST_FILENAME="crud_tables_pgx_update_many_test.go_"
+
+#TEMPLATES_CRUD_UPDATE_MANY_FUNC_FILENAME - short filename of "crud_tables_pgx_update_many_func.go_" file
+TEMPLATES_CRUD_UPDATE_MANY_FUNC_FILENAME="crud_tables_pgx_update_many_func.go_"
+
+#TEMPLATES_CRUD_UPDATE_MANY_FUNC_TEST_FILENAME - short filename of "crud_tables_pgx_update_many_func_test.go_" file
+TEMPLATES_CRUD_UPDATE_MANY_FUNC_TEST_FILENAME="crud_tables_pgx_update_many_func_test.go_"
+
+
