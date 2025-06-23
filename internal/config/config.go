@@ -17,42 +17,42 @@ var Settings SettingsINI
 
 // SettingsINI - структура для хранения всех нужных переменных окружения
 type SettingsINI struct {
-	INCLUDE_TABLES                                   string
-	EXCLUDE_TABLES                                   string
-	TEMPLATE_FOLDERNAME                              string
-	TEMPLATE_FOLDERNAME_MODEL                        string
-	TEMPLATE_FOLDERNAME_DB                           string
-	TEMPLATE_FOLDERNAME_CRUD                         string
-	TEMPLATE_FOLDERNAME_TABLES                       string
-	TEMPLATE_FOLDERNAME_GRPC                         string
-	TEMPLATE_FOLDERNAME_GRPC_PROTO                   string
-	TEMPLATE_FOLDERNAME_GRPC_SERVER                  string
-	TEMPLATE_FOLDERNAME_GRPC_CLIENT                  string
-	TEMPLATE_FOLDERNAME_NRPC                         string
-	TEMPLATE_FOLDERNAME_NRPC_SERVER                  string
-	TEMPLATE_FOLDERNAME_NRPC_CLIENT                  string
-	TEMPLATE_FOLDERNAME_GRPC_NRPC                    string
-	TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC             string
-	TEMPLATE_SERVICE_NAME                            string
-	TEMPLATE_FOLDERNAME_CRUD_STARTER                 string
-	TEMPLATE_FOLDERNAME_ALIAS                        string
-	TEMPLATE_FOLDER_CRUD_FUNCTIONS                   string
-	TEMPLATE_FOLDERNAME_MAIN                         string
-	TEMPLATE_REPOSITORY_URL                          string
-	TEMPLATE_EXTERNAL_PROTO_FILENAME                 string
-	TEMPLATES_CRUD_FILENAME                          string
-	TEMPLATES_CRUD_TEST_FILENAME                     string
-	TEMPLATES_ALIAS_FILENAME                         string
-	TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME        string
-	TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME   string
-	TEMPLATES_CONVERT_ID_FILENAME                    string
-	TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME         string
-	TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME   string
-	TEMPLATES_NAME_REPLACE_FILENAME                  string
-	TEMPLATES_NAME_PRIMARYKEYS_FILENAME              string
-	TEMPLATES_NULLABLE_FILENAME                      string
-	TEMPLATES_CRUD_TABLE_UPDATE_FILENAME             string
-	TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME        string
+	INCLUDE_TABLES                       string
+	EXCLUDE_TABLES                       string
+	TEMPLATE_FOLDERNAME                  string
+	TEMPLATE_FOLDERNAME_MODEL            string
+	TEMPLATE_FOLDERNAME_DB               string
+	TEMPLATE_FOLDERNAME_CRUD             string
+	TEMPLATE_FOLDERNAME_TABLES           string
+	TEMPLATE_FOLDERNAME_GRPC             string
+	TEMPLATE_FOLDERNAME_GRPC_PROTO       string
+	TEMPLATE_FOLDERNAME_GRPC_SERVER      string
+	TEMPLATE_FOLDERNAME_GRPC_CLIENT      string
+	TEMPLATE_FOLDERNAME_NRPC             string
+	TEMPLATE_FOLDERNAME_NRPC_SERVER      string
+	TEMPLATE_FOLDERNAME_NRPC_CLIENT      string
+	TEMPLATE_FOLDERNAME_GRPC_NRPC        string
+	TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC string
+	TEMPLATE_SERVICE_NAME                string
+	TEMPLATE_FOLDERNAME_CRUD_STARTER     string
+	TEMPLATE_FOLDERNAME_ALIAS            string
+	TEMPLATE_FOLDER_CRUD_FUNCTIONS       string
+	TEMPLATE_FOLDERNAME_MAIN             string
+	TEMPLATE_REPOSITORY_URL              string
+	TEMPLATE_EXTERNAL_PROTO_FILENAME     string
+	TEMPLATES_CRUD_FILENAME              string
+	TEMPLATES_CRUD_TEST_FILENAME         string
+	TEMPLATES_ALIAS_FILENAME             string
+	//TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME        string
+	//TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME   string
+	TEMPLATES_CONVERT_ID_FILENAME                  string
+	TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME       string
+	TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME string
+	TEMPLATES_NAME_REPLACE_FILENAME                string
+	TEMPLATES_NAME_PRIMARYKEYS_FILENAME            string
+	TEMPLATES_NULLABLE_FILENAME                    string
+	//TEMPLATES_CRUD_TABLE_UPDATE_FILENAME             string
+	//TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME        string
 	TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_FILENAME      string
 	TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME string
 	TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME      string
@@ -582,14 +582,14 @@ func FillSettings() {
 	Settings.PREFIX_CLIENT_GRPC = s
 
 	//
-	Name = "TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME = s
-
+	//Name = "TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME"
+	//s = Getenv(Name, true)
+	//Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME = s
 	//
-	Name = "TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME = s
+	////
+	//Name = "TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME"
+	//s = Getenv(Name, true)
+	//Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CONVERT_ID_FILENAME"
@@ -616,15 +616,15 @@ func FillSettings() {
 	s = Getenv(Name, true)
 	Settings.TEMPLATES_NULLABLE_FILENAME = s
 
+	////
+	//Name = "TEMPLATES_CRUD_TABLE_UPDATE_FILENAME"
+	//s = Getenv(Name, true)
+	//Settings.TEMPLATES_CRUD_TABLE_UPDATE_FILENAME = s
 	//
-	Name = "TEMPLATES_CRUD_TABLE_UPDATE_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_CRUD_TABLE_UPDATE_FILENAME = s
-
-	//
-	Name = "TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME"
-	s = Getenv(Name, true)
-	Settings.TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME = s
+	////
+	//Name = "TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME"
+	//s = Getenv(Name, true)
+	//Settings.TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_FILENAME"

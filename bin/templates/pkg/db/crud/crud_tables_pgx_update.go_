@@ -4,11 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"github.com/ManyakRus/starter/stopapp"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"strconv"
 	"sync/atomic"
 	"time"
 )
@@ -61,6 +63,40 @@ ReplaceWhereID
 	//
 	_, err = db.Exec(ctx, TextSQL, 
 		ReplaceAllFieldsWithComma)
+	if err != nil {
+		err = fmt.Errorf(m.TableNameDB()+" Update() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		return err
+	}
+
+
+	return err
+}
+
+// Update_MassNeedUpdate_ctx - записывает новый объект в базу данных
+func Update_MassNeedUpdate_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType, MassNeedUpdateFields []string) error {
+	var err error
+
+	//количество невыполненных операций +1 -1
+	atomic.AddInt32(&stopapp.TotalMessagesSendingNow, 1)
+	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
+
+	//
+	if ctx.Err() != nil {
+		err = ctx.Err()
+		return err
+	}
+
+	//проверка ID
+	if ReplaceID0 {
+		TextError := fmt.Sprint(m.TableNameDB()+" Update() ", TableName, " error: ReplacePKFieldsWithComma is empty")
+		err = errors.New(TextError)
+		return err
+	}
+
+	ReplaceTextSQLUpdateMass
+
+	//
+	_, err = db.Exec(ctx, TextSQL, MassFields...)
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Update() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
 		return err

@@ -104,17 +104,22 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 	ReplacePKFieldNamesFormat := ""
 	ReplaceID0 := ""
 	//ReplaceWhereID := ""
+	TextWhereID := ""
+	ReplaceTextMassFields := "MassFields := make([]any, 0)\n"
 	Comma := ""
+	//TextNewLine := ""
 	TextAnd := ""
-	for _, Column1 := range ColumnsPK {
-		//sNumber := strconv.Itoa(i + 1)
+	for i, Column1 := range ColumnsPK {
+		sNumber := strconv.Itoa(i + 1)
 		ReplacePKFieldsWithComma = ReplacePKFieldsWithComma + Comma + "m." + Column1.NameGo
 		ReplacePKFieldNamesFormat = ReplacePKFieldNamesFormat + Comma + Column1.NameGo + ": %v"
 		TextEmpty := create_files.FindText_EqualEmpty(Column1, "m."+Column1.NameGo)
 		ReplaceID0 = ReplaceID0 + TextAnd + TextEmpty
-		//ReplaceWhereID = ReplaceWhereID + "\tand " + Column1.Name + " = $" + sNumber + "\n"
+		TextWhereID = TextWhereID + "\tand " + Column1.Name + " = $" + sNumber
+		ReplaceTextMassFields = ReplaceTextMassFields + "\tMassFields = append(MassFields, m." + Column1.NameGo + ")\n"
 
 		Comma = ", "
+		//TextNewLine = ",\n"
 		TextAnd = " && "
 	}
 	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldsWithComma", ReplacePKFieldsWithComma)
@@ -128,6 +133,7 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 	//ReplaceDollarsWithComma := ""
 	ReplaceColumnNameEqualDollarComma := ""
 	ReplaceWhereID := ""
+	ReplaceMassFieldsWithComma := ""
 	//Comma = ""
 	CommaNewline := "\t"
 	CommaNewline2 := ""
@@ -147,9 +153,10 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 
 		if Column1.IsPrimaryKey == true {
 			ReplaceWhereID = ReplaceWhereID + "\tand " + Column1.Name + " = $" + sNumber + "\n"
+			ReplaceMassFieldsWithComma = ReplaceMassFieldsWithComma + Comma + "m." + Column1.NameGo
 		}
 
-		//Comma = ", "
+		Comma = ", "
 		CommaNewline = ",\n\t"
 		CommaNewline2 = ",\n\t\t"
 	}
@@ -159,6 +166,28 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceTableName", Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceColumnNameEqualDollarComma", ReplaceColumnNameEqualDollarComma)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
+
+	//
+	PK_count := len(ColumnsPK)
+	ReplaceTextSQLUpdateMass := `
+	MassFields := make([]any, 0)
+	Comma := ""
+	TextSQL := ` + "`" + `UPDATE "` + Table1.Name + `" SET` + "`" + `
+	for i, ColumnName1 := range MassNeedUpdateFields {
+		ColumnNameDB, err := micro.Find_Tag_JSON(m, ColumnName1)
+		if err != nil {
+			return err
+		}
+		TextSQL = TextSQL + Comma + ColumnNameDB + " = $" + ` + `strconv.Itoa(` + strconv.Itoa(PK_count) + `+i+1)
+		Value, err := micro.GetStructValue(m, ColumnName1)
+		if err != nil {
+			return err
+		}
+		MassFields = append(MassFields, Value)
+		Comma = ",\n"
+	}
+	TextSQL = TextSQL + "\nWHERE 1=1 ` + TextWhereID + `"`
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQLUpdateMass", ReplaceTextSQLUpdateMass)
 
 	return Otvet
 }

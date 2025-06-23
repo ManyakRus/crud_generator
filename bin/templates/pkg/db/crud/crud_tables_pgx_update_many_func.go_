@@ -7,7 +7,7 @@ func (crud Crud_DB) Update_ReplaceFieldName(m *lawsuit_status_types.LawsuitStatu
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 
 	err = Update_ReplaceFieldName_ctx(ctx, db, m)
 	return err
@@ -30,7 +30,7 @@ func Update_ReplaceFieldName_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsu
 
 	//ID не должен быть =0
 	if ReplaceID0 {
-		err = errors.New(m.TableNameDB()+` Read() error: ColumnNamePK=0`)
+		err = errors.New(m.TableNameDB()+` Read() error: empty ReplacePKFieldsWithComma`)
 		return err
 	}
 
@@ -38,16 +38,19 @@ func Update_ReplaceFieldName_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsu
 	//tx := db.WithContext(ctx)
 	tx := db
 
+	TextSQL := `
+	UPDATE ReplaceTableName SET
+	ReplaceColumnNameEqualDollarComma
+	ReplaceWhereID
+	`
+
+	TextSQL = strings.ReplaceAll(TextSQL, "ReplaceColumnNameEqualDollarComma", "")
+
 	//
-	Value := m.ReplaceFieldName
-	if ReplaceValue0 {
-		tx = db.Model(&m).Update("ReplaceFieldName", gorm.Expr("NULL"))
-	} else {
-		tx = db.Model(&m).Update("ReplaceFieldName", Value)
-	}
-	err = tx.Error
+	ReplaceValueEqual
+	_, err = db.Exec(ctx, TextSQL, Value, ReplacePKFieldsWithComma)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Update_ReplaceFieldName() ReplaceFieldsPKFormat, error: %w", ReplaceFieldsPKWithComma, err)
+		err = fmt.Errorf(m.TableNameDB()+" Update_ReplaceFieldName() ReplacePKFieldNamesFormat, error: %w", ReplacePKFieldsWithComma, err)
 		return err
 	}
 

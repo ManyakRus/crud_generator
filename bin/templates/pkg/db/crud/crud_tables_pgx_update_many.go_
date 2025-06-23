@@ -6,9 +6,9 @@ import (
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"github.com/ManyakRus/starter/stopapp"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
-	"gorm.io/gorm"
 	"sync/atomic"
 	"time"
 )
@@ -46,10 +46,10 @@ func UpdateManyFields_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_stat
 	}
 
 	if ReplaceID0 {
-		err = errors.New(m.TableNameDB() + ` UpdateManyFields() error: empty ReplaceFieldNamesPKWithComma`)
+		err = errors.New(m.TableNameDB() + ` UpdateManyFields() error: empty ReplacePKFieldsWithComma`)
 		return err
 	}
 
-	err = update_ctx(ctx, db, m, MassNeedUpdateFields)
+	err = Update_MassNeedUpdate_ctx(ctx, db, m, MassNeedUpdateFields)
 	return err
 }

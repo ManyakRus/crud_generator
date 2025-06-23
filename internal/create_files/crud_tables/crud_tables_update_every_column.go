@@ -9,6 +9,7 @@ import (
 	"github.com/ManyakRus/starter/micro"
 	"os"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -25,9 +26,9 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + micro.SeparatorFile()
 
-	FilenameTemplateCrudFunc := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_FILENAME
+	FilenameTemplateCrudFunc := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_UPDATE_MANY_FUNC_FILENAME
 	DirReadyTable := DirReadyCrud
-	FilenameReadyCrudUpdateFunc := DirReadyTable + config.Settings.PREFIX_CRUD + TableName + "_update.go"
+	FilenameReadyCrudUpdateFunc := DirReadyTable + config.Settings.PREFIX_CRUD + TableName + "_update_many.go"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
@@ -40,7 +41,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	TextCrudUpdateFunc := string(bytes)
 
 	//читаем шаблон файла, без функций
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_FILENAME
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_UPDATE_MANY_FILENAME
 	bytes, err = os.ReadFile(FilenameTemplateCrud)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
@@ -50,8 +51,9 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 
 	//заменим имя пакета на новое
 	TextCrud = create_files.Replace_PackageName(TextCrud, DirReadyTable)
-	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
-	TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_MODEL, Table1.NameGo)
+	//TextCrud = strings.ReplaceAll(TextCrud, config.Settings.TEXT_TEMPLATE_TABLENAME, Table1.Name)
+	TextCrud = CreateFiles_UpdateEveryColumn1(TextCrud, Table1)
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumn(TextCrudUpdateFunc, Table1)
@@ -62,6 +64,8 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	//}
 
 	TextCrud = TextCrud + TextUpdateEveryColumn
+	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
+	TextCrud = create_files.Replace_TemplateTableName_to_TableName(TextCrud, Table1.Name)
 	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
 
 	//заменим импорты
@@ -89,7 +93,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	//TextCrud = RenameFunctions(TextCrud, Table1)
 
 	//заменяет "m.ID" на название колонки PrimaryKey
-	TextCrud = Replace_PrimaryKeyOtvetID(TextCrud, Table1)
+	//TextCrud = Replace_PrimaryKeyOtvetID(TextCrud, Table1)
 
 	//добавим импорт uuid
 	TextCrud = create_files.CheckAndAdd_ImportUUID_FromText(TextCrud)
@@ -107,6 +111,30 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	err = os.WriteFile(FilenameReadyCrudUpdateFunc, []byte(TextCrud), config.Settings.FILE_PERMISSIONS)
 
 	return err
+}
+
+// CreateFiles_UpdateEveryColumn1 - заполняет Text
+func CreateFiles_UpdateEveryColumn1(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	//Primary key
+	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	ReplacePKFieldsWithComma := ""
+	ReplaceID0 := ""
+	Comma := ""
+	TextAnd := ""
+	for _, Column1 := range ColumnsPK {
+		ReplacePKFieldsWithComma = ReplacePKFieldsWithComma + Comma + "m." + Column1.NameGo
+		TextEmpty := create_files.FindText_EqualEmpty(Column1, "m."+Column1.NameGo)
+		ReplaceID0 = ReplaceID0 + TextAnd + TextEmpty
+		Comma = ", "
+		TextAnd = " && "
+	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldsWithComma", ReplacePKFieldsWithComma)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceID0", ReplaceID0)
+
+	return Otvet
+
 }
 
 // FindTextUpdateEveryColumn - возвращает текст для всех таблиц
@@ -142,55 +170,88 @@ func FindTextUpdateEveryColumn(TextCrudUpdateFunc string, Table1 *types.Table) s
 func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, Column1 *types.Column) string {
 	Otvet := TextCrudUpdateFunc
 
-	ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
+	//Primary key
+	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	//TableAlias := create_files.Find_TableAlias(Table1)
+	ReplacePKFieldsWithComma := ""
+	ReplacePKFieldNamesFormat := ""
+	ReplaceID0 := ""
+	ReplaceWhereID := ""
+	Comma := ""
+	TextAnd := ""
+	for i, Column1 := range ColumnsPK {
+		//sNumber := strconv.Itoa(i + 1)
+		ReplacePKFieldsWithComma = ReplacePKFieldsWithComma + Comma + "m." + Column1.NameGo
+		ReplacePKFieldNamesFormat = ReplacePKFieldNamesFormat + Comma + Column1.NameGo + ": %v"
+		TextEmpty := create_files.FindText_EqualEmpty(Column1, "m."+Column1.NameGo)
+		ReplaceID0 = ReplaceID0 + TextAnd + TextEmpty
+		sNumber := strconv.Itoa(i + 2) // 1 - уже занят для Column1
+		ReplaceWhereID = ReplaceWhereID + "\tand " + Column1.Name + " = $" + sNumber + "\n"
+		//ReplaceWhereID = ReplaceWhereID + "\tand " + Column1.Name + " = $" + sNumber + "\n"
 
-	ModelName := Table1.NameGo
-	ColumnName := Column1.NameGo
-	FuncName := "Update_" + ColumnName
-	TextRequest, TextRequestFieldName := create_files.FindText_ProtobufRequest(Table1)
-
-	//ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
-
-	Otvet = ReplaceCacheRemove(Otvet, Table1)
-
-	Otvet = Replace_PrimaryKeyOtvetID(Otvet, Table1)
-
-	//запись null в nullable колонки
-	if Column1.IsNullable == true && (Column1.TableKey != "" || Column1.TypeGo == "time.Time") {
-	} else {
-		TextFind := `	if Value == 0 {
-		tx = db.Model(&m).Update("ColumnNameField", gorm.Expr("NULL"))
-	} else {
-		tx = db.Model(&m).Update("ColumnNameField", Value)
-	}`
-		TextReplace := `	tx = db.Model(&m).Update("ColumnNameField", Value)`
-		Otvet = strings.ReplaceAll(Otvet, TextFind, TextReplace)
+		Comma = ", "
+		TextAnd = " && "
 	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldsWithComma", ReplacePKFieldsWithComma)
+	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldNamesFormat", ReplacePKFieldNamesFormat)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceID0", ReplaceID0)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
 
-	//заменяем Read_ctx()
-	Otvet = strings.ReplaceAll(Otvet, " Read_ctx ", " "+FuncName+"_ctx ")
-	Otvet = strings.ReplaceAll(Otvet, " Read_ctx(", " "+FuncName+"_ctx(")
-	Otvet = strings.ReplaceAll(Otvet, ".Read_ctx(", "."+FuncName+"_ctx(")
+	//
+	TextAlias := create_files.ConvertFromAlias(Table1, Column1, "m."+Column1.NameGo)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceValueFromAlias(m.ID)", TextAlias)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldName", Column1.NameGo)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceTableName", Column1.Name)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceTableName", Table1.Name)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceColumnNameEqualDollarComma", Column1.Name+" = $1")
 
-	//заменяем Read()
-	Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Read", ModelName+"_"+FuncName)
-	Otvet = strings.ReplaceAll(Otvet, " Read ", " "+FuncName+" ")
-	Otvet = strings.ReplaceAll(Otvet, " Read(", " "+FuncName+"(")
-	Otvet = strings.ReplaceAll(Otvet, `"Read()`, `"`+FuncName+"()")
+	ReplaceValueEqual := "Value := m." + Column1.NameGo
+	if Column1.IsNullable == true {
+		TextValue := create_files.FindText_NullValue(Column1.TypeGo, "m.")
+		ReplaceValueEqual = "Value := " + TextValue
+	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceValueEqual", ReplaceValueEqual)
 
-	Otvet = create_files.Replace_TemplateModel_to_Model(Otvet, Table1.NameGo)
-	Otvet = create_files.Replace_TemplateTableName_to_TableName(Otvet, Table1.Name)
-
-	TextProto := create_files.TextProto()
-	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", TextProto+"."+TextRequest)
-	Otvet = strings.ReplaceAll(Otvet, "ColumnNamePK", ColumnPK.NameGo)
-	Otvet = strings.ReplaceAll(Otvet, "ColumnNameField", ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
-	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
-
-	//внешние ключи заменяем 0 на null
-	TextEqualEmpty := create_files.FindText_EqualEmpty(Column1, "Value")
-	Otvet = strings.ReplaceAll(Otvet, "Value == 0", TextEqualEmpty)
+	//ModelName := Table1.NameGo
+	//ColumnName := Column1.NameGo
+	//FuncName := "Update_" + ColumnName
+	//TextRequest, TextRequestFieldName := create_files.FindText_ProtobufRequest(Table1)
+	//
+	////ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
+	//
+	//Otvet = ReplaceCacheRemove(Otvet, Table1)
+	//
+	//Otvet = Replace_PrimaryKeyOtvetID(Otvet, Table1)
+	//
+	////запись null в nullable колонки
+	//if Column1.IsNullable == true{
+	//} else {
+	//}
+	//
+	////заменяем Read_ctx()
+	//Otvet = strings.ReplaceAll(Otvet, " Read_ctx ", " "+FuncName+"_ctx ")
+	//Otvet = strings.ReplaceAll(Otvet, " Read_ctx(", " "+FuncName+"_ctx(")
+	//Otvet = strings.ReplaceAll(Otvet, ".Read_ctx(", "."+FuncName+"_ctx(")
+	//
+	////заменяем Read()
+	//Otvet = strings.ReplaceAll(Otvet, config.Settings.TEXT_TEMPLATE_MODEL+"_Read", ModelName+"_"+FuncName)
+	//Otvet = strings.ReplaceAll(Otvet, " Read ", " "+FuncName+" ")
+	//Otvet = strings.ReplaceAll(Otvet, " Read(", " "+FuncName+"(")
+	//Otvet = strings.ReplaceAll(Otvet, `"Read()`, `"`+FuncName+"()")
+	//
+	//Otvet = create_files.Replace_TemplateModel_to_Model(Otvet, Table1.NameGo)
+	//Otvet = create_files.Replace_TemplateTableName_to_TableName(Otvet, Table1.Name)
+	//
+	//TextProto := create_files.TextProto()
+	//Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", TextProto+"."+TextRequest)
+	//Otvet = strings.ReplaceAll(Otvet, "ColumnNamePK", ColumnPK.NameGo)
+	//Otvet = strings.ReplaceAll(Otvet, "ColumnNameField", ColumnName)
+	//Otvet = strings.ReplaceAll(Otvet, "Model.ID", "Model."+ColumnName)
+	//Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
+	//
+	////внешние ключи заменяем 0 на null
+	//TextEqualEmpty := create_files.FindText_EqualEmpty(Column1, "Value")
+	//Otvet = strings.ReplaceAll(Otvet, "Value == 0", TextEqualEmpty)
 
 	return Otvet
 }
@@ -208,9 +269,9 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	DirTemplatesCrud := DirTemplates + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile()
 	DirReadyCrud := DirReady + config.Settings.TEMPLATE_FOLDERNAME_CRUD + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + micro.SeparatorFile()
 
-	FilenameTemplateCrudFunc := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_FUNC_TEST_FILENAME
+	FilenameTemplateCrudFunc := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_UPDATE_MANY_FUNC_TEST_FILENAME
 	DirReadyTable := DirReadyCrud
-	FilenameReadyCrudUpdate := DirReadyTable + config.Settings.PREFIX_CRUD + TableName + "_update_test.go"
+	FilenameReadyCrudUpdate := DirReadyTable + config.Settings.PREFIX_CRUD + TableName + "_update_many_test.go"
 
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
@@ -223,7 +284,7 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	TextCrudUpdateFunc := string(bytes)
 
 	//читаем шаблон файла, без функций
-	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_UPDATE_TEST_FILENAME
+	FilenameTemplateCrud := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_UPDATE_MANY_TEST_FILENAME
 	bytes, err = os.ReadFile(FilenameTemplateCrud)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
