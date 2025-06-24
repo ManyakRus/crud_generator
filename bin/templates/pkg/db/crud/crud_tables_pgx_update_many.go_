@@ -5,10 +5,12 @@ import (
 	"errors"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
+	"github.com/ManyakRus/starter/postgres_func"
 	"github.com/ManyakRus/starter/stopapp"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
+	"strings"
 	"sync/atomic"
 	"time"
 )
@@ -51,5 +53,8 @@ func UpdateManyFields_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_stat
 	}
 
 	err = Update_MassNeedUpdate_ctx(ctx, db, m, MassNeedUpdateFields)
+
+ReplaceCacheRemove
+
 	return err
 }

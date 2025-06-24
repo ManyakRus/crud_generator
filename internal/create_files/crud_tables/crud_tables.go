@@ -209,18 +209,18 @@ func RenameFunctions(TextDB string, Table1 *types.Table) string {
 	return Otvet
 }
 
-// ReplaceCacheRemove - заменяет cache.Remove(IntFromAlias(m.ID))
-func ReplaceCacheRemove(Text string, Table1 *types.Table) string {
-	Otvet := Text
-
-	if Table1.PrimaryKeyColumnsCount == 1 {
-		Otvet = ReplaceCacheRemove_1PK(Otvet, Table1)
-	} else {
-		Otvet = ReplaceCacheRemove_ManyPK(Otvet, Table1)
-	}
-
-	return Otvet
-}
+//// ReplaceCacheRemove - заменяет cache.Remove(IntFromAlias(m.ID))
+//func ReplaceCacheRemove(Text string, Table1 *types.Table) string {
+//	Otvet := Text
+//
+//	if Table1.PrimaryKeyColumnsCount == 1 {
+//		Otvet = ReplaceCacheRemove_1PK(Otvet, Table1)
+//	} else {
+//		Otvet = ReplaceCacheRemove_ManyPK(Otvet, Table1)
+//	}
+//
+//	return Otvet
+//}
 
 // ReplaceColumnNamePK - заменяет "ColumnNamePK" на текст имя колонки
 func ReplaceColumnNamePK(Text string, Table1 *types.Table) string {
@@ -255,6 +255,38 @@ func ReplaceCacheRemove_ManyPK(Text string, Table1 *types.Table) string {
 		TextNew := "cache.Remove(" + Table1.Name + ".StringIdentifier(" + TextNames + "))"
 		Otvet = strings.ReplaceAll(Otvet, TextOld, TextNew)
 	}
+
+	return Otvet
+}
+
+// ReplaceCacheRemove - заменяет текст ReplaceCacheRemove на текст cache.Remove()
+func ReplaceCacheRemove(Text string, Table1 *types.Table) string {
+	Otvet := Text
+
+	//Primary key
+	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	ReplacePKFieldsWithComma := ""
+	Comma := ""
+	for _, Column1 := range ColumnsPK {
+		ReplacePKFieldsWithComma = ReplacePKFieldsWithComma + Comma + "m." + Column1.NameGo
+		Comma = ", "
+	}
+
+	//
+	TextReplaceCacheRemove := ""
+	if config.Settings.NEED_CREATE_CACHE_API == true {
+		if len(ColumnsPK) == 1 {
+			ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
+			TextStringIdentifier := create_files.ConvertFromAlias(Table1, ColumnPK, "m."+ColumnPK.NameGo)
+			TextReplaceCacheRemove = `	//удалим из кэша
+	cache.Remove(` + TextStringIdentifier + ")"
+		}
+	} else {
+		TextStringIdentifier := Table1.Name + ".StringIdentifier(" + ReplacePKFieldsWithComma + ")"
+		TextReplaceCacheRemove = `		//удалим из кэша
+	cache.Remove(` + TextStringIdentifier + ")"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceCacheRemove", TextReplaceCacheRemove)
 
 	return Otvet
 }

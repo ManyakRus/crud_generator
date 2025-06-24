@@ -133,6 +133,8 @@ func CreateFiles_UpdateEveryColumn1(Text string, Table1 *types.Table) string {
 	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldsWithComma", ReplacePKFieldsWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceID0", ReplaceID0)
 
+	Otvet = ReplaceCacheRemove(Otvet, Table1)
+
 	return Otvet
 
 }
@@ -207,10 +209,12 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 
 	ReplaceValueEqual := "Value := m." + Column1.NameGo
 	if Column1.IsNullable == true {
-		TextValue := create_files.FindText_NullValue(Column1.TypeGo, "m.")
+		TextValue := create_files.FindText_NullValue(Column1.TypeGo, "m."+Column1.NameGo)
 		ReplaceValueEqual = "Value := " + TextValue
 	}
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceValueEqual", ReplaceValueEqual)
+
+	Otvet = ReplaceCacheRemove(Otvet, Table1)
 
 	//ModelName := Table1.NameGo
 	//ColumnName := Column1.NameGo
@@ -502,3 +506,5 @@ func Replace_Postgres_ID_Update_Test(Text string, Table1 *types.Table) string {
 
 	return Otvet
 }
+
+// Replace_Postgres_ID_Update - заменяет текст "const Postgres_ID = 0" на нужные ИД, для много колонок PrimaryKey

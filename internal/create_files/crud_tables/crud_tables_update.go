@@ -169,25 +169,29 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 
 	//
 	PK_count := len(ColumnsPK)
-	ReplaceTextSQLUpdateMass := `
-	MassFields := make([]any, 0)
-	Comma := ""
-	TextSQL := ` + "`" + `UPDATE "` + Table1.Name + `" SET` + "`" + `
-	for i, ColumnName1 := range MassNeedUpdateFields {
-		ColumnNameDB, err := micro.Find_Tag_JSON(m, ColumnName1)
-		if err != nil {
-			return err
-		}
-		TextSQL = TextSQL + Comma + ColumnNameDB + " = $" + ` + `strconv.Itoa(` + strconv.Itoa(PK_count) + `+i+1)
-		Value, err := micro.GetStructValue(m, ColumnName1)
-		if err != nil {
-			return err
-		}
-		MassFields = append(MassFields, Value)
-		Comma = ",\n"
-	}
-	TextSQL = TextSQL + "\nWHERE 1=1 ` + TextWhereID + `"`
-	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQLUpdateMass", ReplaceTextSQLUpdateMass)
+	sPK_count := strconv.Itoa(PK_count)
+	//ReplaceTextSQLUpdateMass := `
+	//MassFields := make([]any, 0)
+	//Comma := ""
+	//TextSQL := ` + "`" + `UPDATE "` + Table1.Name + `" SET` + "`" + `
+	//for i, ColumnName1 := range MassNeedUpdateFields {
+	//	ColumnNameDB, err := micro.Find_Tag_JSON(m, ColumnName1)
+	//	if err != nil {
+	//		return err
+	//	}
+	//	TextSQL = TextSQL + Comma + ColumnNameDB + " = $" + ` + `strconv.Itoa(` + strconv.Itoa(PK_count) + `+i+1)
+	//	Value, err := micro.GetStructValue(m, ColumnName1)
+	//	if err != nil {
+	//		return err
+	//	}
+	//	MassFields = append(MassFields, Value)
+	//	Comma = ",\n"
+	//}
+	//TextSQL = TextSQL + "\nWHERE 1=1 ` + TextWhereID + `"`
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQLWhere", TextWhereID)
+	Otvet = strings.ReplaceAll(Otvet, "ReplacePKCount", sPK_count)
+
+	Otvet = ReplaceCacheRemove(Otvet, Table1)
 
 	return Otvet
 }

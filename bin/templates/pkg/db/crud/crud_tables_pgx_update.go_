@@ -68,6 +68,7 @@ ReplaceWhereID
 		return err
 	}
 
+ReplaceCacheRemove
 
 	return err
 }
@@ -93,7 +94,26 @@ func Update_MassNeedUpdate_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit
 		return err
 	}
 
-	ReplaceTextSQLUpdateMass
+	MassFields := make([]any, 0)
+	Comma := ""
+	TextSQL := `UPDATE "lawsuit_status_types" SET`
+	for i, ColumnName1 := range MassNeedUpdateFields {
+		ColumnNameDB, err := micro.Find_Tag_JSON(m, ColumnName1)
+		if err != nil {
+			return err
+		}
+
+		TextSQL = TextSQL + Comma + ColumnNameDB + " = $" + strconv.Itoa(ReplacePKCount+i+1)
+		Value, err := micro.GetStructValue(m, ColumnName1)
+		if err != nil {
+			return err
+		}
+
+		MassFields = append(MassFields, Value)
+
+		Comma = ",\n"
+	}
+	TextSQL = TextSQL + "\nWHERE 1=1 ReplaceTextSQLWhere"
 
 	//
 	_, err = db.Exec(ctx, TextSQL, MassFields...)
@@ -102,6 +122,7 @@ func Update_MassNeedUpdate_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit
 		return err
 	}
 
+ReplaceCacheRemove
 
 	return err
 }

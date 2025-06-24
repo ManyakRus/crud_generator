@@ -35,9 +35,6 @@ func Update_ReplaceFieldName_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsu
 	}
 
 	//
-	//tx := db.WithContext(ctx)
-	tx := db
-
 	TextSQL := `
 	UPDATE ReplaceTableName SET
 	ReplaceColumnNameEqualDollarComma
@@ -54,8 +51,7 @@ func Update_ReplaceFieldName_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsu
 		return err
 	}
 
-	//удалим из кэша
-	//cache.Remove(ReplaceValueFromAlias(m.ID))
+ReplaceCacheRemove
 
 	return err
 }

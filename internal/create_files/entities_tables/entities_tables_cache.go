@@ -10,9 +10,9 @@ import (
 func AddFunctionStringIdentifier(TextModel string, Table1 *types.Table) string {
 	Otvet := TextModel
 
-	if Table1.PrimaryKeyColumnsCount == 1 {
-		return Otvet
-	}
+	//if Table1.PrimaryKeyColumnsCount == 1 {
+	//	return Otvet
+	//}
 
 	_, TextNamesTypes, _ := create_files.FindText_IDMany(Table1)
 
