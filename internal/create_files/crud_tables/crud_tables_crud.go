@@ -47,35 +47,35 @@ func CreateFiles(Table1 *types.Table) error {
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
 		TextDB = create_files.Delete_TemplateRepositoryImports(TextDB)
 
-		ModelTableURL := create_files.Find_ModelTableURL(TableName)
-		TextDB = create_files.AddImport(TextDB, ModelTableURL)
-
-		ConstantsURL := create_files.Find_DBConstantsURL()
-		TextDB = create_files.AddImport(TextDB, ConstantsURL)
-
-		CrudFunctionsURL := create_files.Find_CrudFunctionsURL()
-		TextDB = create_files.AddImport(TextDB, CrudFunctionsURL)
-
-		//удалим лишние функции
-		TextDB = create_files.DeleteFunc_Delete(TextDB, Table1)
-		TextDB = create_files.DeleteFunc_Restore(TextDB, Table1)
-		TextDB = create_files.DeleteFunc_Find_byExtID(TextDB, Table1)
-
-		//удалим лишние функции ctx
-		TextDB = DeleteFunc_DeleteCtx(TextDB, Table1)
-		TextDB = DeleteFunc_RestoreCtx(TextDB, Table1)
-		TextDB = DeleteFunc_Find_byExtIDCtx(TextDB, Table1)
-
-		//кэш
-		if config.Settings.NEED_CREATE_CACHE_API == true {
-			//исправление Save()
-			const TEXT_CACHE_REMOVE = "cache.Remove("
-			TextDB = create_files.CommentLineInText(TextDB, TEXT_CACHE_REMOVE)
-			//TextDB = strings.ReplaceAll(TextDB, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
-		}
-
+		//ModelTableURL := create_files.Find_ModelTableURL(TableName)
+		//TextDB = create_files.AddImport(TextDB, ModelTableURL)
 		//
-		TextDB = Replace_ExtID_equal0_string(TextDB, Table1)
+		//ConstantsURL := create_files.Find_DBConstantsURL()
+		//TextDB = create_files.AddImport(TextDB, ConstantsURL)
+		//
+		//CrudFunctionsURL := create_files.Find_CrudFunctionsURL()
+		//TextDB = create_files.AddImport(TextDB, CrudFunctionsURL)
+		//
+		////удалим лишние функции
+		//TextDB = create_files.DeleteFunc_Delete(TextDB, Table1)
+		//TextDB = create_files.DeleteFunc_Restore(TextDB, Table1)
+		//TextDB = create_files.DeleteFunc_Find_byExtID(TextDB, Table1)
+		//
+		////удалим лишние функции ctx
+		//TextDB = DeleteFunc_DeleteCtx(TextDB, Table1)
+		//TextDB = DeleteFunc_RestoreCtx(TextDB, Table1)
+		//TextDB = DeleteFunc_Find_byExtIDCtx(TextDB, Table1)
+		//
+		////кэш
+		//if config.Settings.NEED_CREATE_CACHE_API == true {
+		//	//исправление Save()
+		//	const TEXT_CACHE_REMOVE = "cache.Remove("
+		//	TextDB = create_files.CommentLineInText(TextDB, TEXT_CACHE_REMOVE)
+		//	//TextDB = strings.ReplaceAll(TextDB, `//`+constants.TEXT_CACHE_REMOVE, constants.TEXT_CACHE_REMOVE)
+		//}
+		//
+		////
+		//TextDB = Replace_ExtID_equal0_string(TextDB, Table1)
 	}
 
 	//TextDB = create_files.DeleteFunc_Find_byExtID(TextDB, Table1)

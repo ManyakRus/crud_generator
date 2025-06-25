@@ -7,8 +7,8 @@ import (
 	"github.com/hashicorp/golang-lru/v2/expirable"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
-	"github.com/ManyakRus/starter/postgres_gorm"
-	"gorm.io/gorm"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"sync/atomic"
 )
 
@@ -36,7 +36,7 @@ func (crud Crud_DB) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatusT
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 
 	Otvet, err = ReadFromCache_ctx(ctx, db, ID)
 
@@ -44,7 +44,7 @@ func (crud Crud_DB) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatusT
 }
 
 // ReadFromCache_ctx - находит запись в кеше или в БД по ID
-func ReadFromCache_ctx(ctx context.Context, db *gorm.DB, ID int64) (lawsuit_status_types.LawsuitStatusType, error) {
+func ReadFromCache_ctx(ctx context.Context, db *pgxpool.Pool, ID int64) (lawsuit_status_types.LawsuitStatusType, error) {
 	var Otvet lawsuit_status_types.LawsuitStatusType
 	var err error
 

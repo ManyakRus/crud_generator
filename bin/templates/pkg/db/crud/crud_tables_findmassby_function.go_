@@ -8,7 +8,7 @@ func (crud Crud_DB) FindMassBy_FieldNamesWithUnderline(m *lawsuit_status_types.L
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 
 	Otvet, err = FindMassBy_FieldNamesWithUnderline_ctx(ctx, db, m)
 
@@ -16,7 +16,7 @@ func (crud Crud_DB) FindMassBy_FieldNamesWithUnderline(m *lawsuit_status_types.L
 }
 
 // FindMassBy_FieldNamesWithUnderline_ctx - находит запись в БД по FieldNamesWithPlus
-func FindMassBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) ([]lawsuit_status_types.LawsuitStatusType, error) {
+func FindMassBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) ([]lawsuit_status_types.LawsuitStatusType, error) {
 	var err error
 	Otvet := make([]lawsuit_status_types.LawsuitStatusType, 0)
 

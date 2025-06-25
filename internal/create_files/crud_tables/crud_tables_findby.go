@@ -6,7 +6,9 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
+	"github.com/bxcodec/faker/v3/support/slice"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -123,36 +125,76 @@ func CreateFiles_FindBy_Table(Table1 *types.Table, TextTemplateFunction string) 
 func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
 	Otvet := TextTemplateFunction
 
+	TableAlias := create_files.Find_TableAlias(Table1)
+
+	//все колонки
+	//	ReplaceTextSQL := `
+	//SELECT
+	//	`
+	ReplaceWhereID := ""
+	ReplaceAllFieldsWithComma := ""
+	//CommaNewline := ""
+	CommaNewline2 := ""
+	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
+	for i, Column1 := range MassColumns {
+		sNumber := strconv.Itoa(i + 1)
+		//if Column1.IsNullable == true {
+		//	DefaultValueSQL := create_files.FindText_DefaultValueSQL_NotNull(Column1.TypeGo)
+		//	ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE(" + TableAlias + "." + Column1.Name + ", " + DefaultValueSQL + ") as " + Column1.Name
+		//} else {
+		//	ReplaceTextSQL = ReplaceTextSQL + CommaNewline + TableAlias + "." + Column1.Name
+		//}
+		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&m." + Column1.NameGo
+
+		if slice.Contains(MassColumns1, Column1.Name) == true {
+			ReplaceWhereID = ReplaceWhereID + "\tand " + TableAlias + "." + Column1.Name + " = $" + sNumber + "\n"
+		}
+
+		//CommaNewline = ",\n\t"
+		CommaNewline2 = ",\n\t\t"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
+	//	ReplaceTextSQL = ReplaceTextSQL + `
+	//FROM
+	//	` + Table1.Name + ` as ` + TableAlias + "\n"
+	//	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQL", ReplaceTextSQL)
+
 	//
 	FieldNamesWithUnderline := ""
 	FieldNamesWithComma := ""
-	TextWhere := ""
 
 	//
-	TextFind := "\t" + `tx = tx.Where(` + "`" + `"ColumnName" = ?` + "`" + `, m.FieldName)` + "\n"
+	ReplaceFieldNamesFormat := ""
+	ReplaceFieldsWithComma := ""
 	Underline := ""
 	Plus := ""
+	Comma := ""
 	for _, ColumnName1 := range MassColumns1 {
 		Column1, ok := Table1.MapColumns[ColumnName1]
 		if ok == false {
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
-		TextWhere = TextWhere + "\t" + `tx = tx.Where(` + "`" + `"` + ColumnName1 + `" = ?` + "`" + `, m.` + Column1.NameGo + `)` + "\n"
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
+		ReplaceFieldNamesFormat = ReplaceFieldNamesFormat + Comma + Column1.NameGo + ": %v"
+		ReplaceFieldsWithComma = ReplaceFieldsWithComma + Comma + "m." + Column1.NameGo
+
+		Comma = ", "
 		Underline = "_"
 		Plus = "+"
 	}
 
 	//кроме помеченных на удаление
 	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
-		TextWhere = TextWhere + "\t" + `tx = tx.Where("is_deleted = ?", false)` + "\n"
+		ReplaceWhereID = ReplaceWhereID + "\tand " + TableAlias + ".is_deleted = false\n"
 	}
 
 	//
-	Otvet = strings.ReplaceAll(Otvet, TextFind, TextWhere)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldNamesFormat", ReplaceFieldNamesFormat)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldsWithComma", ReplaceFieldsWithComma)
 
 	return Otvet
 }

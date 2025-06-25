@@ -2,11 +2,12 @@ package crud_lawsuit_status_types
 
 import (
 	"context"
-	"github.com/ManyakRus/starter/postgres_gorm"
+	"fmt"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"github.com/ManyakRus/starter/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
-	"gorm.io/gorm"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"sync/atomic"
 	"time"
 )

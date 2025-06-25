@@ -7,7 +7,7 @@ func (crud Crud_DB) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.Lawsu
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 
 	err = FindBy_FieldNamesWithUnderline_ctx(ctx, db, m)
 
@@ -15,7 +15,7 @@ func (crud Crud_DB) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.Lawsu
 }
 
 // FindBy_FieldNamesWithUnderline_ctx - находит запись в БД по FieldNamesWithPlus
-func FindBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m *lawsuit_status_types.LawsuitStatusType) error {
+func FindBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	//количество невыполненных операций +1 -1
@@ -23,12 +23,24 @@ func FindBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *gorm.DB, m *law
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	//tx := db.WithContext(ctx)
-	tx := db
+	if ctx.Err() != nil {
+		err = ctx.Err()
+		return err
+	}
 
-	tx = tx.Where(`"ColumnName" = ?`, m.FieldName)
-	tx = tx.Take(m)
-	err = tx.Error
+	//
+	TextSQL := TextSQL_Read + `
+WHERE 1=1
+ReplaceWhereID
+`
+
+	//
+	row := db.QueryRow(ctx, TextSQL, ReplaceFieldsWithComma)
+	err = row.Scan(ReplaceAllFieldsWithComma)
+	if err != nil {
+		err = fmt.Errorf(m.TableNameDB()+" FindBy_FieldNamesWithUnderline() ReplaceFieldNamesFormat, error: %w", ReplaceFieldsWithComma, err)
+		return err
+	}
 
 	return err
 }

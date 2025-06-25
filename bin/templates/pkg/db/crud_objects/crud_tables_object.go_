@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/micro"
-	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud/crud_lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/objects/object_lawsuit_status_types"
-	"gorm.io/gorm"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"time"
 )
 
@@ -25,14 +25,14 @@ func (crud Crud_DB) ReadObject(m *object_lawsuit_status_types.ObjectLawsuitStatu
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 
 	err = ReadObject_ctx(ctx, db, m)
 	return err
 }
 
 // ReadObject_ctx - находит запись в БД по ID, также заполняет внешние поля
-func ReadObject_ctx(ctx context.Context, db *gorm.DB, m *object_lawsuit_status_types.ObjectLawsuitStatusType) error {
+func ReadObject_ctx(ctx context.Context, db *pgxpool.Pool, m *object_lawsuit_status_types.ObjectLawsuitStatusType) error {
 	var err error
 
 	if micro.ContextDone(ctx) == true {

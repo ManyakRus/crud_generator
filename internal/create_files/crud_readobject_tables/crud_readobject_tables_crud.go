@@ -71,10 +71,6 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 
 	}
 
-	//заменим Object
-	TextCrud = create_files.Replace_ObjectTemplateModel_to_Model(TextCrud, Table1.NameGo)
-	//TextCrud = create_files.Replace_ObjectTemplateTableName_to_TableName(TextCrud, Table1.Name)
-
 	//
 	//FieldNamesWithPercent
 	FieldNamesWithPercent := create_files.Find_FieldNamesWithPercent_from_Table(Table1)
@@ -83,6 +79,10 @@ func CreateFiles_ReadObject(MapAll map[string]*types.Table, Table1 *types.Table)
 	//FieldNamesWithCommaM
 	FieldNamesWithCommaM := create_files.Find_FieldNamesWithComma_from_Table_VariableName(Table1, "m")
 	TextCrud = strings.ReplaceAll(TextCrud, "FieldNamesWithCommaM", FieldNamesWithCommaM)
+
+	//заменим Object
+	TextCrud = create_files.Replace_ObjectTemplateModel_to_Model(TextCrud, Table1.NameGo)
+	//TextCrud = create_files.Replace_ObjectTemplateTableName_to_TableName(TextCrud, Table1.Name)
 
 	//создание текста
 	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
