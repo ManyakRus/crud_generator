@@ -1,5 +1,5 @@
-// FindModelBy_FieldNamesWithUnderline - находит запись в БД из связанной таблицы по FieldNamesWithPlus
-func (crud Crud_DB) FindModelBy_FieldNamesWithUnderline(m *lawsuit_status_types.LawsuitStatusType) (foreign_package.ForeignModel, error) {
+// FindModelBy_FieldName - находит запись в БД из связанной таблицы по FieldNamesWithPlus
+func (crud Crud_DB) FindModelBy_FieldName(m *lawsuit_status_types.LawsuitStatusType) (foreign_package.ForeignModel, error) {
 	var err error
 
 	ctxMain := context.Background() //операцию надо выполнить, даже при отмене контекста
@@ -9,13 +9,13 @@ func (crud Crud_DB) FindModelBy_FieldNamesWithUnderline(m *lawsuit_status_types.
 
 	db := postgres_pgxpool.GetConnection()
 
-	Otvet, err := FindModelBy_FieldNamesWithUnderline_ctx(ctx, db, m)
+	Otvet, err := FindModelBy_FieldName_ctx(ctx, db, m)
 
 	return Otvet, err
 }
 
-// FindModelBy_FieldNamesWithUnderline_ctx - находит запись в БД из связанной таблицы по FieldNamesWithPlus
-func FindModelBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) (foreign_package.ForeignModel, error) {
+// FindModelBy_FieldName_ctx - находит запись в БД из связанной таблицы по FieldNamesWithPlus
+func FindModelBy_FieldName_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) (foreign_package.ForeignModel, error) {
 	Otvet := foreign_package.ForeignModel{}
 	var err error
 
@@ -24,29 +24,25 @@ func FindModelBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *pgxpool.Po
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	tx := db
-	
-	//находим запись в этой таблице
-	//tx = tx.Where("ColumnName = ?", m.PrimaryKeyName)
-	tx = tx.Where(m, PrimaryKeysWithQuotes).Take(m)
-	err = tx.Error
-	if err != nil {
-		err = fmt.Errorf("tx.Take() error: %w", err)
+	if ctx.Err() != nil {
+		err = ctx.Err()
 		return Otvet, err
 	}
 
-	//находим запись в другой таблице
-	//tx = db.WithContext(ctx)
-	tx = db
-	ID := m.FieldName
-	Otvet.ForeignPrimaryKeyName = ID
-	tx = tx.Where(&Otvet, ForeignPrimaryKeysWithQuotes).Take(&Otvet)
-	err = tx.Error
+	//
+	TextSQL := foreign_package.TextSQL_Read
+	TextSQL = TextSQL + `
+	WHERE 1=1
+	ReplaceWhereID
+`
+
+	//
+	row := db.QueryRow(ctx, TextSQL, m.FieldName)
+	err = row.Scan(ReplaceAllFieldsWithComma)
 	if err != nil {
-		err = fmt.Errorf("tx.Take() error: %w", err)
+		err = fmt.Errorf(m.TableNameDB()+" FindModelBy_FieldName() FieldName: %v, error: %w", m.FieldName, err)
 		return Otvet, err
 	}
-
 
 	return Otvet, err
 }

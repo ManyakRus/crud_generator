@@ -68,7 +68,8 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 	}
 
 	//создание функций
-	TextCrudFunc := CreateFiles_FindModelBy_Table(MapAll, Table1, &TextCrud, TextTemplatedFunction)
+	TextCrudFunc := ""
+	TextCrudFunc, TextCrud = CreateFiles_FindModelBy_Table(MapAll, Table1, TextCrud, TextTemplatedFunction)
 	if TextCrudFunc == "" {
 		return err
 	}
@@ -108,49 +109,29 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 }
 
 // CreateFiles_FindModelBy_Table - создаёт текст всех функций
-func CreateFiles_FindModelBy_Table(MapAll map[string]*types.Table, Table1 *types.Table, TextCrud *string, TextTemplateFunction string) string {
+func CreateFiles_FindModelBy_Table(MapAll map[string]*types.Table, Table1 *types.Table, TextCrud string, TextTemplateFunction string) (string, string) {
 	Otvet := ""
 
 	for _, TableColumns1 := range types.MassFindModelBy {
 		if TableColumns1.Table != Table1 {
 			continue
 		}
-		Otvet1 := CreateFiles_FindModelBy_Table1(MapAll, Table1, TextCrud, TextTemplateFunction, TableColumns1.Column)
+		Otvet1 := ""
+		TextCrud1 := ""
+		Otvet1, TextCrud1 = CreateFiles_FindModelBy_Table1(MapAll, Table1, TextCrud, TextTemplateFunction, TableColumns1.Column)
+		TextCrud = TextCrud1
 		Otvet = Otvet + Otvet1
 	}
 
-	return Otvet
+	return Otvet, TextCrud
 }
 
 // CreateFiles_FindModelBy_Table1 - создаёт текст всех функций
-func CreateFiles_FindModelBy_Table1(MapAll map[string]*types.Table, Table1 *types.Table, TextCrud *string, TextTemplateFunction string, Column1 *types.Column) string {
+// возвращает:
+// 1. текст функции
+// 2. изменённый TextCrud
+func CreateFiles_FindModelBy_Table1(MapAll map[string]*types.Table, Table1 *types.Table, TextCrud string, TextTemplateFunction string, Column1 *types.Column) (string, string) {
 	Otvet := TextTemplateFunction
-
-	//
-	FieldNamesWithUnderline := ""
-	FieldNamesWithComma := ""
-	TextWhere := ""
-	//ColumnPK := create_files.Find_PrimaryKeyColumn(Table1)
-
-	//
-	TextFind := "\t" + `//tx = tx.Where("ColumnName = ?", m.PrimaryKeyName)` + "\n"
-	Underline := ""
-	Plus := ""
-	//TextWhere = TextWhere + "\t" + `tx = tx.Where("` + ColumnPK.Name + ` = ?", m.` + ColumnPK.NameGo + `)` + "\n"
-	FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
-	FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
-	Underline = "_"
-	Plus = "+"
-
-	//кроме помеченных на удаление
-	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
-		TextWhere = TextWhere + "\t" + `tx = tx.Where("is_deleted = ?", false)` + "\n"
-	}
-
-	//
-	Otvet = strings.ReplaceAll(Otvet, TextFind, TextWhere)
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
 
 	//
 	ForeignTableName := Column1.TableKey
@@ -171,30 +152,30 @@ func CreateFiles_FindModelBy_Table1(MapAll map[string]*types.Table, Table1 *type
 	TextForeignModel := ForeignTable.NameGo
 	Otvet = strings.ReplaceAll(Otvet, "ForeignModel", TextForeignModel)
 
-	//
-	Foreign_ColumnPK := create_files.Find_PrimaryKeyColumn(ForeignTable)
-	TextForeignPrimaryKeyName := Foreign_ColumnPK.NameGo
-	Otvet = strings.ReplaceAll(Otvet, "ForeignPrimaryKeyName", TextForeignPrimaryKeyName)
+	Otvet = strings.ReplaceAll(Otvet, "FieldName", Column1.NameGo)
 
-	//
-	TextFieldName := Column1.NameGo
-	Otvet = strings.ReplaceAll(Otvet, "FieldName", TextFieldName)
+	ForeignTableAlias := create_files.Find_TableAlias(ForeignTable)
+	ForeignColumnPK := create_files.Find_PrimaryKeyColumn(ForeignTable)
+	ReplaceWhereID := "\tand " + ForeignTableAlias + "." + ForeignColumnPK.Name + " = $1\n"
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
 
-	//
-	ModelTableURL := create_files.Find_ModelTableURL(ForeignTableName)
-	*TextCrud = create_files.AddImport(*TextCrud, ModelTableURL)
+	//все колонки
+	ReplaceAllFieldsWithComma := ""
+	CommaNewline2 := ""
+	MassColumns := micro.MassFrom_Map(ForeignTable.MapColumns)
+	for _, Column1 := range MassColumns {
+		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&Otvet." + Column1.NameGo
+		CommaNewline2 = ",\n\t\t"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
 
-	//ForeignPrimaryKeysWithQuotes
-	ForeignColumnsPK := create_files.Find_PrimaryKeyColumns(ForeignTable)
-	ForeignPrimaryKeysWithQuotes := create_files.ColumnNamesGo_WithQuotes(ForeignColumnsPK)
-	Otvet = strings.ReplaceAll(Otvet, "ForeignPrimaryKeysWithQuotes", ForeignPrimaryKeysWithQuotes)
+	//добавим импорт
+	ForeignURL := create_files.Find_ModelTableURL(ForeignTable.Name)
+	Text1 := create_files.AddImport(TextCrud, ForeignURL)
+	TextCrud = Text1
 
-	//PrimaryKeysWithQuotes
-	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
-	PrimaryKeysWithQuotes := create_files.ColumnNamesGo_WithQuotes(ColumnsPK)
-	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeysWithQuotes", PrimaryKeysWithQuotes)
+	return Otvet, TextCrud
 
-	return Otvet
 }
 
 // CreateFiles_FindModelBy_Test - создаёт 1 файл в папке crud
