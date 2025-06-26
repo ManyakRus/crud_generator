@@ -123,6 +123,10 @@ SELECT
 	CommaNewline2 := ""
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
 	for _, Column1 := range MassColumns {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+			continue
+		}
+
 		if Column1.IsNullable == true {
 			DefaultValueSQL := create_files.FindText_DefaultValueSQL_NotNull(Column1.TypeGo)
 			ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE(" + TableAlias + "." + Column1.Name + ", " + DefaultValueSQL + ") as " + Column1.Name

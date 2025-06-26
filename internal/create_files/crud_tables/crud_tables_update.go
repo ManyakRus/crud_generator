@@ -138,8 +138,14 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 	CommaNewline := "\t"
 	CommaNewline2 := ""
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
-	for i, Column1 := range MassColumns {
-		sNumber := strconv.Itoa(i + 1)
+	Number := 0
+	for _, Column1 := range MassColumns {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+			continue
+		}
+
+		Number = Number + 1
+		sNumber := strconv.Itoa(Number)
 		ReplaceColumnNameEqualDollarComma = ReplaceColumnNameEqualDollarComma + CommaNewline + Column1.NameGo + " = $" + sNumber
 		if Column1.Name == "modified_at" {
 			ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "time.Now()"

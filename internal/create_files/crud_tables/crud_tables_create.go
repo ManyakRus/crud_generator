@@ -121,10 +121,19 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 	Comma = ""
 	CommaNewline := ""
 	CommaNewline2 := ""
+	Number := 0
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
-	for i, Column1 := range MassColumns {
+	for _, Column1 := range MassColumns {
+		//кроме ненужных колонок
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+			continue
+		}
+
+		Number = Number + 1
+		sNumber := strconv.Itoa(Number)
+
 		ReplaceAllColumnNamesWithComma = ReplaceAllColumnNamesWithComma + CommaNewline + Column1.Name
-		ReplaceDollarsWithComma = ReplaceDollarsWithComma + Comma + "$" + strconv.Itoa(i+1)
+		ReplaceDollarsWithComma = ReplaceDollarsWithComma + Comma + "$" + sNumber
 		if Column1.Name == "created_at" {
 			ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "time.Now()"
 		} else {

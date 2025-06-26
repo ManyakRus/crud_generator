@@ -64,6 +64,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	//}
 
 	TextCrud = TextCrud + TextUpdateEveryColumn
+
 	TextCrud = create_files.Replace_TemplateModel_to_Model(TextCrud, Table1.NameGo)
 	TextCrud = create_files.Replace_TemplateTableName_to_TableName(TextCrud, Table1.Name)
 	TextCrud = config.Settings.TEXT_MODULE_GENERATED + TextCrud
@@ -78,9 +79,13 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		TextCrud = create_files.CheckAndAdd_ImportGorm_FromText(TextCrud)
+		//TextCrud = create_files.CheckAndAdd_ImportGorm_FromText(TextCrud)
 		//TextCrud = create_files.Convert_RequestIdToAlias(TextCrud, Table1)
 		//добавим импорт uuid
+
+		//postgres_func
+		TextCrud = create_files.CheckAndAdd_Import(TextCrud, "github.com/ManyakRus/starter/postgres_func")
+
 	}
 
 	//кэш
@@ -143,19 +148,10 @@ func CreateFiles_UpdateEveryColumn1(Text string, Table1 *types.Table) string {
 func FindTextUpdateEveryColumn(TextCrudUpdateFunc string, Table1 *types.Table) string {
 	Otvet := ""
 
-	//сортировка по названию колонок
-	keys := make([]string, 0, len(Table1.MapColumns))
-	for k := range Table1.MapColumns {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-
 	//найдём новый текст для каждой таблицы
-	for _, key1 := range keys {
-		Column1, ok := Table1.MapColumns[key1]
-		if ok == false {
-			log.Panic("FindTextUpdateEveryColumn() Table1.MapColumns[key1] = false")
-		}
+	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
+	for _, Column1 := range MassColumns {
+		//кроме ненужных колонок
 		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}

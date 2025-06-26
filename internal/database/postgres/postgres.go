@@ -87,7 +87,13 @@ on
 	
 WHERE 1=1
 	--and c.confrelid = (select oid from pg_class where relname = 'lawsuit_invoices')
-	--AND c.confrelid!=c.conrelid
+	AND c.confrelid!=c.conrelid
+
+GROUP BY	
+       (select r.relname from pg_class r where r.oid = c.conrelid),
+       UNNEST((select array_agg(attname) from pg_attribute where attrelid = c.conrelid and array[attnum] <@ c.conkey)),
+       (select  r.relname from pg_class r where r.oid = c.confrelid),
+       a.attname
 ;
 
 

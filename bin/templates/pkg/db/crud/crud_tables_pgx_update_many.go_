@@ -5,7 +5,6 @@ import (
 	"errors"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
-	"github.com/ManyakRus/starter/postgres_func"
 	"github.com/ManyakRus/starter/stopapp"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"

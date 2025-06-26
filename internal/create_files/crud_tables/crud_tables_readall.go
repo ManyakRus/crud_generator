@@ -120,15 +120,26 @@ func CreateFiles_ReadAllTable(Table1 *types.Table, TextTemplateFunction string) 
 func CreateFiles_ReadAll_Table1(Table1 *types.Table, TextTemplateFunction string) string {
 	Otvet := TextTemplateFunction
 
-	//кроме помеченных на удаление
-	if create_files.Has_Column_IsDeleted_Bool(Table1) == false {
-		TextWhere := "\t" + `tx = tx.Where("is_deleted = ?", false)` + "\n"
-		Otvet = strings.ReplaceAll(Otvet, TextWhere, "")
-	}
+	//все колонки
+	ReplaceAllFieldsWithComma := ""
+	CommaNewline2 := ""
+	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
+	for _, Column1 := range MassColumns {
+		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+			continue
+		}
 
-	//
-	PrimaryKeyNamesWithComma := create_files.Find_PrimaryKeyNamesWithComma(Table1)
-	Otvet = strings.ReplaceAll(Otvet, "PrimaryKeyNamesWithComma", PrimaryKeyNamesWithComma)
+		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&m." + Column1.NameGo
+		CommaNewline2 = ",\n\t\t\t"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
+
+	//кроме помеченных на удаление
+	ReplaceWhere := ""
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
+		ReplaceWhere = "\tand is_deleted = false"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhere", ReplaceWhere)
 
 	return Otvet
 }

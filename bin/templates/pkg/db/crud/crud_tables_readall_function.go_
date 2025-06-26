@@ -25,13 +25,36 @@ func ReadAll_ctx(ctx context.Context, db *pgxpool.Pool) ([]lawsuit_status_types.
 	defer atomic.AddInt32(&stopapp.TotalMessagesSendingNow, -1)
 
 	//
-	tx := db
-	
-	tx = tx.Where("is_deleted = ?", false)
-	tx = tx.Order("PrimaryKeyNamesWithComma")
-	tx = tx.Find(&Otvet)
-	err = tx.Error
+	if ctx.Err() != nil {
+		err = ctx.Err()
+		return Otvet, err
+	}
+
+	//
+	TextSQL := TextSQL_Read + `
+WHERE 1=1
+ReplaceWhere
+`
+
+	//
+	rows, err := db.Query(ctx, TextSQL)
+	defer rows.Close()
+	if rows == nil {
+		err = fmt.Errorf("RawMultipleSQL() error: rows =nil")
+		return Otvet, err
+	}
+
+	//результат в массив
+	for rows.Next() {
+		m := lawsuit_status_types.LawsuitStatusType{}
+		err := rows.Scan(ReplaceAllFieldsWithComma)
+		if err != nil {
+			Values, _ := rows.Values()
+			err = fmt.Errorf("rows.Scan() values: %v, error: %w", Values, err)
+			return Otvet, err
+		}
+		Otvet = append(Otvet, m)
+	}
 
 	return Otvet, err
 }
-
