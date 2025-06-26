@@ -2859,6 +2859,8 @@ func Replace_ObjectTemplateModel_to_Model(Text, ModelName string) string {
 	Otvet = strings.ReplaceAll(Otvet, " "+TextFrom, " "+TextTo)
 	Otvet = strings.ReplaceAll(Otvet, "*"+TextFrom, "*"+TextTo)
 	Otvet = strings.ReplaceAll(Otvet, "."+TextFrom, "."+TextTo)
+	//Otvet = strings.ReplaceAll(Otvet, "_"+TextFrom, "_"+TextTo)
+	Otvet = strings.ReplaceAll(Otvet, "("+TextFrom, "("+TextTo)
 
 	return Otvet
 }
