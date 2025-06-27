@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/ManyakRus/starter/postgres_pgx"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"github.com/ManyakRus/starter/stopapp"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"sync/atomic"
@@ -32,7 +32,7 @@ func (crud Crud_DB) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 }
 
 // Delete_ctx - удаляет объект в базу данных
-func Delete_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+func Delete_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	//количество невыполненных операций +1 -1

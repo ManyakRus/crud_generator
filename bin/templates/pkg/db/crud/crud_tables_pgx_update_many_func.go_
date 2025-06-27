@@ -15,7 +15,7 @@ func (crud Crud_DB) Update_ReplaceFieldName(m *lawsuit_status_types.LawsuitStatu
 
 // Update_ReplaceFieldName_ctx - изменяет 1 поле ReplaceFieldName в базе данных
 // с учётом контекста и соединения к БД
-func Update_ReplaceFieldName_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+func Update_ReplaceFieldName_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	//количество невыполненных операций +1 -1

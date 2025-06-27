@@ -15,7 +15,7 @@ func (crud Crud_DB) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.Lawsu
 }
 
 // FindBy_FieldNamesWithUnderline_ctx - находит запись в БД по FieldNamesWithPlus
-func FindBy_FieldNamesWithUnderline_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+func FindBy_FieldNamesWithUnderline_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	//количество невыполненных операций +1 -1

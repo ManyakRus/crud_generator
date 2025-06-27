@@ -15,7 +15,7 @@ func (crud Crud_DB) FindModelBy_FieldName(m *lawsuit_status_types.LawsuitStatusT
 }
 
 // FindModelBy_FieldName_ctx - находит запись в БД из связанной таблицы по FieldNamesWithPlus
-func FindModelBy_FieldName_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) (foreign_package.ForeignModel, error) {
+func FindModelBy_FieldName_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *lawsuit_status_types.LawsuitStatusType) (foreign_package.ForeignModel, error) {
 	Otvet := foreign_package.ForeignModel{}
 	var err error
 

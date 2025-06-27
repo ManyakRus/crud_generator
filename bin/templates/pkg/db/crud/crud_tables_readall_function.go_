@@ -16,7 +16,7 @@ func (crud Crud_DB) ReadAll() ([]lawsuit_status_types.LawsuitStatusType, error) 
 }
 
 // ReadAll_ctx - возвращает все записи в БД, кроме is_deleted=true
-func ReadAll_ctx(ctx context.Context, db *pgxpool.Pool) ([]lawsuit_status_types.LawsuitStatusType, error) {
+func ReadAll_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction) ([]lawsuit_status_types.LawsuitStatusType, error) {
 	var err error
 	Otvet := make([]lawsuit_status_types.LawsuitStatusType, 0)
 

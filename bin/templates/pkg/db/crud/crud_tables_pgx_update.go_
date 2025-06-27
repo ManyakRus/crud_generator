@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ManyakRus/starter/micro"
+	"github.com/ManyakRus/starter/postgres_pgx"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"github.com/ManyakRus/starter/stopapp"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"strconv"
@@ -35,7 +35,7 @@ func (crud Crud_DB) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 }
 
 // Update_ctx - записывает новый объект в базу данных
-func Update_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+func Update_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	//количество невыполненных операций +1 -1
@@ -74,7 +74,7 @@ ReplaceCacheRemove
 }
 
 // Update_MassNeedUpdate_ctx - записывает новый объект в базу данных
-func Update_MassNeedUpdate_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType, MassNeedUpdateFields []string) error {
+func Update_MassNeedUpdate_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *lawsuit_status_types.LawsuitStatusType, MassNeedUpdateFields []string) error {
 	var err error
 
 	//количество невыполненных операций +1 -1
@@ -141,7 +141,7 @@ func (crud Crud_DB) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 }
 
 // Save_ctx - записывает новый или существующий объект в базу данных
-func Save_ctx(ctx context.Context, db *pgxpool.Pool, m *lawsuit_status_types.LawsuitStatusType) error {
+func Save_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
 	//количество невыполненных операций +1 -1
