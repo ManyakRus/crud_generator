@@ -682,11 +682,11 @@ FOLDERNAME_GRPC_PROTO="api/grpc_proto"
 FOLDERNAME_API="api"
 
 #NEED_SOFT_DELETE - need for not delete rows, only set is_deleted = true
-NEED_SOFT_DELETE=false
+NEED_SOFT_DELETE=true
 
 #------------------------------------------- pgx crud --------------------------------------------
 
-#TEMPLATES_CRUD_PGX_FILENAME - short filename of "crud_tables.go_" file
+#TEMPLATES_CRUD_PGX_FILENAME - short filename of "crud_tables_pgx_read.go_" file
 TEMPLATES_CRUD_READ_FILENAME="crud_tables_pgx_read.go_"
 
 #TEMPLATES_CRUD_CREATE_FILENAME - short filename of "crud_tables_pgx_create.go_" file
@@ -694,6 +694,9 @@ TEMPLATES_CRUD_CREATE_FILENAME="crud_tables_pgx_create.go_"
 
 #TEMPLATES_CRUD_UPDATE_FILENAME - short filename of "crud_tables_pgx_update.go_" file
 TEMPLATES_CRUD_UPDATE_FILENAME="crud_tables_pgx_update.go_"
+
+#TEMPLATES_CRUD_DELETE_FILENAME - short filename of "crud_tables_pgx_delete.go_" file
+TEMPLATES_CRUD_DELETE_FILENAME="crud_tables_pgx_delete.go_"
 
 #TEMPLATES_CRUD_SOFT_DELETE_FILENAME - short filename of "crud_tables_pgx_soft_delete.go_" file
 TEMPLATES_CRUD_SOFT_DELETE_FILENAME="crud_tables_pgx_soft_delete.go_"
@@ -715,5 +718,4 @@ TEMPLATES_CRUD_UPDATE_MANY_FUNC_FILENAME="crud_tables_pgx_update_many_func.go_"
 
 #TEMPLATES_CRUD_UPDATE_MANY_FUNC_TEST_FILENAME - short filename of "crud_tables_pgx_update_many_func_test.go_" file
 TEMPLATES_CRUD_UPDATE_MANY_FUNC_TEST_FILENAME="crud_tables_pgx_update_many_func_test.go_"
-
 

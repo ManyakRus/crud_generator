@@ -127,6 +127,19 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 
 	TableAlias := create_files.Find_TableAlias(Table1)
 
+	//имя функции
+	FieldNamesWithUnderline := ""
+	Underline := ""
+	for _, sColumn1 := range MassColumns1 {
+		Column1, ok := Table1.MapColumns[sColumn1]
+		if ok == false {
+			log.Panic("Column not found: ", sColumn1)
+		}
+		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		Underline = "_"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
+
 	//все колонки
 	//	ReplaceTextSQL := `
 	//SELECT
@@ -167,13 +180,11 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 	//	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQL", ReplaceTextSQL)
 
 	//
-	FieldNamesWithUnderline := ""
 	FieldNamesWithComma := ""
 
 	//
 	ReplaceFieldNamesFormat := ""
 	ReplaceFieldsWithComma := ""
-	Underline := ""
 	Plus := ""
 	Comma := ""
 	for _, ColumnName1 := range MassColumns1 {
@@ -181,7 +192,6 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 		if ok == false {
 			log.Panic(Table1.Name + " .MapColumns[" + ColumnName1 + "] = false")
 		}
-		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		FieldNamesWithComma = FieldNamesWithComma + Plus + Column1.NameGo
 		ReplaceFieldNamesFormat = ReplaceFieldNamesFormat + Comma + Column1.NameGo + ": %v"
 		ReplaceFieldsWithComma = ReplaceFieldsWithComma + Comma + "m." + Column1.NameGo
@@ -198,7 +208,6 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 
 	//
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldNamesFormat", ReplaceFieldNamesFormat)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldsWithComma", ReplaceFieldsWithComma)

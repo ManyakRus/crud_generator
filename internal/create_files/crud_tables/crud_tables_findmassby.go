@@ -122,12 +122,23 @@ func CreateFiles_FindMassBy_Table(Table1 *types.Table, TextTemplateFunction stri
 func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
 	Otvet := TextTemplateFunction
 
+	//имя функции
+	FieldNamesWithUnderline := ""
+	Underline := ""
+	for _, sColumn1 := range MassColumns1 {
+		Column1, ok := Table1.MapColumns[sColumn1]
+		if ok == false {
+			log.Panic("Column not found: ", sColumn1)
+		}
+		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		Underline = "_"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
+
 	//все колонки
 	ReplaceAllFieldsWithComma := ""
-	FieldNamesWithUnderline := ""
 	ReplaceWhere := ""
 	CommaNewline2 := ""
-	Underline := "_"
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
 	Number := 0
 	for _, Column1 := range MassColumns {
@@ -140,15 +151,12 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 		//
 		if slice.Contains(MassColumns1, Column1.Name) == true {
 			ReplaceWhere = ReplaceWhere + "\tand " + Column1.Name + " = $" + sNumber + "\n"
-			FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		}
 
 		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&m." + Column1.NameGo
 		CommaNewline2 = ",\n\t\t\t"
-		Underline = "_"
 	}
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
-	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 
 	//кроме помеченных на удаление
 	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {

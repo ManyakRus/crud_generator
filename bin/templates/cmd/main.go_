@@ -5,7 +5,6 @@ import (
 	"github.com/ManyakRus/starter/stopapp"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
-	"github.com/ManyakRus/starter/postgres_gorm"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
 )
 
@@ -19,11 +18,11 @@ func StartApp() {
 	config_main.LoadEnv()
 
 	stopapp.StartWaitStop()
-	crud_starter.InitCrudTransport_DB()
-	postgres_gorm.Start(constants.SERVICE_NAME)
+
 	postgres_pgxpool.Start(constants.SERVICE_NAME)
+	crud_starter.InitCrudTransport_DB()
+
 	server_grpc.Start()
-	server_nrpc.Start()
 
 	stopapp.GetWaitGroup_Main().Wait()
 
