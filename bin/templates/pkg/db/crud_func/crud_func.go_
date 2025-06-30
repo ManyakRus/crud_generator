@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// IsRecordNotFound - возвращает true если ошибка = "record not found"
+// IsRecordNotFound - возвращает true если ошибка = "record not found" или "no rows in result set"
 func IsRecordNotFound(err error) bool {
 	Otvet := false
 
@@ -14,7 +14,15 @@ func IsRecordNotFound(err error) bool {
 	}
 
 	TextErr := err.Error()
+
+	//gorm
 	pos1 := strings.Index(TextErr, db_constants.TEXT_RECORD_NOT_FOUND)
+	if pos1 >= 0 {
+		Otvet = true
+	}
+
+	//pgx
+	pos1 = strings.Index(TextErr, db_constants.TEXT_NO_ROWS)
 	if pos1 >= 0 {
 		Otvet = true
 	}

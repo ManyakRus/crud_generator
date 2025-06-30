@@ -199,7 +199,7 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	TextAlias := create_files.ConvertFromAlias(Table1, Column1, "m."+Column1.NameGo)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceValueFromAlias(m.ID)", TextAlias)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldName", Column1.NameGo)
-	Otvet = strings.ReplaceAll(Otvet, "ReplaceTableName", Column1.Name)
+	//Otvet = strings.ReplaceAll(Otvet, "ReplaceTableName", Column1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceTableName", Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceColumnNameEqualDollarComma", Column1.Name+" = $1")
 
@@ -307,10 +307,17 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 		ConstantsURL := create_files.Find_ConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
 
+		CrudFuncURL := create_files.Find_CrudFuncURL()
+		TextCrud = create_files.AddImport(TextCrud, CrudFuncURL)
+
 		//замена "postgres_gorm.Connect_WithApplicationName("
 		TextCrud = create_files.Replace_Connect_WithApplicationName(TextCrud)
 
 	}
+
+	//ReplacePKColumnName
+	ColumnsPK := create_files.Find_PrimaryKeyColumn(Table1)
+	TextCrud = strings.ReplaceAll(TextCrud, "ReplacePKColumnName", ColumnsPK.NameGo)
 
 	//создание текста
 	TextUpdateEveryColumn := FindTextUpdateEveryColumnTest(TextCrudUpdateFunc, Table1)
@@ -394,6 +401,7 @@ func FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc string, Table1 *types.Tab
 	TextProto := create_files.TextProto()
 	Otvet = strings.ReplaceAll(Otvet, "grpc_proto.RequestId", TextProto+"."+TextRequest)
 	Otvet = strings.ReplaceAll(Otvet, "ColumnName", ColumnName)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldName", ColumnName)
 	Otvet = strings.ReplaceAll(Otvet, "Request.ID", "Request."+TextRequestFieldName)
 	Otvet = strings.ReplaceAll(Otvet, "TestUpdate(", "Test"+FuncName+"(")
 	Otvet = strings.ReplaceAll(Otvet, ".Update(", "."+FuncName+"(")

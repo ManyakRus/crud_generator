@@ -6,7 +6,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"github.com/bxcodec/faker/v3/support/slice"
 	"os"
 	"strconv"
 	"strings"
@@ -122,36 +121,48 @@ func CreateFiles_FindMassBy_Table(Table1 *types.Table, TextTemplateFunction stri
 func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction string, MassColumns1 []string) string {
 	Otvet := TextTemplateFunction
 
-	//имя функции
+	//из MassColumns1
 	FieldNamesWithUnderline := ""
+	ReplaceFieldNamesWithComma := ""
+	ReplaceFieldsWithComma := ""
+	ReplaceWhere := ""
 	Underline := ""
+	Comma := ""
+	Number := 0
 	for _, sColumn1 := range MassColumns1 {
 		Column1, ok := Table1.MapColumns[sColumn1]
 		if ok == false {
 			log.Panic("Column not found: ", sColumn1)
 		}
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		ReplaceFieldNamesWithComma = ReplaceFieldNamesWithComma + Comma + "m." + Column1.NameGo
+		ReplaceFieldsWithComma = ReplaceFieldsWithComma + Comma + "&m." + Column1.NameGo
+		Number = Number + 1
+		sNumber := strconv.Itoa(Number)
+		ReplaceWhere = ReplaceWhere + "\tand " + `"` + Column1.Name + `"` + " = $" + sNumber + "\n"
+
 		Underline = "_"
+		Comma = ", "
 	}
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldNamesWithComma", ReplaceFieldNamesWithComma)
+	//Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldsWithComma", ReplaceFieldsWithComma)
 
 	//все колонки
 	ReplaceAllFieldsWithComma := ""
-	ReplaceWhere := ""
 	CommaNewline2 := ""
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
-	Number := 0
 	for _, Column1 := range MassColumns {
 		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
-		Number = Number + 1
-		sNumber := strconv.Itoa(Number)
+		//Number = Number + 1
+		//sNumber := strconv.Itoa(Number)
 
-		//
-		if slice.Contains(MassColumns1, Column1.Name) == true {
-			ReplaceWhere = ReplaceWhere + "\tand " + Column1.Name + " = $" + sNumber + "\n"
-		}
+		////
+		//if slice.Contains(MassColumns1, Column1.Name) == true {
+		//	ReplaceWhere = ReplaceWhere + "\tand " + Column1.Name + " = $" + sNumber + "\n"
+		//}
 
 		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&m." + Column1.NameGo
 		CommaNewline2 = ",\n\t\t\t"

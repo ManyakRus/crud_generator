@@ -1,8 +1,8 @@
 func TestFindMassBy_FieldNamesWithUnderline(t *testing.T) {
 	config_main.LoadEnv()
 
-	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
-	defer postgres_gorm.CloseConnection()
+	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	defer postgres_pgxpool.CloseConnection()
 
 	crud := Crud_DB{}
 	Otvet := lawsuit_status_types.LawsuitStatusType{}

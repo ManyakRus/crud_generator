@@ -105,7 +105,8 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 	ReplaceID0 := ""
 	//ReplaceWhereID := ""
 	TextWhereID := ""
-	ReplaceTextMassFields := "MassFields := make([]any, 0)\n"
+	//ReplaceTextMassFields := "MassFields := make([]any, 0)\n"
+	ReplaceMassFieldsAppend := ""
 	Comma := ""
 	//TextNewLine := ""
 	TextAnd := ""
@@ -115,8 +116,9 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 		ReplacePKFieldNamesFormat = ReplacePKFieldNamesFormat + Comma + Column1.NameGo + ": %v"
 		TextEmpty := create_files.FindText_EqualEmpty(Column1, "m."+Column1.NameGo)
 		ReplaceID0 = ReplaceID0 + TextAnd + TextEmpty
-		TextWhereID = TextWhereID + "\tand " + Column1.Name + " = $" + sNumber
-		ReplaceTextMassFields = ReplaceTextMassFields + "\tMassFields = append(MassFields, m." + Column1.NameGo + ")\n"
+		TextWhereID = TextWhereID + "\tand " + `"` + Column1.Name + `"` + " = $" + sNumber
+		//ReplaceTextMassFields = ReplaceTextMassFields + "\tMassFields = append(MassFields, m." + Column1.NameGo + ")\n"
+		ReplaceMassFieldsAppend = ReplaceMassFieldsAppend + "\tMassFields = append(MassFields, m." + Column1.NameGo + ")\n"
 
 		Comma = ", "
 		//TextNewLine = ",\n"
@@ -125,6 +127,7 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldsWithComma", ReplacePKFieldsWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldNamesFormat", ReplacePKFieldNamesFormat)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceID0", ReplaceID0)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceMassFieldsAppend", ReplaceMassFieldsAppend)
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
 
 	//все колонки
@@ -143,10 +146,13 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
+		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		//	continue
+		//}
 
 		Number = Number + 1
 		sNumber := strconv.Itoa(Number)
-		ReplaceColumnNameEqualDollarComma = ReplaceColumnNameEqualDollarComma + CommaNewline + Column1.NameGo + " = $" + sNumber
+		ReplaceColumnNameEqualDollarComma = ReplaceColumnNameEqualDollarComma + CommaNewline + `"` + Column1.Name + `"` + " = $" + sNumber
 		if Column1.Name == "modified_at" {
 			ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "time.Now()"
 		} else if Column1.IsNullable == true {
@@ -158,7 +164,7 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 		}
 
 		if Column1.IsPrimaryKey == true {
-			ReplaceWhereID = ReplaceWhereID + "\tand " + Column1.Name + " = $" + sNumber + "\n"
+			ReplaceWhereID = ReplaceWhereID + "\tand " + `"` + Column1.Name + `"` + " = $" + sNumber + "\n"
 			ReplaceMassFieldsWithComma = ReplaceMassFieldsWithComma + Comma + "m." + Column1.NameGo
 		}
 

@@ -38,10 +38,9 @@ func Update_ReplaceFieldName_ctx(ctx context.Context, db postgres_pgx.IConnectio
 	TextSQL := `
 	UPDATE ReplaceTableName SET
 	ReplaceColumnNameEqualDollarComma
+	WHERE 1=1
 	ReplaceWhereID
 	`
-
-	TextSQL = strings.ReplaceAll(TextSQL, "ReplaceColumnNameEqualDollarComma", "")
 
 	//
 	ReplaceValueEqual

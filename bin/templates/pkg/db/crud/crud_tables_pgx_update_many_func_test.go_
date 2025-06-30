@@ -10,6 +10,9 @@ func TestUpdate(t *testing.T) {
 	m.ID = Postgres_ID_Test
 	err := crud.Read(&m)
 	if err != nil {
+		if crud_func.IsRecordNotFound(err) == true {
+			return
+		}
 		t.Error("TestUpdate() Read() error: ", err)
 	}
 

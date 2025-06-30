@@ -5,6 +5,7 @@ import (
 	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_func"
 	"testing"
 )
 
@@ -21,11 +22,18 @@ func TestUpdateManyFields(t *testing.T) {
 	m.ID = Postgres_ID_Test
 	err := crud.Read(&m)
 	if err != nil {
+		if crud_func.IsRecordNotFound(err) == true {
+			return
+		}
 		t.Error("TestUpdateManyFields() Read() error: ", err)
 	}
 
+	//
+	MassNeedUpdateField := make([]string, 0)
+	MassNeedUpdateField = append(MassNeedUpdateField, "ReplacePKColumnName")
+
 	//запишем в БД это же значение
-	err = crud.UpdateManyFields(&m, nil)
+	err = crud.UpdateManyFields(&m, MassNeedUpdateField)
 	if err != nil {
 		t.Error("TestUpdateManyFields() UpdateManyFields() error: ", err)
 	}

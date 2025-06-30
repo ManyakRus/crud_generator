@@ -95,8 +95,9 @@ func Update_MassNeedUpdate_ctx(ctx context.Context, db postgres_pgx.IConnectionT
 	}
 
 	MassFields := make([]any, 0)
+ReplaceMassFieldsAppend
 	Comma := ""
-	TextSQL := `UPDATE "lawsuit_status_types" SET`
+	TextSQL := `UPDATE "lawsuit_status_types" SET `
 	for i, ColumnName1 := range MassNeedUpdateFields {
 		ColumnNameDB, err := micro.Find_Tag_JSON(m, ColumnName1)
 		if err != nil {
@@ -113,7 +114,7 @@ func Update_MassNeedUpdate_ctx(ctx context.Context, db postgres_pgx.IConnectionT
 
 		Comma = ",\n"
 	}
-	TextSQL = TextSQL + "\nWHERE 1=1 ReplaceTextSQLWhere"
+	TextSQL = TextSQL + "\n" + `WHERE 1=1 ReplaceTextSQLWhere`
 
 	//
 	_, err = db.Exec(ctx, TextSQL, MassFields...)

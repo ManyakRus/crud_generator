@@ -37,7 +37,7 @@ ReplaceWhere
 `
 
 	//
-	rows, err := db.Query(ctx, TextSQL)
+	rows, err := db.Query(ctx, TextSQL, ReplaceFieldNamesWithComma)
 	defer rows.Close()
 	if rows == nil {
 		err = fmt.Errorf("RawMultipleSQL() error: rows =nil")
