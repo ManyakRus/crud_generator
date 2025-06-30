@@ -424,10 +424,20 @@ func Is_Common_Сolumn(Column1 *types.Column) bool {
 func Is_NotNeedUpdate_Сolumn(Column1 *types.Column) bool {
 	Otvet := false
 
-	//Otvet = Is_Column_CommonStruct(Column1) || Is_Column_GroupsStruct(Column1) //|| Is_Column_ExtLinksStruct(Column1)
+	Otvet = Is_Column_CommonStruct(Column1) || Is_Column_GroupsStruct(Column1) //|| Is_Column_ExtLinksStruct(Column1)
+
+	if Is_Need_Сolumn(Column1) == false {
+		Otvet = true
+	}
+
+	return Otvet
+}
+
+// Is_NotNeedUpdate_Сolumn_SQL - возвращает true если не нужна функция UpdateColumnNAme(), например если это общая колонка: table_name_id, table_row_id, is_group, parent_id, ext_id, created_at, modified_at, deleted_at, id
+func Is_NotNeedUpdate_Сolumn_SQL(Column1 *types.Column) bool {
+	Otvet := false
 
 	ColumnName := Column1.Name
-
 	switch ColumnName {
 	case "created_at":
 		Otvet = true

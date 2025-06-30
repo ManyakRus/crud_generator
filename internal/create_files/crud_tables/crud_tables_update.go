@@ -143,7 +143,7 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
 	Number := 0
 	for _, Column1 := range MassColumns {
-		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		if create_files.Is_NotNeedUpdate_Сolumn_SQL(Column1) == true {
 			continue
 		}
 		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
