@@ -106,7 +106,7 @@ func CreateFiles_Read1(Text string, Table1 *types.Table) string {
 		ReplacePKFieldsWithComma = ReplacePKFieldsWithComma + Comma + "m." + Column1.NameGo
 		ReplacePKFieldNamesFormat = ReplacePKFieldNamesFormat + Comma + Column1.NameGo + ": %v"
 		sNumber := strconv.Itoa(i + 1)
-		ReplaceWhereID = ReplaceWhereID + "\tand " + TableAlias + "." + Column1.Name + " = $" + sNumber + "\n"
+		ReplaceWhereID = ReplaceWhereID + "\tand " + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"` + " = $" + sNumber + "\n"
 		Comma = ", "
 		CommaNewline = ",\n\t\t"
 	}
@@ -130,12 +130,12 @@ SELECT
 		if Column1.IsNullable == true {
 			DefaultValueSQL := create_files.FindText_DefaultValueSQL_NotNull(Column1.TypeGo)
 			if Column1.Type == "timetz" {
-				ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE('0001-01-01 ' || " + TableAlias + "." + Column1.Name + ", " + DefaultValueSQL + ")::timestamptz as " + Column1.Name
+				ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE('0001-01-01 ' || " + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"` + ", " + DefaultValueSQL + ")::timestamptz as " + Column1.Name
 			} else {
-				ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE(" + TableAlias + "." + Column1.Name + ", " + DefaultValueSQL + ") as " + Column1.Name
+				ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE(" + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"` + ", " + DefaultValueSQL + ") as " + Column1.Name
 			}
 		} else {
-			ReplaceTextSQL = ReplaceTextSQL + CommaNewline + TableAlias + "." + Column1.Name
+			ReplaceTextSQL = ReplaceTextSQL + CommaNewline + `"` + TableAlias + `"` + "." + Column1.Name
 		}
 		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&m." + Column1.NameGo
 		CommaNewline = ",\n\t"
@@ -144,7 +144,7 @@ SELECT
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
 	ReplaceTextSQL = ReplaceTextSQL + `
 FROM
-	` + Table1.Name + ` as ` + TableAlias + "\n"
+	` + Table1.Name + ` as ` + `"` + TableAlias + `"` + "\n"
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQL", ReplaceTextSQL)
 
 	return Otvet

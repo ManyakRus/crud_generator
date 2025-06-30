@@ -6,7 +6,6 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
-	"github.com/bxcodec/faker/v3/support/slice"
 	"os"
 	"strconv"
 	"strings"
@@ -127,37 +126,39 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 
 	TableAlias := create_files.Find_TableAlias(Table1)
 
-	//имя функции
+	//MassColumns1
 	FieldNamesWithUnderline := ""
+	ReplaceWhereID := ""
 	Underline := ""
+	Number := 0
 	for _, sColumn1 := range MassColumns1 {
 		Column1, ok := Table1.MapColumns[sColumn1]
 		if ok == false {
 			log.Panic("Column not found: ", sColumn1)
 		}
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
+		Number = Number + 1
+		sNumber := strconv.Itoa(Number)
+		ReplaceWhereID = ReplaceWhereID + "\tand " + TableAlias + "." + Column1.Name + " = $" + sNumber + "\n"
+
 		Underline = "_"
 	}
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
 
 	//все колонки
-	//	ReplaceTextSQL := `
-	//SELECT
-	//	`
-	ReplaceWhereID := ""
 	ReplaceAllFieldsWithComma := ""
 	//CommaNewline := ""
 	CommaNewline2 := ""
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
-	Number := 0
 	for _, Column1 := range MassColumns {
 		//кроме ненужных колонок
 		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
 			continue
 		}
 
-		Number = Number + 1
-		sNumber := strconv.Itoa(Number)
+		//Number = Number + 1
+		//sNumber := strconv.Itoa(Number)
 		//if Column1.IsNullable == true {
 		//	DefaultValueSQL := create_files.FindText_DefaultValueSQL_NotNull(Column1.TypeGo)
 		//	ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE(" + TableAlias + "." + Column1.Name + ", " + DefaultValueSQL + ") as " + Column1.Name
@@ -166,9 +167,9 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 		//}
 		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&m." + Column1.NameGo
 
-		if slice.Contains(MassColumns1, Column1.Name) == true {
-			ReplaceWhereID = ReplaceWhereID + "\tand " + TableAlias + "." + Column1.Name + " = $" + sNumber + "\n"
-		}
+		//if slice.Contains(MassColumns1, Column1.Name) == true {
+		//	ReplaceWhereID = ReplaceWhereID + "\tand " + TableAlias + "." + Column1.Name + " = $" + sNumber + "\n"
+		//}
 
 		//CommaNewline = ",\n\t"
 		CommaNewline2 = ",\n\t\t"
@@ -207,7 +208,6 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 	}
 
 	//
-	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithPlus", FieldNamesWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldNamesFormat", ReplaceFieldNamesFormat)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldsWithComma", ReplaceFieldsWithComma)
