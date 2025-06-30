@@ -184,7 +184,7 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 		TextEmpty := create_files.FindText_EqualEmpty(Column1, "m."+Column1.NameGo)
 		ReplaceID0 = ReplaceID0 + TextAnd + TextEmpty
 		sNumber := strconv.Itoa(i + 2) // 1 - уже занят для Column1
-		ReplaceWhereID = ReplaceWhereID + "\tand " + Column1.Name + " = $" + sNumber + "\n"
+		ReplaceWhereID = ReplaceWhereID + "\tand " + `"` + Column1.Name + `"` + " = $" + sNumber + "\n"
 		//ReplaceWhereID = ReplaceWhereID + "\tand " + Column1.Name + " = $" + sNumber + "\n"
 
 		Comma = ", "
@@ -201,7 +201,7 @@ func FindTextUpdateEveryColumn1(TextCrudUpdateFunc string, Table1 *types.Table, 
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldName", Column1.NameGo)
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceTableName", Column1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceTableName", Table1.Name)
-	Otvet = strings.ReplaceAll(Otvet, "ReplaceColumnNameEqualDollarComma", Column1.Name+" = $1")
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceColumnNameEqualDollarComma", `"`+Column1.Name+`"`+" = $1")
 
 	ReplaceValueEqual := "Value := m." + Column1.NameGo
 	if Column1.IsNullable == true {

@@ -223,6 +223,9 @@ func CreateFiles_Test(Table1 *types.Table) error {
 	//удаление пустых строк
 	TextDB = create_files.Delete_EmptyLines(TextDB)
 
+	//импорт "time"
+	TextDB = create_files.CheckAndAdd_ImportTime_FromText(TextDB)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyDB, []byte(TextDB), config.Settings.FILE_PERMISSIONS)
 

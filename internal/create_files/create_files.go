@@ -987,7 +987,7 @@ func FindText_DefaultValueSQL_NotNull(Type_go string) string {
 	case "int", "int32", "int64", "float32", "float64", "uint", "uint32", "uint64":
 		Otvet = "0"
 	case "time.Time":
-		Otvet = "'0001-01-01'"
+		Otvet = "'0001-01-01 00:00:00'"
 	case "bool":
 		Otvet = "false"
 	case "uuid.UUID", "uuid.NullUUID":
@@ -2259,6 +2259,10 @@ func Replace_Postgres_ID_Test1(Text string, Table1 *types.Table, PrimaryKeyColum
 			} else {
 				Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+Name+`, _ = `+sIDMinimum)
 			}
+		}
+	case "time.Time":
+		{
+			Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+Name+` = `+sIDMinimum+``)
 		}
 	case "string":
 		{

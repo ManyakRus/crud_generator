@@ -129,7 +129,11 @@ SELECT
 
 		if Column1.IsNullable == true {
 			DefaultValueSQL := create_files.FindText_DefaultValueSQL_NotNull(Column1.TypeGo)
-			ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE(" + TableAlias + "." + Column1.Name + ", " + DefaultValueSQL + ") as " + Column1.Name
+			if Column1.Type == "timetz" {
+				ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE('0001-01-01 ' || " + TableAlias + "." + Column1.Name + ", " + DefaultValueSQL + ")::timestamptz as " + Column1.Name
+			} else {
+				ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE(" + TableAlias + "." + Column1.Name + ", " + DefaultValueSQL + ") as " + Column1.Name
+			}
 		} else {
 			ReplaceTextSQL = ReplaceTextSQL + CommaNewline + TableAlias + "." + Column1.Name
 		}
