@@ -3,7 +3,7 @@ package server_grpc
 import (
 	"context"
 	"github.com/ManyakRus/starter/contextmain"
-	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
@@ -38,7 +38,7 @@ func (s *ServerGRPC) LawsuitStatusType_UpdateManyFields(ctx context.Context, Req
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	err = crud_lawsuit_status_types.UpdateManyFields_ctx(ctx, db, &m, Request.MassNames)
 	if err != nil {
 		return &Otvet, err

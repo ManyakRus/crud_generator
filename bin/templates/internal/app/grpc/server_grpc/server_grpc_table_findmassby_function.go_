@@ -12,7 +12,7 @@ func (s *ServerGRPC) LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(ctx co
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	Model := &lawsuit_status_types.LawsuitStatusType{}
 	Model.FieldName = Request.RequestFieldName
 	Mass, err := crud_lawsuit_status_types.FindMassBy_FieldNamesWithUnderline_ctx(ctx, db, Model)

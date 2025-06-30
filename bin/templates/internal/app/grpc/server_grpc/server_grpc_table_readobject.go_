@@ -2,7 +2,7 @@ package server_grpc
 
 import (
 	"context"
-	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/objects/object_lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_objects/crud_object_lawsuit_status_types"
@@ -28,7 +28,7 @@ func (s *ServerGRPC) LawsuitStatusType_ReadObject(ctx context.Context, Request *
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	ID := Request.ID
 	m := &object_lawsuit_status_types.ObjectLawsuitStatusType{}
 	m.ID = AliasFromInt(ID)

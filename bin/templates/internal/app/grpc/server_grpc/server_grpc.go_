@@ -2,7 +2,7 @@ package server_grpc
 
 import (
 	"context"
-	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/network/grpc/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud/crud_lawsuit_status_types"
@@ -28,7 +28,7 @@ func (s *ServerGRPC) LawsuitStatusType_Read(ctx context.Context, Request *grpc_p
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	ID := Request.ID
 	m := &lawsuit_status_types.LawsuitStatusType{}
 	m.ID = AliasFromInt(ID)
@@ -67,7 +67,7 @@ func (s *ServerGRPC) LawsuitStatusType_Delete(ctx context.Context, Request *grpc
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	ID := Request.ID
 	m := &lawsuit_status_types.LawsuitStatusType{}
 	m.ID = AliasFromInt(ID)
@@ -106,7 +106,7 @@ func (s *ServerGRPC) LawsuitStatusType_Restore(ctx context.Context, Request *grp
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	ID := Request.ID
 	m := &lawsuit_status_types.LawsuitStatusType{}
 	m.ID = AliasFromInt(ID)
@@ -152,7 +152,7 @@ func (s *ServerGRPC) LawsuitStatusType_Create(ctx context.Context, Request *grpc
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	err = crud_lawsuit_status_types.Create_ctx(ctx, db, m)
 	if err != nil {
 		return &Otvet, err
@@ -195,7 +195,7 @@ func (s *ServerGRPC) LawsuitStatusType_Update(ctx context.Context, Request *grpc
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	err = crud_lawsuit_status_types.Update_ctx(ctx, db, m)
 	if err != nil {
 		return &Otvet, err
@@ -238,7 +238,7 @@ func (s *ServerGRPC) LawsuitStatusType_Save(ctx context.Context, Request *grpc_p
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	err = crud_lawsuit_status_types.Save_ctx(ctx, db, &m)
 	if err != nil {
 		return &Otvet, err
@@ -274,7 +274,7 @@ func (s *ServerGRPC) LawsuitStatusType_FindByExtID(ctx context.Context, Request 
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	m := &lawsuit_status_types.LawsuitStatusType{}
 	m.ExtID = Request.ExtID
 	m.ConnectionID = Request.ConnectionId

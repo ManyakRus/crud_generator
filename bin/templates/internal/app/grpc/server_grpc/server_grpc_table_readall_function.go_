@@ -12,7 +12,7 @@ func (s *ServerGRPC) LawsuitStatusType_ReadAll(ctx context.Context, Request *grp
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	Mass, err := crud_lawsuit_status_types.ReadAll_ctx(ctx, db)
 	if err != nil {
 		return &Otvet, err

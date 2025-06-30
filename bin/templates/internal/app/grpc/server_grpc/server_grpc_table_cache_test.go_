@@ -7,15 +7,15 @@ import (
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/crud_starter"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
-	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"testing"
 )
 
 func Test_server_LawsuitStatusType_ReadFromCache(t *testing.T) {
 	config_main.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
-	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
-	defer postgres_gorm.CloseConnection()
+	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	defer postgres_pgxpool.CloseConnection()
 
 	ctx := context.Background()
 	Request := grpc_proto.RequestId{}

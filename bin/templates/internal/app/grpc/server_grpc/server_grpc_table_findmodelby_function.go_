@@ -12,7 +12,7 @@ func (s *ServerGRPC) LawsuitStatusType_FindModelBy_FieldNamesWithUnderline(ctx c
 	}
 
 	//клиент БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 
 	//модель
 	Model := lawsuit_status_types.LawsuitStatusType{}

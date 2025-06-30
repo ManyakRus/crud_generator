@@ -1,8 +1,8 @@
 func Test_server_LawsuitStatusType_FindMassBy_FieldNamesWithUnderline(t *testing.T) {
 	config_main.LoadEnv()
 	crud_starter.InitCrudTransport_DB()
-	postgres_gorm.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
-	defer postgres_gorm.CloseConnection()
+	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	defer postgres_pgxpool.CloseConnection()
 
 	ctx := context.Background()
 	Request := grpc_proto.Request_Empty{}

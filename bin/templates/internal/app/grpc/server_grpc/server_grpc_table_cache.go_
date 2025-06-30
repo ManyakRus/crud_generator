@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 	"github.com/ManyakRus/starter/contextmain"
-	"github.com/ManyakRus/starter/postgres_gorm"
+	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
@@ -34,7 +34,7 @@ func (s *ServerGRPC) LawsuitStatusType_ReadFromCache(ctx context.Context, Reques
 	defer ctxCancelFunc()
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	ID := Request.ID
 	Model := lawsuit_status_types.LawsuitStatusType{}
 	Model, err = crud_lawsuit_status_types.ReadFromCache_ctx(ctx, db, ReplaceManyID(ID))

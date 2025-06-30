@@ -22,7 +22,7 @@ func (s *ServerGRPC) LawsuitStatusType_Update(ctx context.Context, Request *grpc
 	defer ctxCancelFunc()
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	ID := Request.ID
 	ColumnName := Request.FieldName
 	m := &lawsuit_status_types.LawsuitStatusType{}

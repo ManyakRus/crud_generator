@@ -12,7 +12,7 @@ func (s *ServerGRPC) LawsuitStatusType_FindBy_FieldNamesWithUnderline(ctx contex
 	}
 
 	//запрос в БД
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection()
 	Model := &lawsuit_status_types.LawsuitStatusType{}
 	Model.FieldName = Request.RequestFieldName
 	err = crud_lawsuit_status_types.FindBy_FieldNamesWithUnderline_ctx(ctx, db, Model)
