@@ -2369,6 +2369,7 @@ func Replace_Model_ID_Test1(Text string, Table1 *types.Table, Column1 *types.Col
 				IDMinimum = "time.Time{}"
 			}
 			Otvet = strings.ReplaceAll(Otvet, TextFind, `var `+ModelName+`_`+Name+` = `+IDMinimum+``)
+			//Otvet = strings.ReplaceAll(Otvet, ``+DefaultModelName+`_ID_Test`, `timestamppb.New(`+ModelName+`_`+Name+`)`)
 		}
 	case "string":
 		{

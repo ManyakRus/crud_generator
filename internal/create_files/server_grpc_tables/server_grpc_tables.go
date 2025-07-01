@@ -197,11 +197,13 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 		VariableName := Table1.NameGo + "_" + Name + "_Test"
 		//Text1 := Convert_GolangVariableToProtobufVariableID(Table1, Column1, VariableName)
 		RequestColumnName := create_files.Find_RequestFieldName(Table1, Column1)
-		TextNew = TextNew + "\tRequest." + RequestColumnName + " = " + VariableName + "\n"
+		//TextVariable := VariableName
+		TextVariable := create_files.Convert_GolangVariableToProtobufVariableType(Table1, Column1, VariableName, Column1.TypeGo)
+		TextNew = TextNew + "\tRequest." + RequestColumnName + " = " + TextVariable + "\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 
-	//заменим Request.ID = LawsuitStatusType_ID_Test
+	//заменим Request2.ID = LawsuitStatusType_ID_Test
 	TextFind = "\tRequest2.ID = LawsuitStatusType_ID_Test\n"
 	TextNew = ""
 	for _, Column1 := range MassPK {
@@ -209,7 +211,8 @@ func Replace_Model_ID_Test_ManyPK(Text string, Table1 *types.Table) string {
 		VariableName := Table1.NameGo + "_" + Name + "_Test"
 		//Text1 := Convert_GolangVariableToProtobufVariableID(Table1, Column1, VariableName)
 		RequestColumnName := create_files.Find_RequestFieldName(Table1, Column1)
-		TextNew = TextNew + "\tRequest2." + RequestColumnName + " = " + VariableName + "\n"
+		TextVariable := create_files.Convert_GolangVariableToProtobufVariableType(Table1, Column1, VariableName, Column1.TypeGo)
+		TextNew = TextNew + "\tRequest2." + RequestColumnName + " = " + TextVariable + "\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 

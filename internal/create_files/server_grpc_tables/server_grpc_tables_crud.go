@@ -202,6 +202,9 @@ func CreateFiles_Test(Table1 *types.Table) error {
 	//import time
 	TextGRPCServer = create_files.CheckAndAdd_ImportTime_FromText(TextGRPCServer)
 
+	//import timestamppb.New()
+	TextGRPCServer = create_files.CheckAndAdd_ImportTimestamp_FromText(TextGRPCServer)
+
 	//замена импортов на новые URL
 	//TextGRPCServer = create_files.Replace_RepositoryImportsURL(TextGRPCServer)
 
