@@ -125,9 +125,12 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
 	for _, Column1 := range MassColumns {
 		//кроме ненужных колонок
-		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		if create_files.Is_Need_Сolumn(Column1) == false {
 			continue
 		}
+		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		//	continue
+		//}
 
 		Number = Number + 1
 		sNumber := strconv.Itoa(Number)

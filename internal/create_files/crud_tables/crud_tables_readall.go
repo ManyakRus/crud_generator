@@ -125,9 +125,12 @@ func CreateFiles_ReadAll_Table1(Table1 *types.Table, TextTemplateFunction string
 	CommaNewline2 := ""
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
 	for _, Column1 := range MassColumns {
-		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		if create_files.Is_Need_Сolumn(Column1) == false {
 			continue
 		}
+		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		//	continue
+		//}
 
 		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&m." + Column1.NameGo
 		CommaNewline2 = ",\n\t\t\t"

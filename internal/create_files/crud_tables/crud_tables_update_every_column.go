@@ -152,9 +152,12 @@ func FindTextUpdateEveryColumn(TextCrudUpdateFunc string, Table1 *types.Table) s
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
 	for _, Column1 := range MassColumns {
 		//кроме ненужных колонок
-		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		if create_files.Is_Need_Сolumn(Column1) == false {
 			continue
 		}
+		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		//	continue
+		//}
 
 		TextColumn1 := FindTextUpdateEveryColumn1(TextCrudUpdateFunc, Table1, Column1)
 		Otvet = Otvet + TextColumn1 + "\n\n"
@@ -370,9 +373,12 @@ func FindTextUpdateEveryColumnTest(TextCrudUpdateFunc string, Table1 *types.Tabl
 		if ok == false {
 			log.Panic("FindTextUpdateEveryColumnTest() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		if create_files.Is_Need_Сolumn(Column1) == false {
 			continue
 		}
+		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		//	continue
+		//}
 
 		TextColumn1 := FindTextUpdateEveryColumnTest1(TextCrudUpdateFunc, Table1, Column1)
 		Otvet = Otvet + TextColumn1 + "\n\n"

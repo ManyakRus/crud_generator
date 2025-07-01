@@ -44,9 +44,14 @@ func Update_ReplaceFieldName_ctx(ctx context.Context, db postgres_pgx.IConnectio
 
 	//
 	ReplaceValueEqual
-	_, err = db.Exec(ctx, TextSQL, Value, ReplacePKFieldsWithComma)
+	CommandTag, err := db.Exec(ctx, TextSQL, Value, ReplacePKFieldsWithComma)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Update_ReplaceFieldName() ReplacePKFieldNamesFormat, error: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf(m.TableNameDB()+" Update_ReplaceFieldName_ctx() ReplacePKFieldNamesFormat, error: %w", ReplacePKFieldsWithComma, err)
+		return err
+	}
+	RowsAffected := CommandTag.RowsAffected()
+	if RowsAffected == 0 {
+		err = fmt.Errorf(m.TableNameDB()+" Update_ReplaceFieldName_ctx() error: ReplacePKFieldNamesFormat, RowsAffected: %v", ReplacePKFieldsWithComma, RowsAffected)
 		return err
 	}
 

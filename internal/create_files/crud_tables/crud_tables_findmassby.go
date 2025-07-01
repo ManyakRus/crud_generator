@@ -153,9 +153,12 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 	CommaNewline2 := ""
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
 	for _, Column1 := range MassColumns {
-		if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		if create_files.Is_Need_Сolumn(Column1) == false {
 			continue
 		}
+		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		//	continue
+		//}
 		//Number = Number + 1
 		//sNumber := strconv.Itoa(Number)
 

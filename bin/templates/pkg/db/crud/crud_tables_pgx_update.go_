@@ -61,10 +61,15 @@ WHERE 1=1
 ReplaceWhereID
 `
 	//
-	_, err = db.Exec(ctx, TextSQL, 
+	CommandTag, err := db.Exec(ctx, TextSQL, 
 		ReplaceAllFieldsWithComma)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Update() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf(m.TableNameDB()+" Update_ctx() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		return err
+	}
+	RowsAffected := CommandTag.RowsAffected()
+	if RowsAffected == 0 {
+		err = fmt.Errorf(m.TableNameDB()+" Update_ctx() error: ReplacePKFieldNamesFormat, RowsAffected: %v", ReplacePKFieldsWithComma, RowsAffected)
 		return err
 	}
 
@@ -117,9 +122,14 @@ ReplaceMassFieldsAppend
 	TextSQL = TextSQL + "\n" + `WHERE 1=1 ReplaceTextSQLWhere`
 
 	//
-	_, err = db.Exec(ctx, TextSQL, MassFields...)
+	CommandTag, err := db.Exec(ctx, TextSQL, MassFields...)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Update() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf(m.TableNameDB()+" Update_MassNeedUpdate_ctx() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		return err
+	}
+	RowsAffected := CommandTag.RowsAffected()
+	if RowsAffected == 0 {
+		err = fmt.Errorf(m.TableNameDB()+" Update_MassNeedUpdate_ctx() error: ReplacePKFieldNamesFormat, RowsAffected: %v", ReplacePKFieldsWithComma, RowsAffected)
 		return err
 	}
 
