@@ -189,6 +189,9 @@ func CreateFiles_Cache_Test(Table1 *types.Table) error {
 	//	TextGRPCServer = create_files.Convert_RequestIdToAlias(TextGRPCServer, Table1)
 	//}
 
+	//import timestamppb.New()
+	TextGRPCServer = create_files.CheckAndAdd_ImportTimestamp_FromText(TextGRPCServer)
+
 	//удаление пустого импорта
 	TextGRPCServer = create_files.Delete_EmptyImport(TextGRPCServer)
 

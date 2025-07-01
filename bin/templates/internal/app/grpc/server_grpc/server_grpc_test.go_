@@ -126,7 +126,7 @@ func Test_server_LawsuitStatusType_Create(t *testing.T) {
 	}
 
 	RequestModel := grpc_proto.RequestModel{}
-	RequestModel.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
+	//RequestModel.VersionModel = lawsuit_status_types.LawsuitStatusType{}.GetStructVersion()
 	RequestModel.ModelString = ModelString
 
 	ctx := context.Background()

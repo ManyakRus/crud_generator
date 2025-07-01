@@ -2,6 +2,7 @@ package server_grpc
 
 import (
 	"context"
+	"fmt"
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/api/grpc_proto"
@@ -27,6 +28,12 @@ func (s *ServerGRPC) LawsuitStatusType_UpdateManyFields(ctx context.Context, Req
 	VersionClient := Request.VersionModel
 	if VersionServer != VersionClient {
 		err = ErrorModelVersion(lawsuit_status_types.LawsuitStatusType{})
+		return &Otvet, err
+	}
+
+	//
+	if len(Request.MassNames) == 0 {
+		err = fmt.Errorf("error: len(MassNames)=0")
 		return &Otvet, err
 	}
 

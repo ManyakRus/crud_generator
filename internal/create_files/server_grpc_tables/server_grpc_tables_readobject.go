@@ -205,6 +205,9 @@ func CreateFiles_ReadObject_Test(Table1 *types.Table) error {
 	//TextGRPCServer = create_files.Replace_PrimaryKeyOtvetID(TextGRPCServer, Table1)
 	//TextGRPCServer = create_files.Replace_PrimaryKeyM_ID(TextGRPCServer, Table1)
 
+	//import timestamppb.New()
+	TextGRPCServer = create_files.CheckAndAdd_ImportTimestamp_FromText(TextGRPCServer)
+
 	//SkipNow()
 	TextGRPCServer = create_files.AddSkipNow(TextGRPCServer, Table1)
 

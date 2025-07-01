@@ -44,7 +44,7 @@ func TestServerGRPC_LawsuitStatusType_UpdateManyFields(t *testing.T) {
 	RequestModel.MassNames = nil
 
 	_, err = server1.LawsuitStatusType_UpdateManyFields(ctx, &RequestModel)
-	if err != nil {
+	if err == nil {
 		t.Error("TestServerGRPC_LawsuitStatusType_UpdateManyFields() error: ", err)
 	}
 
