@@ -51,8 +51,8 @@ func CreateFiles_Update(MapAll map[string]*types.Table, Table1 *types.Table) err
 		ConstantsURL := create_files.Find_DBConstantsURL()
 		TextDB = create_files.AddImport(TextDB, ConstantsURL)
 
-		//CrudFunctionsURL := create_files.Find_CrudFunctionsURL()
-		//TextDB = create_files.AddImport(TextDB, CrudFunctionsURL)
+		CrudFunctionsURL := create_files.Find_CrudFuncURL()
+		TextDB = create_files.AddImport(TextDB, CrudFunctionsURL)
 
 	}
 

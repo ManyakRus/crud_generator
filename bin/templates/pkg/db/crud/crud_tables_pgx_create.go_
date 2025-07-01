@@ -2,7 +2,6 @@ package crud_lawsuit_status_types
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/ManyakRus/starter/postgres_pgx"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
@@ -46,15 +45,9 @@ func Create_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *
 		return err
 	}
 
-	//проверка ID
-	if ReplaceIDNot0 {
-		TextError := fmt.Sprint(m.TableNameDB()+" Create() ", TableName, " error: ReplacePKFieldsWithComma is not empty")
-		err = errors.New(TextError)
-		return err
-	}
-
 	//
 	TextSQL := TextSQL_Create
+
 	//
 	_, err = db.Exec(ctx, TextSQL, ReplaceAllFieldsWithComma)
 	if err != nil {

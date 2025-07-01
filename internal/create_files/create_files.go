@@ -987,7 +987,7 @@ func FindText_DefaultValueSQL_NotNull(Type_go string) string {
 	case "int", "int32", "int64", "float32", "float64", "uint", "uint32", "uint64":
 		Otvet = "0"
 	case "time.Time":
-		Otvet = "'0001-01-01 00:00:00'"
+		Otvet = "'0001-01-01 00:00:00+0000'"
 	case "bool":
 		Otvet = "false"
 	case "uuid.UUID", "uuid.NullUUID":
@@ -1093,6 +1093,16 @@ func CheckAndAdd_ImportFmt(Text string) string {
 	Otvet := Text
 
 	RepositoryURL := `fmt`
+	Otvet = CheckAndAdd_Import(Text, RepositoryURL)
+
+	return Otvet
+}
+
+// CheckAndAdd_ImportPostgresFunc - добавляет пакет postgres_func в секцию Import, если его там нет
+func CheckAndAdd_ImportPostgresFunc(Text string) string {
+	Otvet := Text
+
+	RepositoryURL := `github.com/ManyakRus/starter/postgres_func`
 	Otvet = CheckAndAdd_Import(Text, RepositoryURL)
 
 	return Otvet

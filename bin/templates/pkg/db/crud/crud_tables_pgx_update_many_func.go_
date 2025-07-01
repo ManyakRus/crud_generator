@@ -51,7 +51,7 @@ func Update_ReplaceFieldName_ctx(ctx context.Context, db postgres_pgx.IConnectio
 	}
 	RowsAffected := CommandTag.RowsAffected()
 	if RowsAffected == 0 {
-		err = fmt.Errorf(m.TableNameDB()+" Update_ReplaceFieldName_ctx() error: ReplacePKFieldNamesFormat, RowsAffected: %v", ReplacePKFieldsWithComma, RowsAffected)
+		err = fmt.Errorf(m.TableNameDB()+" Update_ReplaceFieldName_ctx() ReplacePKFieldNamesFormat, error: %s", ReplacePKFieldsWithComma, db_constants.TEXT_NO_ROWS)
 		return err
 	}
 

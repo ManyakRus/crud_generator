@@ -8,6 +8,7 @@ import (
 	"github.com/ManyakRus/starter/postgres_pgx"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"github.com/ManyakRus/starter/stopapp"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_func"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"strconv"
@@ -69,7 +70,7 @@ ReplaceWhereID
 	}
 	RowsAffected := CommandTag.RowsAffected()
 	if RowsAffected == 0 {
-		err = fmt.Errorf(m.TableNameDB()+" Update_ctx() error: ReplacePKFieldNamesFormat, RowsAffected: %v", ReplacePKFieldsWithComma, RowsAffected)
+		err = fmt.Errorf(m.TableNameDB()+" Update_ctx() ReplacePKFieldNamesFormat, error: %s", ReplacePKFieldsWithComma, db_constants.TEXT_NO_ROWS)
 		return err
 	}
 
@@ -129,7 +130,7 @@ ReplaceMassFieldsAppend
 	}
 	RowsAffected := CommandTag.RowsAffected()
 	if RowsAffected == 0 {
-		err = fmt.Errorf(m.TableNameDB()+" Update_MassNeedUpdate_ctx() error: ReplacePKFieldNamesFormat, RowsAffected: %v", ReplacePKFieldsWithComma, RowsAffected)
+		err = fmt.Errorf(m.TableNameDB()+" Update_MassNeedUpdate_ctx() ReplacePKFieldNamesFormat, error: %s", ReplacePKFieldsWithComma, db_constants.TEXT_NO_ROWS)
 		return err
 	}
 
@@ -170,6 +171,9 @@ func Save_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *la
 		err = Create_ctx(ctx, db, m)
 	} else {
 		err = Update_ctx(ctx, db, m)
+		if crud_func.IsRecordNotFound(err) == true {
+			err = Create_ctx(ctx, db, m)
+		}
 	}
 
 	return err

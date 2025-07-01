@@ -81,6 +81,9 @@ func CreateFiles_Create(MapAll map[string]*types.Table, Table1 *types.Table) err
 	//импорт "fmt"
 	TextDB = create_files.CheckAndAdd_ImportFmt(TextDB)
 
+	//импорт postgres_func
+	TextDB = create_files.CheckAndAdd_ImportPostgresFunc(TextDB)
+
 	//удаление пустых строк
 	TextDB = create_files.Delete_EmptyLines(TextDB)
 
@@ -140,7 +143,11 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 		if Column1.Name == "created_at" {
 			ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "time.Now()"
 		} else {
-			ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "m." + Column1.NameGo
+			TextValue := "m." + Column1.NameGo
+			if Column1.IsNullable == true {
+				TextValue = create_files.FindText_NullValue(Column1.TypeGo, TextValue)
+			}
+			ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + TextValue
 		}
 		Comma = ", "
 		CommaNewline = ",\n\t"
