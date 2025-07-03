@@ -1108,6 +1108,16 @@ func CheckAndAdd_ImportPostgresFunc(Text string) string {
 	return Otvet
 }
 
+// CheckAndAdd_ImportMicro - добавляет пакет micro в секцию Import, если его там нет
+func CheckAndAdd_ImportMicro(Text string) string {
+	Otvet := Text
+
+	RepositoryURL := `github.com/ManyakRus/starter/micro`
+	Otvet = CheckAndAdd_Import(Text, RepositoryURL)
+
+	return Otvet
+}
+
 // AddImport_UUID - добавляет пакет в секцию Import, если его там нет
 func AddImport_UUID(Text string) string {
 	Otvet := Text
@@ -3326,6 +3336,38 @@ func FindText_NullValue(TypeGo string, TextVariable string) string {
 		Otvet = "postgres_func.NullString_DefaultNull(" + TextVariable + ".String())"
 	default:
 		log.Error("FindText_NullValue() - неизвестный тип: ", TypeGo)
+	}
+
+	return Otvet
+}
+
+// FindText_NilValue - возвращает текст, = ссылка на переменную или nil
+func FindText_NilValue(TypeGo string, TextVariable string) string {
+	Otvet := TextVariable
+
+	switch TypeGo {
+	case "time.Time":
+		Otvet = "micro.Time_DefaultNil(" + TextVariable + ")"
+	case "string":
+		Otvet = "micro.String_DefaultNil(" + TextVariable + ")"
+	case "int64", "int":
+		Otvet = "micro.Int64_DefaultNil(" + TextVariable + ")"
+	case "int32":
+		Otvet = "micro.Int32_DefaultNil(" + TextVariable + ")"
+	case "int16":
+		Otvet = "micro.Int32_DefaultNil(" + TextVariable + ")"
+	case "int8":
+		Otvet = "micro.Int32_DefaultNil(" + TextVariable + ")"
+	case "bool":
+		Otvet = "micro.Bool_DefaultNil(" + TextVariable + ")"
+	case "float64":
+		Otvet = "micro.Float64_DefaultNil(" + TextVariable + ")"
+	case "float32":
+		Otvet = "micro.Float64_DefaultNil(" + TextVariable + ")"
+	case "uuid.UUID":
+		Otvet = "micro.String_DefaultNil(" + TextVariable + ".String())"
+	default:
+		log.Error("FindText_NilValue() - неизвестный тип: ", TypeGo)
 	}
 
 	return Otvet

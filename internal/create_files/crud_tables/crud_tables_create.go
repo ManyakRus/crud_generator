@@ -84,6 +84,9 @@ func CreateFiles_Create(MapAll map[string]*types.Table, Table1 *types.Table) err
 	//импорт postgres_func
 	TextDB = create_files.CheckAndAdd_ImportPostgresFunc(TextDB)
 
+	//импорт micro
+	TextDB = create_files.CheckAndAdd_ImportMicro(TextDB)
+
 	//удаление пустых строк
 	TextDB = create_files.Delete_EmptyLines(TextDB)
 
@@ -140,7 +143,12 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 
 		ReplaceAllColumnNamesWithComma = ReplaceAllColumnNamesWithComma + CommaNewline + Column1.Name
 		ReplaceDollarsWithComma = ReplaceDollarsWithComma + Comma + "$" + sNumber
-		if Column1.Name == "created_at" {
+		if Column1.IsPrimaryKey == true {
+			//TextValue := "m." + Column1.NameGo
+			//TextValue = create_files.FindText_NilValue(Column1.TypeGo, TextValue)
+			//ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + TextValue
+			//
+		} else if Column1.Name == "created_at" {
 			ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "time.Now()"
 		} else {
 			TextValue := "m." + Column1.NameGo
