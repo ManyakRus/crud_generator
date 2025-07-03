@@ -19,7 +19,7 @@ func StartApp() {
 
 	stopapp.StartWaitStop()
 
-	postgres_pgxpool.Start(constants.SERVICE_NAME)
+	postgres_pgxpool.Start_NoNull(constants.SERVICE_NAME)
 	crud_starter.InitCrudTransport_DB()
 
 	server_grpc.Start()

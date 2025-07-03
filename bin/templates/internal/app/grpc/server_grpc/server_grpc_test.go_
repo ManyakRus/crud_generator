@@ -16,8 +16,9 @@ const LawsuitStatusType_ID_Test = 0
 
 func Test_server_LawsuitStatusType_Read(t *testing.T) {
 	config_main.LoadEnv()
+
 	crud_starter.InitCrudTransport_DB()
-	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	postgres_pgxpool.Connect_NoNull(constants.SERVICE_NAME + "_test")
 	defer postgres_pgxpool.CloseConnection()
 
 	ctx := context.Background()
@@ -40,8 +41,9 @@ func Test_server_LawsuitStatusType_Read(t *testing.T) {
 
 func Test_server_LawsuitStatusType_Delete(t *testing.T) {
 	config_main.LoadEnv()
+
 	crud_starter.InitCrudTransport_DB()
-	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	postgres_pgxpool.Connect_NoNull(constants.SERVICE_NAME + "_test")
 	defer postgres_pgxpool.CloseConnection()
 
 	ctx := context.Background()
@@ -112,8 +114,9 @@ func Test_server_LawsuitStatusType_Delete(t *testing.T) {
 
 func Test_server_LawsuitStatusType_Create(t *testing.T) {
 	config_main.LoadEnv()
+
 	crud_starter.InitCrudTransport_DB()
-	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	postgres_pgxpool.Connect_NoNull(constants.SERVICE_NAME + "_test")
 	defer postgres_pgxpool.CloseConnection()
 
 	var ModelString string
@@ -142,8 +145,9 @@ func Test_server_LawsuitStatusType_Create(t *testing.T) {
 
 func Test_server_LawsuitStatusType_Update(t *testing.T) {
 	config_main.LoadEnv()
+
 	crud_starter.InitCrudTransport_DB()
-	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	postgres_pgxpool.Connect_NoNull(constants.SERVICE_NAME + "_test")
 	defer postgres_pgxpool.CloseConnection()
 
 	ctx := context.Background()
@@ -183,8 +187,9 @@ func Test_server_LawsuitStatusType_Update(t *testing.T) {
 
 func Test_server_LawsuitStatusType_Save(t *testing.T) {
 	config_main.LoadEnv()
+
 	crud_starter.InitCrudTransport_DB()
-	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	postgres_pgxpool.Connect_NoNull(constants.SERVICE_NAME + "_test")
 	defer postgres_pgxpool.CloseConnection()
 
 	ctx := context.Background()

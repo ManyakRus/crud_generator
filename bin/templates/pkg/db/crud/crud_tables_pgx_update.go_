@@ -56,6 +56,7 @@ func Update_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *
 		return err
 	}
 
+ReplaceDeletedAt
 	//
 	TextSQL := TextSQL_Update + `
 WHERE 1=1

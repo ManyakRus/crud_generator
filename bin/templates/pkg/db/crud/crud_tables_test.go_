@@ -14,7 +14,7 @@ const Postgres_ID_Test = 0
 func TestRead(t *testing.T) {
 	config_main.LoadEnv()
 
-	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	postgres_pgxpool.Connect_NoNull(constants.SERVICE_NAME + "_test")
 	defer postgres_pgxpool.CloseConnection()
 
 	crud := Crud_DB{}
@@ -35,7 +35,7 @@ func TestRead(t *testing.T) {
 func TestSave(t *testing.T) {
 	config_main.LoadEnv()
 
-	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	postgres_pgxpool.Connect_NoNull(constants.SERVICE_NAME + "_test")
 	defer postgres_pgxpool.CloseConnection()
 
 	crud := Crud_DB{}
@@ -63,7 +63,7 @@ func TestSave(t *testing.T) {
 func TestDelete(t *testing.T) {
 	config.LoadEnv()
 
-	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	postgres_pgxpool.Connect_NoNull(constants.SERVICE_NAME + "_test")
 	defer postgres_pgxpool.CloseConnection()
 
 	crud := Crud_DB{}
@@ -78,7 +78,7 @@ func TestDelete(t *testing.T) {
 
 func TestFind_ByExtID(t *testing.T) {
 	config_main.LoadEnv()
-	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	postgres_pgxpool.Connect_NoNull(constants.SERVICE_NAME + "_test")
 	defer postgres_pgxpool.CloseConnection()
 
 	crud := Crud_DB{}

@@ -30,7 +30,7 @@ func CreateFiles_Soft_Restore(MapAll map[string]*types.Table, Table1 *types.Tabl
 	FilenameTemplateDB := DirTemplatesDB + config.Settings.TEMPLATES_CRUD_SOFT_RESTORE_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
-	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_restore.go"
+	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_soft_restore.go"
 
 	//создадим каталог
 	create_files.CreateDirectory(DirReadyTable)

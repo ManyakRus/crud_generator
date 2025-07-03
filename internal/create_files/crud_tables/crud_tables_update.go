@@ -205,5 +205,8 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 
 	Otvet = ReplaceCacheRemove(Otvet, Table1)
 
+	//заполним поле deleted_at
+	Otvet = ReplaceText_is_deleted_deleted_at(Otvet, Table1)
+
 	return Otvet
 }

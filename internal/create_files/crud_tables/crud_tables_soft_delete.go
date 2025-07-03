@@ -30,7 +30,7 @@ func CreateFiles_Soft_Delete(MapAll map[string]*types.Table, Table1 *types.Table
 	FilenameTemplateDB := DirTemplatesDB + config.Settings.TEMPLATES_CRUD_SOFT_DELETE_FILENAME
 	TableName := strings.ToLower(Table1.Name)
 	DirReadyTable := DirReadyDB + config.Settings.PREFIX_CRUD + TableName
-	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_delete.go"
+	FilenameReadyDB := DirReadyTable + micro.SeparatorFile() + config.Settings.PREFIX_CRUD + TableName + "_soft_delete.go"
 
 	//создадим каталог
 	create_files.CreateDirectory(DirReadyTable)

@@ -1,7 +1,7 @@
 func TestFindMassBy_FieldNamesWithUnderline(t *testing.T) {
 	config_main.LoadEnv()
 
-	postgres_pgxpool.Connect_WithApplicationName(constants.SERVICE_NAME + "_test")
+	postgres_pgxpool.Connect_NoNull(constants.SERVICE_NAME + "_test")
 	defer postgres_pgxpool.CloseConnection()
 
 	crud := Crud_DB{}

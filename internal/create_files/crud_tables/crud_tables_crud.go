@@ -347,18 +347,25 @@ func ReplaceText_modified_at(s string, Table1 *types.Table) string {
 func ReplaceText_is_deleted_deleted_at(s string, Table1 *types.Table) string {
 	Otvet := s
 
+	//
 	TextNew := config.Settings.TEXT_DB_IS_DELETED
-	_, ok := Table1.MapColumns["is_deleted"]
-	if ok == false {
+
+	//
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == false {
 		TextNew = ""
 	}
 
-	_, ok = Table1.MapColumns["deleted_at"]
-	if ok == false {
+	//
+	if create_files.Has_Column_DeletedAt_Time(Table1) == false {
 		TextNew = ""
 	}
 
-	TextFind := "\t//Text_is_deleted_deleted_at\n"
+	//
+	if config.Settings.NEED_SOFT_DELETE == false {
+		TextNew = ""
+	}
+
+	TextFind := "ReplaceDeletedAt\n"
 	Otvet = strings.ReplaceAll(Otvet, TextFind, TextNew)
 
 	return Otvet
