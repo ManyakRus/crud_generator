@@ -112,10 +112,10 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 	ReplacePKFieldNamesFormat := ""
 	ReplaceIDNot0 := ""
 	Comma := ""
-	NewLine := ""
+	NewLineTT := ""
 	TextAnd := ""
 	TextOR := ""
-	//CommaNewLine := ""
+	//CommaNewLineIf := ""
 	NumberID := len(MassAllColumns) - len(ColumnsPK)
 	for _, Column1 := range ColumnsPK {
 		NumberID = NumberID + 1
@@ -133,13 +133,13 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 		if Column1.IsNullable == true {
 			TextValue = create_files.FindText_NullValue(Column1.TypeGo, TextValue)
 		}
-		ReplaceMassValuesIDAppend = ReplaceMassValuesIDAppend + NewLine + "MassValues = append(MassValues, " + TextValue + ")"
+		ReplaceMassValuesIDAppend = ReplaceMassValuesIDAppend + NewLineTT + "MassValues = append(MassValues, " + TextValue + ")"
 
 		Comma = ", "
 		TextAnd = " && "
-		NewLine = "\n\t"
+		NewLineTT = "\n\t\t"
 		TextOR = " || "
-		//CommaNewLine = ",\n"
+		//CommaNewLineIf = ",\n"
 	}
 	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldsWithComma", ReplacePKFieldsWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldNamesFormat", ReplacePKFieldNamesFormat)
@@ -153,65 +153,45 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 	TextSQLCreateWithoutID := ""
 	//ReplaceAllFieldsWithComma := ""
 	//ReplaceAllColumnNamesWithComma := ""
-	ReplaceDollarsWithComma := ""
+	//ReplaceDollarsWithComma := ""
 	Comma = ""
+	CommaIf := ""
 	//CommaNewline := ""
 	//CommaNewline2 := ""
-	NewLine = ""
-	CommaNewLine := ""
-	Number := 0
+	NewLineIf := ""
+	CommaNewLineIf := ""
 	NumberNotID := 0
 	for _, Column1 := range MassAllColumns {
 		//кроме ненужных колонок
 		if create_files.Is_Need_Сolumn(Column1) == false {
 			continue
 		}
-		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
-		//	continue
-		//}
-
-		Number = Number + 1
-		sNumber := strconv.Itoa(Number)
-
-		//ReplaceAllColumnNamesWithComma = ReplaceAllColumnNamesWithComma + CommaNewline + Column1.Name
-		ReplaceDollarsWithComma = ReplaceDollarsWithComma + Comma + "$" + sNumber
-
-		TextValue := "m." + Column1.NameGo
-		if Column1.IsNullable == true {
-			TextValue = create_files.FindText_NullValue(Column1.TypeGo, TextValue)
-		}
-		//if Column1.IsPrimaryKey == true {
-		//	//TextValue := "m." + Column1.NameGo
-		//	//TextValue = create_files.FindText_NilValue(Column1.TypeGo, TextValue)
-		//	//ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + TextValue
-		//	//
-		//} else if Column1.Name == "created_at" {
-		//	ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "time.Now()"
-		//} else {
-		//	ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + TextValue
-		//}
 
 		if Column1.IsPrimaryKey == false {
+			TextValue := "m." + Column1.NameGo
+			if Column1.IsNullable == true {
+				TextValue = create_files.FindText_NullValue(Column1.TypeGo, TextValue)
+			}
+
 			NumberNotID = NumberNotID + 1
 			sNumberNotID := strconv.Itoa(NumberNotID)
-			TextSQLCreateWithoutID = TextSQLCreateWithoutID + CommaNewLine + Column1.Name
-			TextSQLCreateWithoutID_values = TextSQLCreateWithoutID_values + Comma + "$" + sNumberNotID
+			TextSQLCreateWithoutID = TextSQLCreateWithoutID + CommaNewLineIf + Column1.Name
+			TextSQLCreateWithoutID_values = TextSQLCreateWithoutID_values + CommaIf + "$" + sNumberNotID
 			if Column1.Name == "created_at" {
-				ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLine + "MassValues = append(MassValues, time.Now())"
+				ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLineIf + "MassValues = append(MassValues, time.Now())"
 			} else {
-				ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLine + "MassValues = append(MassValues, " + TextValue + ")"
+				ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLineIf + "MassValues = append(MassValues, " + TextValue + ")"
 			}
+
+			CommaIf = ", "
+			NewLineIf = "\n\t"
+			CommaNewLineIf = ",\n\t"
 		}
 
-		Comma = ", "
-		//CommaNewline = ",\n\t"
-		//CommaNewline2 = ",\n\t\t"
-		NewLine = "\n\t"
-		CommaNewLine = ",\n\t"
 	}
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceAllColumnNamesWithComma", ReplaceAllColumnNamesWithComma)
-	Otvet = strings.ReplaceAll(Otvet, "ReplaceDollarsWithComma", ReplaceDollarsWithComma)
+	//Otvet = strings.ReplaceAll(Otvet, "ReplaceDollarsWithComma", ReplaceDollarsWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceTableName", Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceMassValuesAppend", ReplaceMassValuesAppend)
 
