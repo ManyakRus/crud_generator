@@ -12,12 +12,11 @@ import (
 	"time"
 )
 
-// TextSQL_Create - текст SQL запроса для добавления записи
-const TextSQL_Create = `
-INSERT INTO ReplaceTableName (ReplaceAllColumnNamesWithComma)
-VALUES (ReplaceDollarsWithComma)
-`
+// TextSQL_Create - текст SQL запроса для добавления записи, с заполненным ID
+ReplaceTextSQLCreateWithID
 
+// TextSQL_Create_WithoutID - текст SQL запроса для добавления записи, без колонок ID
+ReplaceTextSQLCreateWithoutID
 
 // Create - записывает новый объект в базу данных
 func (crud Crud_DB) Create(m *lawsuit_status_types.LawsuitStatusType) error {
@@ -46,10 +45,21 @@ func Create_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *
 	}
 
 	//
-	TextSQL := TextSQL_Create
+	TextSQL := TextSQL_Create_WithoutID
+
+	//массив, в котором значения всех полей и ИД
+	MassValues := make([]interface{}, 0)
+	ReplaceMassValuesAppend
+
+	//если ИД не пустой, то добавим его в запрос
+	if ReplacePKNotEqual0 {
+		TextSQL = TextSQL_Create
+		ReplaceMassValuesIDAppend
+	}
+
 
 	//
-	_, err = db.Exec(ctx, TextSQL, ReplaceAllFieldsWithComma)
+	_, err = db.Exec(ctx, TextSQL, MassValues...)
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Create() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
 		return err
