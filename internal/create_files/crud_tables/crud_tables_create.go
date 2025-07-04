@@ -151,12 +151,12 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 	ReplaceMassValuesAppend := ""
 	TextSQLCreateWithoutID_values := ""
 	TextSQLCreateWithoutID := ""
-	ReplaceAllFieldsWithComma := ""
-	ReplaceAllColumnNamesWithComma := ""
+	//ReplaceAllFieldsWithComma := ""
+	//ReplaceAllColumnNamesWithComma := ""
 	ReplaceDollarsWithComma := ""
 	Comma = ""
-	CommaNewline := ""
-	CommaNewline2 := ""
+	//CommaNewline := ""
+	//CommaNewline2 := ""
 	NewLine = ""
 	CommaNewLine := ""
 	Number := 0
@@ -173,40 +173,44 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 		Number = Number + 1
 		sNumber := strconv.Itoa(Number)
 
-		ReplaceAllColumnNamesWithComma = ReplaceAllColumnNamesWithComma + CommaNewline + Column1.Name
+		//ReplaceAllColumnNamesWithComma = ReplaceAllColumnNamesWithComma + CommaNewline + Column1.Name
 		ReplaceDollarsWithComma = ReplaceDollarsWithComma + Comma + "$" + sNumber
 
 		TextValue := "m." + Column1.NameGo
 		if Column1.IsNullable == true {
 			TextValue = create_files.FindText_NullValue(Column1.TypeGo, TextValue)
 		}
-		if Column1.IsPrimaryKey == true {
-			//TextValue := "m." + Column1.NameGo
-			//TextValue = create_files.FindText_NilValue(Column1.TypeGo, TextValue)
-			//ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + TextValue
-			//
-		} else if Column1.Name == "created_at" {
-			ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "time.Now()"
-		} else {
-			ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + TextValue
-		}
+		//if Column1.IsPrimaryKey == true {
+		//	//TextValue := "m." + Column1.NameGo
+		//	//TextValue = create_files.FindText_NilValue(Column1.TypeGo, TextValue)
+		//	//ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + TextValue
+		//	//
+		//} else if Column1.Name == "created_at" {
+		//	ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "time.Now()"
+		//} else {
+		//	ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + TextValue
+		//}
 
 		if Column1.IsPrimaryKey == false {
 			NumberNotID = NumberNotID + 1
 			sNumberNotID := strconv.Itoa(NumberNotID)
 			TextSQLCreateWithoutID = TextSQLCreateWithoutID + CommaNewLine + Column1.Name
 			TextSQLCreateWithoutID_values = TextSQLCreateWithoutID_values + Comma + "$" + sNumberNotID
-			ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLine + "MassValues = append(MassValues, " + TextValue + ")"
+			if Column1.Name == "created_at" {
+				ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLine + "MassValues = append(MassValues, time.Now())"
+			} else {
+				ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLine + "MassValues = append(MassValues, " + TextValue + ")"
+			}
 		}
 
 		Comma = ", "
-		CommaNewline = ",\n\t"
-		CommaNewline2 = ",\n\t\t"
+		//CommaNewline = ",\n\t"
+		//CommaNewline2 = ",\n\t\t"
 		NewLine = "\n\t"
 		CommaNewLine = ",\n\t"
 	}
-	Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
-	Otvet = strings.ReplaceAll(Otvet, "ReplaceAllColumnNamesWithComma", ReplaceAllColumnNamesWithComma)
+	//Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
+	//Otvet = strings.ReplaceAll(Otvet, "ReplaceAllColumnNamesWithComma", ReplaceAllColumnNamesWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceDollarsWithComma", ReplaceDollarsWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceTableName", Table1.Name)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceMassValuesAppend", ReplaceMassValuesAppend)

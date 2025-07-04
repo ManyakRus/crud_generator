@@ -61,7 +61,7 @@ func Create_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *
 	//
 	_, err = db.Exec(ctx, TextSQL, MassValues...)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Create() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf(m.TableNameDB()+" Create_ctx() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
 		return err
 	}
 
