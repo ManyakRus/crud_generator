@@ -313,77 +313,92 @@ func FillSettings() {
 	//
 	Name = "TEMPLATE_FOLDERNAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_MODEL"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_MODEL = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_CRUD"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_CRUD = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_GRPC_PROTO"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_GRPC_PROTO = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_GRPC_SERVER"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_GRPC_SERVER = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_GRPC_CLIENT"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_NRPC"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_NRPC = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_NRPC_SERVER"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_NRPC_SERVER = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_NRPC_CLIENT"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_NRPC_CLIENT = s
 
 	//
 	Name = "TEXT_TEMPLATE_MODEL"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEXT_TEMPLATE_MODEL = s
 
 	//
 	Name = "TEXT_TEMPLATE_TABLENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEXT_TEMPLATE_TABLENAME = s
 
 	//
 	Name = "TEMPLATE_SERVICE_NAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_SERVICE_NAME = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_CRUD_STARTER"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_CRUD_STARTER = s
 
 	//
 	Name = "SERVICE_REPOSITORY_URL"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	//s = strings.ToLower(s)
 	Settings.SERVICE_REPOSITORY_URL = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_ALIAS"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_ALIAS = s
 
 	//
@@ -494,16 +509,19 @@ func FillSettings() {
 	//
 	Name = "TEMPLATE_FOLDERNAME_MAIN"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_MAIN = s
 
 	//
 	Name = "TEMPLATE_REPOSITORY_URL"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_REPOSITORY_URL = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_GRPC"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_GRPC = s
 
 	//
@@ -519,31 +537,37 @@ func FillSettings() {
 	//
 	Name = "TEMPLATE_FOLDERNAME_TABLES"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_TABLES = s
 
 	//
 	Name = "PREFIX_MODEL"
 	s = Getenv(Name, false)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.PREFIX_MODEL = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_DB"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_DB = s
 
 	//
 	Name = "TEMPLATE_FOLDER_CRUD_FUNCTIONS"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDER_CRUD_FUNCTIONS = s
 
 	//
 	Name = "TEMPLATE_EXTERNAL_PROTO_FILENAME"
 	s = Getenv(Name, false)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_GRPC_NRPC"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_GRPC_NRPC = s
 
 	//
@@ -554,16 +578,19 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_CRUD_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_ALIAS_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_ALIAS_FILENAME = s
 
 	//
@@ -594,26 +621,31 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_CONVERT_ID_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CONVERT_ID_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_FUNCTIONS_RENAME_FILENAME = s
 
 	//
 	Name = "TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_CRUD_DELETE_FUNCTIONS_FILENAME = s
 
 	//
 	Name = "TEMPLATES_NAME_REPLACE_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_NAME_REPLACE_FILENAME = s
 
 	//
 	Name = "TEMPLATES_NULLABLE_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_NULLABLE_FILENAME = s
 
 	////
@@ -629,21 +661,25 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_TABLE_UPDATE_TEST_FILENAME = s
 
 	//
@@ -664,11 +700,13 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_CACHE_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_CACHE_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_CACHE_TEST_FILENAME = s
 
 	//
@@ -683,21 +721,25 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_README_MD_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_README_MD_FILENAME = s
 
 	//
 	Name = "TEMPLATES_README_RUS_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_README_RUS_FILENAME = s
 
 	//
 	Name = "TEMPLATE_FOLDERNAME_CONSTANTS"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_CONSTANTS = s
 
 	//
 	Name = "TEMPLATES_CONSTANTS_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CONSTANTS_FILENAME = s
 
 	//
@@ -708,335 +750,401 @@ func FillSettings() {
 	//
 	Name = "TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_FOLDERNAME_GRPC_CLIENT_FUNC = s
 
 	//
 	Name = "TEMPLATE_GRPC_CLIENT_FUNC_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_GRPC_CLIENT_FUNC_FILENAME = s
 
 	//
 	Name = "TEMPLATE_GRPC_CLIENT_FUNC_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_GRPC_CLIENT_FUNC_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_FINDBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_FINDBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDBY_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDBY_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDBY_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDBY_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDBY_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_MODEL_FINDBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_FINDBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_FINDBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDBY_FUNCTION_TEST_FILENAME = s
 
 	//-----------------FINDMASSBY---------------------------
 	//
 	Name = "TEMPLATES_FINDMASSBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_FINDMASSBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDMASSBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDMASSBY_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDMASSBY_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDMASSBY_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_MODEL_FINDMASSBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_FINDMASSBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_MODEL_FINDMASSBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_FINDMASSBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMASSBY_FUNCTION_TEST_FILENAME = s
 
 	//-----------------READALL---------------------------
 	//
 	Name = "TEMPLATES_READALL_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_READALL_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_READALL_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_READALL_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_READALL_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_READALL_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_READALL_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_READALL_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_READALL_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_READALL_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_READALL_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_READALL_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_READALL_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_READALL_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_READALL_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_MODEL_READALL_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_READALL_FILENAME = s
 
 	//
 	Name = "TEMPLATES_MODEL_READALL_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_READALL_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READALL_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READALL_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READALL_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READALL_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READALL_FUNCTION_TEST_FILENAME = s
 
 	//-----------------FINDMODELBY---------------------------
 	//
 	Name = "TEMPLATES_FINDMODELBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_FINDMODELBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDMODELBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDMODELBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDMODELBY_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDMODELBY_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDMODELBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDMODELBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_FINDMODELBY_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_FINDMODELBY_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDMODELBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDMODELBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDMODELBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDMODELBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDMODELBY_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDMODELBY_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_FINDMODELBY_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_FINDMODELBY_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_MODEL_FINDMODELBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_FINDMODELBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_MODEL_FINDMODELBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_FINDMODELBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_TEST_FILENAME = s
 
 	//----------------CRUD_FUNC----------------------------
 	//
 	Name = "TEMPLATES_CRUD_FUNC_FOLDERNAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_FUNC_FOLDERNAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_FUNC_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_FUNC_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_FUNC_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_FUNC_TEST_FILENAME = s
 
 	//--------------------------------------------
@@ -1054,136 +1162,163 @@ func FillSettings() {
 	//
 	Name = "GENERATION_PROTO_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.GENERATION_PROTO_FILENAME = s
 
 	//
 	Name = "GRPC_CLIENT_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.GRPC_CLIENT_FILENAME = s
 
 	//
 	Name = "GRPC_CLIENT_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.GRPC_CLIENT_TEST_FILENAME = s
 
 	//
 	Name = "NRPC_CLIENT_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.NRPC_CLIENT_FILENAME = s
 
 	//
 	Name = "NRPC_CLIENT_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.NRPC_CLIENT_TEST_FILENAME = s
 
 	//
 	Name = "NRPC_CLIENT_TABLE_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.NRPC_CLIENT_TABLE_FILENAME = s
 
 	//
 	Name = "NRPC_CLIENT_TABLE_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.NRPC_CLIENT_TABLE_TEST_FILENAME = s
 
 	//
 	Name = "SERVER_GRPC_STARTER_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.SERVER_GRPC_STARTER_FILENAME = s
 
 	//
 	Name = "SERVER_GRPC_FUNC_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.SERVER_GRPC_FUNC_FILENAME = s
 
 	//
 	Name = "MAKEFILE_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.MAKEFILE_FILENAME = s
 
 	//
 	Name = "ENV_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.ENV_FILENAME = s
 
 	//
 	Name = "STARTER_TABLES_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.STARTER_TABLES_FILENAME = s
 
 	//
 	Name = "STARTER_TABLES_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.STARTER_TABLES_TEST_FILENAME = s
 
 	//
 	Name = "STARTER_TABLES_MANUAL_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.STARTER_TABLES_MANUAL_FILENAME = s
 
 	//
 	Name = "STARTER_TABLES_TEST_MANUAL_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.STARTER_TABLES_TEST_MANUAL_FILENAME = s
 
 	//
 	Name = "STARTER_TABLES_PREFIX"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.STARTER_TABLES_PREFIX = s
 
 	//
 	Name = "CRUD_TABLES_FREFIX"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.CRUD_TABLES_FREFIX = s
 
 	//
 	Name = "MODEL_TABLE_MANUAL_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.MODEL_TABLE_MANUAL_FILENAME = s
 
 	//
 	Name = "MODEL_TABLE_UPDATE_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.MODEL_TABLE_UPDATE_FILENAME = s
 
 	//
 	Name = "SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.SERVER_GRPC_TABLE_UPDATE_FUNC_FILENAME = s
 
 	//
 	Name = "SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.SERVER_GRPC_TABLE_UPDATE_FUNC_TEST_FILENAME = s
 
 	//
 	Name = "GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.GRPC_CLIENT_TABLE_UPDATE_FUNC_FILENAME = s
 
 	//
 	Name = "GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.GRPC_CLIENT_TABLE_UPDATE_FUNC_TEST_FILENAME = s
 
 	//
 	Name = "CRUD_TABLES_CACHE_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.CRUD_TABLES_CACHE_FILENAME = s
 
 	//
 	Name = "CRUD_TABLES_CACHE_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.CRUD_TABLES_CACHE_TEST_FILENAME = s
 
 	//
 	Name = "SERVER_GRPC_TABLE_CACHE_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.SERVER_GRPC_TABLE_CACHE_FILENAME = s
 
 	//
 	Name = "SERVER_GRPC_TABLE_CACHE_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.SERVER_GRPC_TABLE_CACHE_TEST_FILENAME = s
 
 	//
@@ -1199,16 +1334,19 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_NAME_PRIMARYKEYS_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_NAME_PRIMARYKEYS_FILENAME = s
 
 	//
 	Name = "TEMPLATES_READOBJECT_FOLDERNAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_READOBJECT_FOLDERNAME = s
 
 	//
 	Name = "TEMPLATES_MODEL_READOBJECT_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_READOBJECT_FILENAME = s
 
 	//
@@ -1244,66 +1382,79 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_CRUD_READOBJECT_FOLDERNAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_READOBJECT_FOLDERNAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_READOBJECT_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_READOBJECT_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_READOBJECT_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_READOBJECT_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_READOBJECT_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_READOBJECT_FILENAME = s
 
 	//
 	Name = "TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_CRUD_TABLE_READOBJECT_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_READOBJECT_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_READOBJECT_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_SERVER_READOBJECT_FUNCTION_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_TEST_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_FILENAME = s
 
 	//
 	Name = "TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_GRPC_CLIENT_TABLES_READOBJECT_FUNCTION_TEST_FILENAME = s
 
 	//
@@ -1319,6 +1470,7 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_MODEL_CRUD_READOBJECT_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATES_MODEL_CRUD_READOBJECT_FILENAME = s
 
 	//
@@ -1329,11 +1481,13 @@ func FillSettings() {
 	//
 	Name = "STARTER_TABLES_READOBJECT_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.STARTER_TABLES_READOBJECT_FILENAME = s
 
 	//
 	Name = "STARTER_TABLES_READOBJECT_TEST_FILENAME"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.STARTER_TABLES_READOBJECT_TEST_FILENAME = s
 
 	//
@@ -1344,11 +1498,13 @@ func FillSettings() {
 	//
 	Name = "FOLDERNAME_GRPC_PROTO"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.FOLDERNAME_GRPC_PROTO = s
 
 	//
 	Name = "FOLDERNAME_API"
 	s = Getenv(Name, true)
+	s = micro.Path_Linux_to_Windows(s)
 	Settings.FOLDERNAME_API = s
 
 	//
@@ -1358,6 +1514,7 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_MODEL_CRUD_OBJECT_MANUAL_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_MODEL_CRUD_OBJECT_MANUAL_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_MODEL_CRUD_OBJECT_MANUAL_FILENAME)
 
 	//
 	Name = "PREFIX_OBJECT_MODEL"
@@ -1366,18 +1523,22 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_CRUD_READ_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_READ_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_READ_FILENAME)
 
 	//
 	Name = "TEMPLATES_CRUD_CREATE_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_CREATE_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_CREATE_FILENAME)
 
 	//
 	Name = "TEMPLATES_CRUD_UPDATE_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_UPDATE_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_UPDATE_FILENAME)
 
 	//
 	Name = "TEMPLATES_CRUD_DELETE_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_DELETE_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_DELETE_FILENAME)
 
 	//
 	Name = "NEED_SOFT_DELETE"
@@ -1386,30 +1547,37 @@ func FillSettings() {
 	//
 	Name = "TEMPLATES_CRUD_SOFT_DELETE_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_SOFT_DELETE_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_SOFT_DELETE_FILENAME)
 
 	//
 	Name = "TEMPLATES_CRUD_SOFT_RESTORE_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_SOFT_RESTORE_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_SOFT_RESTORE_FILENAME)
 
 	//
 	Name = "TEMPLATES_CRUD_FINDBY_EXTID_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_FINDBY_EXTID_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_FINDBY_EXTID_FILENAME)
 
 	//
 	Name = "TEMPLATES_CRUD_UPDATE_MANY_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_UPDATE_MANY_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_UPDATE_MANY_FILENAME)
 
 	//
 	Name = "TEMPLATES_CRUD_UPDATE_MANY_TEST_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_UPDATE_MANY_TEST_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_UPDATE_MANY_TEST_FILENAME)
 
 	//
 	Name = "TEMPLATES_CRUD_UPDATE_MANY_FUNC_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_UPDATE_MANY_FUNC_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_UPDATE_MANY_FUNC_FILENAME)
 
 	//
 	Name = "TEMPLATES_CRUD_UPDATE_MANY_FUNC_TEST_FILENAME"
 	microl.Set_FieldFromEnv_String(&Settings, Name, true)
+	Settings.TEMPLATES_CRUD_UPDATE_MANY_FUNC_TEST_FILENAME = micro.Path_Linux_to_Windows(Settings.TEMPLATES_CRUD_UPDATE_MANY_FUNC_TEST_FILENAME)
 
 }
 
