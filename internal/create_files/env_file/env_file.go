@@ -50,7 +50,7 @@ func CreateENV() error {
 		return err
 	}
 
-	bytes, err := os.ReadFile(FilenameTemplateENV)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateENV)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateENV, " error: ", err)
 	}

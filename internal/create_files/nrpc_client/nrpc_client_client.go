@@ -26,7 +26,7 @@ func CreateNRPCClient() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyClientNRPC)
 
-	bytes, err := os.ReadFile(FilenameTemplateNRPC)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateNRPC)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateNRPC, " error: ", err)
 	}
@@ -99,7 +99,7 @@ func CreateNRPCClient_Test() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyClientNRPC)
 
-	bytes, err := os.ReadFile(FilenameTemplateNRPC)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateNRPC)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateNRPC, " error: ", err)
 	}

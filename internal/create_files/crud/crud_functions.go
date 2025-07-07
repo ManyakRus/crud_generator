@@ -27,7 +27,7 @@ func CreateCrud() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyCrud)
 
-	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateCrud)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
 	}
@@ -86,7 +86,7 @@ func CreateCrudTest() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyCrud)
 
-	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateCrud)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
 	}

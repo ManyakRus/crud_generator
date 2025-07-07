@@ -32,7 +32,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	folders.CreateFolder(DirReadyTable)
 
 	//читаем шаблон файла, только функции
-	bytes, err := os.ReadFile(FilenameTemplateGRPCServerFunc)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateGRPCServerFunc)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCServerFunc, " error: ", err)
 	}
@@ -40,7 +40,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 
 	//читаем шаблон файла, без функций
 	FilenameTemplateGRPCServerUpdate := DirTemplatesGRPCServer + config.Settings.TEMPLATES_GRPC_SERVER_TABLE_UPDATE_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateGRPCServerUpdate)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateGRPCServerUpdate)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCServerUpdate, " error: ", err)
 	}

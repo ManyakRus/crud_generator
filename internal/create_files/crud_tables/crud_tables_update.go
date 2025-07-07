@@ -31,7 +31,7 @@ func CreateFiles_Update(MapAll map[string]*types.Table, Table1 *types.Table) err
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateDB)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
 	}

@@ -37,7 +37,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	folders.CreateFolder(DirReadyModel)
 
 	//чтение файла шаблона
-	bytes, err := os.ReadFile(FilenameTemplateModel)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateModel)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
 	}

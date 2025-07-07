@@ -50,7 +50,7 @@ func CreateFileProto(MapAll map[string]*types.Table) error {
 	if config.Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME != "" {
 		FilenameTemplateProto = config.Settings.TEMPLATE_EXTERNAL_PROTO_FILENAME
 	}
-	bytes, err := os.ReadFile(FilenameTemplateProto)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateProto)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateProto, " error: ", err)
 	}

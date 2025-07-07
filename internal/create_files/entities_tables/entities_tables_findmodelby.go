@@ -35,7 +35,7 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateModel)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateModel)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
 	}
@@ -43,7 +43,7 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 
 	//загрузим шаблон файла функции
 	FilenameTemplateModelFunction := DirTemplatesModel + config.Settings.TEMPLATES_MODEL_FINDMODELBY_FUNCTION_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateModelFunction)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateModelFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateModelFunction, " error: ", err)
 	}

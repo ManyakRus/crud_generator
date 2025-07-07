@@ -31,7 +31,7 @@ func CreateFiles_Create(MapAll map[string]*types.Table, Table1 *types.Table) err
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateDB)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
 	}
@@ -124,7 +124,7 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 		ReplacePKFieldNamesFormat = ReplacePKFieldNamesFormat + Comma + Column1.NameGo + ": %v"
 		TextEmpty := create_files.FindText_NotEqualEmpty(Column1, "m."+Column1.NameGo)
 		ReplaceIDNot0 = ReplaceIDNot0 + TextAnd + TextEmpty
-		ReplaceTextSQLCreateWithoutID_id = ReplaceTextSQLCreateWithoutID_id + ",\n\t" + Column1.Name
+		ReplaceTextSQLCreateWithoutID_id = ReplaceTextSQLCreateWithoutID_id + ",\n\t" + `"` + Column1.Name + `"`
 		ReplaceTextSQLCreateWithoutID_values_id = ReplaceTextSQLCreateWithoutID_values_id + ", $" + sNumberID
 		TextNotEqual0 := create_files.FindText_NotEqualEmpty(Column1, "m."+Column1.NameGo)
 		ReplacePKNotEqual0 = ReplacePKNotEqual0 + TextOR + TextNotEqual0
@@ -175,7 +175,7 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 
 			NumberNotID = NumberNotID + 1
 			sNumberNotID := strconv.Itoa(NumberNotID)
-			TextSQLCreateWithoutID = TextSQLCreateWithoutID + CommaNewLineIf + Column1.Name
+			TextSQLCreateWithoutID = TextSQLCreateWithoutID + CommaNewLineIf + `"` + Column1.Name + `"`
 			TextSQLCreateWithoutID_values = TextSQLCreateWithoutID_values + CommaIf + "$" + sNumberNotID
 			if Column1.Name == "created_at" {
 				ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLineIf + "MassValues = append(MassValues, time.Now())"

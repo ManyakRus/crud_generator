@@ -30,7 +30,7 @@ func CreateFiles(Table1 *types.Table) error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
-	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateGRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
@@ -151,7 +151,7 @@ func CreateFiles_Test(Table1 *types.Table) error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
-	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateGRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}

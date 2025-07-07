@@ -42,7 +42,7 @@ func CreateServerGRPCFunc() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyServerGRPC)
 
-	bytes, err := os.ReadFile(FilenameTemplateServerGRPCFunc)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateServerGRPCFunc)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateServerGRPCFunc, " error: ", err)
 	}

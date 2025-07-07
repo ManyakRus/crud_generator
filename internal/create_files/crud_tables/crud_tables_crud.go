@@ -33,7 +33,7 @@ func CreateFiles(Table1 *types.Table) error {
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateDB)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
 	}
@@ -158,7 +158,7 @@ func CreateFiles_Test(Table1 *types.Table) error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
-	bytes, err := os.ReadFile(FilenameTemplateDB)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
 	}

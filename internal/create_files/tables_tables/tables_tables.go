@@ -75,7 +75,7 @@ func CreateFiles_Table_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTa
 	FilenameReadyModel := DirReadyTable + config.Settings.PREFIX_TABLE + TableName + ".go"
 
 	//чтение файла шаблона
-	bytes, err := os.ReadFile(FilenameTemplateModel)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateModel)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
 	}
@@ -300,9 +300,7 @@ func Replace_ModelStruct(TextTemplateModel, TextModelStruct string) string {
 
 	s2 := TextTemplateModel[pos1:]
 	TextFind1 = "}\n"
-	TextFind2 := "}\r"
-	posEnd := micro.FindPos(s2, TextFind1, TextFind2)
-	//posEnd := strings.Index(s2, TextFind1)
+	posEnd := strings.Index(s2, TextFind1)
 	if posEnd < 0 {
 		log.Panic("Replace_ModelStruct() error: in model.go_ not found text: ", TextFind1)
 	}

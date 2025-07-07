@@ -30,7 +30,7 @@ func CreateFiles_Cache(Table1 *types.Table) error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyTable)
 
-	bytes, err := os.ReadFile(FilenameTemplateCache)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateCache)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCache, " error: ", err)
 	}

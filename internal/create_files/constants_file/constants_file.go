@@ -47,7 +47,7 @@ func CreateFileConstants() error {
 	folders.CreateFolder(DirReadyConstants)
 
 	FilenameTemplateConstants := DirTemplatesConstants + config.Settings.TEMPLATES_CONSTANTS_FILENAME
-	bytes, err := os.ReadFile(FilenameTemplateConstants)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateConstants)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateConstants, " error: ", err)
 	}

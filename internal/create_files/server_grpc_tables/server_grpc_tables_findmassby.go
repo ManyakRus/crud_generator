@@ -34,7 +34,7 @@ func CreateFiles_FindMassBy(Table1 *types.Table) error {
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateGRPCServer)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCServer, " error: ", err)
 	}
@@ -42,7 +42,7 @@ func CreateFiles_FindMassBy(Table1 *types.Table) error {
 
 	//загрузим шаблон файла функции
 	FilenameTemplateGRPCServerFunction := DirTemplatesGRPCServer + config.Settings.TEMPLATES_GRPC_SERVER_FINDMASSBY_FUNCTION_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateGRPCServerFunction)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateGRPCServerFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCServerFunction, " error: ", err)
 	}

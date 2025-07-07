@@ -34,7 +34,7 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateGRPCServer)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateGRPCServer)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCServer, " error: ", err)
 	}

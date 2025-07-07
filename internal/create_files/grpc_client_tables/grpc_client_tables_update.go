@@ -33,7 +33,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 	folders.CreateFolder(DirReadyTable)
 
 	//читаем шаблон файла, только функции
-	bytes, err := os.ReadFile(FilenameTemplateGRPC_ClientFunc)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateGRPC_ClientFunc)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPC_ClientFunc, " error: ", err)
 	}
@@ -41,7 +41,7 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 
 	//читаем шаблон файла, без функций
 	FilenameTemplateCrud := DirTemplatesGRPC_Client + config.Settings.TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateCrud)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateCrud)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
 	}
@@ -227,7 +227,7 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 	folders.CreateFolder(DirReadyTable)
 
 	//читаем шаблон файла, только функции
-	bytes, err := os.ReadFile(FilenameTemplateGRPC_ClientFunc)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateGRPC_ClientFunc)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPC_ClientFunc, " error: ", err)
 	}
@@ -235,7 +235,7 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 
 	//читаем шаблон файла, без функций
 	FilenameTemplateCrud := DirTemplatesGRPC_Client + config.Settings.TEMPLATES_GRPC_CLIENT_TABLE_UPDATE_TEST_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateCrud)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateCrud)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
 	}

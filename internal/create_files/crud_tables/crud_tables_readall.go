@@ -34,7 +34,7 @@ func CreateFiles_ReadAll(Table1 *types.Table) error {
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateCrud)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
 	}
@@ -42,7 +42,7 @@ func CreateFiles_ReadAll(Table1 *types.Table) error {
 
 	//загрузим шаблон файла функции
 	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateCrudFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
 	}
@@ -171,7 +171,7 @@ func CreateFiles_ReadAll_Test(Table1 *types.Table) error {
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateCrud)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
 	}
@@ -179,7 +179,7 @@ func CreateFiles_ReadAll_Test(Table1 *types.Table) error {
 
 	//загрузим шаблон файла функции
 	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_READALL_FUNCTION_TEST_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateCrudFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
 	}

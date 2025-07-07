@@ -34,7 +34,7 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateGRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
@@ -42,7 +42,7 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 
 	//загрузим шаблон файла функции
 	FilenameTemplateGRPCClientFunction := DirTemplatesGRPCClient + config.Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateGRPCClientFunction)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateGRPCClientFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClientFunction, " error: ", err)
 	}
@@ -239,7 +239,7 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateGRPCClient)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateGRPCClient)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClient, " error: ", err)
 	}
@@ -247,7 +247,7 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 
 	//загрузим шаблон файла функции
 	FilenameTemplateGRPCClientFunction := DirTemplatesGRPCClient + config.Settings.TEMPLATES_GRPC_CLIENT_TABLES_FINDMODELBY_FUNCTION_TEST_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateGRPCClientFunction)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateGRPCClientFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateGRPCClientFunction, " error: ", err)
 	}
