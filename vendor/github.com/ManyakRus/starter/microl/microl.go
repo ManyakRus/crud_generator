@@ -15,9 +15,15 @@ import (
 // Getenv - возвращает переменную окружения
 func Getenv(Name string, IsRequired bool) string {
 	TextError := "Need fill OS environment variable: "
-	Otvet := os.Getenv(Name)
-	if IsRequired == true && Otvet == "" {
-		log.Error(TextError + Name)
+	Otvet, IsFind := os.LookupEnv(Name)
+	if IsFind == true {
+		return Otvet
+	}
+
+	if IsRequired == true {
+		log.Panic(TextError + Name)
+	} else {
+		log.Warn(TextError + Name)
 	}
 
 	return Otvet
@@ -178,4 +184,53 @@ func Set_FieldFromEnv_Bool(StructReference any, FieldName string, IsRequired boo
 		log.Error(err)
 		return
 	}
+}
+
+// ShowTimePassed - показывает время прошедшее с момента старта
+// запускать:
+// defer micro.ShowTimePassed(time.Now())
+func ShowTimePassed(StartAt time.Time) {
+	log.Debugf("Time passed: %s\n", time.Since(StartAt))
+}
+
+// ShowTimePassed_FormatText - показывает время прошедшее с момента старта
+// запускать:
+// defer micro.ShowTimePassed(time.Now())
+func ShowTimePassed_FormatText(FormatText string, StartAt time.Time) {
+	log.Debugf(FormatText, time.Since(StartAt))
+}
+
+// ShowTimePassedSeconds - показывает время секунд прошедшее с момента старта
+// запускать:
+// defer micro.ShowTimePassedSeconds(time.Now())
+func ShowTimePassedSeconds(StartAt time.Time) {
+	log.Debugf("Time passed: %s\n", time.Since(StartAt).Round(time.Second))
+}
+
+// ShowTimePassedMilliSeconds - показывает время миллисекунд прошедшее с момента старта
+// запускать:
+// defer micro.ShowTimePassedMilliSeconds(time.Now())
+func ShowTimePassedMilliSeconds(StartAt time.Time) {
+	log.Debugf("Time passed: %s\n", time.Since(StartAt).Round(time.Millisecond))
+}
+
+// Set_StructField - устанавливает значение поля из переменной окружения
+// Параметры:
+// Object - указатель на структуру
+// FieldName - имя поля
+// Value - значение
+func Set_StructField(StructReference any, FieldName string, Value any) {
+	err := micro.SetFieldValue(StructReference, FieldName, Value)
+
+	if err != nil {
+		err = fmt.Errorf("Set_StructField() FieldName: %s error: %w", FieldName, err)
+		log.Error(err)
+		return
+	}
+}
+
+// Show_Stage - показывает в логе переменную окружения STAGE
+func Show_Stage() {
+	Stage := os.Getenv("STAGE")
+	log.Debugf("STAGE: %s", Stage)
 }

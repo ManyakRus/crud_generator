@@ -3,7 +3,7 @@
 package stopapp
 
 import (
-	"github.com/ManyakRus/starter/logger"
+	"github.com/ManyakRus/starter/log"
 	"os"
 	"os/signal"
 	"sync"
@@ -21,7 +21,7 @@ import (
 )
 
 // log - глобальный логгер
-var log = logger.GetLog()
+//var log = logger.GetLog()
 
 // SignalInterrupt - канал для ожидания сигнала остановки приложения
 var SignalInterrupt chan os.Signal
@@ -66,6 +66,10 @@ func GetWaitGroup_Main() *sync.WaitGroup {
 
 // StartWaitStop - запускает ожидание сигнала завершения приложения
 func StartWaitStop() {
+	//создадим контекст, т.к. попозже уже гонка данных
+	contextmain.GetContext()
+
+	//
 	SignalInterrupt = make(chan os.Signal, 1)
 
 	fnWait := func() {
@@ -111,7 +115,7 @@ func WaitStop() {
 			contextmain.CancelContext()
 		}
 	case <-contextmain.GetContext().Done():
-		log.Warn("Context app is canceled.")
+		log.Warn("Context app is canceled. stopapp")
 	}
 
 	GetWaitGroup_Main().Done()

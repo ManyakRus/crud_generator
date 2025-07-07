@@ -86,6 +86,8 @@ func DeleteFuncFromFuncName(Text, FuncName string) string {
 	Otvet := Text
 
 	TextFind := "\nfunc " + FuncName + "("
+	//TextFind2 := "\nfunc " + FuncName + "("
+	//pos1 := micro.FindPos(Otvet, TextFind, TextFind2)
 	pos1 := strings.Index(Otvet, TextFind)
 	if pos1 < 0 {
 		return Otvet

@@ -575,6 +575,8 @@ func FillIDMinimum_ManyPK(MapTable map[string]*types.Table) error {
 			return err
 		}
 
+		rows.Close()
+
 		for i, colName := range ColumnsGorm {
 			value1 := ""
 			value1 = fmt.Sprint(*values[i].(*interface{}))

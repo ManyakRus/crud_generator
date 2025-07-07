@@ -3,7 +3,7 @@ module github.com/ManyakRus/crud_generator
 go 1.22.1
 
 require (
-	github.com/ManyakRus/starter v1.0.92
+	github.com/ManyakRus/starter v1.0.210
 	github.com/alexsergivan/transliterator v1.0.1
 	github.com/bxcodec/faker/v3 v3.8.1
 	github.com/davecgh/go-spew v1.1.1
@@ -15,25 +15,26 @@ require (
 	github.com/ompluscator/dynamic-struct v1.4.0
 	github.com/otiai10/copy v1.14.0
 	github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e
-	golang.org/x/tools v0.27.0
+	golang.org/x/tools v0.29.0
 	gorm.io/gorm v1.25.12
 )
 
 require (
 	github.com/ManyakRus/logrus v0.0.0-20231019115155-9e6fede0d792 // indirect
+	github.com/dromara/carbon/v2 v2.6.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
-	github.com/jackc/pgx/v5 v5.7.1 // indirect
+	github.com/jackc/pgx/v5 v5.7.2 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
-	golang.org/x/crypto v0.29.0 // indirect
-	golang.org/x/exp v0.0.0-20241108190413-2d47ceb2692f // indirect
+	golang.org/x/crypto v0.32.0 // indirect
+	golang.org/x/exp v0.0.0-20250128182459-e0ece0dbea4c // indirect
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/sync v0.9.0 // indirect
-	golang.org/x/sys v0.27.0 // indirect
-	golang.org/x/text v0.20.0 // indirect
-	google.golang.org/protobuf v1.35.2 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
+	google.golang.org/protobuf v1.36.4 // indirect
 	gorm.io/driver/postgres v1.5.11 // indirect
 )

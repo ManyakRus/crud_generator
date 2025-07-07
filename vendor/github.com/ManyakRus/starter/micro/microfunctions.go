@@ -8,10 +8,13 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
+	"github.com/ManyakRus/starter/constants"
+	"github.com/dromara/carbon/v2"
 	"github.com/google/uuid"
 	"golang.org/x/exp/constraints"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"hash/fnv"
+	"math"
 	"os/exec"
 	"reflect"
 	"runtime"
@@ -26,7 +29,15 @@ import (
 	"time"
 )
 
+//// Time - тип для хранения времени
+//type Time time.Time
+
 //var log = logger.GetLog()
+
+func init() {
+	//время всегда московское (из константы)
+	carbon.SetLocation(constants.Loc)
+}
 
 // IsTestApp - возвращает true если это тестовая среда выполнения приложения
 func IsTestApp() bool {
@@ -102,6 +113,20 @@ func Pause_ctx(ctx context.Context, ms int) {
 	select {
 	case <-ctx.Done():
 	case <-time.After(Duration):
+	}
+}
+
+// Pause_duration - приостановка работы программы на время duration
+func Pause_duration(duration time.Duration) {
+	time.Sleep(duration)
+}
+
+// Pause_duration_ctx - приостановка работы программы на время duration, с учётом глобального контекста
+func Pause_duration_ctx(ctx context.Context, duration time.Duration) {
+
+	select {
+	case <-ctx.Done():
+	case <-time.After(duration):
 	}
 }
 
@@ -247,7 +272,9 @@ func ProgramDir_Common() string {
 		//Windows
 		substr = "\\temp\\"
 		pos1 = strings.Index(sdir, substr)
-		if pos1 >= 0 {
+		substr = "\\tmp\\"
+		pos2 := strings.Index(sdir, substr)
+		if pos1 >= 0 || pos2 >= 0 {
 			filename = CurrentFilename()
 			dir = filepath.Dir(filename)
 
@@ -335,36 +362,164 @@ func Trim(s string) string {
 	return Otvet
 }
 
-// Max returns the largest of x or y.
-func Max(x, y int) int {
-	if x < y {
-		return y
+// Max returns the largest value
+func Max(Mass ...int) int {
+	var Otvet int
+
+	//
+	if len(Mass) == 0 {
+		return Otvet
 	}
-	return x
+
+	//
+	Otvet = Mass[0]
+	for _, val := range Mass {
+		if val > Otvet {
+			Otvet = val
+		}
+	}
+
+	return Otvet
 }
 
-// Min returns the smallest of x or y.
-func Min(x, y int) int {
-	if x > y {
-		return y
+// Min returns the smallest value
+func Min(Mass ...int) int {
+	var Otvet int
+
+	//
+	if len(Mass) == 0 {
+		return Otvet
 	}
-	return x
+
+	//
+	Otvet = Mass[0]
+	for _, val := range Mass {
+		if val < Otvet {
+			Otvet = val
+		}
+	}
+
+	return Otvet
 }
 
-// Max returns the largest of x or y.
-func MaxInt64(x, y int64) int64 {
-	if x < y {
-		return y
+// MaxInt64 returns the largest value
+func MaxInt64(Mass ...int64) int64 {
+	var Otvet int64
+
+	//
+	if len(Mass) == 0 {
+		return Otvet
 	}
-	return x
+
+	//
+	Otvet = Mass[0]
+	for _, val := range Mass {
+		if val > Otvet {
+			Otvet = val
+		}
+	}
+
+	return Otvet
 }
 
-// Min returns the smallest of x or y.
-func MinInt64(x, y int64) int64 {
-	if x > y {
-		return y
+// MinInt64 returns the smallest value
+func MinInt64(Mass ...int64) int64 {
+	var Otvet int64
+
+	//
+	if len(Mass) == 0 {
+		return Otvet
 	}
-	return x
+
+	//
+	Otvet = Mass[0]
+	for _, val := range Mass {
+		if val < Otvet {
+			Otvet = val
+		}
+	}
+
+	return Otvet
+}
+
+// MaxInt returns the largest value
+func MaxInt(Mass ...int) int {
+	var Otvet int
+
+	//
+	if len(Mass) == 0 {
+		return Otvet
+	}
+
+	//
+	Otvet = Mass[0]
+	for _, val := range Mass {
+		if val > Otvet {
+			Otvet = val
+		}
+	}
+
+	return Otvet
+}
+
+// MinInt returns the smallest value
+func MinInt(Mass ...int) int {
+	var Otvet int
+
+	//
+	if len(Mass) == 0 {
+		return Otvet
+	}
+
+	//
+	Otvet = Mass[0]
+	for _, val := range Mass {
+		if val < Otvet {
+			Otvet = val
+		}
+	}
+
+	return Otvet
+}
+
+// MaxFloat64 returns the largest value
+func MaxFloat64(Mass ...float64) float64 {
+	var Otvet float64
+
+	//
+	if len(Mass) == 0 {
+		return Otvet
+	}
+
+	//
+	Otvet = Mass[0]
+	for _, val := range Mass {
+		if val > Otvet {
+			Otvet = val
+		}
+	}
+
+	return Otvet
+}
+
+// MinFloat64 returns the smallest value
+func MinFloat64(Mass ...float64) float64 {
+	var Otvet float64
+
+	//
+	if len(Mass) == 0 {
+		return Otvet
+	}
+
+	//
+	Otvet = Mass[0]
+	for _, val := range Mass {
+		if val < Otvet {
+			Otvet = val
+		}
+	}
+
+	return Otvet
 }
 
 // MaxDate returns the largest of x or y.
@@ -558,11 +713,20 @@ func CheckINNControlSum12(Inn string) error {
 	return err
 }
 
-// StringFromInt64 - возвращает строку из числа
+// StringFromInt64 - возвращает строку из числа int64
 func StringFromInt64(i int64) string {
 	Otvet := ""
 
 	Otvet = strconv.FormatInt(i, 10)
+
+	return Otvet
+}
+
+// StringFromInt32 - возвращает строку из числа int32
+func StringFromInt32(i int32) string {
+	Otvet := ""
+
+	Otvet = fmt.Sprintf("%d", i)
 
 	return Otvet
 }
@@ -585,7 +749,7 @@ func StringDateTime(t time.Time) string {
 	return Otvet
 }
 
-// ProgramDir_bin - возвращает каталог "bin" или каталог программы
+// ProgramDir_bin - возвращает каталог "bin" или каталог программы, в конце "/" (или "\")
 func ProgramDir_bin() string {
 	Otvet := ""
 
@@ -787,7 +951,12 @@ func StringFromUpperCase(s string) string {
 		return Otvet
 	}
 
-	Otvet = strings.ToUpper(Otvet[:1]) + Otvet[1:]
+	//преобразуем в руны т.к. есть русские буквы
+	MassRunes := []rune(Otvet)
+	MassRunes[0] = unicode.ToUpper(MassRunes[0])
+	Otvet = string(MassRunes)
+
+	//Otvet = strings.ToUpper(Otvet[:1]) + Otvet[1:]
 
 	return Otvet
 }
@@ -836,16 +1005,44 @@ func FindLastPos(s, TextFind string) int {
 	return Otvet
 }
 
-// StringFloat64_Dimension2 - возвращает строку с 2 знака после запятой
-func StringFloat64_Dimension2(f float64) string {
+// StringFromFloat64_Dimension2 - возвращает строку с 2 знака после запятой
+func StringFromFloat64_Dimension2(f float64) string {
 	Otvet := fmt.Sprintf("%.2f", f)
 
 	return Otvet
 }
 
-// StringFloat32_Dimension2 - возвращает строку с 2 знака после запятой
-func StringFloat32_Dimension2(f float32) string {
+// StringFromFloat32_Dimension2 - возвращает строку с 2 знака после запятой
+func StringFromFloat32_Dimension2(f float32) string {
 	Otvet := fmt.Sprintf("%.2f", f)
+
+	return Otvet
+}
+
+// StringFromFloat64_Dimension0 - возвращает строку с 0 знаков после запятой
+func StringFromFloat64_Dimension0(f float64) string {
+	Otvet := fmt.Sprintf("%.0f", f)
+
+	return Otvet
+}
+
+// StringFromFloat32_Dimension0 - возвращает строку с 0 знаков после запятой
+func StringFromFloat32_Dimension0(f float32) string {
+	Otvet := fmt.Sprintf("%.0f", f)
+
+	return Otvet
+}
+
+// StringFromFloat64_Dimension - возвращает строку с Dimension знаков после запятой
+func StringFromFloat64_Dimension(f float64, Dimension int) string {
+	Otvet := fmt.Sprintf("%."+strconv.Itoa(Dimension)+"f", f)
+
+	return Otvet
+}
+
+// StringFromFloat32_Dimension - возвращает строку с Dimension знаков после запятой
+func StringFromFloat32_Dimension(f float32, Dimension int) string {
+	Otvet := fmt.Sprintf("%."+strconv.Itoa(Dimension)+"f", f)
 
 	return Otvet
 }
@@ -1361,4 +1558,532 @@ func SetFieldValue(Object any, FieldName string, Value any) error {
 	prop.Set(ValueNew)
 
 	return err
+}
+
+// Float64FromString - возвращает float64 из строки
+func Float64FromString(s string) (float64, error) {
+	var Otvet float64
+	var err error
+
+	Otvet, err = strconv.ParseFloat(s, 64)
+
+	return Otvet, err
+}
+
+// Abs - возвращает абсолютное значение
+func Abs[T constraints.Integer](x T) T {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+// StringFromBool - возвращает строку из булевского значения
+func StringFromBool(value bool) string {
+	Otvet := "true"
+
+	if value == false {
+		Otvet = "false"
+	}
+
+	return Otvet
+}
+
+// StringFromBool_Rus - возвращает строку из булевского значения, Да/Нет
+func StringFromBool_Rus(value bool) string {
+	Otvet := "Да"
+
+	if value == false {
+		Otvet = "Нет"
+	}
+
+	return Otvet
+}
+
+// StringFromBool_Rus_lower - возвращает строку из булевского значения, да/нет
+func StringFromBool_Rus_lower(value bool) string {
+	Otvet := "да"
+
+	if value == false {
+		Otvet = "нет"
+	}
+
+	return Otvet
+}
+
+//// UnmarshalJSON - преобразует строку время в time.Time
+//func (d *Time) UnmarshalJSON(b []byte) error {
+//	str := string(b)
+//	if str != "" && str[0] == '"' && str[len(str)-1] == '"' {
+//		str = str[1 : len(str)-1]
+//	}
+//
+//	// parse string
+//	t, err := time.ParseInLocation(constants.LayoutTime, str, constants.Loc)
+//	if err != nil {
+//		err = fmt.Errorf("invalid time string: %s, error: %w", b, err)
+//		return err
+//	}
+//
+//	//
+//	*d = Time(t)
+//	return nil
+//}
+
+//// UnmarshalString - преобразует строку время в time.Time
+//func (d *Time) UnmarshalString(str string) error {
+//	if str != "" && str[0] == '"' && str[len(str)-1] == '"' {
+//		str = str[1 : len(str)-1]
+//	}
+//
+//	// parse string
+//	t, err := time.Parse(constants.LayoutTime, str)
+//	if err != nil {
+//		err = fmt.Errorf("invalid time string: %s, error: %w", str, err)
+//		return err
+//	}
+//
+//	//
+//	*d = Time(t)
+//	return nil
+//}
+
+// IsFalseString - возвращает true если строка = false, или =0
+func IsFalseString(s string) bool {
+	Otvet := false
+
+	s = strings.Trim(s, " ")
+	s = strings.Trim(s, "\n")
+	s = strings.ToLower(s)
+
+	switch s {
+	case "0", "нет", "no", "off", "false":
+		Otvet = true
+	}
+
+	return Otvet
+}
+
+// IsTrueString - возвращает true если строка = true, или =1
+func IsTrueString(s string) bool {
+	Otvet := false
+
+	s = strings.Trim(s, " ")
+	s = strings.Trim(s, "\n")
+	s = strings.ToLower(s)
+
+	switch s {
+	case "1", "да", "yes", "on", "true":
+		Otvet = true
+	}
+
+	return Otvet
+}
+
+// DateTimeFromString_rus - возвращает дату из строки, из формата "02.01.2006 15:04:05"
+func DateTimeFromString_rus(s string) (time.Time, error) {
+	t, err := time.ParseInLocation(constants.LayoutDateTimeRus, s, constants.Loc)
+	return t, err
+}
+
+// DateFromString_rus - возвращает дату из строки, из формата "02.01.2006"
+func DateFromString_rus(s string) (time.Time, error) {
+
+	//
+	if len(s) > 10 {
+		s = s[:10]
+	}
+
+	//
+	t, err := time.ParseInLocation(constants.LayoutDateRus, s, constants.Loc)
+	return t, err
+}
+
+// DateFromToToday_rus - возвращает дату начала и конца дня
+func DateFromToToday_rus() (time.Time, time.Time) {
+	//carbon.SetLocation(constants.Loc)
+	Date1 := carbon.Now().StartOfDay().StdTime()
+	Date2 := carbon.CreateFromStdTime(Date1).EndOfDay().StdTime()
+
+	return Date1, Date2
+}
+
+// StringDateSPo_rus - возвращает строку с периодом дат
+func StringDateSPo_rus(Date1, Date2 time.Time) string {
+	Otvet := ""
+
+	Date1_00 := carbon.CreateFromStdTime(Date1).StartOfDay().StdTime()
+	Date2_00 := carbon.CreateFromStdTime(Date2).StartOfDay().StdTime()
+	if Date1_00 == Date2_00 {
+		Otvet = "на дату: " + StringDate(Date1_00)
+	} else {
+		Otvet = fmt.Sprintf("с %s по %s", StringDate(Date1_00), StringDate(Date2_00))
+	}
+
+	return Otvet
+}
+
+// StringDatePeriod_rus - возвращает строку с периодом дат
+func StringDatePeriod_rus(Date1, Date2 time.Time) string {
+	Otvet := ""
+
+	Date1_00 := carbon.CreateFromStdTime(Date1).StartOfDay().StdTime()
+	Date2_00 := carbon.CreateFromStdTime(Date2).StartOfDay().StdTime()
+	if Date1_00 == Date2_00 {
+		Otvet = "на дату: " + StringDate(Date1_00)
+	} else {
+		Otvet = fmt.Sprintf("%s - %s", StringDate(Date1_00), StringDate(Date2_00))
+	}
+
+	return Otvet
+}
+
+// StringIntWithSeparator - возвращает строку с разделителем по 3 разрядам
+// пример:
+// s := StringIntWithSeparator(1222333, '_')
+// Ответ: "1_222_333"
+func StringIntWithSeparator(n int, separator rune) string {
+
+	s := strconv.Itoa(n)
+
+	startOffset := 0
+	var buff bytes.Buffer
+
+	if n < 0 {
+		startOffset = 1
+		buff.WriteByte('-')
+	}
+
+	l := len(s)
+
+	commaIndex := 3 - ((l - startOffset) % 3)
+
+	if commaIndex == 3 {
+		commaIndex = 0
+	}
+
+	for i := startOffset; i < l; i++ {
+
+		if commaIndex == 3 {
+			buff.WriteRune(separator)
+			commaIndex = 0
+		}
+		commaIndex++
+
+		buff.WriteByte(s[i])
+	}
+
+	return buff.String()
+}
+
+// RoundFloat64 - округляет float64 до precision цифр после запятой
+// пример:
+// RoundFloat64(123.456, 2) = 123.46
+// RoundFloat64(123.456, 1) = 123.5
+func RoundFloat64(value float64, precision int) float64 {
+	ratio := math.Pow(10, float64(precision))
+	return math.Round(value*ratio) / ratio
+}
+
+// StringSplitBylength - разбивает строку на подстроки по n символов, с учётом рун
+func StringSplitBylength(s string, n int) []string {
+	sub := ""
+	subs := []string{}
+
+	//весь текст меньше n
+	if len(s) <= n {
+		subs = append(subs, s)
+		return subs
+	}
+
+	//
+	runes := bytes.Runes([]byte(s))
+	l := len(runes)
+	for i, r := range runes {
+		sub = sub + string(r)
+		if (i+1)%n == 0 {
+			subs = append(subs, sub)
+			sub = ""
+		} else if (i + 1) == l {
+			subs = append(subs, sub)
+		}
+	}
+
+	return subs
+}
+
+// StringSplitBylength_WithLastWord - разбивает строку на подстроки по n символов, с учётом рун
+func StringSplitBylength_WithLastWord(s string, n int, LastWord rune) []string {
+	Otvet := make([]string, 0)
+
+	runes := bytes.Runes([]byte(s))
+	for {
+		Otvet1, pos1 := stringSplitBylength_WithLastWord1(runes, n, LastWord)
+		Otvet = append(Otvet, string(Otvet1))
+		if len(runes) >= pos1 {
+			runes = runes[pos1:]
+		} else {
+			break
+		}
+
+		if len(runes) <= 0 {
+			break
+		}
+	}
+
+	return Otvet
+}
+
+// stringSplitBylength_WithLastWord1 - возвращает первые n строк, заканчивая на LastWord
+func stringSplitBylength_WithLastWord1(s []rune, n int, LastWord rune) ([]rune, int) {
+	Otvet := make([]rune, 0)
+	pos1 := 0
+	runes := s
+	length1 := len(runes)
+	length := MinInt(n, length1)
+	Otvet = runes[:length]
+
+	//весь текст меньше n
+	if len(s) <= n {
+		return Otvet, len(s)
+	}
+
+	//
+	for i := length; i > 0; i-- {
+		if runes[i-1] == LastWord {
+			pos1 = i
+			Otvet = Otvet[:pos1]
+			break
+		}
+	}
+
+	if pos1 == 0 {
+		pos1 = len(Otvet)
+	}
+
+	return Otvet, pos1
+}
+
+// Round_Float64_WithPrecision округляет float64 до указанного количества знаков после запятой
+func Round_Float64_WithPrecision(x float64, precision int) float64 {
+	pow := math.Pow(10, float64(precision))
+	Otvet := math.Round(x*pow) / pow
+	return Otvet
+}
+
+// Find_Tag_JSON - возвращает тег json для полей структуры
+func Find_Tag_JSON(Struct1 any, FieldName string) (string, error) {
+	var Otvet string
+	var err error
+
+	field, ok := reflect.TypeOf(Struct1).Elem().FieldByName(FieldName)
+	if !ok {
+		err = fmt.Errorf("Field %s not found in type %T", FieldName, Struct1)
+		return Otvet, err
+	}
+
+	Otvet = field.Tag.Get("json")
+
+	return Otvet, err
+}
+
+// GetStructValue - возвращает значение 1 поля структуры по его имени
+func GetStructValue(Struct1 any, FieldName string) (any, error) {
+	// Проверяем, что переданный аргумент является структурой
+	val := reflect.ValueOf(Struct1)
+	if val.Kind() == reflect.Ptr {
+		val = val.Elem()
+	}
+
+	if val.Kind() != reflect.Struct {
+		return nil, errors.New("переданный аргумент не является структурой")
+	}
+
+	// Получаем поле структуры по имени
+	field := val.FieldByName(FieldName)
+	if !field.IsValid() {
+		return nil, errors.New("поле не найдено")
+	}
+
+	// Возвращаем значение поля как interface{}
+	return field.Interface(), nil
+}
+
+// String_DefaultNil - возвращает *string, если пустая строка то nil
+func String_DefaultNil(Value string) *string {
+	var Otvet *string
+
+	if Value != "" {
+		Otvet = &Value
+	}
+
+	return Otvet
+}
+
+// Int64_DefaultNil - возвращает *int64, если пустая строка то nil
+func Int64_DefaultNil(Value int64) *int64 {
+	var Otvet *int64
+
+	if Value != 0 {
+		Otvet = &Value
+	}
+
+	return Otvet
+}
+
+// Int_DefaultNil - возвращает *int, если значение 0 - возвращает nil
+func Int_DefaultNil(Value int) *int {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Int8_DefaultNil - возвращает *int8, если значение 0 - возвращает nil
+func Int8_DefaultNil(Value int8) *int8 {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Int16_DefaultNil - возвращает *int16, если значение 0 - возвращает nil
+func Int16_DefaultNil(Value int16) *int16 {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Int32_DefaultNil - возвращает *int32, если значение 0 - возвращает nil
+func Int32_DefaultNil(Value int32) *int32 {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Uint_DefaultNil - возвращает *uint, если значение 0 - возвращает nil
+func Uint_DefaultNil(Value uint) *uint {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Uint8_DefaultNil - возвращает *uint8, если значение 0 - возвращает nil
+func Uint8_DefaultNil(Value uint8) *uint8 {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Uint16_DefaultNil - возвращает *uint16, если значение 0 - возвращает nil
+func Uint16_DefaultNil(Value uint16) *uint16 {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Uint32_DefaultNil - возвращает *uint32, если значение 0 - возвращает nil
+func Uint32_DefaultNil(Value uint32) *uint32 {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Uint64_DefaultNil - возвращает *uint64, если значение 0 - возвращает nil
+func Uint64_DefaultNil(Value uint64) *uint64 {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Float32_DefaultNil - возвращает *float32, если значение 0 - возвращает nil
+func Float32_DefaultNil(Value float32) *float32 {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Float64_DefaultNil - возвращает *float64, если значение 0 - возвращает nil
+func Float64_DefaultNil(Value float64) *float64 {
+	if Value == 0 {
+		return nil
+	}
+	return &Value
+}
+
+// Bool_DefaultNil - возвращает *bool, если значение false - возвращает nil
+func Bool_DefaultNil(Value bool) *bool {
+	if !Value {
+		return nil
+	}
+	return &Value
+}
+
+// Time_DefaultNil - возвращает *time.Time, если значение IsZero() - возвращает nil
+func Time_DefaultNil(Value time.Time) *time.Time {
+	if Value.IsZero() {
+		return nil
+	}
+	return &Value
+}
+
+// IsWindows - возвращает true если операционная система = windows
+func IsWindows() bool {
+	Otvet := false
+
+	if runtime.GOOS == "windows" {
+		Otvet = true
+	}
+
+	return Otvet
+}
+
+// Path_Linux_to_Windows - заменяет / на \, для правильных путей файлов
+func Path_Linux_to_Windows(s string) string {
+	Otvet := s
+
+	if IsWindows() == true {
+		Otvet = strings.ReplaceAll(Otvet, `/`, `\`)
+	}
+
+	return Otvet
+}
+
+// FindPos - находит наименьший индекс вхождения подстроки
+func FindPos(Text string, MassFind ...string) int {
+	Otvet := -1
+
+	PosMin := math.MaxInt
+
+	for _, s1 := range MassFind {
+		pos1 := strings.Index(Text, s1)
+		if pos1 < PosMin {
+			PosMin = pos1
+		}
+	}
+
+	if PosMin != math.MaxInt {
+		Otvet = PosMin
+	}
+
+	return Otvet
+}
+
+// ReadFile_Linux_Windows - читаем файл и удаляет "\r"
+func ReadFile_Linux_Windows(Filename string) ([]byte, error) {
+	MassBytes, err := os.ReadFile(Filename)
+
+	if err == nil {
+		MassBytes = bytes.ReplaceAll(MassBytes, []byte("\r"), []byte(""))
+	}
+
+	return MassBytes, err
 }

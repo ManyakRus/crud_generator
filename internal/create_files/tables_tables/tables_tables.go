@@ -300,7 +300,9 @@ func Replace_ModelStruct(TextTemplateModel, TextModelStruct string) string {
 
 	s2 := TextTemplateModel[pos1:]
 	TextFind1 = "}\n"
-	posEnd := strings.Index(s2, TextFind1)
+	TextFind2 := "}\r"
+	posEnd := micro.FindPos(s2, TextFind1, TextFind2)
+	//posEnd := strings.Index(s2, TextFind1)
 	if posEnd < 0 {
 		log.Panic("Replace_ModelStruct() error: in model.go_ not found text: ", TextFind1)
 	}
