@@ -43,6 +43,7 @@ func CreateFiles_Create(MapAll map[string]*types.Table, Table1 *types.Table) err
 	//ModelName := Table1.NameGo
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		//удалим все свои импорты
 		TextDB = create_files.Delete_TemplateRepositoryImports(TextDB)
 
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)

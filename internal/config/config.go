@@ -391,7 +391,6 @@ func FillSettings() {
 	//
 	Name = "SERVICE_REPOSITORY_URL"
 	s = Getenv(Name, true)
-	s = micro.Path_Linux_to_Windows(s)
 	//s = strings.ToLower(s)
 	Settings.SERVICE_REPOSITORY_URL = s
 
@@ -515,7 +514,6 @@ func FillSettings() {
 	//
 	Name = "TEMPLATE_REPOSITORY_URL"
 	s = Getenv(Name, true)
-	s = micro.Path_Linux_to_Windows(s)
 	Settings.TEMPLATE_REPOSITORY_URL = s
 
 	//
