@@ -31,7 +31,7 @@ func CreateFiles_Create(MapAll map[string]*types.Table, Table1 *types.Table) err
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateDB)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
 	}
@@ -43,6 +43,7 @@ func CreateFiles_Create(MapAll map[string]*types.Table, Table1 *types.Table) err
 	//ModelName := Table1.NameGo
 	//заменим импорты
 	if config.Settings.USE_DEFAULT_TEMPLATE == true {
+		//удалим все свои импорты
 		TextDB = create_files.Delete_TemplateRepositoryImports(TextDB)
 
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)

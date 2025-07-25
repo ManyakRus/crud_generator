@@ -32,7 +32,7 @@ func CreateFiles_Cache(Table1 *types.Table) error {
 	folders.CreateFolder(DirReadyTable)
 
 	//читаем шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateCache)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateCache)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCache, " error: ", err)
 	}
@@ -130,7 +130,7 @@ func CreateFiles_Cache_Test(Table1 *types.Table) error {
 	folders.CreateFolder(DirReadyTable)
 
 	//читаем шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateCache)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateCache)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCache, " error: ", err)
 	}

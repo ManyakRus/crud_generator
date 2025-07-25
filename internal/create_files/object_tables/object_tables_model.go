@@ -37,7 +37,7 @@ func CreateFiles(MapAll map[string]*types.Table, Table1 *types.Table) error {
 	//}
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateObject)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateObject)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateObject, " error: ", err)
 	}

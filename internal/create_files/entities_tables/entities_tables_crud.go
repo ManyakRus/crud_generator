@@ -74,7 +74,7 @@ func CreateFiles_Model_struct(Table1 *types.Table, DirTemplatesModel, DirReadyMo
 	folders.CreateFolder(DirReadyModel)
 
 	//чтение файла шаблона
-	bytes, err := os.ReadFile(FilenameTemplateModel)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateModel)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
 	}
@@ -126,7 +126,7 @@ func CreateFiles_Model_crud(MapAll map[string]*types.Table, Table1 *types.Table,
 	FilenameReadyModel := DirReadyModel + TableName + "_crud.go"
 
 	//чтение файла шаблона
-	bytes, err := os.ReadFile(FilenameTemplateModel)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateModel)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
 	}
@@ -501,7 +501,7 @@ func CreateFiles_Model_Manual(Table1 *types.Table, DirTemplatesModel, DirReadyMo
 	FilenameReadyModel := DirReadyModel + TableName + "_manual.go"
 
 	//чтение файла шаблона
-	bytes, err := os.ReadFile(FilenameTemplateModel)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateModel)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
 	}

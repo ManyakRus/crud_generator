@@ -34,7 +34,7 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateCrud)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
 	}
@@ -42,7 +42,7 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 
 	//загрузим шаблон файла функции
 	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDMODELBY_FUNCTION_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateCrudFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
 	}
@@ -202,7 +202,7 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateCrud)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateCrud)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrud, " error: ", err)
 	}
@@ -210,7 +210,7 @@ func CreateFiles_FindModelBy_Test(MapAll map[string]*types.Table, Table1 *types.
 
 	//загрузим шаблон файла функции
 	FilenameTemplateCrudFunction := DirTemplatesCrud + config.Settings.TEMPLATES_CRUD_TABLE_FINDMODELBY_FUNCTION_TEST_FILENAME
-	bytes, err = os.ReadFile(FilenameTemplateCrudFunction)
+	bytes, err = micro.ReadFile_Linux_Windows(FilenameTemplateCrudFunction)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateCrudFunction, " error: ", err)
 	}

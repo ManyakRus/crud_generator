@@ -27,7 +27,7 @@ func CreateGRPCClient() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyClientGRPC)
 
-	bytes, err := os.ReadFile(FilenameTemplateMain)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateMain)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMain, " error: ", err)
 	}
@@ -125,7 +125,7 @@ func CreateGRPCClientTest() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyClientGRPC)
 
-	bytes, err := os.ReadFile(FilenameTemplateMain)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateMain)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMain, " error: ", err)
 	}

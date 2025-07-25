@@ -50,7 +50,7 @@ func CreateFileGenerationCodeSh() error {
 	//создадим папку готовых файлов proto
 	folders.CreateFolder(DirReadyProto)
 
-	bytes, err := os.ReadFile(FilenameTemplateProto)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateProto)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateProto, " error: ", err)
 	}

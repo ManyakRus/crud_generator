@@ -50,7 +50,7 @@ func CreateReadmeMD() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyReadmeFile)
 
-	bytes, err := os.ReadFile(FilenameTemplateReadmeFile)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateReadmeFile)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateReadmeFile, " error: ", err)
 	}
@@ -88,7 +88,7 @@ func CreateReadmeRus() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyReadmeFile)
 
-	bytes, err := os.ReadFile(FilenameTemplateReadmeFile)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateReadmeFile)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateReadmeFile, " error: ", err)
 	}

@@ -36,7 +36,7 @@ func CreateFiles_Soft_Restore(MapAll map[string]*types.Table, Table1 *types.Tabl
 	create_files.CreateDirectory(DirReadyTable)
 
 	//загрузим шаблон файла
-	bytes, err := os.ReadFile(FilenameTemplateDB)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateDB)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateDB, " error: ", err)
 	}

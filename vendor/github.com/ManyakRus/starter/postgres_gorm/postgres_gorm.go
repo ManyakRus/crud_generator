@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ManyakRus/starter/constants"
-	"github.com/ManyakRus/starter/logger"
+	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/port_checker"
 	"strings"
 	"time"
@@ -28,10 +28,13 @@ import (
 var Conn *gorm.DB
 
 // log - глобальный логгер
-var log = logger.GetLog()
+//var log = logger.GetLog()
 
-// mutexReconnect - защита от многопоточности Reconnect()
-var mutexReconnect = &sync.Mutex{}
+// mutex_Connect - защита от многопоточности Connect()
+var mutex_Connect = &sync.RWMutex{}
+
+// mutex_ReConnect - защита от многопоточности ReConnect()
+var mutex_ReConnect = &sync.RWMutex{}
 
 // NeedReconnect - флаг необходимости переподключения
 var NeedReconnect bool
@@ -170,8 +173,8 @@ func IsClosed() bool {
 // Reconnect повторное подключение к базе данных, если оно отключено
 // или полная остановка программы
 func Reconnect(err error) {
-	mutexReconnect.Lock()
-	defer mutexReconnect.Unlock()
+	mutex_ReConnect.Lock()
+	defer mutex_ReConnect.Unlock()
 
 	if err == nil {
 		return
@@ -255,17 +258,18 @@ func CloseConnection_err() error {
 	if err != nil {
 		log.Error("DB.Close() error: ", err)
 	}
-	Conn = nil
+	//Conn = nil
 
 	return err
 }
 
 // WaitStop - ожидает отмену глобального контекста
 func WaitStop() {
+	defer stopapp.GetWaitGroup_Main().Done()
 
 	select {
 	case <-contextmain.GetContext().Done():
-		log.Warn("Context app is canceled. Postgres gorm.")
+		log.Warn("Context app is canceled. postgres_gorm")
 	}
 
 	//
@@ -274,7 +278,6 @@ func WaitStop() {
 	//
 	CloseConnection()
 
-	stopapp.GetWaitGroup_Main().Done()
 }
 
 // StartDB - делает соединение с БД, отключение и др.
@@ -295,7 +298,10 @@ func Start_ctx(ctx *context.Context, WaitGroup *sync.WaitGroup) error {
 	var err error
 
 	//запомним к себе контекст
-	contextmain.Ctx = ctx
+	if contextmain.Ctx != ctx {
+		contextmain.SetContext(ctx)
+	}
+	//contextmain.Ctx = ctx
 	if ctx == nil {
 		contextmain.GetContext()
 	}
@@ -378,7 +384,7 @@ func FillSettings() {
 	}
 
 	if Settings.DB_SCHEMA == "" {
-		log.Panicln("Need fill DB_SCHEMA ! in os.ENV ")
+		log.Panicln("Need fill DB_SCHEME ! in os.ENV ")
 	}
 
 	if Settings.DB_USER == "" {
@@ -411,8 +417,18 @@ func GetDSN(ApplicationName string) string {
 
 // GetConnection - возвращает соединение к нужной базе данных
 func GetConnection() *gorm.DB {
+	//мьютекс чтоб не подключаться одновременно
+	mutex_Connect.RLock()
+	defer mutex_Connect.RUnlock()
+
+	//
 	if Conn == nil {
-		Connect()
+		err := Connect_err()
+		if err != nil {
+			log.Error("POSTGRES gorm Connect() to database host: ", Settings.DB_HOST, ", error: ", err)
+		} else {
+			log.Info("POSTGRES gorm Connected. host: ", Settings.DB_HOST, ", base name: ", Settings.DB_NAME, ", schema: ", Settings.DB_SCHEMA)
+		}
 	}
 
 	return Conn
@@ -432,6 +448,8 @@ func GetConnection_WithApplicationName(ApplicationName string) *gorm.DB {
 
 // ping_go - делает пинг каждые 60 секунд, и реконнект
 func ping_go() {
+	//var err error
+	defer stopapp.GetWaitGroup_Main().Done()
 
 	ticker := time.NewTicker(60 * time.Second)
 	defer ticker.Stop()
@@ -446,8 +464,21 @@ loop:
 			log.Warn("Context app is canceled. postgres_gorm.ping")
 			break loop
 		case <-ticker.C:
-			err := port_checker.CheckPort_err(Settings.DB_HOST, Settings.DB_PORT)
-			//log.Debug("ticker, ping err: ", err) //удалить
+			//ping в базе данных
+			DB, err := Conn.DB()
+			if err != nil {
+				NeedReconnect = true
+				log.Error("Conn.DB() error: ", err)
+			} else {
+				err = DB.PingContext(contextmain.GetContext())
+				if err != nil {
+					NeedReconnect = true
+					log.Error("DB.PingContext() error: ", err)
+				}
+			}
+
+			//ping порта
+			err = port_checker.CheckPort_err(Settings.DB_HOST, Settings.DB_PORT)
 			if err != nil {
 				NeedReconnect = true
 				log.Warn("postgres_gorm CheckPort(", addr, ") error: ", err)
@@ -463,7 +494,6 @@ loop:
 		}
 	}
 
-	stopapp.GetWaitGroup_Main().Done()
 }
 
 //// RawMultipleSQL - выполняет текст запроса, отдельно для каждого запроса
@@ -553,6 +583,15 @@ func ReplaceSchema(TextSQL string) string {
 	Otvet = strings.ReplaceAll(Otvet, "\tpublic.", "\t"+Settings.DB_SCHEMA+".")
 	Otvet = strings.ReplaceAll(Otvet, "\npublic.", "\n"+Settings.DB_SCHEMA+".")
 	Otvet = strings.ReplaceAll(Otvet, " public.", " "+Settings.DB_SCHEMA+".")
+
+	return Otvet
+}
+
+// ReplaceSchemaName - заменяет имя схемы в тексте SQL
+func ReplaceSchemaName(TextSQL, SchemaNameFrom string) string {
+	Otvet := TextSQL
+
+	Otvet = strings.ReplaceAll(Otvet, SchemaNameFrom+".", Settings.DB_SCHEMA+".")
 
 	return Otvet
 }

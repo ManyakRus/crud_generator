@@ -43,7 +43,7 @@ func CreateMakefile() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyMakefile)
 
-	bytes, err := os.ReadFile(FilenameTemplateMakefile)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateMakefile)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateMakefile, " error: ", err)
 	}

@@ -75,7 +75,7 @@ func CreateFiles_Table_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTa
 	FilenameReadyModel := DirReadyTable + config.Settings.PREFIX_TABLE + TableName + ".go"
 
 	//чтение файла шаблона
-	bytes, err := os.ReadFile(FilenameTemplateModel)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateModel)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateModel, " error: ", err)
 	}
@@ -83,6 +83,9 @@ func CreateFiles_Table_struct(Table1 *types.Table, DirTemplatesTable, DirReadyTa
 
 	//заменим имя пакета на новое
 	TextModel = create_files.Replace_PackageName(TextModel, DirReadyTable)
+
+	//удалим все свои импорты
+	TextModel = create_files.Delete_TemplateRepositoryImports(TextModel)
 
 	//создание текста
 	TextModel, TextModelStruct, ModelName, err := FindText_ModelStruct(TextModel, Table1)

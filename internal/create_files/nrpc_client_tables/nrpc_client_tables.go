@@ -63,7 +63,7 @@ package nrpc_client_tables
 //	//создадим папку готовых файлов
 //	folders.CreateFolder(DirReadyTable)
 //
-//	bytes, err := os.ReadFile(FilenameTemplateNRPCClient)
+//	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateNRPCClient)
 //	if err != nil {
 //		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 //	}
@@ -137,7 +137,7 @@ package nrpc_client_tables
 //	//создадим папку готовых файлов
 //	folders.CreateFolder(DirReadyTable)
 //
-//	bytes, err := os.ReadFile(FilenameTemplateNRPCClient)
+//	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateNRPCClient)
 //	if err != nil {
 //		log.Panic("ReadFile() ", FilenameTemplateNRPCClient, " error: ", err)
 //	}

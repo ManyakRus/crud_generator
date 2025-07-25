@@ -42,7 +42,7 @@ func CreateAlias() error {
 	//создадим папку готовых файлов
 	folders.CreateFolder(DirReadyAlias)
 
-	bytes, err := os.ReadFile(FilenameTemplateAlias)
+	bytes, err := micro.ReadFile_Linux_Windows(FilenameTemplateAlias)
 	if err != nil {
 		log.Panic("ReadFile() ", FilenameTemplateAlias, " error: ", err)
 	}
