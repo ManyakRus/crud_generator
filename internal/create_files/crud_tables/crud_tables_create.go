@@ -124,7 +124,7 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 		ReplacePKFieldNamesFormat = ReplacePKFieldNamesFormat + Comma + Column1.NameGo + ": %v"
 		TextEmpty := create_files.FindText_NotEqualEmpty(Column1, "m."+Column1.NameGo)
 		ReplaceIDNot0 = ReplaceIDNot0 + TextAnd + TextEmpty
-		ReplaceTextSQLCreateWithoutID_id = ReplaceTextSQLCreateWithoutID_id + ",\n\t" + Column1.Name
+		ReplaceTextSQLCreateWithoutID_id = ReplaceTextSQLCreateWithoutID_id + ",\n\t" + `"` + Column1.Name + `"`
 		ReplaceTextSQLCreateWithoutID_values_id = ReplaceTextSQLCreateWithoutID_values_id + ", $" + sNumberID
 		TextNotEqual0 := create_files.FindText_NotEqualEmpty(Column1, "m."+Column1.NameGo)
 		ReplacePKNotEqual0 = ReplacePKNotEqual0 + TextOR + TextNotEqual0
@@ -175,7 +175,7 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 
 			NumberNotID = NumberNotID + 1
 			sNumberNotID := strconv.Itoa(NumberNotID)
-			TextSQLCreateWithoutID = TextSQLCreateWithoutID + CommaNewLineIf + Column1.Name
+			TextSQLCreateWithoutID = TextSQLCreateWithoutID + CommaNewLineIf + `"` + Column1.Name + `"`
 			TextSQLCreateWithoutID_values = TextSQLCreateWithoutID_values + CommaIf + "$" + sNumberNotID
 			if Column1.Name == "created_at" {
 				ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLineIf + "MassValues = append(MassValues, time.Now())"
@@ -196,11 +196,11 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceMassValuesAppend", ReplaceMassValuesAppend)
 
 	ReplaceTextSQLCreateWithoutID := "const TextSQL_Create_WithoutID = " +
-		"`" + "\nINSERT INTO " + Table1.Name + "(" + TextSQLCreateWithoutID + ")\n" +
+		"`" + "\nINSERT INTO " + `"` + Table1.Name + `"` + "(" + TextSQLCreateWithoutID + ")\n" +
 		"VALUES (" + TextSQLCreateWithoutID_values + ")\n" +
 		"`"
 	ReplaceTextSQLCreate := "const TextSQL_Create = " +
-		"`" + "\nINSERT INTO " + Table1.Name + "(" + TextSQLCreateWithoutID + ReplaceTextSQLCreateWithoutID_id + ")\n" +
+		"`" + "\nINSERT INTO " + `"` + Table1.Name + `"` + "(" + TextSQLCreateWithoutID + ReplaceTextSQLCreateWithoutID_id + ")\n" +
 		"VALUES (" + TextSQLCreateWithoutID_values + ReplaceTextSQLCreateWithoutID_values_id + ")\n" +
 		"`"
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQLCreateWithoutID", ReplaceTextSQLCreateWithoutID)

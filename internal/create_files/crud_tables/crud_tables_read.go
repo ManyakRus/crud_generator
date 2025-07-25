@@ -139,7 +139,7 @@ SELECT
 			//}
 			ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE(" + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"` + ", " + DefaultValueSQL + ") as " + Column1.Name
 		} else {
-			ReplaceTextSQL = ReplaceTextSQL + CommaNewline + `"` + TableAlias + `"` + "." + Column1.Name
+			ReplaceTextSQL = ReplaceTextSQL + CommaNewline + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"`
 		}
 		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&m." + Column1.NameGo
 		CommaNewline = ",\n\t"
