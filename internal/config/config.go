@@ -1349,7 +1349,7 @@ func FillSettings() {
 
 	//
 	Name = "PREFIX_READOBJECT"
-	s = Getenv(Name, true)
+	s = Getenv(Name, false)
 	Settings.PREFIX_READOBJECT = s
 
 	//
