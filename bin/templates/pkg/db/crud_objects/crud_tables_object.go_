@@ -32,7 +32,7 @@ func (crud Crud_DB) ReadObject(m *object_lawsuit_status_types.ObjectLawsuitStatu
 }
 
 // ReadObject_ctx - находит запись в БД по ID, также заполняет внешние поля
-func ReadObject_ctx(ctx context.Context, db *pgxpool.Pool, m *object_lawsuit_status_types.ObjectLawsuitStatusType) error {
+func ReadObject_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *object_lawsuit_status_types.ObjectLawsuitStatusType) error {
 	var err error
 
 	if micro.ContextDone(ctx) == true {

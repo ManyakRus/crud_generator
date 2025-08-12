@@ -30,7 +30,7 @@ func FindModelBy_FieldName_ctx(ctx context.Context, db postgres_pgx.IConnectionT
 	}
 
 	//
-	TextSQL := foreign_package.TextSQL_Read
+	TextSQL := crud_foreign_package.TextSQL_Read
 	TextSQL = TextSQL + `
 	WHERE 1=1
 	ReplaceWhereID
