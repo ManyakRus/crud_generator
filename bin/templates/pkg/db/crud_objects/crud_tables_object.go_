@@ -6,10 +6,10 @@ import (
 	"github.com/ManyakRus/starter/contextmain"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_pgxpool"
+	"github.com/ManyakRus/starter/postgres_pgx"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud/crud_lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/objects/object_lawsuit_status_types"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"time"
 )
 
