@@ -174,6 +174,11 @@ func CreateFiles_FindModelBy_Table1(MapAll map[string]*types.Table, Table1 *type
 	Text1 := create_files.AddImport(TextCrud, ForeignURL)
 	TextCrud = Text1
 
+	//добавим импорт crud
+	ForeignCrudURL := create_files.Find_CrudTableURL(ForeignTable.Name)
+	Text1 = create_files.AddImport(TextCrud, ForeignCrudURL)
+	TextCrud = Text1
+
 	return Otvet, TextCrud
 
 }
