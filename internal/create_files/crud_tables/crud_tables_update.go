@@ -156,6 +156,7 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 		sNumber := strconv.Itoa(Number)
 		if Column1.IsPrimaryKey == false {
 			ReplaceColumnNameEqualDollarComma = ReplaceColumnNameEqualDollarComma + CommaNewline + `"` + Column1.Name + `"` + " = $" + sNumber
+			CommaNewline = ",\n\t"
 		}
 
 		if Column1.Name == "modified_at" {
@@ -174,7 +175,6 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 		}
 
 		Comma = ", "
-		CommaNewline = ",\n\t"
 		CommaNewline2 = ",\n\t\t"
 	}
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)

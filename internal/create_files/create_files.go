@@ -6,6 +6,7 @@ import (
 	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/mini_func"
 	"github.com/ManyakRus/crud_generator/internal/types"
+	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
 	"github.com/ManyakRus/starter/micro"
 	"github.com/gobeam/stringy"
@@ -741,7 +742,7 @@ func FindText_DefaultValueSQL_NotNull(Type_go string) string {
 	case "bool":
 		Otvet = "false"
 	case "uuid.UUID", "uuid.NullUUID":
-		Otvet = "''"
+		Otvet = "'00000000-0000-0000-0000-000000000000'::uuid"
 	}
 
 	return Otvet
@@ -2759,6 +2760,37 @@ func FindText_NilValue(TypeGo string, TextVariable string) string {
 	default:
 		log.Error("FindText_NilValue() - неизвестный тип: ", TypeGo)
 	}
+
+	return Otvet
+}
+
+// FindText_DefaultValueSQL_NotNull_TypeDB - возвращает значение по умолчанию для типа, не null
+func FindText_DefaultValueSQL_NotNull_TypeDB(TypeDB string) string {
+	var Otvet string
+
+	switch TypeDB {
+	case "uuid":
+		Otvet = "'00000000-0000-0000-0000-000000000000'::uuid"
+	default:
+		{
+			Otvet = Convert_TypeDB_To_TypeGo(TypeDB)
+		}
+	}
+
+	return Otvet
+}
+
+// Convert_TypeDB_To_TypeGo - возвращает тип go из типа postgres
+func Convert_TypeDB_To_TypeGo(TypeDB string) string {
+	Otvet := ""
+
+	MapMappings := dbmeta.GetMappings()
+	SQLMapping1, ok := MapMappings[TypeDB]
+	if ok == false {
+		log.Panic("Convert_TypeDB_To_TypeGo() Column1.Type: ", TypeDB, ", error: not found")
+	}
+
+	Otvet = SQLMapping1.GoType
 
 	return Otvet
 }
