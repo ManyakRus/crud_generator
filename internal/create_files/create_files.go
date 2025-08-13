@@ -2773,7 +2773,8 @@ func FindText_DefaultValueSQL_NotNull_TypeDB(TypeDB string) string {
 		Otvet = "'00000000-0000-0000-0000-000000000000'::uuid"
 	default:
 		{
-			Otvet = Convert_TypeDB_To_TypeGo(TypeDB)
+			TypeGo := Convert_TypeDB_to_TypeGo(TypeDB)
+			Otvet = FindText_DefaultValueSQL_NotNull(TypeGo)
 		}
 	}
 
@@ -2781,7 +2782,7 @@ func FindText_DefaultValueSQL_NotNull_TypeDB(TypeDB string) string {
 }
 
 // Convert_TypeDB_To_TypeGo - возвращает тип go из типа postgres
-func Convert_TypeDB_To_TypeGo(TypeDB string) string {
+func Convert_TypeDB_to_TypeGo(TypeDB string) string {
 	Otvet := ""
 
 	MapMappings := dbmeta.GetMappings()
