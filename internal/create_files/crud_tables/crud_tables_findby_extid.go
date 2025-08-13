@@ -55,7 +55,7 @@ func CreateFiles_FindBy_ExtID(MapAll map[string]*types.Table, Table1 *types.Tabl
 
 	}
 
-	TextDB = CreateFiles_Read1(TextDB, Table1)
+	TextDB = CreateFiles_FindBy_ExtID1(TextDB, Table1)
 
 	//создание текста
 	TextDB = create_files.Replace_TemplateModel_to_Model(TextDB, Table1.NameGo)
@@ -79,6 +79,9 @@ func CreateFiles_FindBy_ExtID(MapAll map[string]*types.Table, Table1 *types.Tabl
 
 	//импорт "fmt"
 	TextDB = create_files.CheckAndAdd_ImportFmt(TextDB)
+
+	//импорт "postgres_func"
+	TextDB = create_files.CheckAndAdd_ImportPostgresFunc(TextDB)
 
 	//удаление пустых строк
 	TextDB = create_files.Delete_EmptyLines(TextDB)
@@ -122,14 +125,34 @@ func CreateFiles_FindBy_ExtID1(Text string, Table1 *types.Table) string {
 		if create_files.Is_Need_Сolumn(Column1) == false {
 			continue
 		}
-		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
-		//	continue
-		//}
 
+		//
 		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&m." + Column1.NameGo
+
 		CommaNewline2 = ",\n\t\t"
 	}
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
+
+	//0=null
+	ReplaceFieldsWithComma := ""
+	ColumnConnectionID := create_files.FindColumn_ConnectionID(Table1)
+	if ColumnConnectionID.IsNullable == true {
+		TextVariable := "m." + ColumnConnectionID.NameGo
+		TextValue := create_files.FindText_NullValue(ColumnConnectionID.TypeGo, TextVariable)
+		ReplaceFieldsWithComma = ReplaceFieldsWithComma + TextValue
+	} else {
+		ReplaceFieldsWithComma = ReplaceFieldsWithComma + "m.ConnectionID"
+	}
+	ReplaceFieldsWithComma = ReplaceFieldsWithComma + ", "
+	ColumnExtID := create_files.FindColumn_ExtID(Table1)
+	if ColumnExtID.IsNullable == true {
+		TextVariable := "m." + ColumnExtID.NameGo
+		TextValue := create_files.FindText_NullValue(ColumnExtID.TypeGo, TextVariable)
+		ReplaceFieldsWithComma = ReplaceFieldsWithComma + TextValue
+	} else {
+		ReplaceFieldsWithComma = ReplaceFieldsWithComma + "m.ExtID"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldsWithComma", ReplaceFieldsWithComma)
 
 	return Otvet
 }

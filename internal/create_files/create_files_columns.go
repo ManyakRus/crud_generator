@@ -469,3 +469,12 @@ func FindColumn_ExtID(Table1 *types.Table) *types.Column {
 	}
 	return Column1
 }
+
+// FindColumn_ConnectionID - возвращает колонку ConnectionID
+func FindColumn_ConnectionID(Table1 *types.Table) *types.Column {
+	Column1, ok := Table1.MapColumns["connection_id"]
+	if ok == false {
+		return nil
+	}
+	return Column1
+}

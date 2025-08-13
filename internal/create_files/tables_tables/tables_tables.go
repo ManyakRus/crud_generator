@@ -22,7 +22,7 @@ func CreateAllFiles(MapAll map[string]*types.Table) error {
 		//проверка имени таблицы "DELETED_"
 		err1 := create_files.IsGood_TableName(Table1)
 		if err1 != nil {
-			log.Warn("CreateFiles() table: ", Table1.Name, " warning: ", err)
+			log.Warn("CreateFiles() table: ", Table1.Name, " warning: ", err1)
 			continue
 		}
 

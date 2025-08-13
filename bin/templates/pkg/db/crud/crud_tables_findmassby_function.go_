@@ -38,11 +38,15 @@ ReplaceWhere
 
 	//
 	rows, err := db.Query(ctx, TextSQL, ReplaceFieldNamesWithComma)
-	defer rows.Close()
-	if rows == nil {
-		err = fmt.Errorf("RawMultipleSQL() error: rows =nil")
+	if err != nil {
+		err = fmt.Errorf("db.Query() error: %w", err)
 		return Otvet, err
 	}
+	if rows == nil {
+		err = fmt.Errorf("db.Query() error: rows =nil")
+		return Otvet, err
+	}
+	defer rows.Close()
 
 	//результат в массив
 	for rows.Next() {
