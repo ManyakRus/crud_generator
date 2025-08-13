@@ -211,6 +211,12 @@ func CreateFiles_Test(Table1 *types.Table) error {
 	}
 	TextDB = DeleteFunc_TestFind_byExtID(TextDB, Table1)
 
+	//удалим тест TestSave()
+	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	if len(ColumnsPK) == len(Table1.MapColumns) {
+		TextDB = create_files.DeleteFuncFromFuncName(TextDB, "TestSave")
+	}
+
 	//SkipNow() если нет строк в БД
 	TextDB = create_files.AddSkipNow(TextDB, Table1)
 

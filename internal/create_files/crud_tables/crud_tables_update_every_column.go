@@ -159,6 +159,11 @@ func FindTextUpdateEveryColumn(TextCrudUpdateFunc string, Table1 *types.Table) s
 		//	continue
 		//}
 
+		////
+		//if Column1.IsPrimaryKey == true {
+		//	continue
+		//}
+
 		TextColumn1 := FindTextUpdateEveryColumn1(TextCrudUpdateFunc, Table1, Column1)
 		Otvet = Otvet + TextColumn1 + "\n\n"
 
@@ -377,6 +382,11 @@ func FindTextUpdateEveryColumnTest(TextCrudUpdateFunc string, Table1 *types.Tabl
 			continue
 		}
 		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
+		//	continue
+		//}
+
+		//
+		//if Column1.IsPrimaryKey == true {
 		//	continue
 		//}
 

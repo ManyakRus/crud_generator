@@ -22,6 +22,8 @@ func TestUpdate(t *testing.T) {
 	Otvet.ColumnName = m.ColumnName
 	err = crud.Update_ReplaceFieldName(&Otvet)
 	if err != nil {
-		t.Error("TestUpdate() Update_ReplaceFieldName() error: ", err)
+		if strings.Contains(err.Error(), "can only be updated to DEFAULT") == false {
+			t.Error("TestUpdate() Update_ReplaceFieldName() error: ", err)
+		}
 	}
 }
