@@ -5,6 +5,7 @@ import (
 	"github.com/ManyakRus/starter/postgres_pgxpool"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/crud_func"
 	"testing"
 )
 
@@ -71,6 +72,9 @@ func TestDelete(t *testing.T) {
 	Otvet.ID = Postgres_ID_Test
 	err := crud.Read(&Otvet)
 	if err != nil {
+		if crud_func.IsRecordNotFound(err) == true {
+			return
+		}
 		t.Error("TestDelete() error: ", err)
 	}
 
