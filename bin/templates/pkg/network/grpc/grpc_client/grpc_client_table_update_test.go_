@@ -22,10 +22,6 @@ func TestCrud_GRPC_UpdateManyFields(t *testing.T) {
 		return
 	}
 
-	if Otvet.ExtID ==0 || Otvet.ConnectionID == 0 {
-		return
-	}
-
 	//запишем в БД, пустой список полей (не изменится)
 	err = crud.UpdateManyFields(&Otvet, nil)
 
