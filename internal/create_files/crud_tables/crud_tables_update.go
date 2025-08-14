@@ -98,7 +98,7 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//Primary key
-	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	MassColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
 	//TableAlias := create_files.Find_TableAlias(Table1)
 	ReplacePKFieldsWithComma := ""
 	ReplacePKFieldNamesFormat := ""
@@ -110,7 +110,7 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 	Comma := ""
 	//TextNewLine := ""
 	TextAnd := ""
-	for i, Column1 := range ColumnsPK {
+	for i, Column1 := range MassColumnsPK {
 		sNumber := strconv.Itoa(i + 1)
 		ReplacePKFieldsWithComma = ReplacePKFieldsWithComma + Comma + "m." + Column1.NameGo
 		ReplacePKFieldNamesFormat = ReplacePKFieldNamesFormat + Comma + Column1.NameGo + ": %v"
@@ -154,7 +154,7 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 
 		Number = Number + 1
 		sNumber := strconv.Itoa(Number)
-		if Column1.IsPrimaryKey == false {
+		if Column1.IsPrimaryKey == false || len(MassColumnsPK) == len(MassColumns) {
 			ReplaceColumnNameEqualDollarComma = ReplaceColumnNameEqualDollarComma + CommaNewline + `"` + Column1.Name + `"` + " = $" + sNumber
 			CommaNewline = ",\n\t"
 		}
@@ -185,7 +185,7 @@ func CreateFiles_Update1(Text string, Table1 *types.Table) string {
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
 
 	//
-	PK_count := len(ColumnsPK)
+	PK_count := len(MassColumnsPK)
 	sPK_count := strconv.Itoa(PK_count)
 	//ReplaceTextSQLUpdateMass := `
 	//MassFields := make([]any, 0)
