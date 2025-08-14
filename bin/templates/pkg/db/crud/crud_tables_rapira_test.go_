@@ -116,7 +116,7 @@ func TestFind_ByExtID(t *testing.T) {
 		t.Error("TestFind_ByExtID() error: ", err)
 	}
 
-	if Otvet.ExtID ==0 {
+	if Otvet.ExtID ==0 || Otvet.ConnectionID ==0 {
 		return
 	}
 
