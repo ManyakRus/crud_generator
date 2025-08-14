@@ -99,20 +99,23 @@ func CreateFiles_FindBy_ExtID1(Text string, Table1 *types.Table) string {
 	//TableAlias := create_files.Find_TableAlias(Table1)
 
 	////Primary key
-	//ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
+	ReplaceColumnsPK := ""
 	//ReplacePKFieldsWithComma := ""
 	//ReplacePKFieldNamesFormat := ""
 	//ReplaceWhereID := ""
 	//Comma := ""
-	//CommaNewline := ""
-	//for i, Column1 := range ColumnsPK {
-	//	ReplacePKFieldsWithComma = ReplacePKFieldsWithComma + Comma + "m." + Column1.NameGo
-	//	ReplacePKFieldNamesFormat = ReplacePKFieldNamesFormat + Comma + Column1.NameGo + ": %v"
-	//	sNumber := strconv.Itoa(i + 1)
-	//	ReplaceWhereID = ReplaceWhereID + "\tand " + TableAlias + "." + Column1.Name + " = $" + sNumber + "\n"
-	//	Comma = ", "
-	//	CommaNewline = ",\n\t\t"
-	//}
+	CommaNewline := ""
+	for _, Column1 := range ColumnsPK {
+		ReplaceColumnsPK = ReplaceColumnsPK + CommaNewline + `"` + Column1.Name + `"`
+		//	ReplacePKFieldsWithComma = ReplacePKFieldsWithComma + Comma + "m." + Column1.NameGo
+		//	ReplacePKFieldNamesFormat = ReplacePKFieldNamesFormat + Comma + Column1.NameGo + ": %v"
+		//	sNumber := strconv.Itoa(i + 1)
+		//	ReplaceWhereID = ReplaceWhereID + "\tand " + TableAlias + "." + Column1.Name + " = $" + sNumber + "\n"
+		//	Comma = ", "
+		CommaNewline = ",\n\t\t"
+	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceColumnsPK", ReplaceColumnsPK)
 	//Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldsWithComma", ReplacePKFieldsWithComma)
 	//Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldNamesFormat", ReplacePKFieldNamesFormat)
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)

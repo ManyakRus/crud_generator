@@ -45,6 +45,8 @@ func Find_ByExtID_ctx(ctx context.Context, db postgres_pgx.IConnectionTransactio
 WHERE 1=1
 	and connection_id = $1
 	and ext_id = $2
+ORDER BY
+	ReplaceColumnsPK
 `
 
 	//
