@@ -435,7 +435,8 @@ func Replace_OtvetIDEqual1(Text string, Table1 *types.Table) string {
 	TextFind := "\tOtvet.ID = -1\n"
 	TextNew := ""
 	for _, ColumnPK1 := range PrimaryKeyColumns {
-		Value := create_files.Find_NegativeValue(ColumnPK1.TypeGo)
+		Value := create_files.FindText_DefaultValue(ColumnPK1.TypeGo)
+		//Value := create_files.Find_NegativeValue(ColumnPK1.TypeGo)
 		TextNew = TextNew + "\tOtvet." + ColumnPK1.NameGo + " = " + Value + "\n"
 	}
 

@@ -40,6 +40,8 @@ func TestRead(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.SkipNow() //не создаём новые записи
+
 	config_main.LoadEnv()
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
