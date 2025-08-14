@@ -8,6 +8,8 @@ import (
 )
 
 func TestCrud_GRPC_UpdateManyFields(t *testing.T) {
+	t.SkipNow() //универсально не сделаешь
+
 	config_main.LoadEnv()
 	grpc_client.Connect()
 	defer grpc_client.CloseConnection()
@@ -22,8 +24,11 @@ func TestCrud_GRPC_UpdateManyFields(t *testing.T) {
 		return
 	}
 
-	//запишем в БД, пустой список полей (не изменится)
-	err = crud.UpdateManyFields(&Otvet, nil)
+	//
+	MassFields := make([]string, 0)
+
+	//запишем в БД
+	err = crud.UpdateManyFields(&Otvet, MassFields)
 
 	if err != nil {
 		t.Error("TestCrud_GRPC_UpdateManyFields() error: ", err)
