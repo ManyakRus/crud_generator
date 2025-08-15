@@ -13,8 +13,11 @@ import (
 	"time"
 )
 
+// TextSQL_Columns - текст SQL запроса, только колонки
+const TextSQL_Columns = `ReplaceTextSQLColumns`
+
 // TextSQL_Read - текст SQL запроса для чтения записи
-const TextSQL_Read = `ReplaceTextSQL`
+const TextSQL_Read = `ReplaceTextSQLRead`
 
 // Read - находит запись в БД по ID
 func (crud Crud_DB) Read(m *lawsuit_status_types.LawsuitStatusType) error {

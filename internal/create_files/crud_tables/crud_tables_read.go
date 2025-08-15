@@ -115,9 +115,10 @@ func CreateFiles_Read1(Text string, Table1 *types.Table) string {
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
 
 	//все колонки
+	ReplaceTextSQLColumns := "\n\t"
 	ReplaceTextSQL := `
 SELECT
-	`
+`
 	ReplaceAllFieldsWithComma := ""
 	CommaNewline = ""
 	CommaNewline2 := ""
@@ -132,19 +133,25 @@ SELECT
 
 		if Column1.IsNullable == true && Column1.TypeGo != "time.Time" { //"time.Time" нужен null
 			DefaultValueSQL := create_files.FindText_DefaultValueSQL_NotNull_TypeDB(Column1.Type)
-			ReplaceTextSQL = ReplaceTextSQL + CommaNewline + "COALESCE(" + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"` + ", " + DefaultValueSQL + ") as " + Column1.Name
+			TextColumn := "COALESCE(" + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"` + ", " + DefaultValueSQL + ") as " + Column1.Name
+			ReplaceTextSQLColumns = ReplaceTextSQLColumns + CommaNewline + TextColumn
+			//ReplaceTextSQL = ReplaceTextSQL + CommaNewline + TextColumn
 		} else {
-			ReplaceTextSQL = ReplaceTextSQL + CommaNewline + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"`
+			TextColumn := `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"`
+			ReplaceTextSQLColumns = ReplaceTextSQLColumns + CommaNewline + TextColumn
+			//ReplaceTextSQL = ReplaceTextSQL + CommaNewline + TextColumn
 		}
 		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&m." + Column1.NameGo
 		CommaNewline = ",\n\t"
 		CommaNewline2 = ",\n\t\t"
 	}
+	ReplaceTextSQL = ReplaceTextSQL + "` + TextSQL_Columns + `" + "\n"
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
 	ReplaceTextSQL = ReplaceTextSQL + `
 FROM
 	` + Table1.Name + ` as ` + `"` + TableAlias + `"` + "\n"
-	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQL", ReplaceTextSQL)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQLRead", ReplaceTextSQL)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQLColumns", ReplaceTextSQLColumns)
 
 	return Otvet
 }
