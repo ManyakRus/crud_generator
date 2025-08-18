@@ -110,18 +110,22 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 	ReplaceTextSQLCreateWithoutID_values_id := ""
 	ColumnsPK := create_files.Find_PrimaryKeyColumns(Table1)
 	ReplacePKFieldsWithComma := ""
+	ReplacePKFieldsWithAmpersandComma := ""
 	ReplacePKFieldNamesFormat := ""
+	ReplaceColumnNamesPK := ""
 	ReplaceIDNot0 := ""
 	Comma := ""
 	NewLineTT := ""
 	TextAnd := ""
 	TextOR := ""
 	//CommaNewLineIf := ""
+	CommaNewLine := ""
 	NumberID := len(MassAllColumns) - len(ColumnsPK)
 	for _, Column1 := range ColumnsPK {
 		NumberID = NumberID + 1
 		sNumberID := strconv.Itoa(NumberID)
 		ReplacePKFieldsWithComma = ReplacePKFieldsWithComma + Comma + "m." + Column1.NameGo
+		ReplacePKFieldsWithAmpersandComma = ReplacePKFieldsWithAmpersandComma + Comma + "&m." + Column1.NameGo
 		ReplacePKFieldNamesFormat = ReplacePKFieldNamesFormat + Comma + Column1.NameGo + ": %v"
 		TextEmpty := create_files.FindText_NotEqualEmpty(Column1, "m."+Column1.NameGo)
 		ReplaceIDNot0 = ReplaceIDNot0 + TextAnd + TextEmpty
@@ -136,17 +140,22 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 		}
 		ReplaceMassValuesIDAppend = ReplaceMassValuesIDAppend + NewLineTT + "MassValues = append(MassValues, " + TextValue + ")"
 
+		ReplaceColumnNamesPK = ReplaceColumnNamesPK + CommaNewLine + `"` + Column1.Name + `"`
+
 		Comma = ", "
 		TextAnd = " && "
 		NewLineTT = "\n\t\t"
 		TextOR = " || "
 		//CommaNewLineIf = ",\n"
+		CommaNewLine = ",\n\t"
 	}
 	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldsWithComma", ReplacePKFieldsWithComma)
 	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldNamesFormat", ReplacePKFieldNamesFormat)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceIDNot0", ReplaceIDNot0)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceMassValuesIDAppend", ReplaceMassValuesIDAppend)
 	Otvet = strings.ReplaceAll(Otvet, "ReplacePKNotEqual0", ReplacePKNotEqual0)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceColumnNamesPK", ReplaceColumnNamesPK)
+	Otvet = strings.ReplaceAll(Otvet, "ReplacePKFieldsWithAmpersandComma", ReplacePKFieldsWithAmpersandComma)
 
 	//все колонки
 	ReplaceMassValuesAppend := ""

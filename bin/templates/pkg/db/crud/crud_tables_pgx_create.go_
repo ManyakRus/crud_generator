@@ -45,7 +45,9 @@ func Create_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *
 	}
 
 	//
-	TextSQL := TextSQL_Create_WithoutID
+	TextSQL := TextSQL_Create_WithoutID + `
+RETURNING ReplaceColumnNamesPK;
+`
 
 	//массив, в котором значения всех полей и ИД
 	MassValues := make([]interface{}, 0)
@@ -59,12 +61,11 @@ func Create_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *
 
 
 	//
-	_, err = db.Exec(ctx, TextSQL, MassValues...)
+	err = db.QueryRow(ctx, TextSQL, MassValues...).Scan(ReplacePKFieldsWithAmpersandComma)
 	if err != nil {
 		err = fmt.Errorf(m.TableNameDB()+" Create_ctx() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
 		return err
 	}
-
 
 	return err
 }
