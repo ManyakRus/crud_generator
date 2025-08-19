@@ -55,7 +55,7 @@ RETURNING ReplaceColumnNamesPK;
 
 	//если ИД не пустой, то добавим его в запрос
 	if ReplacePKNotEqual0 {
-		TextSQL := TextSQL_Create + `
+		TextSQL = TextSQL_Create + `
 RETURNING ReplaceColumnNamesPK;
 `
 		ReplaceMassValuesIDAppend
