@@ -2279,7 +2279,9 @@ func Replace_ObjectTemplateModel_to_Model(Text, ModelName string) string {
 	prefix_object := config.Settings.PREFIX_OBJECT_MODEL
 	TextFrom := "Object" + config.Settings.TEXT_TEMPLATE_MODEL
 	TextTo := prefix_object + ModelName
-	Otvet = strings.ReplaceAll(Otvet, " "+TextFrom, " "+TextTo)
+	Otvet = strings.ReplaceAll(Otvet, " "+TextFrom+" ", " "+TextTo+" ")
+	Otvet = strings.ReplaceAll(Otvet, " "+TextFrom+")", " "+TextTo+")")
+	Otvet = strings.ReplaceAll(Otvet, " "+TextFrom+"{", " "+TextTo+"{")
 	Otvet = strings.ReplaceAll(Otvet, "*"+TextFrom, "*"+TextTo)
 	Otvet = strings.ReplaceAll(Otvet, "."+TextFrom, "."+TextTo)
 	//Otvet = strings.ReplaceAll(Otvet, "_"+TextFrom, "_"+TextTo)

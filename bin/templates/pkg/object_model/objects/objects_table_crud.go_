@@ -8,10 +8,10 @@ import (
 	"reflect"
 )
 
-// versionLawsuitStatusType - версия структуры модели, с учётом имен и типов полей
+// versionObjectLawsuitStatusType - версия структуры модели, с учётом имен и типов полей
 var versionObjectLawsuitStatusType uint32
 
-// Crud_LawsuitStatusType - объект контроллер crud операций
+// Crud_ObjectLawsuitStatusType - объект контроллер crud операций
 var Crud_ObjectLawsuitStatusType ICrud_ObjectLawsuitStatusType
 
 // интерфейс стандартных CRUD операций, для использования в DB или GRPC или NRPC
@@ -54,12 +54,12 @@ func (m ObjectLawsuitStatusType) GetJSON() (string, error) {
 	return Result, err
 }
 
-// NewLawsuitStatusType - возвращает новый объект
+// NewObjectLawsuitStatusType - возвращает новый объект
 func NewObjectLawsuitStatusType() ObjectLawsuitStatusType {
 	return ObjectLawsuitStatusType{}
 }
 
-// AsLawsuitStatusType - создаёт объект из упакованного объекта в массиве байтов
+// AsObjectLawsuitStatusType - создаёт объект из упакованного объекта в массиве байтов
 func AsObjectLawsuitStatusType(b []byte) (ObjectLawsuitStatusType, error) {
 	c := NewObjectLawsuitStatusType()
 	err := msgpack.Unmarshal(b, &c)
@@ -69,7 +69,7 @@ func AsObjectLawsuitStatusType(b []byte) (ObjectLawsuitStatusType, error) {
 	return c, nil
 }
 
-// LawsuitStatusTypeAsBytes - упаковывает объект в массив байтов
+// ObjectLawsuitStatusTypeAsBytes - упаковывает объект в массив байтов
 func ObjectLawsuitStatusTypeAsBytes(m *ObjectLawsuitStatusType) ([]byte, error) {
 	b, err := msgpack.Marshal(m)
 	if err != nil {
