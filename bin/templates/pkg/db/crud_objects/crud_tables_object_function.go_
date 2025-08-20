@@ -1,10 +1,12 @@
 	//FieldNameTable
-	ModelNameColumn:= TableNameForeign.ModelNameForeign{}
-	ModelNameColumnID := m.FieldNameTable
-	ModelNameColumn.PrimaryKeyNameFK = IntFromAlias(ModelNameColumnID)
-	err = crud_TableNameForeign.Read_ctx(ctx, db, &ModelNameColumn)
-	if err != nil {
-		err = fmt.Errorf(ModelNameColumn.TableNameDB()+" Read() FieldNamesWithPercent, error: %w", FieldNamesWithCommaM, err)
+	if m.FieldNameTable != ReplaceDefaultValue {
+		ModelNameColumn := TableNameForeign.ModelNameForeign{}
+		ModelNameColumnID := m.FieldNameTable
+		ModelNameColumn.PrimaryKeyNameFK = IntFromAlias(ModelNameColumnID)
+		err = crud_TableNameForeign.Read_ctx(ctx, db, &ModelNameColumn)
+		if err != nil {
+			err = fmt.Errorf(ModelNameColumn.TableNameDB()+" Read() FieldNamesWithPercent, error: %w", FieldNamesWithCommaM, err)
+		}
+		m.ModelNameColumn = ModelNameColumn
 	}
-	m.ModelNameColumn = ModelNameColumn
 

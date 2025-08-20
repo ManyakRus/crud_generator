@@ -224,6 +224,10 @@ func CreateFiles_ReadObject_Table1(MapAll map[string]*types.Table, Table1 *types
 	//crud_
 	Otvet = strings.ReplaceAll(Otvet, " crud_", " "+config.Settings.PREFIX_CRUD)
 
+	//
+	DefaultValue := create_files.FindText_DefaultValue(Column1.TypeGo)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceDefaultValue", DefaultValue)
+
 	return Otvet
 }
 
