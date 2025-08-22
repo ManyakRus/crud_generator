@@ -39,11 +39,11 @@ ReplaceWhere
 	//
 	rows, err := db.Query(ctx, TextSQL)
 	if err != nil {
-		err = fmt.Errorf("db.Query() error: %w", err)
+		err = fmt.Errorf("db.Query() warning: %w", err)
 		return Otvet, err
 	}
 	if rows == nil {
-		err = fmt.Errorf("db.Query() error: rows =nil")
+		err = fmt.Errorf("db.Query() warning: rows =nil")
 		return Otvet, err
 	}
 	defer rows.Close()

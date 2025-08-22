@@ -40,7 +40,7 @@ func FindModelBy_FieldName_ctx(ctx context.Context, db postgres_pgx.IConnectionT
 	row := db.QueryRow(ctx, TextSQL, m.FieldName)
 	err = row.Scan(ReplaceAllFieldsWithComma)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" FindModelBy_FieldName() FieldName: %v, error: %w", m.FieldName, err)
+		err = fmt.Errorf(m.TableNameDB()+" FindModelBy_FieldName() FieldName: %v, warning: %w", m.FieldName, err)
 		return Otvet, err
 	}
 

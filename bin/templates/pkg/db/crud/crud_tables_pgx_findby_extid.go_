@@ -53,7 +53,7 @@ ORDER BY
 	row := db.QueryRow(ctx, TextSQL, ReplaceFieldsWithComma)
 	err = row.Scan(ReplaceAllFieldsWithComma)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Read() ConnectionID: %v, ExtID: %v, error: %w", m.ConnectionID, m.ExtID, err)
+		err = fmt.Errorf(m.TableNameDB()+" Read() ConnectionID: %v, ExtID: %v, warning: %w", m.ConnectionID, m.ExtID, err)
 		return err
 	}
 

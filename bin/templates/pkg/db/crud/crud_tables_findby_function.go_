@@ -38,7 +38,7 @@ ReplaceWhereID
 	row := db.QueryRow(ctx, TextSQL, ReplaceFieldsWithComma)
 	err = row.Scan(ReplaceAllFieldsWithComma)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" FindBy_FieldNamesWithUnderline() ReplaceFieldNamesFormat, error: %w", ReplaceFieldsWithComma, err)
+		err = fmt.Errorf(m.TableNameDB()+" FindBy_FieldNamesWithUnderline() ReplaceFieldNamesFormat, warning: %w", ReplaceFieldsWithComma, err)
 		return err
 	}
 
