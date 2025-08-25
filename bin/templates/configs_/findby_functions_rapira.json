@@ -10,6 +10,7 @@
 {"Table":"user_roles","Columns":["code"]},
 {"Table":"user_roles","Columns":["name"]},
 {"Table":"accounting_areas","Columns":["code"]},
+{"Table":"accounting_areas","Columns":["ext_id"]},
 {"Table":"service_types","Columns":["code"]},
 {"Table":"debt_types","Columns":["ext_code"]},
 {"Table":"debt_types","Columns":["code_nsi"]},
