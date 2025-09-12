@@ -25,7 +25,7 @@ func (crud Crud_GRPC) ReadAll() ([]lawsuit_status_types.LawsuitStatusType, error
 	}
 	if err != nil {
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic("table: ", TableName, " error: ", err)
+			log.Error("table: ", TableName, " error: ", err)
 		}
 		return Otvet, err
 	}

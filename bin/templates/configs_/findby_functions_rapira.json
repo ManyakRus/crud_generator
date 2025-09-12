@@ -19,6 +19,7 @@
 {"Table":"debtor_category_types","Columns":["name"]},
 {"Table":"document_types","Columns":["type"]},
 {"Table":"completed_months","Columns":["accounting_area_id","connection_id"]},
+{"Table":"document_links_rapira","Columns":["ext_id","connection_id"]},
 {"Table":"debtor_category_types","Columns":["ext_id"]}
 
 ]

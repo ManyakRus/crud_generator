@@ -42,7 +42,7 @@ func (crud Crud_GRPC) UpdateManyFields(m *lawsuit_status_types.LawsuitStatusType
 	}
 	if err != nil {
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic(err)
+			log.Error(err)
 		}
 		return err
 	}

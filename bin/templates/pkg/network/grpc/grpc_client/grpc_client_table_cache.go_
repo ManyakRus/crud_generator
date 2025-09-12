@@ -40,7 +40,7 @@ func (crud Crud_GRPC) ReadFromCache(ID int64) (lawsuit_status_types.LawsuitStatu
 	}
 	if err != nil {
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic(err)
+			log.Error(err)
 		}
 		return Otvet, err
 	}

@@ -133,7 +133,12 @@ SELECT
 
 		if Column1.IsNullable == true && Column1.TypeGo != "time.Time" { //"time.Time" нужен null
 			DefaultValueSQL := create_files.FindText_DefaultValueSQL_NotNull_TypeDB(Column1.Type)
-			TextColumn := "COALESCE(" + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"` + ", " + DefaultValueSQL + ") as " + Column1.Name
+			TextColumn := ""
+			if Column1.Type == "json" || Column1.Type == "jsonb" {
+				TextColumn = "COALESCE(" + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"` + "::text" + ", " + DefaultValueSQL + ") as " + Column1.Name
+			} else {
+				TextColumn = "COALESCE(" + `"` + TableAlias + `"` + "." + `"` + Column1.Name + `"` + ", " + DefaultValueSQL + ") as " + Column1.Name
+			}
 			ReplaceTextSQLColumns = ReplaceTextSQLColumns + CommaNewline + TextColumn
 			//ReplaceTextSQL = ReplaceTextSQL + CommaNewline + TextColumn
 		} else {

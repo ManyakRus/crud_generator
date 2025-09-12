@@ -26,7 +26,7 @@ func (crud Crud_GRPC) FindBy_FieldNamesWithUnderline(m *lawsuit_status_types.Law
 	if err != nil {
 		err = fmt.Errorf("LawsuitStatusType_FindBy_FieldNamesWithUnderline() error: %w", err)
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic("table: ", TableName, " error: ", err)
+			log.Error("table: ", TableName, " error: ", err)
 		}
 		return err
 	}

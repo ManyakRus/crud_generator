@@ -65,7 +65,7 @@ func (crud Crud_GRPC) Read(m *lawsuit_status_types.LawsuitStatusType) error {
 	}
 	if err != nil {
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic(err)
+			log.Error(err)
 		}
 		return err
 	}
@@ -111,7 +111,7 @@ func (crud Crud_GRPC) Create(m *lawsuit_status_types.LawsuitStatusType) error {
 	}
 	if err != nil {
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic(err)
+			log.Error(err)
 		}
 		return err
 	}
@@ -157,7 +157,7 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	}
 	if err != nil {
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic(err)
+			log.Error(err)
 		}
 		return err
 	}
@@ -203,7 +203,7 @@ func (crud Crud_GRPC) Save(m *lawsuit_status_types.LawsuitStatusType) error {
 	}
 	if err != nil {
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic(err)
+			log.Error(err)
 		}
 		return err
 	}
@@ -245,7 +245,7 @@ func (crud Crud_GRPC) Delete(m *lawsuit_status_types.LawsuitStatusType) error {
 	}
 	if err != nil {
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic(err)
+			log.Error(err)
 		}
 		return err
 	}
@@ -287,7 +287,7 @@ func (crud Crud_GRPC) Restore(m *lawsuit_status_types.LawsuitStatusType) error {
 	}
 	if err != nil {
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic(err)
+			log.Error(err)
 		}
 		return err
 	}
@@ -330,7 +330,7 @@ func (crud Crud_GRPC) Find_ByExtID(m *lawsuit_status_types.LawsuitStatusType) er
 	}
 	if err != nil {
 		if grpc_client_func.IsErrorModelVersion(err) == true {
-			log.Panic(err)
+			log.Error(err)
 		}
 		return err
 	}

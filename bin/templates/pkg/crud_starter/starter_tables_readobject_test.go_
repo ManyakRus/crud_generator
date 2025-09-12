@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestSetCrudInterface(t *testing.T) {
+func TestSetCrudReadObjectInterface(t *testing.T) {
 	crud := crud_object_lawsuit_status_types.Crud_DB{}
 
-	SetCrudInterface(crud)
+	SetCrudReadObjectInterface(crud)
 }

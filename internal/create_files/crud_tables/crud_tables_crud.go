@@ -526,7 +526,7 @@ func DeleteFunc_TestFind_byExtID(Text string, Table1 *types.Table) string {
 	Otvet := Text
 
 	//проверка есть ли колонки ExtID и ConnectionID
-	if create_files.Has_Column_ExtID_ConnectionID(Table1) == true {
+	if create_files.Has_Column_ExtID_ConnectionID_Int64(Table1) == true {
 		return Otvet
 	}
 

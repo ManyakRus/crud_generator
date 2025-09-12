@@ -74,6 +74,9 @@
 {"Table":"enforcement_payment_schedules","Columns":["enforcement_id"]},
 {"Table":"enforcement_third_parties","Columns":["enforcement_id"]},
 {"Table":"enforcement_third_parties","Columns":["organization_id"]},
+{"Table":"organizations_files","Columns":["organization_id"]},
+{"Table":"contracts_files","Columns":["contract_id"]},
+{"Table":"employees_files","Columns":["employee_id"]},
 {"Table":"enforcement_third_parties","Columns":["individual_id"]}
 
 ]
