@@ -79,6 +79,9 @@ func CreateFiles_UpdateEveryColumn(Table1 *types.Table) error {
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
+		ConstantsURL := create_files.Find_ConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
+
 		//TextCrud = create_files.CheckAndAdd_ImportGorm_FromText(TextCrud)
 		//TextCrud = create_files.Convert_RequestIdToAlias(TextCrud, Table1)
 		//добавим импорт uuid

@@ -7,7 +7,7 @@ func (crud Crud_DB) Update_ReplaceFieldName(m *lawsuit_status_types.LawsuitStatu
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	db := postgres_pgxpool.GetConnection()
+	db := postgres_pgxpool.GetConnection_NoNull(constants.SERVICE_NAME)
 
 	err = Update_ReplaceFieldName_ctx(ctx, db, m)
 	return err

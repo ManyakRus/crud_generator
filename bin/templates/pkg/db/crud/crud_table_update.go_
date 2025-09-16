@@ -6,6 +6,7 @@ import (
 	"github.com/ManyakRus/starter/micro"
 	"github.com/ManyakRus/starter/postgres_gorm"
 	"github.com/ManyakRus/starter/stopapp"
+	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/db/db_constants"
 	"gitlab.aescorp.ru/dsp_dev/claim/sync_service/pkg/object_model/entities/lawsuit_status_types"
 	"gorm.io/gorm"
@@ -23,7 +24,7 @@ func (crud Crud_DB) UpdateManyFields(m *lawsuit_status_types.LawsuitStatusType, 
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	db := postgres_gorm.GetConnection()
+	db := postgres_pgxpool.GetConnection_NoNull(constants.SERVICE_NAME)
 
 	err = UpdateManyFields_ctx(ctx, db, m, MassNeedUpdateFields)
 	return err

@@ -7,7 +7,7 @@ func (crud Crud_DB) FindModelBy_FieldName(m *lawsuit_status_types.LawsuitStatusT
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(db_constants.TIMEOUT_DB_SECONDS))
 	defer ctxCancelFunc()
 
-	db := postgres_pgxpool.GetConnection()
+	db := postgres_pgxpool.GetConnection_NoNull(constants.SERVICE_NAME)
 
 	Otvet, err := FindModelBy_FieldName_ctx(ctx, db, m)
 

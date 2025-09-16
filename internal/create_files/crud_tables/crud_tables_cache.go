@@ -51,6 +51,9 @@ func CreateFiles_Cache(Table1 *types.Table) error {
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCache = create_files.AddImport(TextCache, ModelTableURL)
 
+		ConstantsURL := create_files.Find_ConstantsURL()
+		TextCache = create_files.AddImport(TextCache, ConstantsURL)
+
 		//TextCache = create_files.Convert_RequestIdToAlias(TextCache, Table1)
 	}
 
