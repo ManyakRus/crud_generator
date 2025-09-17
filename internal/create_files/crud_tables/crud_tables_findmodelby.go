@@ -59,7 +59,10 @@ func CreateFiles_FindModelBy(MapAll map[string]*types.Table, Table1 *types.Table
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextCrud = create_files.AddImport(TextCrud, ModelTableURL)
 
-		ConstantsURL := create_files.Find_DBConstantsURL()
+		DBConstantsURL := create_files.Find_DBConstantsURL()
+		TextCrud = create_files.AddImport(TextCrud, DBConstantsURL)
+
+		ConstantsURL := create_files.Find_ConstantsURL()
 		TextCrud = create_files.AddImport(TextCrud, ConstantsURL)
 
 		//замена "postgres_gorm.Connect_WithApplicationName("

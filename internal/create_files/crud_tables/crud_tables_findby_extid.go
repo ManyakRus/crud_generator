@@ -47,7 +47,10 @@ func CreateFiles_FindBy_ExtID(MapAll map[string]*types.Table, Table1 *types.Tabl
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextDB = create_files.AddImport(TextDB, ModelTableURL)
 
-		ConstantsURL := create_files.Find_DBConstantsURL()
+		DBConstantsURL := create_files.Find_DBConstantsURL()
+		TextDB = create_files.AddImport(TextDB, DBConstantsURL)
+
+		ConstantsURL := create_files.Find_ConstantsURL()
 		TextDB = create_files.AddImport(TextDB, ConstantsURL)
 
 		//CrudFunctionsURL := create_files.Find_CrudFunctionsURL()

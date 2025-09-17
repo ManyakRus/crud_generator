@@ -76,6 +76,10 @@ func CreateFiles(Table1 *types.Table) error {
 		//
 		////
 		//TextDB = Replace_ExtID_equal0_string(TextDB, Table1)
+
+		//ConstantsURL := create_files.Find_ConstantsURL()
+		//TextDB = create_files.AddImport(TextDB, ConstantsURL)
+
 	}
 
 	//TextDB = create_files.DeleteFunc_Find_byExtID(TextDB, Table1)

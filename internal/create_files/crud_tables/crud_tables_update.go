@@ -48,11 +48,14 @@ func CreateFiles_Update(MapAll map[string]*types.Table, Table1 *types.Table) err
 		ModelTableURL := create_files.Find_ModelTableURL(TableName)
 		TextDB = create_files.AddImport(TextDB, ModelTableURL)
 
-		ConstantsURL := create_files.Find_DBConstantsURL()
-		TextDB = create_files.AddImport(TextDB, ConstantsURL)
+		DBConstants_URL := create_files.Find_DBConstantsURL()
+		TextDB = create_files.AddImport(TextDB, DBConstants_URL)
 
 		CrudFunctionsURL := create_files.Find_CrudFuncURL()
 		TextDB = create_files.AddImport(TextDB, CrudFunctionsURL)
+
+		ConstantsURL := create_files.Find_ConstantsURL()
+		TextDB = create_files.AddImport(TextDB, ConstantsURL)
 
 	}
 
