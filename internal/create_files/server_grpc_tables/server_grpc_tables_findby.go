@@ -146,6 +146,7 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 		}
 		//RequestFieldName := create_files.Find_RequestFieldName_FromMass(Column1, MassColumns)
 		TextRequest, TextRequestCode := create_files.Convert_ProtobufVariableToGolangVariable_with_MassColumns(Column1, MassColumns, "Request.")
+		TextRequest = create_files.Convert_ColumnToAlias(Table1, Column1, TextRequest)
 		if TextRequestCode != "" {
 			TextAssign = TextAssign + TextRequestCode + "\n"
 		} else {

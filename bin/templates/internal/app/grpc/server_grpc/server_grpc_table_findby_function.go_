@@ -1,4 +1,4 @@
-// LawsuitStatusType_FindByFieldNamesWithUnderline - находит lawsuit_status_types в БД по FieldNamesWithPlus
+// LawsuitStatusType_FindBy_FieldNamesWithUnderline - находит lawsuit_status_types в БД по FieldNamesWithPlus
 func (s *ServerGRPC) LawsuitStatusType_FindBy_FieldNamesWithUnderline(ctx context.Context, Request *grpc_proto.RequestName) (*grpc_proto.Response, error) {
 	var Otvet grpc_proto.Response
 	var err error

@@ -146,6 +146,10 @@ func CreateFiles_FindBy_Table1(Table1 *types.Table, TextTemplateFunction string,
 
 		Underline = "_"
 	}
+
+	if create_files.Has_Column_IsDeleted_Bool(Table1) == true {
+		ReplaceWhereID = ReplaceWhereID + "\tand " + TableAlias + "." + "is_deleted" + " = " + "false" + "\n"
+	}
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceWhereID", ReplaceWhereID)
 
