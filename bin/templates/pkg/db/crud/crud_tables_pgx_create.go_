@@ -50,6 +50,8 @@ func Create_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *
 RETURNING ReplaceColumnNamesPK;
 `
 
+ReplaceCreatedAtModifiedAt
+
 	//массив, в котором значения всех полей и ИД
 	MassValues := make([]interface{}, 0)
 	ReplaceMassValuesAppend

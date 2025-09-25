@@ -190,11 +190,11 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 			sNumberNotID := strconv.Itoa(NumberNotID)
 			TextSQLCreateWithoutID = TextSQLCreateWithoutID + CommaNewLineIf + `"` + Column1.Name + `"`
 			TextSQLCreateWithoutID_values = TextSQLCreateWithoutID_values + CommaIf + "$" + sNumberNotID
-			if Column1.Name == "created_at" {
-				ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLineIf + "MassValues = append(MassValues, time.Now())"
-			} else {
-				ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLineIf + "MassValues = append(MassValues, " + TextValue + ")"
-			}
+			//if Column1.Name == "created_at" {
+			//	ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLineIf + "MassValues = append(MassValues, time.Now())"
+			//} else {
+			ReplaceMassValuesAppend = ReplaceMassValuesAppend + NewLineIf + "MassValues = append(MassValues, " + TextValue + ")"
+			//}
 
 			CommaIf = ", "
 			NewLineIf = "\n\t"
@@ -202,6 +202,20 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 		}
 
 	}
+
+	//заполнение created_at и modified_at
+	if create_files.Has_Column_CreatedAt_Time(Table1) == true || create_files.Has_Column_ModifiedAt_Time(Table1) == true {
+		ReplaceCreatedAtModifiedAt := "\tTimeNow := time.Now()\n"
+		if create_files.Has_Column_CreatedAt_Time(Table1) == true {
+			ReplaceCreatedAtModifiedAt = ReplaceCreatedAtModifiedAt + "\tm.CreatedAt = TimeNow\n"
+		}
+		if create_files.Has_Column_ModifiedAt_Time(Table1) == true {
+			ReplaceCreatedAtModifiedAt = ReplaceCreatedAtModifiedAt + "\tm.ModifiedAt = TimeNow\n"
+		}
+
+		Otvet = strings.ReplaceAll(Otvet, "ReplaceCreatedAtModifiedAt", ReplaceCreatedAtModifiedAt)
+	}
+
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceAllColumnNamesWithComma", ReplaceAllColumnNamesWithComma)
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceDollarsWithComma", ReplaceDollarsWithComma)
