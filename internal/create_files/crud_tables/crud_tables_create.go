@@ -204,17 +204,19 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 	}
 
 	//заполнение created_at и modified_at
+	ReplaceCreatedAtModifiedAt := ""
 	if create_files.Has_Column_CreatedAt_Time(Table1) == true || create_files.Has_Column_ModifiedAt_Time(Table1) == true {
-		ReplaceCreatedAtModifiedAt := "\tTimeNow := time.Now()\n"
+		ReplaceCreatedAtModifiedAt = "\tTimeNow := time.Now()\n"
 		if create_files.Has_Column_CreatedAt_Time(Table1) == true {
 			ReplaceCreatedAtModifiedAt = ReplaceCreatedAtModifiedAt + "\tm.CreatedAt = TimeNow\n"
 		}
 		if create_files.Has_Column_ModifiedAt_Time(Table1) == true {
 			ReplaceCreatedAtModifiedAt = ReplaceCreatedAtModifiedAt + "\tm.ModifiedAt = TimeNow\n"
 		}
+		ReplaceCreatedAtModifiedAt = ReplaceCreatedAtModifiedAt + "\n"
 
-		Otvet = strings.ReplaceAll(Otvet, "ReplaceCreatedAtModifiedAt", ReplaceCreatedAtModifiedAt)
 	}
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceCreatedAtModifiedAt\n", ReplaceCreatedAtModifiedAt)
 
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceAllFieldsWithComma", ReplaceAllFieldsWithComma)
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceAllColumnNamesWithComma", ReplaceAllColumnNamesWithComma)
