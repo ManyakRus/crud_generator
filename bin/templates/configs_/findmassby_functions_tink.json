@@ -13,6 +13,13 @@
 {"Table":"my_transaction","Columns":["account_id"]},
 {"Table":"my_bond_settings","Columns":["instrument_id", "can_buy"]},
 {"Table":"my_bond_settings","Columns":["instrument_id", "can_sell"]},
+{"Table":"tinkoff_share","Columns":["trading_status_id"]},
+{"Table":"tinkoff_share","Columns":["trading_status_id","api_trade_available_flag"]},
+{"Table":"tinkoff_share","Columns":["trading_status_id","api_trade_available_flag","for_iis_flag"]},
+{"Table":"tinkoff_share","Columns":["trading_status_id","api_trade_available_flag","for_qual_investor_flag"]},
+{"Table":"tinkoff_share","Columns":["trading_status_id","api_trade_available_flag","for_qual_investor_flag","for_iis_flag"]},
+{"Table":"tinkoff_dividend","Columns":["figi"]},
 {"Table":"tinkoff_bond","Columns":["ticker"]},
-{"Table":"tinkoff_bond","Columns":["class_code","ticker"]}
+{"Table":"tinkoff_bond","Columns":["class_code","ticker"]},
+{"Table":"moex_securities_all","Columns":["emitent_id","is_traded"]}
 ]

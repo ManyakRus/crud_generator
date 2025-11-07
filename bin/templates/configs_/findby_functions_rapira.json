@@ -24,6 +24,7 @@
 {"Table":"contract_white_items","Columns":["contract_number"]},
 {"Table":"contract_black_items","Columns":["contract_id"]},
 {"Table":"contract_white_items","Columns":["contract_id"]},
-{"Table":"debtor_category_types","Columns":["ext_id"]}
+{"Table":"debtor_category_types","Columns":["ext_id"]},
+{"Table":"contracts","Columns":["number","connection_id"]}
 
 ]

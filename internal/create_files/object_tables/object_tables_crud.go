@@ -82,6 +82,9 @@ func CreateFiles_crud(MapAll map[string]*types.Table, Table1 *types.Table) error
 	//удаление пустых строк
 	TextGo = create_files.Delete_EmptyLines(TextGo)
 
+	//Файл создан автоматически кодогенератором crud_generator
+	TextGo = create_files.AddText_ModuleGenerated(TextGo)
+
 	//запись файла
 	err = os.WriteFile(FilenameReadyObjects, []byte(TextGo), config.Settings.FILE_PERMISSIONS)
 
