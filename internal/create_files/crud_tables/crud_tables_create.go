@@ -176,7 +176,7 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 	NumberNotID := 0
 	for _, Column1 := range MassAllColumns {
 		//кроме ненужных колонок
-		if create_files.Is_Need_Сolumn(Column1) == false {
+		if create_files.Is_NeedSave_Сolumn_SQL(Column1) == false {
 			continue
 		}
 

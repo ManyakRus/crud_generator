@@ -155,7 +155,7 @@ func FindTextUpdateEveryColumn(TextCrudUpdateFunc string, Table1 *types.Table) s
 	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
 	for _, Column1 := range MassColumns {
 		//кроме ненужных колонок
-		if create_files.Is_Need_Сolumn(Column1) == false {
+		if create_files.Is_NeedSave_Сolumn_SQL(Column1) == false {
 			continue
 		}
 		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {

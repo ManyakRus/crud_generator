@@ -16,6 +16,7 @@ type Column struct {
 	TypeGo          string `gorm:-`
 	IsPrimaryKey    bool   `json:"is_primary_key"   gorm:"column:is_primary_key;default:false"`
 	IDMinimum       string
+	IsGenerated     bool
 }
 
 type Table struct {

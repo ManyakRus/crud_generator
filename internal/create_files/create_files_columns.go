@@ -433,6 +433,23 @@ func Is_NotNeedUpdate_Сolumn(Column1 *types.Column) bool {
 	return Otvet
 }
 
+// Is_NotNeedSave_Сolumn_SQL - возвращает true если нужно записывать эту колонку
+func Is_NeedSave_Сolumn_SQL(Column1 *types.Column) bool {
+	Otvet := false
+
+	//
+	if Is_Need_Сolumn(Column1) == false {
+		Otvet = true
+	}
+
+	//
+	if Column1.IsGenerated == true {
+		Otvet = false
+	}
+
+	return Otvet
+}
+
 // Is_NotNeedUpdate_Сolumn_SQL - возвращает true если не нужна функция UpdateColumnNAme(), например если это общая колонка: table_name_id, table_row_id, is_group, parent_id, ext_id, created_at, modified_at, deleted_at, id
 func Is_NotNeedUpdate_Сolumn_SQL(Column1 *types.Column) bool {
 	Otvet := false
@@ -447,13 +464,19 @@ func Is_NotNeedUpdate_Сolumn_SQL(Column1 *types.Column) bool {
 		Otvet = true
 	}
 
+	//
+	if Column1.IsGenerated == true {
+		Otvet = false
+	}
+
 	return Otvet
 }
 
-// Is_Need_Сolumn - возвращает true если эта колонка не нужна
+// Is_Need_Сolumn - возвращает true если эта колонка нужна
 func Is_Need_Сolumn(Column1 *types.Column) bool {
 	Otvet := true
 
+	//
 	if strings.HasPrefix(Column1.Name, "DELETED_") == true {
 		Otvet = false
 	}

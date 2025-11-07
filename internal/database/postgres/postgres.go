@@ -27,6 +27,7 @@ type TableColumn struct {
 	TableComment      string `json:"table_comment"   gorm:"column:table_comment;default:''"`
 	IsPrimaryKey      bool   `json:"is_primary_key"   gorm:"column:is_primary_key;default:false"`
 	TableIsView       bool   `json:"table_is_view"   gorm:"column:table_is_view;default:false"`
+	ColumnIsGenerated bool   `json:"is_generated"   gorm:"column:is_generated;default:false"`
 }
 
 type TableRowsStruct struct {
@@ -141,7 +142,12 @@ SELECT
 		WHEN v.table_name is not null
 		THEN true
 		ELSE false END 
-	    as is_view
+	    as is_view,
+	CASE
+		WHEN c.is_generated != 'NEVER'
+		THEN true
+		ELSE false END 
+	    as is_generated	
 FROM 
 	information_schema.columns c 
 	
@@ -343,6 +349,7 @@ order by
 		if IsPrimaryKey == true {
 			PrimaryKeyColumnsCount++
 		}
+		Column1.IsGenerated = v.ColumnIsGenerated
 
 		MapColumns[v.ColumnName] = &Column1
 		//Table1.Column = append(Table1.Column, Column1)
