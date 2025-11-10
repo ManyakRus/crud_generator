@@ -381,7 +381,7 @@ func FindTextUpdateEveryColumnTest(TextCrudUpdateFunc string, Table1 *types.Tabl
 		if ok == false {
 			log.Panic("FindTextUpdateEveryColumnTest() Table1.MapColumns[key1] = false")
 		}
-		if create_files.Is_Need_Сolumn(Column1) == false {
+		if create_files.Is_NeedSave_Сolumn_SQL(Column1) == false {
 			continue
 		}
 		//if create_files.Is_NotNeedUpdate_Сolumn(Column1) == true {
