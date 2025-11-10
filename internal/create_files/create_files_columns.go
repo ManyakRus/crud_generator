@@ -430,6 +430,11 @@ func Is_NotNeedUpdate_Сolumn(Column1 *types.Column) bool {
 		Otvet = true
 	}
 
+	//
+	if Column1.IsGenerated == true {
+		Otvet = true
+	}
+
 	return Otvet
 }
 
