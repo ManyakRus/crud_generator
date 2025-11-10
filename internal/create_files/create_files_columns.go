@@ -435,7 +435,7 @@ func Is_NotNeedUpdate_Сolumn(Column1 *types.Column) bool {
 
 // Is_NotNeedSave_Сolumn_SQL - возвращает true если нужно записывать эту колонку
 func Is_NeedSave_Сolumn_SQL(Column1 *types.Column) bool {
-	Otvet := false
+	Otvet := true
 
 	//
 	if Is_Need_Сolumn(Column1) == false {
