@@ -466,7 +466,7 @@ func Is_NotNeedUpdate_Сolumn_SQL(Column1 *types.Column) bool {
 
 	//
 	if Column1.IsGenerated == true {
-		Otvet = false
+		Otvet = true
 	}
 
 	return Otvet
