@@ -439,7 +439,7 @@ func Is_NeedSave_Сolumn_SQL(Column1 *types.Column) bool {
 
 	//
 	if Is_Need_Сolumn(Column1) == false {
-		Otvet = true
+		Otvet = false
 	}
 
 	//
