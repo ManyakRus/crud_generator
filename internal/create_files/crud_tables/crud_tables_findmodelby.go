@@ -167,6 +167,9 @@ func CreateFiles_FindModelBy_Table1(MapAll map[string]*types.Table, Table1 *type
 	CommaNewline2 := ""
 	MassColumns := micro.MassFrom_Map(ForeignTable.MapColumns)
 	for _, Column1 := range MassColumns {
+		if create_files.Is_Need_Сolumn(Column1) == false {
+			continue
+		}
 		ReplaceAllFieldsWithComma = ReplaceAllFieldsWithComma + CommaNewline2 + "&Otvet." + Column1.NameGo
 		CommaNewline2 = ",\n\t\t"
 	}
