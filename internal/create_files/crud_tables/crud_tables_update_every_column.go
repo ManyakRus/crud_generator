@@ -368,19 +368,9 @@ func CreateFiles_UpdateEveryColumn_Test(Table1 *types.Table) error {
 func FindTextUpdateEveryColumnTest(TextCrudUpdateFunc string, Table1 *types.Table) string {
 	Otvet := ""
 
-	//сортировка по названию колонок
-	keys := make([]string, 0, len(Table1.MapColumns))
-	for k := range Table1.MapColumns {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-
 	//найдём новый текст для каждой таблицы
-	for _, key1 := range keys {
-		Column1, ok := Table1.MapColumns[key1]
-		if ok == false {
-			log.Panic("FindTextUpdateEveryColumnTest() Table1.MapColumns[key1] = false")
-		}
+	MassColumns := micro.MassFrom_Map(Table1.MapColumns)
+	for _, Column1 := range MassColumns {
 		if create_files.Is_NeedSave_Сolumn_SQL(Column1) == false {
 			continue
 		}
