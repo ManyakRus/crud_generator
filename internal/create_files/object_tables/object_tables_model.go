@@ -93,15 +93,15 @@ func CreateFiles(MapAll map[string]*types.Table, Table1 *types.Table) error {
 // CreateFiles1 - возвращает текст заполненный
 func CreateFiles1(MapAll map[string]*types.Table, Table1 *types.Table, TextGo string) string {
 	Otvet := TextGo
-	var err error
+	//var err error
 
 	//
 	TextField := ""
 	for _, Column1 := range Table1.MapColumns {
 		//проверка имени колонки "DELETED_"
-		err = create_files.IsGood_Column(Column1)
-		if err != nil {
-			log.Warn("CreateFiles1() table: ", Table1.Name, " column: ", Column1.Name, " warning: ", err)
+		IsGoodColumn := create_files.IsGood_Column(Column1)
+		if IsGoodColumn == false {
+			log.Warn("CreateFiles1() table: ", Table1.Name, " column: ", Column1.Name, " warning: IsGoodColumn = false")
 			continue
 		}
 

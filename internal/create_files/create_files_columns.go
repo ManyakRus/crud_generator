@@ -1,6 +1,7 @@
 package create_files
 
 import (
+	"github.com/ManyakRus/crud_generator/internal/config"
 	"github.com/ManyakRus/crud_generator/internal/types"
 	"github.com/ManyakRus/crud_generator/pkg/dbmeta"
 	"github.com/ManyakRus/starter/log"
@@ -482,7 +483,12 @@ func Is_Need_Сolumn(Column1 *types.Column) bool {
 	Otvet := true
 
 	//
-	if strings.HasPrefix(Column1.Name, "DELETED_") == true {
+	if IsGood_ColumnNamePrefix(Column1) == false {
+		Otvet = false
+	}
+
+	//
+	if IsGood_ColumnCommentPrefix(Column1) == false {
 		Otvet = false
 	}
 
@@ -505,4 +511,32 @@ func FindColumn_ConnectionID(Table1 *types.Table) *types.Column {
 		return nil
 	}
 	return Column1
+}
+
+// IsGood_ColumnNamePrefix - возвращает ошибку если префикс названия колонки = "DELETED"
+func IsGood_ColumnNamePrefix(Column1 *types.Column) bool {
+	Otvet := true
+
+	TableName := Column1.Name
+	HasPrefix := strings.HasPrefix(TableName, config.Settings.TEXT_DELETED_TABLE)
+	HasPrefixRus := strings.HasPrefix(TableName, config.Settings.TEXT_DELETED_TABLE_RUS)
+	if HasPrefix == true || HasPrefixRus == true {
+		Otvet = false
+	}
+
+	return Otvet
+}
+
+// IsGood_ColumnCommentPrefix - возвращает ошибку если префикс комментария колонки = "DELETED"
+func IsGood_ColumnCommentPrefix(Column1 *types.Column) bool {
+	Otvet := true
+
+	TableComment := Column1.Description
+	HasPrefix := strings.HasPrefix(TableComment, config.Settings.TEXT_DELETED_TABLE)
+	HasPrefixRus := strings.HasPrefix(TableComment, config.Settings.TEXT_DELETED_TABLE_RUS)
+	if HasPrefix == true || HasPrefixRus == true {
+		Otvet = false
+	}
+
+	return Otvet
 }

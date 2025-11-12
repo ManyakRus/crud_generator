@@ -123,7 +123,8 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 	TextOR := ""
 	//CommaNewLineIf := ""
 	CommaNewLine := ""
-	NumberID := len(MassAllColumns) - len(ColumnsPK)
+	LenNotGenerated := create_files.Find_LenNotGenerated_FromMap(Table1.MapColumns)
+	NumberID := LenNotGenerated - len(ColumnsPK)
 	for _, Column1 := range ColumnsPK {
 		NumberID = NumberID + 1
 		sNumberID := strconv.Itoa(NumberID)

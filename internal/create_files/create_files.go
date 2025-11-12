@@ -2408,51 +2408,51 @@ func ColumnNamesGo_WithQuotes(ColumnsPK []*types.Column) string {
 }
 
 // IsGood_Column - возвращает ошибку если колонка неправильная
-func IsGood_Column(Column1 *types.Column) error {
-	var err error
+func IsGood_Column(Column1 *types.Column) bool {
+	Otvet := true
 
-	err = IsGood_ColumnNamePrefix(Column1)
-	if err != nil {
-		return err
+	Otvet = IsGood_ColumnNamePrefix(Column1)
+	if Otvet == false {
+		return Otvet
 	}
 
-	err = IsGood_ColumnCommentPrefix(Column1)
-	if err != nil {
-		return err
+	Otvet = IsGood_ColumnCommentPrefix(Column1)
+	if Otvet == false {
+		return Otvet
 	}
 
-	return err
+	return Otvet
 }
 
-// IsGood_ColumnNamePrefix - возвращает ошибку если префикс таблицы = "DELETED_"
-func IsGood_ColumnNamePrefix(Column1 *types.Column) error {
-	var err error
-
-	ColumnName := Column1.Name
-	HasPrefix := strings.HasPrefix(ColumnName, config.Settings.TEXT_DELETED_COLUMN)
-	HasPrefixRus := strings.HasPrefix(ColumnName, config.Settings.TEXT_DELETED_COLUMN_RUS)
-	if HasPrefix == true || HasPrefixRus == true {
-		TextError := fmt.Sprint("Wrong column: ", ColumnName, ", error: name prefix= "+config.Settings.TEXT_DELETED_COLUMN)
-		err = errors.New(TextError)
-	}
-
-	return err
-}
-
-// IsGood_ColumnCommentPrefix - возвращает ошибку если префикс комментария колонки = "DELETED_"
-func IsGood_ColumnCommentPrefix(Column1 *types.Column) error {
-	var err error
-
-	ColumnComment := Column1.Description
-	HasPrefix := strings.HasPrefix(ColumnComment, config.Settings.TEXT_DELETED_COLUMN)
-	HasPrefixRus := strings.HasPrefix(ColumnComment, config.Settings.TEXT_DELETED_COLUMN_RUS)
-	if HasPrefix == true || HasPrefixRus == true {
-		TextError := fmt.Sprint("Wrong column: ", Column1.Name, ", error: comment prefix: ", ColumnComment)
-		err = errors.New(TextError)
-	}
-
-	return err
-}
+//// IsGood_ColumnNamePrefix - возвращает ошибку если префикс таблицы = "DELETED_"
+//func IsGood_ColumnNamePrefix(Column1 *types.Column) error {
+//	var err error
+//
+//	ColumnName := Column1.Name
+//	HasPrefix := strings.HasPrefix(ColumnName, config.Settings.TEXT_DELETED_COLUMN)
+//	HasPrefixRus := strings.HasPrefix(ColumnName, config.Settings.TEXT_DELETED_COLUMN_RUS)
+//	if HasPrefix == true || HasPrefixRus == true {
+//		TextError := fmt.Sprint("Wrong column: ", ColumnName, ", error: name prefix= "+config.Settings.TEXT_DELETED_COLUMN)
+//		err = errors.New(TextError)
+//	}
+//
+//	return err
+//}
+//
+//// IsGood_ColumnCommentPrefix - возвращает ошибку если префикс комментария колонки = "DELETED_"
+//func IsGood_ColumnCommentPrefix(Column1 *types.Column) error {
+//	var err error
+//
+//	ColumnComment := Column1.Description
+//	HasPrefix := strings.HasPrefix(ColumnComment, config.Settings.TEXT_DELETED_COLUMN)
+//	HasPrefixRus := strings.HasPrefix(ColumnComment, config.Settings.TEXT_DELETED_COLUMN_RUS)
+//	if HasPrefix == true || HasPrefixRus == true {
+//		TextError := fmt.Sprint("Wrong column: ", Column1.Name, ", error: comment prefix: ", ColumnComment)
+//		err = errors.New(TextError)
+//	}
+//
+//	return err
+//}
 
 // CreateDirectory - создает каталог на диске, если его нет
 func CreateDirectory(DirectoryName string) {
@@ -2794,6 +2794,19 @@ func Convert_TypeDB_to_TypeGo(TypeDB string) string {
 	}
 
 	Otvet = SQLMapping1.GoType
+
+	return Otvet
+}
+
+// Find_LenNotGenerated_FromMap - возвращает количество элементов, кроме IsGenerated
+func Find_LenNotGenerated_FromMap(MapColumns map[string]*types.Column) int {
+	var Otvet int
+
+	for _, Column1 := range MapColumns {
+		if Column1.IsGenerated == false {
+			Otvet++
+		}
+	}
 
 	return Otvet
 }

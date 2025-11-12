@@ -248,6 +248,10 @@ func FindText_Column(TextModel string, Table1 *types.Table, Column1 *types.Colum
 	TextPrimaryKey := FindText_PrimaryKey(Column1.IsPrimaryKey)
 	Description := Column1.Description
 	Description = create_files.PrintableString(Description) //экранирование символов
+	if Column1.IsGenerated == true {
+		TextDefaultValue = ";<-:false"
+		Description = Description + " (GENERATED)"
+	}
 
 	TextAutoCreateTime := ""
 	TextAutoUpdateTime := ""
