@@ -52,7 +52,7 @@ func Update_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *
 
 	//проверка ID
 	if ReplaceID0 {
-		TextError := fmt.Sprint(m.TableNameDB()+" Update() ", TableName, " error: ReplacePKFieldsWithComma is empty")
+		TextError := fmt.Sprint(m.TableNameDB(), " Update() ", TableName, " error: ReplacePKFieldsWithComma is empty")
 		err = errors.New(TextError)
 		return err
 	}
@@ -67,12 +67,12 @@ ReplaceWhereID
 	CommandTag, err := db.Exec(ctx, TextSQL, 
 		ReplaceAllFieldsWithComma)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Update_ctx() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf("%s Update_ctx() ReplacePKFieldNamesFormat error: %w", m.TableNameDB(), ReplacePKFieldsWithComma, err)
 		return err
 	}
 	RowsAffected := CommandTag.RowsAffected()
 	if RowsAffected == 0 {
-		err = fmt.Errorf(m.TableNameDB()+" Update_ctx() ReplacePKFieldNamesFormat, error: %s", ReplacePKFieldsWithComma, db_constants.TEXT_NO_ROWS)
+		err = fmt.Errorf("%s Update_ctx() ReplacePKFieldNamesFormat, error: %s", m.TableNameDB(), ReplacePKFieldsWithComma, db_constants.TEXT_NO_ROWS)
 		return err
 	}
 
@@ -97,7 +97,7 @@ func Update_MassNeedUpdate_ctx(ctx context.Context, db postgres_pgx.IConnectionT
 
 	//проверка ID
 	if ReplaceID0 {
-		TextError := fmt.Sprint(m.TableNameDB()+" Update() ", TableName, " error: ReplacePKFieldsWithComma is empty")
+		TextError := fmt.Sprint(m.TableNameDB(), " Update() ", TableName, " error: ReplacePKFieldsWithComma is empty")
 		err = errors.New(TextError)
 		return err
 	}
@@ -127,12 +127,12 @@ ReplaceMassFieldsAppend
 	//
 	CommandTag, err := db.Exec(ctx, TextSQL, MassFields...)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Update_MassNeedUpdate_ctx() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf("%s Update_MassNeedUpdate_ctx() ReplacePKFieldNamesFormat error: %w", m.TableNameDB(), ReplacePKFieldsWithComma, err)
 		return err
 	}
 	RowsAffected := CommandTag.RowsAffected()
 	if RowsAffected == 0 {
-		err = fmt.Errorf(m.TableNameDB()+" Update_MassNeedUpdate_ctx() ReplacePKFieldNamesFormat, error: %s", ReplacePKFieldsWithComma, db_constants.TEXT_NO_ROWS)
+		err = fmt.Errorf("%s Update_MassNeedUpdate_ctx() ReplacePKFieldNamesFormat, error: %s", m.TableNameDB(), ReplacePKFieldsWithComma, db_constants.TEXT_NO_ROWS)
 		return err
 	}
 

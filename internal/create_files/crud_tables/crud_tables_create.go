@@ -235,6 +235,7 @@ func CreateFiles_Create1(Text string, Table1 *types.Table) string {
 		"`"
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQLCreateWithoutID", ReplaceTextSQLCreateWithoutID)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceTextSQLCreateWithID", ReplaceTextSQLCreate)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldsCount", strconv.Itoa(len(MassAllColumns)))
 
 	return Otvet
 }

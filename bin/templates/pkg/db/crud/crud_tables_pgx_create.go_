@@ -53,7 +53,7 @@ RETURNING ReplaceColumnNamesPK;
 ReplaceCreatedAtModifiedAt
 
 	//массив, в котором значения всех полей и ИД
-	MassValues := make([]interface{}, 0)
+	MassValues := make([]interface{}, 0, ReplaceFieldsCount)
 	ReplaceMassValuesAppend
 
 	//если ИД не пустой, то добавим его в запрос
@@ -68,7 +68,7 @@ RETURNING ReplaceColumnNamesPK;
 	//
 	err = db.QueryRow(ctx, TextSQL, MassValues...).Scan(ReplacePKFieldsWithAmpersandComma)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Create_ctx() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf("%s Create_ctx() ReplacePKFieldNamesFormat error: %w", m.TableNameDB(), ReplacePKFieldsWithComma, err)
 		return err
 	}
 

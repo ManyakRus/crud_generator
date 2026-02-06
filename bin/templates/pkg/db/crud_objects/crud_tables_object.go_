@@ -44,7 +44,7 @@ func ReadObject_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction,
 	Model := m.LawsuitStatusType
 	err = crud_lawsuit_status_types.Read_ctx(ctx, db, &Model)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Read() FieldNamesWithPercent, error: %w", FieldNamesWithCommaM, err)
+		err = fmt.Errorf("%s Read() FieldNamesWithPercent, error: %w", m.TableNameDB(), FieldNamesWithCommaM, err)
 	}
 	m.LawsuitStatusType = Model
 

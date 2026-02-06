@@ -78,6 +78,8 @@
 {"Table":"contracts_files","Columns":["contract_id"]},
 {"Table":"employees_files","Columns":["employee_id"]},
 {"Table":"enforcement_third_parties","Columns":["individual_id"]},
+{"Table":"state_duty_consumptions_files","Columns":["consumption_id"]},
+{"Table":"state_duty_consumptions_files","Columns":["file_id"]},
 {"Table":"contracts","Columns":["number","connection_id"]}
 
 ]

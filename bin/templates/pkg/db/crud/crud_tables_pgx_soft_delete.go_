@@ -50,7 +50,7 @@ func Delete_ctx(ctx context.Context, db postgres_pgx.IConnectionTransaction, m *
 
 	//проверка ID
 	if ReplaceID0 {
-		TextError := fmt.Sprint(m.TableNameDB()+" Delete() ", TableName, " error: ReplacePKFieldsWithComma is empty")
+		TextError := fmt.Sprint(m.TableNameDB(), " Delete() ", TableName, " error: ReplacePKFieldsWithComma is empty")
 		err = errors.New(TextError)
 		return err
 	}
@@ -63,7 +63,7 @@ ReplaceWhereID
 	//
 	_, err = db.Exec(ctx, TextSQL, ReplacePKFieldsWithComma)
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Delete() ReplacePKFieldNamesFormat error: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf("%s Delete() ReplacePKFieldNamesFormat error: %w", m.TableNameDB(), ReplacePKFieldsWithComma, err)
 		return err
 	}
 

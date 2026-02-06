@@ -66,7 +66,7 @@ func Scan(row pgx.Row, m *lawsuit_status_types.LawsuitStatusType) error {
 	err := row.Scan(ReplaceAllFieldsWithComma)
 
 	if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Scan() ReplacePKFieldNamesFormat warning: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf("%s Scan() ReplacePKFieldNamesFormat warning: %w", m.TableNameDB(), ReplacePKFieldsWithComma, err)
 		return err
 	}
 
@@ -91,7 +91,7 @@ func ScanRows(rows pgx.Rows) ([]lawsuit_status_types.LawsuitStatusType, error) {
 		err := Scan(rows, &m)
 
 		if err != nil {
-		err = fmt.Errorf(m.TableNameDB()+" Scan() ReplacePKFieldNamesFormat warning: %w", ReplacePKFieldsWithComma, err)
+		err = fmt.Errorf("%s Scan() ReplacePKFieldNamesFormat warning: %w", m.TableNameDB(), ReplacePKFieldsWithComma, err)
 			return Otvet, err
 		}
 
