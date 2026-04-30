@@ -1,6 +1,5 @@
 /.env
 /cover.out
-/internal/v0/app/.env
 .env
 
 /.idea/
@@ -8,13 +7,6 @@
 /log.txt
 
 .vscode
-/bin/image_connections
-/settings/connections_add.txt
-/bin/settings/connections_add.txt
-/database.graphml
-/database.graphml0
-/bin/ready/pkg/model/
-/bin/ready/
 /bin/sync_service/
 /bin/sync_service_test/
 /bin/crud_service/
