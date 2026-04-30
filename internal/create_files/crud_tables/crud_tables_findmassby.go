@@ -128,9 +128,11 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 	FieldNamesWithUnderline := ""
 	ReplaceFieldNamesWithComma := ""
 	ReplaceFieldsWithComma := ""
+	ReplaceFieldNamesWithPlus := ""
 	ReplaceWhere := ""
 	Underline := ""
 	Comma := ""
+	Plus := ""
 	Number := 0
 	for _, sColumn1 := range MassColumns1 {
 		Column1, ok := Table1.MapColumns[sColumn1]
@@ -140,15 +142,18 @@ func CreateFiles_FindMassBy_Table1(Table1 *types.Table, TextTemplateFunction str
 		FieldNamesWithUnderline = FieldNamesWithUnderline + Underline + Column1.NameGo
 		ReplaceFieldNamesWithComma = ReplaceFieldNamesWithComma + Comma + "m." + Column1.NameGo
 		ReplaceFieldsWithComma = ReplaceFieldsWithComma + Comma + "&m." + Column1.NameGo
+		ReplaceFieldNamesWithPlus = ReplaceFieldNamesWithPlus + Plus + Column1.NameGo
 		Number = Number + 1
 		sNumber := strconv.Itoa(Number)
 		ReplaceWhere = ReplaceWhere + "\tand " + `"` + Column1.Name + `"` + " = $" + sNumber + "\n"
 
 		Underline = "_"
 		Comma = ", "
+		Plus = " + "
 	}
 	Otvet = strings.ReplaceAll(Otvet, "FieldNamesWithUnderline", FieldNamesWithUnderline)
 	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldNamesWithComma", ReplaceFieldNamesWithComma)
+	Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldNamesWithPlus", ReplaceFieldNamesWithPlus)
 	//Otvet = strings.ReplaceAll(Otvet, "ReplaceFieldsWithComma", ReplaceFieldsWithComma)
 
 	//все колонки

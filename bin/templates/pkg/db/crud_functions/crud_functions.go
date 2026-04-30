@@ -26,12 +26,12 @@ func MassNeedFields_from_MassNeedUpdateFields(MassNeedUpdateFields []string) []s
 	copy(MassFields, MassNeedUpdateFields)
 	MassFields = append(MassFields, "ModifiedAt")
 
-	// DeletedAt вместе с IsDeleted
+	//DeletedAt вместе с IsDeleted
 	if slices.Contains(MassNeedUpdateFields, "IsDeleted") == true {
 		MassFields = append(MassFields, "DeletedAt")
 	}
 
-	//// CreatedAt вместе с ID=0
+	////CreatedAt вместе с ID=0
 	//if slices.Contains(MassNeedUpdateFields, "ID") == true {
 	//	MassFields = append(MassFields, "CreatedAt")
 	//}

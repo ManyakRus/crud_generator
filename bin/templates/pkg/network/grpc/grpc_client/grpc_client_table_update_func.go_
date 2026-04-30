@@ -2,10 +2,10 @@
 func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	var err error
 
-	// подключение
+	//подключение
 	grpc_client_func.Func_Connect_GRPC_NRPC.Connect_GRPC_NRPC()
 
-	// подготовка запроса
+	//подготовка запроса
 	var versionModel = crud.GetVersionModel()
 
 	Request := &grpc_proto.RequestId{}
@@ -13,11 +13,12 @@ func (crud Crud_GRPC) Update(m *lawsuit_status_types.LawsuitStatusType) error {
 	Request.FieldName = m.ColumnName
 	Request.VersionModel = versionModel
 
+	//
 	ctxMain := context.Background()
 	ctx, ctxCancelFunc := context.WithTimeout(ctxMain, time.Second*time.Duration(grpc_constants.GetTimeoutSeconds()))
 	defer ctxCancelFunc()
 
-	// запрос
+	//запрос
 	if grpc_nrpc.NeedNRPC == true {
 		//_, err = nrpc_client.Client.LawsuitStatusType_Update(Request)
 	} else {

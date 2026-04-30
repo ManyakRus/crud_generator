@@ -26,6 +26,7 @@
 /bin/templates/configs_/.env_notifier
 /bin/templates/configs_/.env*
 /bin/notifier_service/
+/bin/crud_generator
 
 /bin/tinkoff_invest/
 /bin/postgres_migrate/

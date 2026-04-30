@@ -11,7 +11,7 @@ func CalcStructVersion(t reflect.Type) uint32 {
 
 	names := make([]string, t.NumField())
 
-	// имя + тип поля
+	//имя + тип поля
 	s := ""
 	for i := range names {
 		Field1 := t.Field(i)

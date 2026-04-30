@@ -26,6 +26,12 @@
 {"Table":"contracts","Columns":["type_id"]},
 {"Table":"contracts","Columns":["branch_id"]},
 {"Table":"contracts","Columns":["parent_id"]},
+{"Table":"contracts","Columns":["number","connection_id"]},
+{"Table":"contracts","Columns":["organization_consignee_id"]},
+{"Table":"contracts","Columns":["organization_customer_id"]},
+{"Table":"contracts","Columns":["organization_payer_id"]},
+{"Table":"contracts","Columns":["department_id"]},
+{"Table":"contracts","Columns":["sector_id"]},
 {"Table":"organization_casebooks","Columns":["organization_id"]},
 {"Table":"organization_casebooks","Columns":["inn"]},
 {"Table":"employees","Columns":["email"]},
@@ -80,6 +86,8 @@
 {"Table":"enforcement_third_parties","Columns":["individual_id"]},
 {"Table":"state_duty_consumptions_files","Columns":["consumption_id"]},
 {"Table":"state_duty_consumptions_files","Columns":["file_id"]},
-{"Table":"contracts","Columns":["number","connection_id"]}
+{"Table":"microservices_events","Columns":["microservice_id"]},
+{"Table":"microservices_events","Columns":["contract_id"]},
+{"Table":"microservices_events","Columns":["briefcase_id"]}
 
 ]

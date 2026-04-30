@@ -3,5 +3,6 @@
 {"Table":"tinkoff_instrument","Columns":["figi"]},
 {"Table":"tinkoff_instrument","Columns":["isin"]},
 {"Table":"my_account","Columns":["account_number"]},
-{"Table":"tinkoff_bond","Columns":["class_code", "isin"]}
+{"Table":"tinkoff_bond","Columns":["class_code", "isin"]},
+{"Table":"moex_security_type","Columns":["name"]}
 ]
